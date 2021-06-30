@@ -1,9 +1,12 @@
 /*Enable/disable console through
 * [Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)]
+* 
+* Currently at: https://learnopengl.com/Getting-started/Textures
 */
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "Shader.h"
 
 #define WAITFORINPUT true;
 
@@ -13,33 +16,12 @@ using std::endl;
 
 const unsigned int winWidth = 800;
 const unsigned int winHeight = 600;
-const char* vertexShaderSource = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0";
-const char* fragmentShaderSource = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\0";
-
 bool wireFrame = false;
-
-enum class ShaderType : unsigned int
-{
-    Vertex,
-    Fragment,
-    Shader
-};
 
 // Function prototypes
 bool run();
 void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight);
 void processInput(GLFWwindow* pWindow);
-void ShaderErrorChecking(unsigned int* pShaderID, ShaderType pType);
 
 int main()
 {
@@ -82,7 +64,7 @@ bool run()
     //glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
 
     // glfw window creation
-    GLFWwindow* window = glfwCreateWindow(winWidth, winHeight, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(winWidth, winHeight, "God I'm gonna cum", NULL, NULL);
     if (window == NULL)
     {
         cout << "Failed to create GLFW window" << endl;
@@ -102,48 +84,22 @@ bool run()
     // The colour filled into the the screen when glClear(GL_COLOR_BUFFER_BIT) is called
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
-    // Creates the vertex shader object and assigns to an id
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    // Loads the vertex shader into the object
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    // Compiles the shader at run-time
-    glCompileShader(vertexShader);
-    // Performs error checking on the vertex shader
-    ShaderErrorChecking(&vertexShader, ShaderType::Vertex);
+    Shader* shader = new Shader("../Assets/shaders/shader.vert", "../Assets/shaders/shader.frag");
 
-    // Creates the fragment shader object and assigns to an id
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    // Loads the fragment shader into the object
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    // Compiles the fragment at run-time
-    glCompileShader(fragmentShader);
-    // Performs error checking on the fragment shader
-    ShaderErrorChecking(&fragmentShader, ShaderType::Fragment);
+    int vertexColourLocation = glGetUniformLocation(shader->m_ID, "shapeColour");
 
-    // Creates a shader program object
-    unsigned int shaderProgram = glCreateProgram();
-    // Link the vertex and fragment shaders
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    // Performs error checking on the shader program
-    ShaderErrorChecking(&shaderProgram, ShaderType::Shader);
-    // We no longer need the vertex and fragment shaders
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    // Creates a 2d rectangle out of two triangles
+    // Creates a 2d triangles with each corner having a unique colour
     float vertices[] =
     {
-        -0.5f,  0.5f, 0.0f, // Top left
-         0.5f,  0.5f, 0.0f, // Top right
-         0.5f, -0.5f, 0.0f, // Bottom right
-        -0.5f, -0.5f, 0.0f, // Bottom left
+        // Positions         // Colours
+         0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // Bottom right
+        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // Bottom left
+         0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // Top 
     };
+
     unsigned int indices[] =
     {
-        0, 1, 2,   // First triangle
-        0, 2, 3    // Second triangle
+        0, 1, 2
     };
     
     // Creates and assigns to an id the
@@ -173,9 +129,12 @@ bool run()
     * p5: Stride, because the data is tightly packed this can be 0
     * p6: Offset, for some reason a void*
     */
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    // No idea what this does
+    // Position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // Colour attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // Unbinds the vertex array
     glBindVertexArray(0);
@@ -187,6 +146,9 @@ bool run()
     // Render loop
     while (!glfwWindowShouldClose(window))
     {
+        float time = glfwGetTime();
+        float greenValue = (sin(time) / 2.0f) + 0.5f;
+
         // Input
         processInput(window);
 
@@ -194,8 +156,10 @@ bool run()
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Not required since we only have 1 shader program and VAO
-        glUseProgram(shaderProgram);
+        glUseProgram(shader->m_ID);
         glBindVertexArray(id_VAO);
+
+        glUniform4f(vertexColourLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
         //glDrawArrays(GL_TRIANGLES, 0, 3);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -211,8 +175,9 @@ bool run()
     // Clean-up once done
     glDeleteVertexArrays(1, &id_VAO);
     glDeleteBuffers(1, &id_VBO);
-    //glDeleteBuffers(1, &i_EBO);
-    glDeleteProgram(shaderProgram);
+    glDeleteBuffers(1, &id_EBO);
+    
+    delete shader;
 
     glfwTerminate();
     return true;
@@ -230,7 +195,13 @@ void processInput(GLFWwindow* pWindow)
     if (glfwGetKey(pWindow, GLFW_KEY_END) == GLFW_PRESS)
         glfwSetWindowShouldClose(pWindow, true);
 
-    // Doesn't work
+    if (glfwGetKey(pWindow, GLFW_KEY_F1) == GLFW_PRESS)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    if (glfwGetKey(pWindow, GLFW_KEY_F2) == GLFW_PRESS)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    // Wireframe toggle doesn't work
     //if (glfwGetKey(pWindow, GLFW_KEY_F6) == GLFW_PRESS)
     //{
     //    while (glfwGetKey(pWindow, GLFW_KEY_F6) != GLFW_RELEASE) { }
@@ -241,45 +212,4 @@ void processInput(GLFWwindow* pWindow)
     //        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     //    
     //}
-}
-
-// Error checks a specified shader
-void ShaderErrorChecking(unsigned int* pShaderID, ShaderType pType)
-{
-    // Variables used in error checking and handling
-    int success;
-    char infoLog[512];
-
-    if (pType == ShaderType::Shader)
-    {
-        // Retrieves the compile status of the given shader by id
-        glGetProgramiv(*pShaderID, GL_LINK_STATUS, &success);
-        if (!success)
-        {
-            // In the case of a failure it loads the log and outputs
-            glGetProgramInfoLog(*pShaderID, 512, NULL, infoLog);
-            cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n" << infoLog << endl;
-        }
-    }
-    else
-    {
-        // Retrieves the compile status of the given shader by id
-        glGetShaderiv(*pShaderID, GL_COMPILE_STATUS, &success);
-        if (!success)
-        {
-            // In the case of a failure it loads the log and outputs
-            glGetShaderInfoLog(*pShaderID, 512, NULL, infoLog);
-            cout << "ERROR::SHADER::";
-            switch (pType)
-            {
-            case ShaderType::Vertex:
-                cout << "VERTEX";
-                break;
-            case ShaderType::Fragment:
-                cout << "FRAGMENT";
-                break;
-            }
-            cout << "::COMPILATION_FAILED\n" << infoLog << endl;
-        }
-    }
 }
