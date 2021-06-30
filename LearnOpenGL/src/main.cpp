@@ -1,3 +1,6 @@
+/*Enable/disable console through
+* [Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)]
+*/
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
