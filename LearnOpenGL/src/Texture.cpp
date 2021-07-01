@@ -6,19 +6,21 @@
 using std::cout;
 using std::endl;
 
-Texture::Texture() { }
+Texture::Texture() : m_texWidth(0), m_texHeight(0), m_texColChannels(0), m_imageData(0)
+{ }
 
-Texture::~Texture() { }
+Texture::~Texture()
+{
+    delete m_imageData;
+}
 
 void Texture::LoadImages()
 {
-    // ----------Texture----------
-// Generates two texture objects
-    unsigned int id_TEX0, id_TEX1;
-    glGenTextures(1, &id_TEX0);
-    glGenTextures(1, &id_TEX1);
+    // Generates two texture objects
+    glGenTextures(1, &m_idTEX0);
+    glGenTextures(1, &m_idTEX1);
     // Rmember this worlks like a pointer to the object using the ID
-    glBindTexture(GL_TEXTURE_2D, id_TEX0);
+    glBindTexture(GL_TEXTURE_2D, m_idTEX0);
 
     // Sets some parameters to the currently bound texture object
     float borderColour[] = { 1.0f, 1.0f, 0.0f, 1.0f };
@@ -32,9 +34,8 @@ void Texture::LoadImages()
     stbi_set_flip_vertically_on_load(true);
 
     // Loads the first texture into memory
-    int texWidth, textHeight, texColChannels;
-    unsigned char* data = stbi_load("../Assets/textures/container.jpg", &texWidth, &textHeight, &texColChannels, 0);
-    if (data)
+    m_imageData = stbi_load("../Assets/textures/container.jpg", &m_texWidth, &m_texHeight, &m_texColChannels, 0);
+    if (m_imageData)
     {
         /*Applies the image to the texture object and creates the mipmaps
         * p1: What object we are applying to
@@ -46,18 +47,19 @@ void Texture::LoadImages()
         * p8: The datatype being passed in (this this case a char)
         * p9: The actual image being passed in
         */
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, textHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_texWidth, m_texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, m_imageData);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
     {
         cout << "Failed to load texture0" << endl;
     }
+
     // Frees the image memory
-    stbi_image_free(data);
+    stbi_image_free(m_imageData);
 
     // Binds the second texture
-    glBindTexture(GL_TEXTURE_2D, id_TEX1);
+    glBindTexture(GL_TEXTURE_2D, m_idTEX1);
     // Sets some parameters to the currently bound texture object
     glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColour);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -66,11 +68,11 @@ void Texture::LoadImages()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     // Loads the seconds texture into memory
-    data = stbi_load("../Assets/textures/awesomeface.png", &texWidth, &textHeight, &texColChannels, 0);
-    if (data)
+    m_imageData = stbi_load("../Assets/textures/awesomeface.png", &m_texWidth, &m_texHeight, &m_texColChannels, 0);
+    if (m_imageData)
     {
         // Applies the image to the texture object and creates the mipmaps
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, textHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_texWidth, m_texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_imageData);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
@@ -78,10 +80,10 @@ void Texture::LoadImages()
         cout << "Failed to load texture1" << endl;
     }
     // Frees the image memory
-    stbi_image_free(data);
+    stbi_image_free(m_imageData);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, id_TEX0);
+    glBindTexture(GL_TEXTURE_2D, m_idTEX0);
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, id_TEX1);
+    glBindTexture(GL_TEXTURE_2D, m_idTEX1);
 }

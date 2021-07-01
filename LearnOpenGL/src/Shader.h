@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
+#include <fstream>
 
 using std::string;
+using std::ifstream;
 
 class Shader
 {
@@ -16,9 +18,12 @@ public:
     void setInt(const string& pName, int pValue) const;
     void setFloat(const string& pName, float pValue) const;
 
-    // The program ID
-    unsigned int m_ID;
 
 private:
     void ShaderErrorChecking(unsigned int* pShaderID, string pType);
+
+    unsigned int m_idProgram, m_idVertex, m_idFragment;
+    string m_vertexString, m_fragmentString;
+    ifstream m_vertexFile;
+    ifstream m_fragmentFile;
 };

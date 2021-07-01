@@ -1,101 +1,99 @@
 #include "Shader.h"
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
-#include <fstream>
 #include <sstream>
 #include <iostream>
 
 using std::cout;
 using std::endl;
-using std::ifstream;
 
 Shader::Shader(const char* pVertexPath, const char* pFragmentPath)
 {
     // 1. retrieve the vertex/fragment source code from filePath
-    string vertexString, fragmentString;
-    ifstream vertexFile, fragmentFile;
     // Ensure ifstream objects can throw exceptions:
-    vertexFile.exceptions(ifstream::failbit | ifstream::badbit);
-    fragmentFile.exceptions(ifstream::failbit | ifstream::badbit);
+    m_vertexFile.exceptions(ifstream::failbit | ifstream::badbit);
+    m_fragmentFile.exceptions(ifstream::failbit | ifstream::badbit);
     try
     {
-        // Open files
-        vertexFile.open(pVertexPath);
-        fragmentFile.open(pFragmentPath);
+        /* For both vertex and frament we:
+        * Open files
+        * Read file's buffer contents into streams
+        * Close file handlers
+        * Convert stream into string
+        */
         std::stringstream vertexStream, fragmentStream;
-        // Read file's buffer contents into streams
-        vertexStream << vertexFile.rdbuf();
-        fragmentStream << fragmentFile.rdbuf();
-        // Close file handlers
-        vertexFile.close();
-        fragmentFile.close();
-        // Convert stream into string
-        vertexString = vertexStream.str();
-        fragmentString = fragmentStream.str();
+        // Vertex
+        m_vertexFile.open(pVertexPath);
+        vertexStream << m_vertexFile.rdbuf();
+        m_vertexFile.close();
+        m_vertexString = vertexStream.str();
+        // Fragment
+        m_fragmentFile.open(pFragmentPath);
+        fragmentStream << m_fragmentFile.rdbuf();
+        m_fragmentFile.close();
+        m_fragmentString = fragmentStream.str();
     }
     catch (ifstream::failure e)
     {
         cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << endl;
     }
-    const char* vertexCode = vertexString.c_str();
-    const char* fragmentCode = fragmentString.c_str();
+    const char* vertexCode = m_vertexString.c_str();
+    const char* fragmentCode = m_fragmentString.c_str();
 
     // 2. compile shaders
-    unsigned int id_Vertex, id_Fragment;
-
     // Creates the vertex shader object and assigns to an id
-    id_Vertex = glCreateShader(GL_VERTEX_SHADER);
+    m_idVertex = glCreateShader(GL_VERTEX_SHADER);
     // Loads the vertex shader into the object
-    glShaderSource(id_Vertex, 1, &vertexCode, NULL);
+    glShaderSource(m_idVertex, 1, &vertexCode, NULL);
     // Compiles the shader at run-time
-    glCompileShader(id_Vertex);
+    glCompileShader(m_idVertex);
     // Performs error checking on the vertex shader
-    ShaderErrorChecking(&id_Vertex, "VERTEX");
+    ShaderErrorChecking(&m_idVertex, "VERTEX");
 
     // Creates the fragment shader object and assigns to an id
-    id_Fragment = glCreateShader(GL_FRAGMENT_SHADER);
+    m_idFragment = glCreateShader(GL_FRAGMENT_SHADER);
     // Loads the fragment shader into the object
-    glShaderSource(id_Fragment, 1, &fragmentCode, NULL);
+    glShaderSource(m_idFragment, 1, &fragmentCode, NULL);
     // Compiles the fragment at run-time
-    glCompileShader(id_Fragment);
+    glCompileShader(m_idFragment);
     // Performs error checking on the fragment shader
-    ShaderErrorChecking(&id_Fragment, "FRAGMENT");
+    ShaderErrorChecking(&m_idFragment, "FRAGMENT");
 
     // Creates a shader program object
-    m_ID = glCreateProgram();
+    m_idProgram = glCreateProgram();
     // Link the vertex and fragment shaders
-    glAttachShader(m_ID, id_Vertex);
-    glAttachShader(m_ID, id_Fragment);
-    glLinkProgram(m_ID);
+    glAttachShader(m_idProgram, m_idVertex);
+    glAttachShader(m_idProgram, m_idFragment);
+    glLinkProgram(m_idProgram);
     // Performs error checking on the shader program
-    ShaderErrorChecking(&m_ID, "PROGRAM");
+    ShaderErrorChecking(&m_idProgram, "PROGRAM");
     // We no longer need the vertex and fragment shaders
-    glDeleteShader(id_Vertex);
-    glDeleteShader(id_Fragment);
+    glDeleteShader(m_idVertex);
+    glDeleteShader(m_idFragment);
 }
 
 Shader::~Shader()
 {
-    glDeleteProgram(m_ID);
+    glDeleteProgram(m_idProgram);
 }
 
 void Shader::use()
 {
-    glUseProgram(m_ID);
+    glUseProgram(m_idProgram);
 }
 
 void Shader::setBool(const string& pName, bool pValue) const
 {
-    glUniform1i(glGetUniformLocation(m_ID, pName.c_str()), (int)pValue);
+    glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), (int)pValue);
 }
 
 void Shader::setInt(const string& pName, int pValue) const
 {
-    glUniform1i(glGetUniformLocation(m_ID, pName.c_str()), pValue);
+    glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 }
 
 void Shader::setFloat(const string& pName, float pValue) const
 {
-    glUniform1f(glGetUniformLocation(m_ID, pName.c_str()), pValue);
+    glUniform1f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 }
 
 void Shader::ShaderErrorChecking(unsigned int* pShaderID, string pType)

@@ -1,6 +1,4 @@
 #include "Application.h"
-#include "Shader.h"
-#include "Texture.h"
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include <iostream>
 
@@ -14,21 +12,13 @@ void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight)
     glViewport(0, 0, pWidth, pHeight);
 }
 
-Application::Application()
-{
-}
-
-Application::~Application()
-{
-}
-
-bool Application::run()
+Application::Application() : winWidth(800), winHeight(600), m_idVAO(0), m_idVBO(0), m_idEBO(0)
 {
     // glfw: initialise and configure
     if (glfwInit() == GLFW_FALSE)
     {
         cout << "GLFW failed to initialise" << endl;
-        return false;
+        return;
     }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -42,71 +32,74 @@ bool Application::run()
     //glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
 
     // glfw window creation
-    GLFWwindow* window = glfwCreateWindow(winWidth, winHeight, "OpenGL", NULL, NULL);
-    if (window == NULL)
+    m_window = glfwCreateWindow(winWidth, winHeight, "OpenGL", NULL, NULL);
+    if (m_window == NULL)
     {
         cout << "Failed to create GLFW window" << endl;
         glfwTerminate();
-        return false;
+        return;
     }
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwMakeContextCurrent(m_window);
+    glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 
     // glad: load all OpenGL function pointers
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         cout << "Failed to initialize GLAD" << endl;
-        return false;
+        return;
     }
+
+    // Texture stuff has been offloaded
+    m_textureRef = new Texture();
+    m_textureRef->LoadImages();
+
+    // Shader stuff has been offloaded
+    m_shaderRef = new Shader("../Assets/shaders/shader.vert", "../Assets/shaders/shader.frag");
 
     // The colour filled into the the screen when glClear(GL_COLOR_BUFFER_BIT) is called
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
-
-    // Creates a 2d triangles with each corner having a unique colour
-    //float vertices[] =
-    //{
-    //    // Positions         // Colours
-    //     0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // Bottom right
-    //    -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // Bottom left
-    //     0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // Top 
-    //};
-
-    // Creates 4 verts with each one having: xyz position, rgb colour and xy texcoord
-    float vertices[] =
+    /*// Creates 4 verts with each one having: xyz position, rgb colour and xy texcoord
+    float m_vertices[32] =
     {
         // Positions          // Colours          // Texture coords
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // Top left 
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // Top left
          0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // Top right
          0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // Bottom right
         -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f    // Bottom left
     };
-
     // How to construct the triangles using the verts
-    unsigned int indices[] =
+    const unsigned int m_indices[6]
     {
         0, 1, 2,    // Triangle one
         0, 2, 3     // Triangle two
-    };
+    };*/
+}
 
-    // Creates and assigns to an id the
-    // Vertex Array Object, Vertex Buffer Object, and Element Buffer Object
-    unsigned int id_VAO, id_VBO, id_EBO;
-    glGenVertexArrays(1, &id_VAO);
-    glGenBuffers(1, &id_VBO);
-    glGenBuffers(1, &id_EBO);
+Application::~Application()
+{
+    delete m_textureRef;
+    delete m_shaderRef;
+}
+
+bool Application::run()
+{
+    // Creates and assigns to an id the Vertex Array Object, Vertex Buffer Object, and Element Buffer Object
+    glGenVertexArrays(1, &m_idVAO);
+    glGenBuffers(1, &m_idVBO);
+    glGenBuffers(1, &m_idEBO);
 
     // Binds the vertex array so that the VBO and EBO are neatly stored within
-    glBindVertexArray(id_VAO);
+    glBindVertexArray(m_idVAO);
 
     // GL_ARRAY_BUFFER effectively works like a pointer, using the id provided to point to the buffer
-    glBindBuffer(GL_ARRAY_BUFFER, id_VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, m_idVBO);
     // Loads the vertices to the VBO
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices), m_vertices, GL_STATIC_DRAW);
 
     // This buffer stores the indices that reference the elements of the VBO
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_idEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_indices), m_indices, GL_STATIC_DRAW);
 
     /*Tells the shader how to use the vertex data provided
     * p1: Which vertex attribute we want to configure (location = 0)
@@ -133,25 +126,18 @@ bool Application::run()
     // Unbinds the GL_ELEMENT_ARRAY_BUFFER
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    // Texture stuff has been offloaded
-    Texture* texture = new Texture();
-    texture->LoadImages();
-
-    // Shader stuff has been offloaded
-    Shader* shader = new Shader("../Assets/shaders/shader.vert", "../Assets/shaders/shader.frag");
-
-    shader->use();
-    shader->setInt("texture0", 0);
-    shader->setInt("texture1", 1);
+    m_shaderRef->use();
+    m_shaderRef->setInt("texture0", 0);
+    m_shaderRef->setInt("texture1", 1);
     // Must be set to the current context
-    glBindVertexArray(id_VAO);
+    glBindVertexArray(m_idVAO);
 
     // Render loop
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(m_window))
     {
         glfwPollEvents();
         // Input
-        processInput(window);
+        processInput(m_window);
 
         // Rendering
         glClear(GL_COLOR_BUFFER_BIT);
@@ -159,15 +145,15 @@ bool Application::run()
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // Check and call events and swap the buffers
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(m_window);
     }
 
     // Clean-up once done
-    glDeleteVertexArrays(1, &id_VAO);
-    glDeleteBuffers(1, &id_VBO);
-    glDeleteBuffers(1, &id_EBO);
+    glDeleteVertexArrays(1, &m_idVAO);
+    glDeleteBuffers(1, &m_idVBO);
+    glDeleteBuffers(1, &m_idEBO);
 
-    delete shader;
+    delete m_shaderRef;
 
     glfwTerminate();
     return true;
