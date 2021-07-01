@@ -74,16 +74,7 @@ Application::Application() : winWidth(800), winHeight(600), m_idVAO(0), m_idVBO(
         0, 1, 2,    // Triangle one
         0, 2, 3     // Triangle two
     };*/
-}
 
-Application::~Application()
-{
-    delete m_textureRef;
-    delete m_shaderRef;
-}
-
-bool Application::run()
-{
     // Creates and assigns to an id the Vertex Array Object, Vertex Buffer Object, and Element Buffer Object
     glGenVertexArrays(1, &m_idVAO);
     glGenBuffers(1, &m_idVBO);
@@ -125,7 +116,17 @@ bool Application::run()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     // Unbinds the GL_ELEMENT_ARRAY_BUFFER
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
 
+Application::~Application()
+{
+    delete m_textureRef;
+    delete m_shaderRef;
+    delete m_window;
+}
+
+bool Application::run()
+{
     m_shaderRef->use();
     m_shaderRef->setInt("texture0", 0);
     m_shaderRef->setInt("texture1", 1);
@@ -152,8 +153,6 @@ bool Application::run()
     glDeleteVertexArrays(1, &m_idVAO);
     glDeleteBuffers(1, &m_idVBO);
     glDeleteBuffers(1, &m_idEBO);
-
-    delete m_shaderRef;
 
     glfwTerminate();
     return true;
