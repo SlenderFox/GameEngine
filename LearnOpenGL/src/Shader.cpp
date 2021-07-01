@@ -1,4 +1,8 @@
 #include "Shader.h"
+#include <glad/glad.h> // Include glad to get all the required OpenGL headers
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 using std::cout;
 using std::endl;

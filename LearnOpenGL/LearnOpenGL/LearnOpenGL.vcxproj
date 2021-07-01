@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Application.cpp" />
     <ClCompile Include="..\src\glad.c" />
+    <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
@@ -29,6 +31,8 @@
     <None Include="..\Assets\shaders\shader.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\Application.h" />
+    <ClInclude Include="..\src\Input.h" />
     <ClInclude Include="..\src\Shader.h" />
     <ClInclude Include="..\src\stb_image.h" />
     <ClInclude Include="..\src\Texture.h" />
