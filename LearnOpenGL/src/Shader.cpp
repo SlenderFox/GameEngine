@@ -36,37 +36,37 @@ Shader::Shader(const char* pVertexPath, const char* pFragmentPath)
     const char* fragmentCode = fragmentString.c_str();
 
     // 2. compile shaders
-    unsigned int vertexShader, fragmentShader;
+    unsigned int id_Vertex, id_Fragment;
 
     // Creates the vertex shader object and assigns to an id
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    id_Vertex = glCreateShader(GL_VERTEX_SHADER);
     // Loads the vertex shader into the object
-    glShaderSource(vertexShader, 1, &vertexCode, NULL);
+    glShaderSource(id_Vertex, 1, &vertexCode, NULL);
     // Compiles the shader at run-time
-    glCompileShader(vertexShader);
+    glCompileShader(id_Vertex);
     // Performs error checking on the vertex shader
-    ShaderErrorChecking(&vertexShader, "VERTEX");
+    ShaderErrorChecking(&id_Vertex, "VERTEX");
 
     // Creates the fragment shader object and assigns to an id
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    id_Fragment = glCreateShader(GL_FRAGMENT_SHADER);
     // Loads the fragment shader into the object
-    glShaderSource(fragmentShader, 1, &fragmentCode, NULL);
+    glShaderSource(id_Fragment, 1, &fragmentCode, NULL);
     // Compiles the fragment at run-time
-    glCompileShader(fragmentShader);
+    glCompileShader(id_Fragment);
     // Performs error checking on the fragment shader
-    ShaderErrorChecking(&fragmentShader, "FRAGMENT");
+    ShaderErrorChecking(&id_Fragment, "FRAGMENT");
 
     // Creates a shader program object
     m_ID = glCreateProgram();
     // Link the vertex and fragment shaders
-    glAttachShader(m_ID, vertexShader);
-    glAttachShader(m_ID, fragmentShader);
+    glAttachShader(m_ID, id_Vertex);
+    glAttachShader(m_ID, id_Fragment);
     glLinkProgram(m_ID);
     // Performs error checking on the shader program
     ShaderErrorChecking(&m_ID, "PROGRAM");
     // We no longer need the vertex and fragment shaders
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    glDeleteShader(id_Vertex);
+    glDeleteShader(id_Fragment);
 }
 
 Shader::~Shader()

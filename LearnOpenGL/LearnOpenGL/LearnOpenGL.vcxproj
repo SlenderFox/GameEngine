@@ -22,6 +22,7 @@
     <ClCompile Include="..\src\glad.c" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
+    <ClCompile Include="..\src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Assets\shaders\shader.frag" />
@@ -29,6 +30,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Shader.h" />
+    <ClInclude Include="..\src\stb_image.h" />
+    <ClInclude Include="..\src\Texture.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
