@@ -1,6 +1,7 @@
 /*Following: https://learnopengl.com/
 * Enable/disable console through
 * [Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)]
+* At: https://learnopengl.com/Getting-started/Coordinate-Systems
 */
 #include "Application.h"
 #include <iostream>
