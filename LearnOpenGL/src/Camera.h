@@ -10,9 +10,19 @@ class Camera
 public:
 	Camera();
 	Camera(mat4 pTransform);
-	Camera(vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 });
-	~Camera();
+	Camera(vec3 pFrom, vec3 pTo, vec3 pUp);
+	~Camera() {}
+
+	void LookAt(vec3 pFrom, vec3 pTo, vec3 pUp);
+	void LookAt(vec3 pFrom, vec3 pTo);
+
+	mat4 GetTransform() const { return m_localTransform; }
+	void SetTransform(mat4 pValue) { m_localTransform = pValue; }
+	void SetPosition(vec3 pValue) { m_localTransform[3] = glm::vec4(pValue, m_localTransform[3][3]); }
 
 private:
-	mat4 m_transform;
+	vec3 m_localUp;
+	mat4 m_localTransform;
+	mat4 m_view;
+	mat4 m_projection;
 };

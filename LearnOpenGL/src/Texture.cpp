@@ -9,11 +9,6 @@ using std::endl;
 Texture::Texture() : m_texWidth(0), m_texHeight(0), m_texColChannels(0), m_imageData(0), m_idTEX0(0), m_idTEX1(0)
 { }
 
-Texture::~Texture()
-{
-    delete m_imageData;
-}
-
 void Texture::LoadImages()
 {
     // Generates two texture objects

@@ -1,13 +1,5 @@
 #include "Input.h"
 
-Input::Input()
-{
-}
-
-Input::~Input()
-{
-}
-
 void Input::ProcessInput(GLFWwindow* pWindow)
 {
     if (glfwGetKey(pWindow, GLFW_KEY_END) == GLFW_PRESS)

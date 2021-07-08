@@ -139,19 +139,12 @@ bool Application::Run()
     glBindVertexArray(m_idVAO);
 
     // Model matrix
-    //mat4 model = mat4(1.0f);
-    //model = glm::rotate(model, glm::radians(-55.0f), vec3(1.0f, 0.0f, 0.0f));
     int modelLoc = glGetUniformLocation(m_shaderRef->m_idProgram, "model");
     // View matrix
-    mat4 view = mat4(1.0f);
-    view = glm::translate(view, vec3(0.0f, 0.0f, -3.0f));
     int viewLoc = glGetUniformLocation(m_shaderRef->m_idProgram, "view");
     // Perspective matrix
     mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
     int projectionLoc = glGetUniformLocation(m_shaderRef->m_idProgram, "projection");
-
-    // Set the view and projection matrix before update since these never change
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
     // Render loop
@@ -161,13 +154,15 @@ bool Application::Run()
         // Input
         m_inputRef->ProcessInput(m_window);
 
-        // Rotates the cube over time
-        //model = glm::rotate(model, glm::radians(0.03f), glm::vec3(0.5f, 1.0f, 0.0f));
-
-        //glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
         // Rendering
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        const float radius = 10.0f;
+        float camX = sin(glfwGetTime()) * radius;
+        float camZ = cos(glfwGetTime()) * radius;
+        mat4 view;
+        view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
         //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

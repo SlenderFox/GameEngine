@@ -4,8 +4,8 @@
 class Input
 {
 public:
-	Input();
-	~Input();
+	Input() {}
+	~Input() {}
 
 	void ProcessInput(GLFWwindow* pWindow);
 };
