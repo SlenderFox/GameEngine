@@ -1,10 +1,15 @@
 #include "Application.h"
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 using std::cout;
 using std::cin;
 using std::endl;
+using glm::mat4;
+using glm::vec3;
 
 // Called when the user resizes the window
 void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight)
@@ -133,12 +138,28 @@ bool Application::run()
     // Must be set to the current context
     glBindVertexArray(m_idVAO);
 
+    // Model matrix
+    mat4 model = mat4(1.0f);
+    model = glm::rotate(model, glm::radians(-55.0f), vec3(1.0f, 0.0f, 0.0f));
+    int modelLoc = glGetUniformLocation(m_shaderRef->m_idProgram, "model");
+    // View matrix
+    mat4 view = mat4(1.0f);
+    view = glm::translate(view, vec3(0.0f, 0.0f, -3.0f));
+    int viewLoc = glGetUniformLocation(m_shaderRef->m_idProgram, "view");
+    // Perspective matrix
+    mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    int projectionLoc = glGetUniformLocation(m_shaderRef->m_idProgram, "projection");
+
     // Render loop
     while (!glfwWindowShouldClose(m_window))
     {
         glfwPollEvents();
         // Input
         processInput(m_window);
+
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         // Rendering
         glClear(GL_COLOR_BUFFER_BIT);
@@ -158,7 +179,7 @@ bool Application::run()
     return true;
 }
 
-// Handles all the input
+// Handles all the input TODO: offload to Input class
 void Application::processInput(GLFWwindow* pWindow)
 {
     if (glfwGetKey(pWindow, GLFW_KEY_END) == GLFW_PRESS)
