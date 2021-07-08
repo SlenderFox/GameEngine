@@ -16,7 +16,7 @@ int main()
 {
     Application* app = new Application();
 
-    if (!app->run())
+    if (!app->Run())
     {
         // Once the window has closed keep the console open
 #ifdef WAITFORINPUT

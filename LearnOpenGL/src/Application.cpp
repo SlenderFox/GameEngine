@@ -9,7 +9,6 @@ using std::cout;
 using std::cin;
 using std::endl;
 using glm::mat4;
-using glm::vec3;
 
 // Called when the user resizes the window
 void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight)
@@ -54,15 +53,16 @@ Application::Application() : winWidth(800), winHeight(600), m_idVAO(0), m_idVBO(
         return;
     }
 
-    // Texture stuff has been offloaded
+    m_shaderRef = new Shader("../Assets/shaders/shader.vert", "../Assets/shaders/shader.frag");
     m_textureRef = new Texture();
     m_textureRef->LoadImages();
-
-    // Shader stuff has been offloaded
-    m_shaderRef = new Shader("../Assets/shaders/shader.vert", "../Assets/shaders/shader.frag");
+    m_inputRef = new Input();
+    m_cameraRef = new Camera();
 
     // The colour filled into the the screen when glClear(GL_COLOR_BUFFER_BIT) is called
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    // Enables the use of the depth buffer
+    glEnable(GL_DEPTH_TEST);
 
     /*// Creates 4 verts with each one having: xyz position, rgb colour and xy texcoord
     float m_vertices[32] =
@@ -130,17 +130,17 @@ Application::~Application()
     delete m_window;
 }
 
-bool Application::run()
+bool Application::Run()
 {
-    m_shaderRef->use();
-    m_shaderRef->setInt("texture0", 0);
-    m_shaderRef->setInt("texture1", 1);
+    m_shaderRef->Use();
+    m_shaderRef->SetInt("texture0", 0);
+    m_shaderRef->SetInt("texture1", 1);
     // Must be set to the current context
     glBindVertexArray(m_idVAO);
 
     // Model matrix
-    mat4 model = mat4(1.0f);
-    model = glm::rotate(model, glm::radians(-55.0f), vec3(1.0f, 0.0f, 0.0f));
+    //mat4 model = mat4(1.0f);
+    //model = glm::rotate(model, glm::radians(-55.0f), vec3(1.0f, 0.0f, 0.0f));
     int modelLoc = glGetUniformLocation(m_shaderRef->m_idProgram, "model");
     // View matrix
     mat4 view = mat4(1.0f);
@@ -150,21 +150,37 @@ bool Application::run()
     mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
     int projectionLoc = glGetUniformLocation(m_shaderRef->m_idProgram, "projection");
 
+    // Set the view and projection matrix before update since these never change
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
     // Render loop
     while (!glfwWindowShouldClose(m_window))
     {
         glfwPollEvents();
         // Input
-        processInput(m_window);
+        m_inputRef->ProcessInput(m_window);
 
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        // Rotates the cube over time
+        //model = glm::rotate(model, glm::radians(0.03f), glm::vec3(0.5f, 1.0f, 0.0f));
+
+        //glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
         // Rendering
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        for (unsigned int i = 0; i < 10; i++)
+        {
+            mat4 model = mat4(1.0f);
+            model = glm::translate(model, m_cubePositions[i]);
+            float angle = glfwGetTime() * 30.0f * ((i + 1) / (i * 0.2f + 1));
+            model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
+            m_shaderRef->SetMat4("model", model);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
         // Check and call events and swap the buffers
         glfwSwapBuffers(m_window);
@@ -177,17 +193,4 @@ bool Application::run()
 
     glfwTerminate();
     return true;
-}
-
-// Handles all the input TODO: offload to Input class
-void Application::processInput(GLFWwindow* pWindow)
-{
-    if (glfwGetKey(pWindow, GLFW_KEY_END) == GLFW_PRESS)
-        glfwSetWindowShouldClose(pWindow, true);
-
-    if (glfwGetKey(pWindow, GLFW_KEY_F1) == GLFW_PRESS)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-    if (glfwGetKey(pWindow, GLFW_KEY_F2) == GLFW_PRESS)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }

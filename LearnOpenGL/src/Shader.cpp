@@ -2,6 +2,7 @@
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include <sstream>
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp>
 
 using std::cout;
 using std::endl;
@@ -76,24 +77,29 @@ Shader::~Shader()
     glDeleteProgram(m_idProgram);
 }
 
-void Shader::use()
+void Shader::Use()
 {
     glUseProgram(m_idProgram);
 }
 
-void Shader::setBool(const string& pName, bool pValue) const
+void Shader::SetBool(const string& pName, bool pValue) const
 {
     glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), (int)pValue);
 }
 
-void Shader::setInt(const string& pName, int pValue) const
+void Shader::SetInt(const string& pName, int pValue) const
 {
     glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 }
 
-void Shader::setFloat(const string& pName, float pValue) const
+void Shader::SetFloat(const string& pName, float pValue) const
 {
     glUniform1f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
+}
+
+void Shader::SetMat4(const string& pName, glm::mat4 pValue) const
+{
+    glUniformMatrix4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, glm::value_ptr(pValue));
 }
 
 void Shader::ShaderErrorChecking(unsigned int* pShaderID, string pType)
