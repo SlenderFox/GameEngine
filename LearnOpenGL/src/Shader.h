@@ -17,10 +17,10 @@ public:
     // Use/activate the shader
     void Use() { glUseProgram(m_idProgram); }
     // Utility uniform functions
-    void SetBool(const string& pName, bool pValue) const { glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), (int)pValue); }
-    void SetInt(const string& pName, int pValue) const { glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), pValue); }
-    void SetFloat(const string& pName, float pValue) const { glUniform1f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue); }
-    void SetMat4(const string& pName, glm::mat4 pValue) const { glUniformMatrix4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, glm::value_ptr(pValue)); }
+    void SetBool(const string& pName, bool& pValue) const;
+    void SetInt(const string& pName, int& pValue) const;
+    void SetFloat(const string& pName, float& pValue) const;
+    void SetMat4(const string& pName, glm::mat4& pValue) const;
 
     unsigned int m_idProgram;
 

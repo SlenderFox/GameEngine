@@ -70,6 +70,26 @@ Shader::Shader(const char* pVertexPath, const char* pFragmentPath)
     glDeleteShader(m_idFragment);
 }
 
+void Shader::SetBool(const string& pName, bool& pValue) const
+{
+    glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), (int)pValue);
+}
+
+void Shader::SetInt(const string& pName, int& pValue) const
+{
+    glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
+}
+
+void Shader::SetFloat(const string& pName, float& pValue) const
+{
+    glUniform1f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
+}
+
+void Shader::SetMat4(const string& pName, glm::mat4& pValue) const
+{
+    glUniformMatrix4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, glm::value_ptr(pValue));
+}
+
 void Shader::ShaderErrorChecking(unsigned int* pShaderID, string pType)
 {
     // Variables used in error checking and handling

@@ -133,19 +133,14 @@ Application::~Application()
 bool Application::Run()
 {
     m_shaderRef->Use();
-    m_shaderRef->SetInt("texture0", 0);
-    m_shaderRef->SetInt("texture1", 1);
+    // This cursed bullshit is the result of me wanting to use pass by reference
+    m_shaderRef->SetInt("texture0", *new int(0));
+    m_shaderRef->SetInt("texture1", *new int(1));
     // Must be set to the current context
     glBindVertexArray(m_idVAO);
 
-    // Model matrix
-    int modelLoc = glGetUniformLocation(m_shaderRef->m_idProgram, "model");
-    // View matrix
-    int viewLoc = glGetUniformLocation(m_shaderRef->m_idProgram, "view");
-    // Perspective matrix
-    mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-    int projectionLoc = glGetUniformLocation(m_shaderRef->m_idProgram, "projection");
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    const float radius = 10.0f;
+    const float speed = 0.5f;
 
     // Render loop
     while (!glfwWindowShouldClose(m_window))
@@ -157,12 +152,13 @@ bool Application::Run()
         // Rendering
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        const float radius = 10.0f;
-        float camX = sin(glfwGetTime()) * radius;
-        float camZ = cos(glfwGetTime()) * radius;
-        mat4 view;
-        view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        float camX = sin(glfwGetTime() * speed) * radius;
+        float camZ = cos(glfwGetTime() * speed) * radius;
+
+        m_cameraRef->SetView(glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+
+        m_shaderRef->SetMat4("view", *new mat4(m_cameraRef->GetView()));
+        m_shaderRef->SetMat4("projection", *new mat4(m_cameraRef->GetProjection()));
 
         //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

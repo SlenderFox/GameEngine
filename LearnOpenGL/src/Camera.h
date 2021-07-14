@@ -19,6 +19,10 @@ public:
 	mat4 GetTransform() const { return m_localTransform; }
 	void SetTransform(mat4 pValue) { m_localTransform = pValue; }
 	void SetPosition(vec3 pValue) { m_localTransform[3] = glm::vec4(pValue, m_localTransform[3][3]); }
+	mat4 GetView() const { return m_view; }
+	void SetView(mat4 pValue) { m_view = pValue; }
+	mat4 GetProjection() const { return m_projection; }
+	void SetProjection(mat4 pValue) { m_projection = pValue; }
 
 private:
 	vec3 m_localUp;
