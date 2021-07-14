@@ -5,7 +5,7 @@ class Texture
 {
 public:
 	Texture();
-	~Texture() { delete m_imageData; }
+	~Texture() {}
 
 	void LoadImages();
 

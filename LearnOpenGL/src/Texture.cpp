@@ -18,7 +18,7 @@ void Texture::LoadImages()
     glBindTexture(GL_TEXTURE_2D, m_idTEX0);
 
     // Sets some parameters to the currently bound texture object
-    float borderColour[] = { 1.0f, 1.0f, 0.0f, 1.0f };
+    float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
     glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColour);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);

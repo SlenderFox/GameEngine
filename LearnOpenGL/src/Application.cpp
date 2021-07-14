@@ -13,21 +13,59 @@ using glm::mat4;
 // Called when the user resizes the window
 void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight)
 {
+    // Currently does not update the aspect ratio
     glViewport(0, 0, pWidth, pHeight);
 }
 
-Application::Application() : winWidth(800), winHeight(600), m_idVAO(0), m_idVBO(0), m_idEBO(0)
+Application::Application() : m_idVAO(0), m_idVBO(0), m_idEBO(0)
+{
+    SetDimensions(1280, 720);
+}
+
+Application::Application(unsigned int pWidth, unsigned int pHeight) : m_idVAO(0), m_idVBO(0), m_idEBO(0)
+{
+    SetDimensions(pWidth, pHeight);
+}
+
+Application::~Application()
+{
+    delete m_textureRef;
+    delete m_shaderRef;
+    // Don't need to delete m_window as it is handled by glfwTerminate()
+}
+
+bool Application::Start(string pTitle, unsigned int pWidth, unsigned int pHeight)
+{
+    SetDimensions(pWidth, pHeight);
+    return Init(pTitle);
+}
+
+bool Application::Start(string pTitle)
+{
+    return Init(pTitle);
+}
+
+void Application::SetDimensions(unsigned int pWidth, unsigned int pHeight)
+{
+    m_winWidth = pWidth;
+    m_winHeight = pHeight;
+    m_aspectRatio = (float)m_winWidth / (float)m_winHeight;
+    m_iAspectRatio = (float)m_winHeight / (float)m_winWidth;
+}
+
+bool Application::Init(string pTitle)
 {
     // glfw: initialise and configure
     if (glfwInit() == GLFW_FALSE)
     {
         cout << "GLFW failed to initialise" << endl;
-        return;
+        return false;
     }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     // Already set by default
     //glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -36,12 +74,12 @@ Application::Application() : winWidth(800), winHeight(600), m_idVAO(0), m_idVBO(
     //glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
 
     // glfw window creation
-    m_window = glfwCreateWindow(winWidth, winHeight, "OpenGL", NULL, NULL);
+    m_window = glfwCreateWindow(m_winWidth, m_winHeight, pTitle.c_str(), NULL, NULL);
     if (m_window == NULL)
     {
         cout << "Failed to create GLFW window" << endl;
         glfwTerminate();
-        return;
+        return false;
     }
     glfwMakeContextCurrent(m_window);
     glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
@@ -50,35 +88,18 @@ Application::Application() : winWidth(800), winHeight(600), m_idVAO(0), m_idVBO(
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         cout << "Failed to initialize GLAD" << endl;
-        return;
+        return false;
     }
 
+    m_cameraRef = new Camera();
+    m_cameraRef->SetClearColour(0.2f, 0.2f, 0.2f);
     m_shaderRef = new Shader("../Assets/shaders/shader.vert", "../Assets/shaders/shader.frag");
     m_textureRef = new Texture();
     m_textureRef->LoadImages();
     m_inputRef = new Input();
-    m_cameraRef = new Camera();
 
-    // The colour filled into the the screen when glClear(GL_COLOR_BUFFER_BIT) is called
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     // Enables the use of the depth buffer
     glEnable(GL_DEPTH_TEST);
-
-    /*// Creates 4 verts with each one having: xyz position, rgb colour and xy texcoord
-    float m_vertices[32] =
-    {
-        // Positions          // Colours          // Texture coords
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // Top left
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // Top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // Bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f    // Bottom left
-    };
-    // How to construct the triangles using the verts
-    const unsigned int m_indices[6]
-    {
-        0, 1, 2,    // Triangle one
-        0, 2, 3     // Triangle two
-    };*/
 
     // Creates and assigns to an id the Vertex Array Object, Vertex Buffer Object, and Element Buffer Object
     glGenVertexArrays(1, &m_idVAO);
@@ -121,21 +142,16 @@ Application::Application() : winWidth(800), winHeight(600), m_idVAO(0), m_idVBO(
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     // Unbinds the GL_ELEMENT_ARRAY_BUFFER
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
 
-Application::~Application()
-{
-    delete m_textureRef;
-    delete m_shaderRef;
-    delete m_window;
+    return true;
 }
 
 bool Application::Run()
 {
     m_shaderRef->Use();
     // This cursed bullshit is the result of me wanting to use pass by reference
-    m_shaderRef->SetInt("texture0", *new int(0));
-    m_shaderRef->SetInt("texture1", *new int(1));
+    m_shaderRef->SetInt("texture0", 0);
+    m_shaderRef->SetInt("texture1", 1);
     // Must be set to the current context
     glBindVertexArray(m_idVAO);
 
@@ -145,6 +161,8 @@ bool Application::Run()
     // Render loop
     while (!glfwWindowShouldClose(m_window))
     {
+        float time = (float)glfwGetTime();
+
         glfwPollEvents();
         // Input
         m_inputRef->ProcessInput(m_window);
@@ -152,13 +170,11 @@ bool Application::Run()
         // Rendering
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        float camX = sin(glfwGetTime() * speed) * radius;
-        float camZ = cos(glfwGetTime() * speed) * radius;
+        float camX = (float)sin(time * speed) * radius;
+        float camZ = (float)cos(time * speed) * radius;
 
-        m_cameraRef->SetView(glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-
-        m_shaderRef->SetMat4("view", *new mat4(m_cameraRef->GetView()));
-        m_shaderRef->SetMat4("projection", *new mat4(m_cameraRef->GetProjection()));
+        //m_cameraRef->SetView(glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+        m_shaderRef->SetMat4("camera", m_cameraRef->WorldToCameraMatrix());
 
         //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -166,7 +182,7 @@ bool Application::Run()
         {
             mat4 model = mat4(1.0f);
             model = glm::translate(model, m_cubePositions[i]);
-            float angle = glfwGetTime() * 30.0f * ((i + 1) / (i * 0.2f + 1));
+            float angle = time * 30.0f * ((i + 1) / (i * 0.2f + 1));
             model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
             m_shaderRef->SetMat4("model", model);
 
@@ -181,7 +197,7 @@ bool Application::Run()
     glDeleteVertexArrays(1, &m_idVAO);
     glDeleteBuffers(1, &m_idVBO);
     glDeleteBuffers(1, &m_idEBO);
-
     glfwTerminate();
+
     return true;
 }
