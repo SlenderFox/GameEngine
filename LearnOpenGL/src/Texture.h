@@ -1,16 +1,19 @@
 #pragma once
 #define STB_IMAGE_IMPLEMENTATION
 
-class Texture
+namespace Engine
 {
-public:
-	Texture();
-	~Texture() {}
+	class Texture
+	{
+	public:
+		Texture();
+		~Texture() {}
 
-	void LoadImages();
+		void LoadImages();
 
-private:
-	unsigned int m_idTEX0, m_idTEX1;
-	int m_texWidth, m_texHeight, m_texColChannels;
-	unsigned char* m_imageData;
-};
+	private:
+		unsigned int m_idTEX0, m_idTEX1;
+		int m_texWidth, m_texHeight, m_texColChannels;
+		unsigned char* m_imageData;
+	};
+}

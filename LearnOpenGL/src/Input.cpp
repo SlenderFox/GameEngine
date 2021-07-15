@@ -1,13 +1,20 @@
 #include "Input.h"
+#include <GLFW/glfw3.h>
 
-void Input::ProcessInput(GLFWwindow* pWindow)
+namespace Engine
 {
-    if (glfwGetKey(pWindow, GLFW_KEY_END) == GLFW_PRESS)
-        glfwSetWindowShouldClose(pWindow, true);
+    // Required to make the singleton actually work
+    Input* Input::m_instance = nullptr;
 
-    if (glfwGetKey(pWindow, GLFW_KEY_F1) == GLFW_PRESS)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    void Input::ProcessInput(GLFWwindow* pWindow)
+    {
+        if (glfwGetKey(pWindow, GLFW_KEY_END) == GLFW_PRESS)
+            glfwSetWindowShouldClose(pWindow, true);
 
-    if (glfwGetKey(pWindow, GLFW_KEY_F2) == GLFW_PRESS)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        if (glfwGetKey(pWindow, GLFW_KEY_F1) == GLFW_PRESS)
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+        if (glfwGetKey(pWindow, GLFW_KEY_F2) == GLFW_PRESS)
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
 }

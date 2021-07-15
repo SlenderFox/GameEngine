@@ -3,30 +3,21 @@
 * [Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)]
 * At: https://learnopengl.com/Getting-started/Camera
 * Resolutions:
-* 800x600
-* 1280x720
-* 1600x900
+* 800, 600
+* 1280, 720
+* 1600, 900
+* 1920, 1080
 * TODO:
 * Get camera fov working
 * Create Renderer class
-* Convert all classes except Application to singletons
 * Make application inheritable
 */
-#include "Application.h"
-#include <iostream>
-
-using std::cout;
-using std::cin;
-using std::endl;
+#include "Project.h"
 
 int main()
 {
-    Application* app = new Application();
-
-    if (app->Start("OpenGL", 1600, 900))
-        app->Run();
-
+    Engine::Application* app = new Project();
+    app->Run(1600, 900, "OpenGL", false);
     delete app;
-
 	return 0;
 }
