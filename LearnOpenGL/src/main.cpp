@@ -8,9 +8,6 @@
 * 1600, 900
 * 1920, 1080
 * TODO:
-* Get camera fov working
-* Create Renderer class
-* Make application inheritable
 */
 #include "Project.h"
 

@@ -3,9 +3,6 @@
 
 namespace Engine
 {
-    // Required to make the singleton actually work
-    Input* Input::m_instance = nullptr;
-
     void Input::ProcessInput(GLFWwindow* pWindow)
     {
         if (glfwGetKey(pWindow, GLFW_KEY_END) == GLFW_PRESS)

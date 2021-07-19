@@ -1,36 +1,87 @@
 #include "Camera.h"
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
+#include <glm/gtc/matrix_transform.hpp>
+#ifdef _DEBUG
+ #include <iostream>
+#endif
 
 namespace Engine
 {
-	Camera::Camera() : m_fovh(90)
+	Camera::Camera()
 	{
 		m_localUp = vec3(0.0f, 1.0f, 0.0f);
 		m_localTransform = mat4(1.0f);
-		float fovy = 2 * glm::atan(glm::tan(m_fovh * 0.5f));
-		m_projection = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
-		// Test
-		m_localTransform = glm::translate(m_localTransform, vec3(0.0f, 0.0f, -6.0f));
+		SetFovH((16.0f / 9.0f), (9.0f / 16.0f), glm::radians(75.0f));
 	}
 
-	Camera::Camera(float pFovh) : m_fovh(pFovh)
+	Camera::Camera(float pAspect, float pInvAspect)
 	{
 		m_localUp = vec3(0.0f, 1.0f, 0.0f);
 		m_localTransform = mat4(1.0f);
-		m_projection = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
+		SetFovH(pAspect, pInvAspect, glm::radians(75.0f));
 	}
 
-	Camera::Camera(mat4 pTransform) : m_fovh(90)
+	Camera::Camera(float pAspect, float pInvAspect, float pFovH)
+	{
+		m_localUp = vec3(0.0f, 1.0f, 0.0f);
+		m_localTransform = mat4(1.0f);
+		SetFovH(pAspect, pInvAspect, pFovH);
+	}
+
+	Camera::Camera(float pAspect, float pInvAspect, mat4 pTransform)
 	{
 		m_localUp = vec3(0.0f, 1.0f, 0.0f);
 		m_localTransform = pTransform;
-		m_projection = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
+		SetFovH(pAspect, pInvAspect, glm::radians(75.0f));
 	}
 
-	Camera::Camera(vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 }) : m_fovh(90)
+	Camera::Camera(float pAspect, float pInvAspect, float pFovH, mat4 pTransform)
+	{
+		m_localUp = vec3(0.0f, 1.0f, 0.0f);
+		m_localTransform = pTransform;
+		SetFovH(pAspect, pInvAspect, pFovH);
+	}
+
+	Camera::Camera(float pAspect, float pInvAspect, vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
 	{
 		LookAt(pFrom, pTo, pUp);
-		m_projection = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
+		SetFovH(pAspect, pInvAspect, glm::radians(75.0f));
+	}
+
+	Camera::Camera(float pAspect, float pInvAspect, float pFovH, vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
+	{
+		LookAt(pFrom, pTo, pUp);
+		SetFovH(pAspect, pInvAspect, pFovH);
+	}
+
+	void Camera::SetFovH(float pAspect, float pInvAspect, float pFovH)
+	{
+		m_fovH = pFovH;
+		UpdateFovV(pAspect, pInvAspect);
+	}
+
+	void Camera::SetFovV(float pAspect, float pInvAspect, float pFovV)
+	{
+		m_fovV = pFovV;
+		UpdateFovH(pAspect, pInvAspect);
+	}
+
+	void Camera::UpdateFovH(float pAspect, float pInvAspect)
+	{
+		m_fovH = 2 * glm::atan(glm::tan(m_fovV * 0.5f) * pAspect);
+		m_projection = glm::perspective(m_fovV, pAspect, 0.1f, 100.0f);
+#ifdef _DEBUG
+		std::cout << "Field of view set to: " << glm::degrees(m_fovH) << "H, " << glm::degrees(m_fovV) << "V" << std::endl;
+#endif
+	}
+
+	void Camera::UpdateFovV(float pAspect, float pInvAspect)
+	{
+		m_fovV = 2 * glm::atan(glm::tan(m_fovH * 0.5f) * pInvAspect);
+		m_projection = glm::perspective(m_fovV, pAspect, 0.1f, 100.0f);
+#ifdef _DEBUG
+		std::cout << "Field of view set to: " << glm::degrees(m_fovH) << "H, " << glm::degrees(m_fovV) << "V" << std::endl;
+#endif
 	}
 
 	void Camera::LookAt(vec3 pFrom, vec3 pTo, vec3 pUp)

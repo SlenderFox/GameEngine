@@ -1,16 +1,14 @@
 #include "Texture.h"
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include "stb_image.h"
-#include <iostream>
-
-using std::cout;
-using std::endl;
+#ifdef _DEBUG
+ #include <iostream>
+ using std::cout;
+ using std::endl;
+#endif
 
 namespace Engine
 {
-    Texture::Texture() : m_texWidth(0), m_texHeight(0), m_texColChannels(0), m_imageData(0), m_idTEX0(0), m_idTEX1(0)
-    { }
-
     void Texture::LoadImages()
     {
         // Generates two texture objects
@@ -49,7 +47,9 @@ namespace Engine
         }
         else
         {
+#ifdef _DEBUG
             cout << "Failed to load texture0" << endl;
+#endif
         }
 
         // Frees the image memory
@@ -74,7 +74,9 @@ namespace Engine
         }
         else
         {
+#ifdef _DEBUG
             cout << "Failed to load texture1" << endl;
+#endif
         }
         // Frees the image memory
         stbi_image_free(m_imageData);

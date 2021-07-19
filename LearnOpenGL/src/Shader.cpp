@@ -1,9 +1,12 @@
 #include "Shader.h"
+#include <glad/glad.h> // Include glad to get all the required OpenGL headers
+#include <glm/gtc/type_ptr.hpp>
 #include <sstream>
-#include <iostream>
-
-using std::cout;
-using std::endl;
+#ifdef _DEBUG
+ #include <iostream>
+ using std::cout;
+ using std::endl;
+#endif
 
 namespace Engine
 {
@@ -35,7 +38,9 @@ namespace Engine
         }
         catch (ifstream::failure e)
         {
+#ifdef _DEBUG
             cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << endl;
+#endif
         }
         const char* vertexCode = m_vertexString.c_str();
         const char* fragmentCode = m_fragmentString.c_str();
@@ -70,6 +75,22 @@ namespace Engine
         // We no longer need the vertex and fragment shaders
         glDeleteShader(m_idVertex);
         glDeleteShader(m_idFragment);
+
+        // Sets the shader as the active one
+        glUseProgram(m_idProgram);
+
+        m_shaderLoaded = true;
+    }
+
+    void Shader::Destroy(bool pValidate)
+    {
+        if (pValidate && m_shaderLoaded)
+            glDeleteProgram(m_idProgram);
+    }
+
+    void Shader::Use()
+    {
+        glUseProgram(m_idProgram);
     }
 
     void Shader::SetBool(const string& pName, bool pValue) const
@@ -106,7 +127,9 @@ namespace Engine
             {
                 // In the case of a failure it loads the log and outputs
                 glGetProgramInfoLog(*pShaderID, 512, NULL, infoLog);
+#ifdef _DEBUG
                 cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n" << infoLog << endl;
+#endif
             }
         }
         else
@@ -117,7 +140,9 @@ namespace Engine
             {
                 // In the case of a failure it loads the log and outputs
                 glGetShaderInfoLog(*pShaderID, 512, NULL, infoLog);
+#ifdef _DEBUG
                 cout << "ERROR::SHADER::" << pType << "::COMPILATION_FAILED\n" << infoLog << endl;
+#endif
             }
         }
     }

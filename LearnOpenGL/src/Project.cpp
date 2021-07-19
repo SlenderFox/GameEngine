@@ -10,17 +10,17 @@ Project::~Project()
 
 bool Project::Startup()
 {
-	return false;
+	return true;
 }
 
 void Project::Shutdown()
 {
 }
 
-void Project::Update(float pDeltaTime)
+void Project::Update(double pDeltaTime)
 {
 }
 
-void Project::Draw()
+void Project::FixedUpdate(double pDeltaTime)
 {
 }
