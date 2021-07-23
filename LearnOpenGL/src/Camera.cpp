@@ -11,74 +11,83 @@ namespace Engine
 	{
 		m_localUp = vec3(0.0f, 1.0f, 0.0f);
 		m_localTransform = mat4(1.0f);
-		SetFovH((16.0f / 9.0f), (9.0f / 16.0f), glm::radians(75.0f));
+		// Defaults to 16:9 aspect ratio
+		UpdateAspectRatio(16.0f, 9.0f);
+		SetFovH(glm::radians(75.0f));
 	}
 
-	Camera::Camera(float pAspect, float pInvAspect)
+	Camera::Camera(float pFovH)
 	{
 		m_localUp = vec3(0.0f, 1.0f, 0.0f);
 		m_localTransform = mat4(1.0f);
-		SetFovH(pAspect, pInvAspect, glm::radians(75.0f));
+		// Defaults to 16:9 aspect ratio
+		UpdateAspectRatio(16.0f, 9.0f);
+		SetFovH(pFovH);
 	}
 
-	Camera::Camera(float pAspect, float pInvAspect, float pFovH)
-	{
-		m_localUp = vec3(0.0f, 1.0f, 0.0f);
-		m_localTransform = mat4(1.0f);
-		SetFovH(pAspect, pInvAspect, pFovH);
-	}
-
-	Camera::Camera(float pAspect, float pInvAspect, mat4 pTransform)
+	Camera::Camera(mat4 pTransform)
 	{
 		m_localUp = vec3(0.0f, 1.0f, 0.0f);
 		m_localTransform = pTransform;
-		SetFovH(pAspect, pInvAspect, glm::radians(75.0f));
+		// Defaults to 16:9 aspect ratio
+		UpdateAspectRatio(16.0f, 9.0f);
+		SetFovH(glm::radians(75.0f));
 	}
 
-	Camera::Camera(float pAspect, float pInvAspect, float pFovH, mat4 pTransform)
+	Camera::Camera(float pFovH, mat4 pTransform)
 	{
 		m_localUp = vec3(0.0f, 1.0f, 0.0f);
 		m_localTransform = pTransform;
-		SetFovH(pAspect, pInvAspect, pFovH);
+		// Defaults to 16:9 aspect ratio
+		UpdateAspectRatio(16.0f, 9.0f);
+		SetFovH(pFovH);
 	}
 
-	Camera::Camera(float pAspect, float pInvAspect, vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
+	Camera::Camera(vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
 	{
 		LookAt(pFrom, pTo, pUp);
-		SetFovH(pAspect, pInvAspect, glm::radians(75.0f));
+		SetFovH(glm::radians(75.0f));
 	}
 
-	Camera::Camera(float pAspect, float pInvAspect, float pFovH, vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
+	Camera::Camera(float pFovH, vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
 	{
 		LookAt(pFrom, pTo, pUp);
-		SetFovH(pAspect, pInvAspect, pFovH);
+		// Defaults to 16:9 aspect ratio
+		UpdateAspectRatio(16.0f, 9.0f);
+		SetFovH(pFovH);
 	}
 
-	void Camera::SetFovH(float pAspect, float pInvAspect, float pFovH)
+	void Camera::UpdateAspectRatio(float pWidth, float pHeight)
+	{
+		m_aspectRatio = pWidth / pHeight;
+		m_invAspectRatio = pHeight / pWidth;
+	}
+
+	void Camera::SetFovH(float pFovH)
 	{
 		m_fovH = pFovH;
-		UpdateFovV(pAspect, pInvAspect);
+		UpdateFovV();
 	}
 
-	void Camera::SetFovV(float pAspect, float pInvAspect, float pFovV)
+	void Camera::SetFovV(float pFovV)
 	{
 		m_fovV = pFovV;
-		UpdateFovH(pAspect, pInvAspect);
+		UpdateFovH();
 	}
 
-	void Camera::UpdateFovH(float pAspect, float pInvAspect)
+	void Camera::UpdateFovH()
 	{
-		m_fovH = 2 * glm::atan(glm::tan(m_fovV * 0.5f) * pAspect);
-		m_projection = glm::perspective(m_fovV, pAspect, 0.1f, 100.0f);
+		m_fovH = 2 * glm::atan(glm::tan(m_fovV * 0.5f) * m_aspectRatio);
+		m_projection = glm::perspective(m_fovV, m_aspectRatio, 0.1f, 100.0f);
 #ifdef _DEBUG
 		std::cout << "Field of view set to: " << glm::degrees(m_fovH) << "H, " << glm::degrees(m_fovV) << "V" << std::endl;
 #endif
 	}
 
-	void Camera::UpdateFovV(float pAspect, float pInvAspect)
+	void Camera::UpdateFovV()
 	{
-		m_fovV = 2 * glm::atan(glm::tan(m_fovH * 0.5f) * pInvAspect);
-		m_projection = glm::perspective(m_fovV, pAspect, 0.1f, 100.0f);
+		m_fovV = 2 * glm::atan(glm::tan(m_fovH * 0.5f) * m_invAspectRatio);
+		m_projection = glm::perspective(m_fovV, m_aspectRatio, 0.1f, 100.0f);
 #ifdef _DEBUG
 		std::cout << "Field of view set to: " << glm::degrees(m_fovH) << "H, " << glm::degrees(m_fovV) << "V" << std::endl;
 #endif

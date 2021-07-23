@@ -12,38 +12,35 @@ namespace Engine
 	public:
 		// Default assumes the aspect ratio is 16:9
 		Camera();
-		Camera(float pAspect, float pInvAspect);
-		Camera(float pAspect, float pInvAspect, float pFovH);
-		Camera(float pAspect, float pInvAspect, mat4 pTransform);
-		Camera(float pAspect, float pInvAspect, float pFovH, mat4 pTransform);
-		Camera(float pAspect, float pInvAspect, vec3 pFrom, vec3 pTo, vec3 pUp);
-		Camera(float pAspect, float pInvAspect, float pFovH, vec3 pFrom, vec3 pTo, vec3 pUp);
+		Camera(float pFovH);
+		Camera(mat4 pTransform);
+		Camera(float pFovH, mat4 pTransform);
+		Camera(vec3 pFrom, vec3 pTo, vec3 pUp);
+		Camera(float pFovH, vec3 pFrom, vec3 pTo, vec3 pUp);
 		~Camera() {}
 
+		/*@brief Updates the aspect ratio and inverse aspect ratio
+		* @param pWidth The window width
+		* @param pHeight The window height
+		*/
+		void UpdateAspectRatio(float pWidth, float pHeight);
+
 		/*@brief Directly sets the horizontal fov and calculates the corresponding vertical fov
-		* @param pAspect The aspect ratio of the window
-		* @param pInvAspect The inverse aspect ratio of the window
 		* @param pFovH The desired horizontal fov in radians
 		*/
-		void SetFovH(float pAspect, float pInvAspect, float pFovH);
+		void SetFovH(float pFovH);
 		/*@brief Directly sets the vertical fov and calculates the corresponding horizontal fov
-		* @param pAspect The aspect ratio of the window
-		* @param pInvAspect The inverse aspect ratio of the window
 		* @param pFovH The desired vertical fov in radians
 		*/
-		void SetFovV(float pAspect, float pInvAspect, float pFovV);
-		/*@brief Updates the horizontal fov from the vertical given a new aspect ratio
+		void SetFovV(float pFovV);
+		/*@brief Updates the horizontal fov from the vertical given the new aspect ratio
 		* then creates a projection
-		* @param pAspect The aspect ratio of the window
-		* @param pInvAspect The inverse aspect ratio of the window
 		*/
-		void UpdateFovH(float pAspect, float pInvAspect);
-		/*@brief Updates the vertical fov from the horizontal given a new inverse aspect ratio
+		void UpdateFovH();
+		/*@brief Updates the vertical fov from the horizontal given the inverse aspect ratio
 		* then creates a projection
-		* @param pAspect The aspect ratio of the window
-		* @param pInvAspect The inverse aspect ratio of the window
 		*/
-		void UpdateFovV(float pAspect, float pInvAspect);
+		void UpdateFovV();
 
 		void LookAt(vec3 pFrom, vec3 pTo, vec3 pUp);
 		void LookAt(vec3 pFrom, vec3 pTo);
@@ -86,7 +83,8 @@ namespace Engine
 		void SetProjection(mat4 pValue);
 
 	private:
-		float m_fovH, m_fovV;	// The field of view of the camera in radians, horizontal & vertical
+		float m_fovH = 0, m_fovV = 0;	// The field of view of the camera in radians, horizontal & vertical
+		float m_aspectRatio = 0, m_invAspectRatio = 0;  // The aspect ratio and inverse aspect ratio
 		vec3 m_localUp;
 		union
 		{

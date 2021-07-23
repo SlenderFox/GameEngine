@@ -156,7 +156,8 @@ namespace Engine
         if (!m_rendererInst->Init())
             return false;
 
-        m_cameraRef = new Camera(m_aspectRatio, m_invAspectRatio, glm::radians(75.0f));
+        m_cameraRef = new Camera(glm::radians(75.0f));
+        UpdateCamera();
         m_cameraRef->SetClearColour(0.2f, 0.2f, 0.2f);
         m_cameraRef->SetPosition({ 0.0f, 0.0f, -6.0f });
 
@@ -170,9 +171,15 @@ namespace Engine
     {
         m_winWidth = pWidth;
         m_winHeight = pHeight;
-        m_aspectRatio = (float)m_winWidth / (float)m_winHeight;
-        m_invAspectRatio = (float)m_winHeight / (float)m_winWidth;
+        UpdateCamera();
+    }
+
+    void Application::UpdateCamera()
+    {
         if (m_cameraRef != nullptr)
-            m_cameraRef->UpdateFovV(m_aspectRatio, m_invAspectRatio);
+        {
+            m_cameraRef->UpdateAspectRatio((float)m_winWidth, (float)m_winHeight);
+            m_cameraRef->UpdateFovV();
+        }
     }
 }

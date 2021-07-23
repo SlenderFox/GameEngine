@@ -44,13 +44,15 @@ namespace Engine
         * @return If initialisation was successful
         */
         bool Init(string pTitle, bool pFullscreen);
+        /*@brief First confirms camera exists then updates it's aspect ratio and fov
+        */
+        void UpdateCamera();
 
         static Application* sm_appRef;
 
         bool m_gladLoaded = false;  // Whether glad has loaded or not
         unsigned int m_winWidth = 0, m_winHeight = 0;   // The width and height of the window
         unsigned int m_frames = 0, m_fps = 0;           // The amount of frames rendered per second
-        float m_aspectRatio = 0, m_invAspectRatio = 0;  // The aspect ratio and inverse aspect ratio
         double m_currentTime = 0, m_prevTime = 0,
             m_deltaTime = 0, m_frameInterval = 0;
 
