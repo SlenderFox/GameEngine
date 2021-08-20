@@ -16,6 +16,11 @@ void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight)
     glViewport(0, 0, pWidth, pHeight);
 }
 
+void mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY)
+{
+    Engine::Application::GetApplication()->MouseCallback(pWindow, pPosX, pPosY);
+}
+
 namespace Engine
 {
     Application* Application::sm_appRef = nullptr;
@@ -70,22 +75,25 @@ namespace Engine
 
                 // Input
                 glfwPollEvents();
-                Input::GetInstance()->ProcessInput(m_window);
+                m_inputInst->ProcessInput(m_window);
+
+                // Temporary
+                ProcessInput();
 
                 Update(m_deltaTime);
 
-                //unsigned short cast = (unsigned short)m_frameInterval * 100;
-                if (((unsigned short)(m_frameInterval * 100)) % 5 == 0)
+                // Scales by 10,000 (converts to mircoseconds) and removes decimal place
+                if (((unsigned short)(m_frameInterval * 10000)) % 166 == 0)
                     FixedUpdate(m_deltaTime);
 
                 // Skip if minimised
                 if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) != 0)
                     continue;
 
-                float camX = (float)sin(m_currentTime * speed) * radius;
-                float camZ = (float)cos(m_currentTime * speed) * radius;
+                //float camX = (float)sin(m_currentTime * speed) * radius;
+                //float camZ = (float)cos(m_currentTime * speed) * radius;
 
-                m_cameraRef->SetView(glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+                //m_cameraRef->SetView(glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
                 m_rendererInst->Draw(m_cameraRef->WorldToCameraMatrix(), m_currentTime);
 
@@ -104,7 +112,7 @@ namespace Engine
     {
 #ifdef _DEBUG
         // Moves the console window
-        MoveWindow(GetConsoleWindow(), 10, 10, 600, 600, TRUE);
+        MoveWindow(GetConsoleWindow(), 2, 2, 600, 600, TRUE);
 #endif
         
         // glfw: initialise and configure
@@ -128,7 +136,8 @@ namespace Engine
         //glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
 
         // glfw window creation
-        m_window = glfwCreateWindow(m_winWidth, m_winHeight, pTitle.c_str(), (pFullscreen ? glfwGetPrimaryMonitor() : nullptr), nullptr);
+        m_window = glfwCreateWindow(m_winWidth, m_winHeight, pTitle.c_str(),
+            (pFullscreen ? glfwGetPrimaryMonitor() : nullptr), nullptr);
         if (m_window == nullptr)
         {
 #ifdef _DEBUG
@@ -137,9 +146,23 @@ namespace Engine
             return false;
         }
         glfwMakeContextCurrent(m_window);
-        glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
-        //glfwSetWindowAspectRatio(m_window, 16, 9);
 
+        // Moves the window to the center of the workarea
+        int monPosX, monPosY, monWidth, monHeight;
+        glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
+        glfwSetWindowPos(m_window, (monWidth - m_winWidth) * 0.5f, (monHeight - m_winHeight) * 0.5f);
+
+        glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
+
+        glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetCursorPosCallback(m_window, mouse_callback);
+        //m_mouseLastX = m_winWidth * 0.5f;
+        //m_mouseLastY = m_winHeight * 0.5f;
+        glfwGetCursorPos(m_window, &m_mouseLastX, &m_mouseLastY);
+        if (glfwRawMouseMotionSupported())
+            glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+
+        //glfwSetWindowAspectRatio(m_window, 16, 9);
         //int* monCount = 0;
         //GLFWmonitor** monitors = glfwGetMonitors(monCount);
 
@@ -159,7 +182,7 @@ namespace Engine
         m_cameraRef = new Camera(glm::radians(75.0f));
         UpdateCamera();
         m_cameraRef->SetClearColour(0.2f, 0.2f, 0.2f);
-        m_cameraRef->SetPosition({ 0.0f, 0.0f, -6.0f });
+        m_cameraRef->SetPosition({ 0.0f, 0.0f, 6.0f });
 
         if (!Startup())
             return false;
@@ -174,6 +197,36 @@ namespace Engine
         UpdateCamera();
     }
 
+    void Application::MouseCallback(GLFWwindow* pWindow, double pPosX, double pPosY)
+    {
+        double offsetX = pPosX - m_mouseLastX;
+        double offsetY = pPosY - m_mouseLastY;
+        m_mouseLastX = pPosX;
+        m_mouseLastY = pPosY;
+        const double sens = 0.08f;
+        offsetX *= sens;
+        offsetY *= sens;
+        m_yaw += offsetX;
+        m_pitch += offsetY;
+        if (m_pitch > 89.0f)
+            m_pitch = 89.0f;
+        else if (m_pitch < -89.0f)
+            m_pitch = -89.0f;
+
+        // The forward direction of the camera
+        vec3 forward = vec3();
+        forward.x = (float)cos(glm::radians(m_yaw)) * (float)cos(glm::radians(m_pitch));
+        forward.y = (float)sin(glm::radians(m_pitch));
+        forward.z = (float)sin(glm::radians(m_yaw)) * (float)cos(glm::radians(m_pitch));
+        forward = glm::normalize(forward);
+        vec3 right = glm::normalize(glm::cross(vec3(0, 1, 0), forward));
+        vec3 up = glm::cross(forward, right);
+
+        m_cameraRef->SetRight(right);
+        m_cameraRef->SetUp(up);
+        m_cameraRef->SetForward(forward);
+    }
+
     void Application::UpdateCamera()
     {
         if (m_cameraRef != nullptr)
@@ -181,5 +234,41 @@ namespace Engine
             m_cameraRef->UpdateAspectRatio((float)m_winWidth, (float)m_winHeight);
             m_cameraRef->UpdateFovV();
         }
+    }
+
+    void Application::ProcessInput()
+    {
+        float speed;
+        vec3 translation = vec3();
+
+        // SlowDown
+        if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+            speed = 2;
+        // SpeedUp
+        else if (glfwGetKey(m_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+            speed = 16;
+        else
+            speed = 8;
+
+        // Forwards
+        if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS)
+            translation += speed * (float)m_deltaTime * m_cameraRef->GetForward();
+        // Backwards
+        if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS)
+            translation -= speed * (float)m_deltaTime * m_cameraRef->GetForward();
+        // Left
+        if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS)
+            translation += speed * (float)m_deltaTime * m_cameraRef->GetRight();
+        // Right
+        if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS)
+            translation -= speed * (float)m_deltaTime * m_cameraRef->GetRight();
+        // Up
+        if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)
+            translation += speed * (float)m_deltaTime * m_cameraRef->GetUp();
+        // Down
+        if (glfwGetKey(m_window, GLFW_KEY_C) == GLFW_PRESS)
+            translation -= speed * (float)m_deltaTime * m_cameraRef->GetUp();
+
+        m_cameraRef->Translate(translation);
     }
 }

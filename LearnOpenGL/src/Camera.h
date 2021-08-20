@@ -76,21 +76,28 @@ namespace Engine
 
 		mat4 GetTransform() const;
 		void SetTransform(mat4 pValue);
-		void SetPosition(vec3 pValue);
 		mat4 GetView() const;
 		void SetView(mat4 pValue);
 		mat4 GetProjection() const;
 		void SetProjection(mat4 pValue);
 
+		vec3 GetPosition() const;
+		void SetPosition(vec3 pValue);
+		void Translate(vec3 pValue);
+
+		vec3 GetRight() const;
+		void SetRight(vec3 pValue);
+		vec3 GetUp() const;
+		void SetUp(vec3 pValue);
+		vec3 GetForward() const;
+		void SetForward(vec3 pValue);
+
 	private:
 		float m_fovH = 0, m_fovV = 0;	// The field of view of the camera in radians, horizontal & vertical
 		float m_aspectRatio = 0, m_invAspectRatio = 0;  // The aspect ratio and inverse aspect ratio
 		vec3 m_localUp;
-		union
-		{
-			mat4 m_localTransform;
-			mat4 m_view;
-		};
+		mat4 m_localTransform;
+		mat4 m_view;
 		mat4 m_projection;
 	};
 }

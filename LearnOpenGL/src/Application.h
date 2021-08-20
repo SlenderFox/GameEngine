@@ -28,6 +28,8 @@ namespace Engine
         */
         void SetDimensions(unsigned int pWidth, unsigned int pHeight);
 
+        void MouseCallback(GLFWwindow* pWindow, double pPosX, double pPosY);
+
     protected:
         Application();
 
@@ -48,13 +50,19 @@ namespace Engine
         */
         void UpdateCamera();
 
+        /*@brief Temporary local input prcoessing
+        */
+        void ProcessInput();
+
         static Application* sm_appRef;
 
         bool m_gladLoaded = false;  // Whether glad has loaded or not
         unsigned int m_winWidth = 0, m_winHeight = 0;   // The width and height of the window
         unsigned int m_frames = 0, m_fps = 0;           // The amount of frames rendered per second
-        double m_currentTime = 0, m_prevTime = 0,
-            m_deltaTime = 0, m_frameInterval = 0;
+        double m_currentTime = 0, m_prevTime = 0, m_deltaTime = 0;  // The time between rendered frames
+        double m_frameInterval = 0; // Accruement of time use for periodic updates
+        double m_mouseLastX = 400, m_mouseLastY = 300;  // Mouse position in the last frame
+        double m_yaw = 90.0f, m_pitch = 0; // The rotation of the camera
 
         GLFWwindow* m_window = nullptr;     // A reference to the window
         Renderer* m_rendererInst = nullptr; // A reference to the renderer instance
