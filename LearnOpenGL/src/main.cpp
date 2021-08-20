@@ -1,7 +1,7 @@
 /*Following: https://learnopengl.com/
 * Enable/disable console through
 * [Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)]
-* At: https://learnopengl.com/Getting-started/Camera
+* At: https://learnopengl.com/Lighting/Colors
 * Resolutions:
 * 800, 600
 * 1280, 720
