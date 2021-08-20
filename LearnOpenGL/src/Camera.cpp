@@ -21,7 +21,7 @@ namespace Engine
 		SetTransform(mat4(1.0f));
 		// Defaults to 16:9 aspect ratio
 		UpdateAspectRatio(16.0f, 9.0f);
-		SetFovH(radians(75.0f));
+		SetFovH(75.0f);
 	}
 
 	Camera::Camera(float pFovH)
@@ -39,7 +39,7 @@ namespace Engine
 		SetTransform(pTransform);
 		// Defaults to 16:9 aspect ratio
 		UpdateAspectRatio(16.0f, 9.0f);
-		SetFovH(radians(75.0f));
+		SetFovH(75.0f);
 	}
 
 	Camera::Camera(float pFovH, mat4 pTransform)
@@ -56,7 +56,7 @@ namespace Engine
 		LookAt(pFrom, pTo, pUp);
 		// Defaults to 16:9 aspect ratio
 		UpdateAspectRatio(16.0f, 9.0f);
-		SetFovH(radians(75.0f));
+		SetFovH(75.0f);
 	}
 
 	Camera::Camera(float pFovH, vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
@@ -76,31 +76,53 @@ namespace Engine
 	void Camera::SetFovH(float pFovH)
 	{
 		m_fovH = pFovH;
+		if (m_fovH > 120.0f)
+			m_fovH = 120.0f;
+		else if (m_fovH < 1.0f)
+			m_fovH = 1.0f;
+		UpdateFovV();
+	}
+
+	void Camera::ModifyFovH(float pValue)
+	{
+		m_fovH += pValue;
+		if (m_fovH > 120.0f)
+			m_fovH = 120.0f;
+		else if (m_fovH < 1.0f)
+			m_fovH = 1.0f;
 		UpdateFovV();
 	}
 
 	void Camera::SetFovV(float pFovV)
 	{
 		m_fovV = pFovV;
+		if (m_fovV > 120.0f)
+			m_fovV = 120.0f;
+		else if (m_fovV < 1.0f)
+			m_fovV = 1.0f;
+		UpdateFovH();
+	}
+
+	void Camera::ModifyFovV(float pValue)
+	{
+		m_fovV += pValue;
+		if (m_fovV > 120.0f)
+			m_fovV = 120.0f;
+		else if (m_fovV < 1.0f)
+			m_fovV = 1.0f;
 		UpdateFovH();
 	}
 
 	void Camera::UpdateFovH()
 	{
-		m_fovH = 2 * atan(tan(m_fovV * 0.5f) * m_aspectRatio);
-		m_projection = perspective(m_fovV, m_aspectRatio, 0.1f, 100.0f);
-#ifdef _DEBUG
-		std::cout << "Field of view set to: " << degrees(m_fovH) << "H, " << degrees(m_fovV) << "V" << std::endl;
-#endif
+		m_fovH = degrees(2 * atan(tan(radians(m_fovV) * 0.5f) * m_aspectRatio));
+		SetProjection(m_fovV);
 	}
 
 	void Camera::UpdateFovV()
 	{
-		m_fovV = 2 * atan(tan(m_fovH * 0.5f) * m_invAspectRatio);
-		m_projection = perspective(m_fovV, m_aspectRatio, 0.1f, 100.0f);
-#ifdef _DEBUG
-		std::cout << "Field of view set to: " << degrees(m_fovH) << "H, " << degrees(m_fovV) << "V" << std::endl;
-#endif
+		m_fovV = degrees(2 * atan(tan(radians(m_fovH) * 0.5f) * m_invAspectRatio));
+		SetProjection(m_fovV);
 	}
 
 	void Camera::LookAt(vec3 pFrom, vec3 pTo, vec3 pUp)
@@ -174,6 +196,14 @@ namespace Engine
 	void Camera::SetProjection(mat4 pValue)
 	{
 		m_projection = pValue;
+	}
+
+	void Camera::SetProjection(float pFovV)
+	{
+		m_projection = perspective(radians(pFovV), m_aspectRatio, 0.1f, 100.0f);
+#ifdef _DEBUG
+		std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
+#endif
 	}
 
 	vec3 Camera::GetPosition() const

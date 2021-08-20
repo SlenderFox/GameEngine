@@ -18,7 +18,12 @@ void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight)
 
 void mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY)
 {
-    Engine::Application::GetApplication()->MouseCallback(pWindow, pPosX, pPosY);
+    Engine::Application::GetApplication()->MouseCallback(pPosX, pPosY);
+}
+
+void scroll_callback(GLFWwindow* window, double pOffsetX, double pOffsetY)
+{
+    Engine::Application::GetApplication()->ScrollCallback(pOffsetX, pOffsetY);
 }
 
 namespace Engine
@@ -162,6 +167,8 @@ namespace Engine
         if (glfwRawMouseMotionSupported())
             glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
+        glfwSetScrollCallback(m_window, scroll_callback);
+
         //glfwSetWindowAspectRatio(m_window, 16, 9);
         //int* monCount = 0;
         //GLFWmonitor** monitors = glfwGetMonitors(monCount);
@@ -179,7 +186,7 @@ namespace Engine
         if (!m_rendererInst->Init())
             return false;
 
-        m_cameraRef = new Camera(glm::radians(75.0f));
+        m_cameraRef = new Camera(75.0f);
         UpdateCamera();
         m_cameraRef->SetClearColour(0.2f, 0.2f, 0.2f);
         m_cameraRef->SetPosition({ 0.0f, 0.0f, 6.0f });
@@ -197,7 +204,7 @@ namespace Engine
         UpdateCamera();
     }
 
-    void Application::MouseCallback(GLFWwindow* pWindow, double pPosX, double pPosY)
+    void Application::MouseCallback(double pPosX, double pPosY)
     {
         double offsetX = pPosX - m_mouseLastX;
         double offsetY = pPosY - m_mouseLastY;
@@ -225,6 +232,11 @@ namespace Engine
         m_cameraRef->SetRight(right);
         m_cameraRef->SetUp(up);
         m_cameraRef->SetForward(forward);
+    }
+
+    void Application::ScrollCallback(double pOffsetX, double pOffsetY)
+    {
+        m_cameraRef->ModifyFovH(pOffsetY * -3.0f);
     }
 
     void Application::UpdateCamera()

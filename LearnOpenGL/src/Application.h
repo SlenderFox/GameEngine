@@ -28,7 +28,8 @@ namespace Engine
         */
         void SetDimensions(unsigned int pWidth, unsigned int pHeight);
 
-        void MouseCallback(GLFWwindow* pWindow, double pPosX, double pPosY);
+        void MouseCallback(double pPosX, double pPosY);
+        void ScrollCallback(double pOffsetX, double pOffsetY);
 
     protected:
         Application();

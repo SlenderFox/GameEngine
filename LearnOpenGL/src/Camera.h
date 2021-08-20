@@ -29,10 +29,18 @@ namespace Engine
 		* @param pFovH The desired horizontal fov in radians
 		*/
 		void SetFovH(float pFovH);
+		/*@brief Adds the supplied value to the current fov
+		* @param pValue The value that is added to the fov
+		*/
+		void ModifyFovH(float pValue);
 		/*@brief Directly sets the vertical fov and calculates the corresponding horizontal fov
 		* @param pFovH The desired vertical fov in radians
 		*/
 		void SetFovV(float pFovV);
+		/*@brief Adds the supplied value to the current fov
+		* @param pValue The value that is added to the fov
+		*/
+		void ModifyFovV(float pValue);
 		/*@brief Updates the horizontal fov from the vertical given the new aspect ratio
 		* then creates a projection
 		*/
@@ -80,6 +88,7 @@ namespace Engine
 		void SetView(mat4 pValue);
 		mat4 GetProjection() const;
 		void SetProjection(mat4 pValue);
+		void SetProjection(float pFovV);
 
 		vec3 GetPosition() const;
 		void SetPosition(vec3 pValue);
@@ -93,7 +102,7 @@ namespace Engine
 		void SetForward(vec3 pValue);
 
 	private:
-		float m_fovH = 0, m_fovV = 0;	// The field of view of the camera in radians, horizontal & vertical
+		float m_fovH = 0, m_fovV = 0;	// The field of view of the camera in degrees, horizontal & vertical
 		float m_aspectRatio = 0, m_invAspectRatio = 0;  // The aspect ratio and inverse aspect ratio
 		vec3 m_localUp;
 		mat4 m_localTransform;
