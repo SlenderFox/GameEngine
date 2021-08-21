@@ -32,14 +32,16 @@ namespace Engine
 
     Application::Application()
     {
+        // Prevents potential memory leak
+        if (sm_appRef != nullptr)
+            delete sm_appRef;
+
         // Applies the static reference
         sm_appRef = this;
 
+        // Need to be instantiated in here to avoid errors if glfw or glad fail
         m_rendererInst = Renderer::GetInstance();
         m_inputInst = Input::GetInstance();
-
-        // Default dimensions
-        SetDimensions(800, 600);
     }
 
     Application::~Application()
@@ -57,7 +59,7 @@ namespace Engine
 
         if (Init(pTitle, pFullscreen))
         {
-            m_prevTime = glfwGetTime();
+            m_currentTime = glfwGetTime();
 
             const float radius = 10.0f;
             const float speed = 0.5f;
@@ -152,17 +154,17 @@ namespace Engine
         }
         glfwMakeContextCurrent(m_window);
 
-        // Moves the window to the center of the workarea
-        int monPosX, monPosY, monWidth, monHeight;
-        glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
-        glfwSetWindowPos(m_window, (monWidth - m_winWidth) * 0.5f, (monHeight - m_winHeight) * 0.5f);
+        {
+            // Moves the window to the center of the workarea
+            int monPosX, monPosY, monWidth, monHeight;
+            glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
+            glfwSetWindowPos(m_window, (monWidth - m_winWidth) * 0.5f, (monHeight - m_winHeight) * 0.5f);
+        }
 
         glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 
         glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         glfwSetCursorPosCallback(m_window, mouse_callback);
-        //m_mouseLastX = m_winWidth * 0.5f;
-        //m_mouseLastY = m_winHeight * 0.5f;
         glfwGetCursorPos(m_window, &m_mouseLastX, &m_mouseLastY);
         if (glfwRawMouseMotionSupported())
             glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
@@ -204,6 +206,15 @@ namespace Engine
         UpdateCamera();
     }
 
+    void Application::UpdateCamera()
+    {
+        if (m_cameraRef != nullptr)
+        {
+            m_cameraRef->UpdateAspectRatio((float)m_winWidth, (float)m_winHeight);
+            m_cameraRef->UpdateFovV();
+        }
+    }
+
     void Application::MouseCallback(double pPosX, double pPosY)
     {
         double offsetX = pPosX - m_mouseLastX;
@@ -237,15 +248,6 @@ namespace Engine
     void Application::ScrollCallback(double pOffsetX, double pOffsetY)
     {
         m_cameraRef->ModifyFovH(pOffsetY * -3.0f);
-    }
-
-    void Application::UpdateCamera()
-    {
-        if (m_cameraRef != nullptr)
-        {
-            m_cameraRef->UpdateAspectRatio((float)m_winWidth, (float)m_winHeight);
-            m_cameraRef->UpdateFovV();
-        }
     }
 
     void Application::ProcessInput()

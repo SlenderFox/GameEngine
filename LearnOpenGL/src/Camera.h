@@ -104,7 +104,6 @@ namespace Engine
 	private:
 		float m_fovH = 0, m_fovV = 0;	// The field of view of the camera in degrees, horizontal & vertical
 		float m_aspectRatio = 0, m_invAspectRatio = 0;  // The aspect ratio and inverse aspect ratio
-		vec3 m_localUp;
 		mat4 m_localTransform;
 		mat4 m_view;
 		mat4 m_projection;

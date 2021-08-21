@@ -10,14 +10,12 @@ using glm::atan;
 using glm::tan;
 using glm::perspective;
 using glm::degrees;
-using glm::lookAt;
 using glm::inverse;
 
 namespace Engine
 {
 	Camera::Camera()
 	{
-		m_localUp = vec3(0.0f, 1.0f, 0.0f);
 		SetTransform(mat4(1.0f));
 		// Defaults to 16:9 aspect ratio
 		UpdateAspectRatio(16.0f, 9.0f);
@@ -26,7 +24,6 @@ namespace Engine
 
 	Camera::Camera(float pFovH)
 	{
-		m_localUp = vec3(0.0f, 1.0f, 0.0f);
 		SetTransform(mat4(1.0f));
 		// Defaults to 16:9 aspect ratio
 		UpdateAspectRatio(16.0f, 9.0f);
@@ -35,7 +32,6 @@ namespace Engine
 
 	Camera::Camera(mat4 pTransform)
 	{
-		m_localUp = vec3(0.0f, 1.0f, 0.0f);
 		SetTransform(pTransform);
 		// Defaults to 16:9 aspect ratio
 		UpdateAspectRatio(16.0f, 9.0f);
@@ -44,7 +40,6 @@ namespace Engine
 
 	Camera::Camera(float pFovH, mat4 pTransform)
 	{
-		m_localUp = vec3(0.0f, 1.0f, 0.0f);
 		SetTransform(pTransform);
 		// Defaults to 16:9 aspect ratio
 		UpdateAspectRatio(16.0f, 9.0f);
@@ -127,13 +122,14 @@ namespace Engine
 
 	void Camera::LookAt(vec3 pFrom, vec3 pTo, vec3 pUp)
 	{
-		m_localUp = pUp;
-		m_view = lookAt(pFrom, pTo, pUp);
+		m_view = glm::lookAt(pFrom, pTo, pUp);
+		m_localTransform = inverse(m_view);
 	}
 
 	void Camera::LookAt(vec3 pFrom, vec3 pTo)
 	{
-		m_view = lookAt(pFrom, pTo, m_localUp);
+		m_view = glm::lookAt(pFrom, pTo, { 0, 1, 0 });
+		m_localTransform = inverse(m_view);
 	}
 
 	void Camera::SetClearColour(vec4 pValue)
