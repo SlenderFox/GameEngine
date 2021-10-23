@@ -13,7 +13,7 @@
 
 int main()
 {
-    Engine::Application* app = new Project();
+    Project* app = new Project();
     app->Run(1600, 900, "OpenGL", false);
     delete app;
 	return 0;
