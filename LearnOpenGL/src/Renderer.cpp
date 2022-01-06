@@ -14,6 +14,7 @@ namespace Engine
         //m_shaderRef->Use();
         m_shaderRef->SetInt("texture0", 0);
         m_shaderRef->SetInt("texture1", 1);
+        m_shaderRef->SetInt("texture2", 2);
         
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);

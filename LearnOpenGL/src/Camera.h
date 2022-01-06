@@ -30,7 +30,7 @@ namespace Engine
 		*/
 		void SetFovH(float pFovH);
 		/*@brief Adds the supplied value to the current fov
-		* @param pValue The value that is added to the fov
+		* @param pValue The value in radians that is added to the fov
 		*/
 		void ModifyFovH(float pValue);
 		/*@brief Directly sets the vertical fov and calculates the corresponding horizontal fov
@@ -38,7 +38,7 @@ namespace Engine
 		*/
 		void SetFovV(float pFovV);
 		/*@brief Adds the supplied value to the current fov
-		* @param pValue The value that is added to the fov
+		* @param pValue The value in radians that is added to the fov
 		*/
 		void ModifyFovV(float pValue);
 		/*@brief Updates the horizontal fov from the vertical given the new aspect ratio

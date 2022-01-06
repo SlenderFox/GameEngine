@@ -41,6 +41,8 @@ namespace Engine
 #ifdef _DEBUG
             cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << endl;
 #endif
+            // Crashes if file not read successfully
+            exit(0);
         }
         const char* vertexCode = m_vertexString.c_str();
         const char* fragmentCode = m_fragmentString.c_str();
