@@ -8,6 +8,7 @@
 * 1600, 900
 * 1920, 1080
 * TODO:
+* Add borderless fullscreen option, use enum for selection
 */
 #include "Project.hpp"
 

@@ -81,20 +81,20 @@ namespace Engine
          */
         void ProcessInput();
 
-        static Application* sm_appRef;
-
-        // TODO: Fix these variable comments
-        bool m_gladLoaded = false;  // Whether glad has loaded or not
-        unsigned int m_winWidth = 0, m_winHeight = 0;   // The width and height of the window
-        unsigned int m_frames = 0, m_fps = 0;           // The amount of frames rendered per second
-        double m_currentTime = 0, m_prevTime = 0, m_deltaTime = 0;  // The time between rendered frames
-        double m_frameInterval = 0; // Accruement of time use for periodic updates
-        double m_mouseLastX = 400, m_mouseLastY = 300;  // Mouse position in the last frame
-        double m_yaw = 90.0f, m_pitch = 0; // The rotation of the camera
-
+        static Application* sm_appRef;      // Static reference to the application
         GLFWwindow* m_window = nullptr;     // A reference to the window
         Renderer* m_rendererInst = nullptr; // A reference to the renderer instance
         Input* m_inputInst = nullptr;       // A reference to the input instance
         Camera* m_cameraRef = nullptr;      // A reference to a camera
+
+        bool m_gladLoaded = false;                      // Whether glad has loaded or not
+        unsigned int m_winWidth = 0, m_winHeight = 0;   // The width and height of the window
+        unsigned int m_frames = 0;                      // The total amount of frames rendered
+        unsigned int m_fps = 0;                         // The amount of frames rendered per second
+        double m_currentTime = 0, m_prevTime = 0,
+         m_deltaTime = 0, m_halfSecondAverage = 0;      // The time between rendered frames
+
+        double m_mouseLastX = 400, m_mouseLastY = 300;  // Mouse position in the last frame
+        double m_yaw = 90.0f, m_pitch = 0;              // The rotation of the camera
     };
 }

@@ -59,7 +59,7 @@ namespace Engine
 
         if (Init(pTitle, pFullscreen))
         {
-            m_currentTime = glfwGetTime();
+            m_currentTime = glfwGetTime() - 0.02f;
 
             const float radius = 10.0f;
             const float speed = 0.5f;
@@ -70,15 +70,19 @@ namespace Engine
                 m_prevTime = m_currentTime;
                 m_currentTime = glfwGetTime();
                 m_deltaTime = m_currentTime - m_prevTime;
+                m_halfSecondAverage += m_deltaTime;
 
-                // TODO: Fix this frame acruement
                 m_frames++;
-                m_frameInterval += m_deltaTime;
-                if (m_frameInterval >= 1.0f)
+                
+                // Doing this allows me to updates fps once every half second
+                if ((unsigned int)(m_currentTime * 10) % 1 == 0)
                 {
-                    m_fps = m_frames;
-                    m_frames = 0;
-                    m_frameInterval -= 1.0f;
+                    m_fps = 1 / m_halfSecondAverage;
+                    m_halfSecondAverage = 0;
+#ifdef _DEBUG
+                    //std::cout << "fps: " << m_fps << std::endl;
+                    printf("fps: %u \n", m_fps);
+#endif
                 }
 
                 // Input
@@ -95,9 +99,14 @@ namespace Engine
                 if (((unsigned short)(m_currentTime * 1000000)) % 16666 == 0)
                     FixedUpdate(m_deltaTime);
 
-                // Skip if minimised
+                // Skip drawing if minimised, restricts fps to 15
                 if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) != 0)
+                {
+                    if (m_deltaTime < 50)
+                        Sleep(50);
+
                     continue;
+                }
 
                 //float camX = (float)sin(m_currentTime * speed) * radius;
                 //float camZ = (float)cos(m_currentTime * speed) * radius;
@@ -206,7 +215,8 @@ namespace Engine
     {
         m_winWidth = pWidth;
         m_winHeight = pHeight;
-        if (m_cameraRef != nullptr)
+
+        if (m_cameraRef != nullptr && pWidth > 0)
         {
             UpdateCamera();
         }
