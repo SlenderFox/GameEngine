@@ -25,13 +25,26 @@ namespace Engine
 		Renderer(Renderer&&) = delete;
 		Renderer& operator=(Renderer&&) = delete;
 
+        /**
+         * @brief Initlialises the renderer
+         * 
+         * @return If initlialisation was successful
+         */
 		bool Init();
+        /**
+         * @brief Destroys the renderer but only if it was ever initliased
+         * 
+         * @param pValidate Whether the renderer was even initialised
+         */
         void Destroy(bool pValidate);
-		/*@brief Renders the scene given a specified viewprojection matrix
-		* @param pCamera The viewprojection matrix used as the camera
-		* @remark Only Application is able to call this function
-		*/
-		void Draw(glm::mat4 pCamera, double pTime /*This is temporary*/);
+        /**
+         * @brief Draws the scene
+         * 
+         * @param pCamera The viewprojection matrix used as the camera
+         * @param pTime TEMPORARY! Used for basic shape animation
+         * @remark Only Application is able to call this function
+         */
+		void Draw(glm::mat4 pCamera, double pTime);
 
 		unsigned int m_idVAO = 0, m_idVBO = 0, m_idEBO = 0; // The vertex attribute object, vertex buffer object, and element buffer object
 

@@ -40,7 +40,6 @@
     <ClInclude Include="..\src\Project.h" />
     <ClInclude Include="..\src\Renderer.h" />
     <ClInclude Include="..\src\Shader.h" />
-    <ClInclude Include="..\src\stb_image.h" />
     <ClInclude Include="..\src\Texture.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

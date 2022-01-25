@@ -21,6 +21,6 @@ void Project::Update(double pDeltaTime)
 {
 }
 
-void Project::FixedUpdate(double pDeltaTime)
+void Project::FixedUpdate(double pFixedDeltaTime)
 {
 }

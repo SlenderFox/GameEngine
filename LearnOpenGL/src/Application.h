@@ -14,18 +14,23 @@ namespace Engine
 
         static Application* GetApplication() { return sm_appRef; }
 
-        /*@brief The entrypoint to the application
-        * @param pTitle The title of the window
-        * @param pTitle If the window is fullscreened or windowed
-        * @param pWidth The desired width in pixels of the window
-        * @param pHeight The desired height in pixels of the window
-        * @return Return code, zero if successful and a number if error
-        */
+        /**
+         * @brief The entrypoint to the application
+         * 
+         * @param pWidth The desired width in pixels of the window
+         * @param pHeight The desired height in pixels of the window
+         * @param pTitle pTitle The title of the window
+         * @param pFullscreen If the window is fullscreened or windowed
+         */
         void Run(unsigned int pWidth, unsigned int pHeight, string pTitle, bool pFullscreen);
-        /*@brief Sets the dimensions of the window and calculates aspect ratio
-        * @param pWidth The desired width in pixels of the window
-        * @param pHeight The desired height in pixels of the window
-        */
+
+        /**
+         * @brief Sets the dimensions of the window and calculates aspect ratio.
+         * If the camera exists, update it aswell
+         * 
+         * @param pWidth The desired width in pixels of the window
+         * @param pHeight The desired height in pixels of the window
+         */
         void SetDimensions(unsigned int pWidth, unsigned int pHeight);
 
         void MouseCallback(double pPosX, double pPosY);
@@ -34,29 +39,51 @@ namespace Engine
     protected:
         Application();
 
+        /**
+         * @brief Called at the end of Init()
+         * 
+         * @return If there was a failure during startup that requires a crash
+         */
         virtual bool Startup() = 0;
+        /**
+         * @brief Called after main loop has exited and before application termination
+         */
         virtual void Shutdown() = 0;
+        /**
+         * @brief Called once per frame
+         * 
+         * @param pDeltaTime The time between frames
+         */
         virtual void Update(double pDeltaTime) = 0;
-        virtual void FixedUpdate(double pDeltaTime) = 0;
+        /**
+         * @brief Called once every 60 seconds
+         * 
+         * @param pFixedDeltaTime The time between every fixed update, should be roughly 0.0166-
+         */
+        virtual void FixedUpdate(double pFixedDeltaTime) = 0;
         //virtual void Draw() = 0;
 
     private:
-        /*@brief Is called by either start function
-        * @param pTitle The title of the window
-        * @param pTitle If the window is fullscreened or windowed
-        * @return If initialisation was successful
-        */
+        /**
+         * @brief Called At the start of Run() for app initialisation
+         * 
+         * @param pTitle The title of the window
+         * @param pFullscreen If the window is fullscreened or windowed
+         * @return If initialisation was successful
+         */
         bool Init(string pTitle, bool pFullscreen);
-        /*@brief First confirms camera exists then updates it's aspect ratio and fov
-        */
+        /**
+         * @brief Updates the camera's aspect ratio and fov
+         */
         void UpdateCamera();
-
-        /*@brief Temporary local input prcoessing
-        */
+        /**
+         * @brief Temporary local input prcoessing
+         */
         void ProcessInput();
 
         static Application* sm_appRef;
 
+        // TODO: Fix these variable comments
         bool m_gladLoaded = false;  // Whether glad has loaded or not
         unsigned int m_winWidth = 0, m_winHeight = 0;   // The width and height of the window
         unsigned int m_frames = 0, m_fps = 0;           // The amount of frames rendered per second

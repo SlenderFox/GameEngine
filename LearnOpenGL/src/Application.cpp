@@ -71,6 +71,7 @@ namespace Engine
                 m_currentTime = glfwGetTime();
                 m_deltaTime = m_currentTime - m_prevTime;
 
+                // TODO: Fix this frame acruement
                 m_frames++;
                 m_frameInterval += m_deltaTime;
                 if (m_frameInterval >= 1.0f)
@@ -89,8 +90,9 @@ namespace Engine
 
                 Update(m_deltaTime);
 
-                // Scales by 10,000 (converts to mircoseconds) and removes decimal place
-                if (((unsigned short)(m_frameInterval * 10000)) % 166 == 0)
+                //TODO: FixedUpdate should be called using current time, also pass in time between calls
+                // Scales by 1,000,000 (converts to mircoseconds) and removes decimal place
+                if (((unsigned short)(m_currentTime * 1000000)) % 16666 == 0)
                     FixedUpdate(m_deltaTime);
 
                 // Skip if minimised
@@ -185,6 +187,7 @@ namespace Engine
         }
         m_gladLoaded = true;
 
+        // Initialises the renderer
         if (!m_rendererInst->Init())
             return false;
 
@@ -203,16 +206,16 @@ namespace Engine
     {
         m_winWidth = pWidth;
         m_winHeight = pHeight;
-        UpdateCamera();
+        if (m_cameraRef != nullptr)
+        {
+            UpdateCamera();
+        }
     }
 
     void Application::UpdateCamera()
     {
-        if (m_cameraRef != nullptr)
-        {
-            m_cameraRef->UpdateAspectRatio((float)m_winWidth, (float)m_winHeight);
-            m_cameraRef->UpdateFovV();
-        }
+        m_cameraRef->UpdateAspectRatio((float)m_winWidth, (float)m_winHeight);
+        m_cameraRef->UpdateFovV();
     }
 
     void Application::MouseCallback(double pPosX, double pPosY)

@@ -1,6 +1,7 @@
 #include "Texture.h"
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
-#include "stb_image.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
 #ifdef _DEBUG
  #include <iostream>
  using std::cout;
@@ -11,8 +12,6 @@ namespace Engine
 {
     void Texture::LoadImages()
     {
-        float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-
         // Generates two texture objects
         glGenTextures(1, &m_idTEX0);
         glGenTextures(1, &m_idTEX1);
@@ -32,6 +31,7 @@ namespace Engine
 //        // Rmember this works like a pointer to the object using the ID
 //        glBindTexture(GL_TEXTURE_2D, m_idTEX0);
 //        // Sets some parameters to the currently bound texture object
+//        float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 //        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColour);
 //        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 //        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -97,6 +97,7 @@ namespace Engine
 //        //glActiveTexture(GL_TEXTURE1);
 //        //glBindTexture(GL_TEXTURE_2D, m_idTEX1);
     }
+    
     void Texture::LoadTexture(unsigned int* texID, const char* location, bool transparent)
     {
         float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
