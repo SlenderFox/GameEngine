@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include "Camera.hpp"
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include <glm/gtc/matrix_transform.hpp>
 #ifdef _DEBUG

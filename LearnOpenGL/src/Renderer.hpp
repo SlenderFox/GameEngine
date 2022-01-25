@@ -1,8 +1,8 @@
 #pragma once
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include <glm/glm.hpp>
-#include "Shader.h"
-#include "Texture.h"
+#include "Shader.hpp"
+#include "Texture.hpp"
 
 namespace Engine
 {

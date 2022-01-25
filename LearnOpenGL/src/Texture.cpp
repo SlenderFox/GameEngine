@@ -1,4 +1,4 @@
-#include "Texture.h"
+#include "Texture.hpp"
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"

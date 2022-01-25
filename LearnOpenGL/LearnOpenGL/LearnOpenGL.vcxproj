@@ -34,13 +34,13 @@
     <None Include="..\Assets\shaders\shader.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\Application.h" />
-    <ClInclude Include="..\src\Camera.h" />
-    <ClInclude Include="..\src\Input.h" />
-    <ClInclude Include="..\src\Project.h" />
-    <ClInclude Include="..\src\Renderer.h" />
-    <ClInclude Include="..\src\Shader.h" />
-    <ClInclude Include="..\src\Texture.h" />
+    <ClInclude Include="..\src\Application.hpp" />
+    <ClInclude Include="..\src\Camera.hpp" />
+    <ClInclude Include="..\src\Input.hpp" />
+    <ClInclude Include="..\src\Project.hpp" />
+    <ClInclude Include="..\src\Renderer.hpp" />
+    <ClInclude Include="..\src\Shader.hpp" />
+    <ClInclude Include="..\src\Texture.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

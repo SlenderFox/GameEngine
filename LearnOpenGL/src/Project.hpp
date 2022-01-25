@@ -1,5 +1,5 @@
 #pragma once
-#include "Application.h"
+#include "Application.hpp"
 
 class Project : public Engine::Application
 {

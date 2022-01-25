@@ -1,7 +1,7 @@
 #pragma once
-#include "Renderer.h"
-#include "Input.h"
-#include "Camera.h"
+#include "Renderer.hpp"
+#include "Input.hpp"
+#include "Camera.hpp"
 
 struct GLFWwindow;
 
