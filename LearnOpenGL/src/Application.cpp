@@ -70,19 +70,23 @@ namespace Engine
                 m_prevTime = m_currentTime;
                 m_currentTime = glfwGetTime();
                 m_deltaTime = m_currentTime - m_prevTime;
-                m_halfSecondAverage += m_deltaTime;
-
-                m_frames++;
+                m_fixedTimer += m_deltaTime;
+                m_frameTimer += m_deltaTime;
+                ++m_frames;
+                ++m_framesPerSecond;
                 
-                // Doing this allows me to updates fps once every half second
-                if ((unsigned int)(m_currentTime * 10) % 1 == 0)
                 {
-                    m_fps = 1 / m_halfSecondAverage;
-                    m_halfSecondAverage = 0;
-#ifdef _DEBUG
-                    //std::cout << "fps: " << m_fps << std::endl;
-                    printf("fps: %u \n", m_fps);
-#endif
+                    // Doing this allows me to updates fps as often as I want
+                    float secondsPerUpdate = 0.5f;
+                    if (m_frameTimer >= secondsPerUpdate)
+                    {
+                        m_frameTimer -= secondsPerUpdate;
+                        m_fps = (unsigned int)((float)m_framesPerSecond / secondsPerUpdate);
+                        m_framesPerSecond = 0U;
+#ifdef _DEBUG   
+                        printf("fps: %*u, current frame time: %3.7f \n", 2, m_fps, m_deltaTime);
+#endif  
+                    }
                 }
 
                 // Input
@@ -94,10 +98,12 @@ namespace Engine
 
                 Update(m_deltaTime);
 
-                //TODO: FixedUpdate should be called using current time, also pass in time between calls
-                // Scales by 1,000,000 (converts to mircoseconds) and removes decimal place
-                if (((unsigned short)(m_currentTime * 1000000)) % 16666 == 0)
-                    FixedUpdate(m_deltaTime);
+                // Calls fixed update 60 times per second
+                if (m_fixedTimer >= m_fixedDeltaTime)
+                {
+                    m_fixedTimer -= m_fixedDeltaTime;
+                    FixedUpdate(m_fixedDeltaTime);
+                }
 
                 // Skip drawing if minimised, restricts fps to 15
                 if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) != 0)
@@ -130,7 +136,7 @@ namespace Engine
     {
 #ifdef _DEBUG
         // Moves the console window
-        MoveWindow(GetConsoleWindow(), 2, 2, 600, 600, TRUE);
+        MoveWindow(GetConsoleWindow(), 0, 0, 600, 600, TRUE);
 #endif
         
         // glfw: initialise and configure
@@ -169,7 +175,7 @@ namespace Engine
             // Moves the window to the center of the workarea
             int monPosX, monPosY, monWidth, monHeight;
             glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
-            glfwSetWindowPos(m_window, (monWidth - m_winWidth) * 0.5f, (monHeight - m_winHeight) * 0.5f);
+            glfwSetWindowPos(m_window, (int)((monWidth - m_winWidth) * 0.5f), (int)((monHeight - m_winHeight) * 0.5f));
         }
 
         glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
@@ -190,7 +196,7 @@ namespace Engine
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
         {
 #ifdef _DEBUG
-            cout << "Failed to initialize GLAD" << endl;
+            cout << "Failed to initialise GLAD" << endl;
 #endif
             return false;
         }
@@ -200,8 +206,8 @@ namespace Engine
         if (!m_rendererInst->Init())
             return false;
 
-        m_cameraRef = new Camera(75.0f);
-        UpdateCamera();
+        m_cameraRef = new Camera((float)m_winWidth / (float)m_winHeight, 75.0f);
+        //UpdateCamera();
         m_cameraRef->SetClearColour(0.2f, 0.2f, 0.2f);
         m_cameraRef->SetPosition({ 0.0f, 0.0f, 6.0f });
 
@@ -216,7 +222,7 @@ namespace Engine
         m_winWidth = pWidth;
         m_winHeight = pHeight;
 
-        if (m_cameraRef != nullptr && pWidth > 0)
+        if (m_cameraRef != nullptr && pWidth > 0 && pHeight > 0)
         {
             UpdateCamera();
         }
@@ -224,7 +230,7 @@ namespace Engine
 
     void Application::UpdateCamera()
     {
-        m_cameraRef->UpdateAspectRatio((float)m_winWidth, (float)m_winHeight);
+        m_cameraRef->SetAspectRatio((float)m_winWidth / (float)m_winHeight);
         m_cameraRef->UpdateFovV();
     }
 
@@ -260,13 +266,19 @@ namespace Engine
 
     void Application::ScrollCallback(double pOffsetX, double pOffsetY)
     {
-        m_cameraRef->ModifyFovH(pOffsetY * -3.0f);
+        m_cameraRef->ModifyFovH((float)pOffsetY * -3.0f);
     }
 
     void Application::ProcessInput()
     {
         float speed;
         vec3 translation = vec3();
+
+        // Toggle fullscreen
+        if (glfwGetKey(m_window, GLFW_KEY_F11) == GLFW_PRESS)
+        {
+
+        }
 
         // SlowDown
         if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)

@@ -1,8 +1,10 @@
 #pragma once
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
-#include <glm/glm.hpp>
+#include <vector>
 #include "Shader.hpp"
 #include "Texture.hpp"
+#include "Mesh.hpp"
+#include "GameObject.hpp"
 
 namespace Engine
 {
@@ -15,6 +17,8 @@ namespace Engine
 			static Renderer* sm_instance = new Renderer();
 			return sm_instance;
 		}
+
+        static void AddMesh(Mesh pMesh);
 
 	private:
 		Renderer() = default;
@@ -46,10 +50,11 @@ namespace Engine
          */
 		void Draw(glm::mat4 pCamera, double pTime);
 
-		unsigned int m_idVAO = 0, m_idVBO = 0, m_idEBO = 0; // The vertex attribute object, vertex buffer object, and element buffer object
-
         Shader* m_shaderRef = nullptr;      // A reference to a shader
         Texture* m_textureRef = nullptr;    // A reference to a texture
+        std::vector<Mesh>* m_meshes = new std::vector<Mesh>();
+
+		unsigned int m_idVAO = 0U, m_idVBO = 0U, m_idEBO = 0U; // The vertex attribute object, vertex buffer object, and element buffer object
 
         // Creates 4 verts with each one having: xyz position, rgb colour and xy texcoord
         //const float m_vertices[32] =
@@ -156,8 +161,8 @@ namespace Engine
         // How to construct the triangles using the verts
         const unsigned int m_indices[6]
         {
-            0, 1, 2,    // Triangle one
-            0, 2, 3     // Triangle two
+            0U, 1U, 2U,    // Triangle one
+            0U, 2U, 3U     // Triangle two
         };
 
         const glm::vec3 m_cubePositions[10] =

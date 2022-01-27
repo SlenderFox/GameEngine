@@ -14,73 +14,62 @@ using glm::inverse;
 
 namespace Engine
 {
-	Camera::Camera()
+	Camera::Camera(float pAspectRatio)
 	{
 		SetTransform(mat4(1.0f));
-		// Defaults to 16:9 aspect ratio
-		UpdateAspectRatio(16.0f, 9.0f);
+		SetAspectRatio(pAspectRatio);
 		SetFovH(75.0f);
 	}
 
-	Camera::Camera(float pFovH)
+	Camera::Camera(float pAspectRatio, float pFovH)
 	{
 		SetTransform(mat4(1.0f));
-		// Defaults to 16:9 aspect ratio
-		UpdateAspectRatio(16.0f, 9.0f);
+		SetAspectRatio(pAspectRatio);
 		SetFovH(pFovH);
 	}
 
-	Camera::Camera(mat4 pTransform)
+	Camera::Camera(float pAspectRatio, mat4 pTransform)
 	{
 		SetTransform(pTransform);
-		// Defaults to 16:9 aspect ratio
-		UpdateAspectRatio(16.0f, 9.0f);
+		SetAspectRatio(pAspectRatio);
 		SetFovH(75.0f);
 	}
 
-	Camera::Camera(float pFovH, mat4 pTransform)
+	Camera::Camera(float pAspectRatio, float pFovH, mat4 pTransform)
 	{
 		SetTransform(pTransform);
-		// Defaults to 16:9 aspect ratio
-		UpdateAspectRatio(16.0f, 9.0f);
+		SetAspectRatio(pAspectRatio);
 		SetFovH(pFovH);
 	}
 
-	Camera::Camera(vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
+	Camera::Camera(float pAspectRatio, vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
 	{
 		LookAt(pFrom, pTo, pUp);
-		// Defaults to 16:9 aspect ratio
-		UpdateAspectRatio(16.0f, 9.0f);
+		SetAspectRatio(pAspectRatio);
 		SetFovH(75.0f);
 	}
 
-	Camera::Camera(float pFovH, vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
+	Camera::Camera(float pAspectRatio, float pFovH, vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
 	{
 		LookAt(pFrom, pTo, pUp);
-		// Defaults to 16:9 aspect ratio
-		UpdateAspectRatio(16.0f, 9.0f);
+		SetAspectRatio(pAspectRatio);
 		SetFovH(pFovH);
 	}
 
-	void Camera::UpdateAspectRatio(float pWidth, float pHeight)
+	void Camera::LookAt(vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
 	{
-		m_aspectRatio = pWidth / pHeight;
-		m_invAspectRatio = pHeight / pWidth;
+		m_view = glm::lookAt(pFrom, pTo, pUp);
+		m_transform = inverse(m_view);
+	}
+
+	void Camera::SetAspectRatio(float pAspectRatio)
+	{
+		m_aspectRatio = pAspectRatio;
 	}
 
 	void Camera::SetFovH(float pFovH)
 	{
 		m_fovH = pFovH;
-		if (m_fovH > 120.0f)
-			m_fovH = 120.0f;
-		else if (m_fovH < 1.0f)
-			m_fovH = 1.0f;
-		UpdateFovV();
-	}
-
-	void Camera::ModifyFovH(float pValue)
-	{
-		m_fovH += pValue;
 		if (m_fovH > 120.0f)
 			m_fovH = 120.0f;
 		else if (m_fovH < 1.0f)
@@ -96,6 +85,16 @@ namespace Engine
 		else if (m_fovV < 1.0f)
 			m_fovV = 1.0f;
 		UpdateFovH();
+	}
+
+	void Camera::ModifyFovH(float pValue)
+	{
+		m_fovH += pValue;
+		if (m_fovH > 120.0f)
+			m_fovH = 120.0f;
+		else if (m_fovH < 1.0f)
+			m_fovH = 1.0f;
+		UpdateFovV();
 	}
 
 	void Camera::ModifyFovV(float pValue)
@@ -116,20 +115,8 @@ namespace Engine
 
 	void Camera::UpdateFovV()
 	{
-		m_fovV = degrees(2 * atan(tan(radians(m_fovH) * 0.5f) * m_invAspectRatio));
+		m_fovV = degrees(2 * atan(tan(radians(m_fovH) * 0.5f) * (1 / m_aspectRatio)));
 		SetProjection(m_fovV);
-	}
-
-	void Camera::LookAt(vec3 pFrom, vec3 pTo, vec3 pUp)
-	{
-		m_view = glm::lookAt(pFrom, pTo, pUp);
-		m_localTransform = inverse(m_view);
-	}
-
-	void Camera::LookAt(vec3 pFrom, vec3 pTo)
-	{
-		m_view = glm::lookAt(pFrom, pTo, { 0, 1, 0 });
-		m_localTransform = inverse(m_view);
 	}
 
 	void Camera::SetClearColour(vec4 pValue)
@@ -164,13 +151,13 @@ namespace Engine
 
 	mat4 Camera::GetTransform() const
 	{
-		return m_localTransform;
+		return m_transform;
 	}
 
 	void Camera::SetTransform(mat4 pValue)
 	{
-		m_localTransform = pValue;
-		m_view = inverse(m_localTransform);
+		m_transform = pValue;
+		m_view = inverse(m_transform);
 	}
 
 	mat4 Camera::GetView() const
@@ -181,7 +168,7 @@ namespace Engine
 	void Camera::SetView(mat4 pValue)
 	{
 		m_view = pValue;
-		m_localTransform = inverse(m_view);
+		m_transform = inverse(m_view);
 	}
 
 	mat4 Camera::GetProjection() const
@@ -204,53 +191,53 @@ namespace Engine
 
 	vec3 Camera::GetPosition() const
 	{
-		return (vec3)m_localTransform[3];
+		return (vec3)m_transform[3];
 	}
 
 	void Camera::SetPosition(vec3 pValue)
 	{
-		m_localTransform[3] = vec4(pValue, m_localTransform[3][3]);
-		m_view = inverse(m_localTransform);
+		m_transform[3] = vec4(pValue, m_transform[3][3]);
+		m_view = inverse(m_transform);
 	}
 
 	void Camera::Translate(vec3 pValue)
 	{
-		m_localTransform[3] = vec4((vec3)m_localTransform[3] + pValue, m_localTransform[3][3]);
-		m_view = inverse(m_localTransform);
+		m_transform[3] = vec4((vec3)m_transform[3] + pValue, m_transform[3][3]);
+		m_view = inverse(m_transform);
 	}
 
 	vec3 Camera::GetRight() const
 	{
 		// The camera is horizontally reversed
-		return -(vec3)m_localTransform[0];
+		return -(vec3)m_transform[0];
 	}
 
 	void Camera::SetRight(vec3 pValue)
 	{
-		m_localTransform[0] = vec4(pValue, 0);
-		m_view = inverse(m_localTransform);
+		m_transform[0] = vec4(pValue, 0);
+		m_view = inverse(m_transform);
 	}
 
 	vec3 Camera::GetUp() const
 	{
-		return (vec3)m_localTransform[1];
+		return (vec3)m_transform[1];
 	}
 
 	void Camera::SetUp(vec3 pValue)
 	{
-		m_localTransform[1] = vec4(pValue, 0);
-		m_view = inverse(m_localTransform);
+		m_transform[1] = vec4(pValue, 0);
+		m_view = inverse(m_transform);
 	}
 
 	vec3 Camera::GetForward() const
 	{
 		// The camera is horizontally reversed
-		return -(vec3)m_localTransform[2];
+		return -(vec3)m_transform[2];
 	}
 
 	void Camera::SetForward(vec3 pValue)
 	{
-		m_localTransform[2] = vec4(pValue, 0);
-		m_view = inverse(m_localTransform);
+		m_transform[2] = vec4(pValue, 0);
+		m_view = inverse(m_transform);
 	}
 }

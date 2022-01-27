@@ -6,6 +6,11 @@ using glm::mat4;
 
 namespace Engine
 {
+    void Renderer::AddMesh(Mesh pMesh)
+    {
+        Renderer::GetInstance()->m_meshes->push_back(pMesh);
+    }
+
 	bool Renderer::Init()
 	{
         m_shaderRef = new Shader("../Assets/shaders/shader.vert", "../Assets/shaders/shader.frag");
@@ -83,6 +88,8 @@ namespace Engine
 
         delete m_textureRef;
         delete m_shaderRef;     // This might be superfluous
+        m_meshes->clear();
+        delete m_meshes;
     }
 
 	void Renderer::Draw(glm::mat4 pCamera, double pTime)

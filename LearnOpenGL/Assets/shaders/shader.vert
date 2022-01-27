@@ -6,8 +6,8 @@ layout (location = 2) in vec2 aTexCoord;
 out vec3 colour;
 out vec2 texCoord;
 
-uniform mat4 model;
 uniform mat4 camera;
+uniform mat4 model;
 
 void main()
 {

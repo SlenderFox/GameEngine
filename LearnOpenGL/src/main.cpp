@@ -9,6 +9,7 @@
 * 1920, 1080
 * TODO:
 * Add borderless fullscreen option, use enum for selection
+* App opens to main menu to allow setting changes
 */
 #include "Project.hpp"
 

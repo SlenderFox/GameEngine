@@ -1,5 +1,5 @@
 #pragma once
-#include <glm/glm.hpp>
+#include "GameObject.hpp"
 
 using glm::vec3;
 using glm::vec4;
@@ -7,25 +7,25 @@ using glm::mat4;
 
 namespace Engine
 {
-	class Camera
+	class Camera : GameObject
 	{
 	public:
-		// Default assumes the aspect ratio is 16:9
-		Camera();
-		Camera(float pFovH);
-		Camera(mat4 pTransform);
-		Camera(float pFovH, mat4 pTransform);
-		Camera(vec3 pFrom, vec3 pTo, vec3 pUp);
-		Camera(float pFovH, vec3 pFrom, vec3 pTo, vec3 pUp);
+		Camera(float pAspectRatio);
+		Camera(float pAspectRatio, float pFovH);
+		Camera(float pAspectRatio, mat4 pTransform);
+		Camera(float pAspectRatio, float pFovH, mat4 pTransform);
+		Camera(float pAspectRatio, vec3 pFrom, vec3 pTo, vec3 pUp);
+		Camera(float pAspectRatio, float pFovH, vec3 pFrom, vec3 pTo, vec3 pUp);
 		~Camera() {}
 
+		void LookAt(vec3 pFrom, vec3 pTo, vec3 pUp);
+
 		/**
-		 * @brief Updates the aspect ratio and inverse aspect ratio
+		 * @brief Sets the aspect ratio
 		 * 
-		 * @param pWidth The window width
-		 * @param pHeight The window height
+		 * @param pAspectRatio The aspect ratio
 		 */
-		void UpdateAspectRatio(float pWidth, float pHeight);
+		void SetAspectRatio(float pAspectRatio);
 		/**
 		 * @brief Directly sets the horizontal fov and calculates the corresponding vertical fov
 		 * 
@@ -33,17 +33,17 @@ namespace Engine
 		 */
 		void SetFovH(float pFovH);
 		/**
-		 * @brief Adds the supplied value to the current fov
-		 * 
-		 * @param pValue The value in radians that is added to the fov
-		 */
-		void ModifyFovH(float pValue);
-		/**
 		 * @brief Directly sets the vertical fov and calculates the corresponding horizontal fov
 		 * 
 		 * @param pFovV The desired vertical fov in radians
 		 */
 		void SetFovV(float pFovV);
+		/**
+		 * @brief Adds the supplied value to the current fov
+		 * 
+		 * @param pValue The value in radians that is added to the fov
+		 */
+		void ModifyFovH(float pValue);
 		/**
 		 * @brief Adds the supplied value to the current fov
 		 * 
@@ -60,9 +60,6 @@ namespace Engine
 		 * then creates a projection
 		 */
 		void UpdateFovV();
-
-		void LookAt(vec3 pFrom, vec3 pTo, vec3 pUp);
-		void LookAt(vec3 pFrom, vec3 pTo);
 
 		/**
 		 * @brief Sets what colour the clear function resolves to
@@ -100,11 +97,11 @@ namespace Engine
 		 * @param pAlpha The desired alpha value
 		 */
 		void SetClearColour(float pRed, float pGreen, float pBlue, float pAlpha);
-
+		
 		mat4 WorldToCameraMatrix();
 
-		mat4 GetTransform() const;
-		void SetTransform(mat4 pValue);
+		mat4 GetTransform() const override;
+		void SetTransform(mat4 pValue) override;
 		mat4 GetView() const;
 		void SetView(mat4 pValue);
 		mat4 GetProjection() const;
@@ -124,8 +121,7 @@ namespace Engine
 
 	private:
 		float m_fovH = 0, m_fovV = 0;	// The field of view of the camera in degrees, horizontal & vertical
-		float m_aspectRatio = 0, m_invAspectRatio = 0;  // The aspect ratio and inverse aspect ratio
-		mat4 m_localTransform;
+		float m_aspectRatio = 0;
 		mat4 m_view;
 		mat4 m_projection;
 	};
