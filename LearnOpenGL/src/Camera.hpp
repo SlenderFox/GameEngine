@@ -22,31 +22,31 @@ namespace Engine
 
 		/**
 		 * @brief Sets the aspect ratio
-		 * 
+		 *
 		 * @param pAspectRatio The aspect ratio
 		 */
 		void SetAspectRatio(float pAspectRatio);
 		/**
 		 * @brief Directly sets the horizontal fov and calculates the corresponding vertical fov
-		 * 
+		 *
 		 * @param pFovH The desired horizontal fov in radians
 		 */
 		void SetFovH(float pFovH);
 		/**
 		 * @brief Directly sets the vertical fov and calculates the corresponding horizontal fov
-		 * 
+		 *
 		 * @param pFovV The desired vertical fov in radians
 		 */
 		void SetFovV(float pFovV);
 		/**
 		 * @brief Adds the supplied value to the current fov
-		 * 
+		 *
 		 * @param pValue The value in radians that is added to the fov
 		 */
 		void ModifyFovH(float pValue);
 		/**
 		 * @brief Adds the supplied value to the current fov
-		 * 
+		 *
 		 * @param pValue The value in radians that is added to the fov
 		 */
 		void ModifyFovV(float pValue);
@@ -63,26 +63,26 @@ namespace Engine
 
 		/**
 		 * @brief Sets what colour the clear function resolves to
-		 * 
+		 *
 		 * @param pValue The desired colour in RGBA
 		 */
 		void SetClearColour(vec4 pValue);
 		/**
 		 * @brief Sets what colour the clear function resolves to. Alpha is set to 1
-		 * 
+		 *
 		 * @param pValue The desired colour in RGB
 		 */
 		void SetClearColour(vec3 pValue);
 		/**
 		 * @brief Sets what colour the clear function resolves to
-		 * 
+		 *
 		 * @param pValue The desired colour in RGB
 		 * @param pA The desired alpha value
 		 */
 		void SetClearColour(vec3 pValue, float pA);
 		/**
 		 * @brief Sets what colour the clear function resolves to. Alpha is set to 1
-		 * 
+		 *
 		 * @param pRed The desired red value
 		 * @param pGreen The desired blue value
 		 * @param pBlue The desired green value
@@ -90,14 +90,14 @@ namespace Engine
 		void SetClearColour(float pRed, float pGreen, float pBlue);
 		/**
 		 * @brief Sets what colour the clear function resolves to
-		 * 
+		 *
 		 * @param pRed The desired red value
 		 * @param pGreen The desired blue value
 		 * @param pBlue The desired green value
 		 * @param pAlpha The desired alpha value
 		 */
 		void SetClearColour(float pRed, float pGreen, float pBlue, float pAlpha);
-		
+
 		mat4 WorldToCameraMatrix();
 
 		mat4 GetTransform() const override;

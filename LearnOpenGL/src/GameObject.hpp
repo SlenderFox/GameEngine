@@ -1,18 +1,25 @@
 #pragma once
 #include <glm/glm.hpp>
 
+using glm::mat4;
+
 namespace Engine
 {
-    class GameObject
-    {
-    public:
-        GameObject();
-        GameObject(glm::mat4 pValue);
+	class GameObject
+	{
+	public:
+		GameObject();
+		GameObject(mat4 pValue);
+		// Copy constructors
+		GameObject(const GameObject& pOther);
+		GameObject(GameObject&& pOther);
+		GameObject& operator=(const GameObject& pOther);
+		GameObject& operator=(GameObject&& pOther);
 
-		virtual glm::mat4 GetTransform() const;
-        virtual void SetTransform(glm::mat4 pValue);
+		virtual mat4 GetTransform() const;
+		virtual void SetTransform(mat4 pValue);
 
-    protected:
-        glm::mat4 m_transform = glm::mat4(1);
-    };
+	protected:
+		mat4 m_transform = mat4(1);
+	};
 }

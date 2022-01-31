@@ -14,7 +14,7 @@ namespace Engine
 	private:
 		/**
 		 * @brief Loads an image from a file into vram (I'm assuming) as a texture
-		 * 
+		 *
 		 * @param texID Which id to load the texture into
 		 * @param location Where the image is stored
 		 * @param transparent Whether the image has an alpha channel
