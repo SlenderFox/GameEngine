@@ -53,10 +53,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Assets\shaders\shader.frag" />
-    <None Include="..\Assets\shaders\shader.vert" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\src\Application.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

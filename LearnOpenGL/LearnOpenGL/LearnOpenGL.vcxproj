@@ -33,10 +33,6 @@
     <ClCompile Include="..\src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Assets\shaders\shader.frag" />
-    <None Include="..\Assets\shaders\shader.vert" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\src\Application.hpp" />
     <ClInclude Include="..\src\Camera.hpp" />
     <ClInclude Include="..\src\GameObject.hpp" />

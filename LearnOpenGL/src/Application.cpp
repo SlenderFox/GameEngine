@@ -240,7 +240,7 @@ namespace Engine
 		double offsetY = pPosY - m_mouseLastY;
 		m_mouseLastX = pPosX;
 		m_mouseLastY = pPosY;
-		const double sens = 0.08f;
+		const double sens = 0.05f;
 		offsetX *= sens;
 		offsetY *= sens;
 		m_yaw += offsetX;

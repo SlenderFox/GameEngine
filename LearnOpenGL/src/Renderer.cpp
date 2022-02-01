@@ -11,7 +11,7 @@ namespace Engine
 {
 	bool Renderer::Init()
 	{
-		m_shaderRef = new Shader("../Assets/shaders/shader.vert", "../Assets/shaders/shader.frag");
+		m_shaderRef = new Shader("../Assets/shaders/cube.vert", "../Assets/shaders/cube.frag");
 		m_textureRef = new Texture();
 		m_textureRef->LoadImages();
 		//m_shaderRef->Use();
@@ -22,20 +22,20 @@ namespace Engine
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);
 
-		std::vector<float>* vertices = new std::vector<float>();
-		for (int i = 0; i < 288; ++i)
-			vertices->push_back(m_vertices[i]);
-		vertices->shrink_to_fit();
-		
-		std::vector<unsigned int>* indices = new std::vector<unsigned int>();
-		for (int i = 0; i < 6; ++i)
-			indices->push_back(m_indices[i]);
-		indices->shrink_to_fit();
+		// std::vector<float>* vertices = new std::vector<float>();
+		// for (int i = 0; i < 288; ++i)
+		// 	vertices->push_back(m_vertices[i]);
+		// vertices->shrink_to_fit();
+		//
+		// std::vector<unsigned int>* indices = new std::vector<unsigned int>();
+		// for (int i = 0; i < 6; ++i)
+		// 	indices->push_back(m_indices[i]);
+		// indices->shrink_to_fit();
 
-		// TODO: CAUSES CRASH
 		test = new Mesh();
+		// m_meshes = new std::vector<Mesh*>();
+		// m_meshes->push_back(new Mesh());
 
-		// 1152U 24U
 		//CreateVAO(m_idVAO, m_idVBO, m_idEBO, &m_vertices, sizeof(*m_vertices), &m_indices, sizeof(*m_indices));
 		
 		//CreateVAO(m_idVAO, m_idVBO, m_idEBO, vertices, indices);
@@ -88,9 +88,9 @@ namespace Engine
 		// // Unbinds the GL_ELEMENT_ARRAY_BUFFER
 		// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		// No idea if I have to do this or if it's automatically done at scope end
-		delete vertices;
-		delete indices;
+		// Pointer is not automatically deleted at end of scope
+		// delete vertices;
+		// delete indices;
 
 		return true;
 	}
@@ -172,16 +172,18 @@ namespace Engine
 		const size_t indexSize = pIndices->size();
 
 		float* vertices = new float[vertexSize];
-		for (int i = 0; i < vertexSize; ++i)
-			vertices[i] = pVertices->at(i);
+		vertices = pVertices->data();
+		// for (int i = 0; i < vertexSize; ++i)
+		// 	vertices[i] = pVertices->at(i);
 
 		unsigned int* indices = new unsigned int[indexSize];
-		for (int i = 0; i < indexSize; ++i)
-			indices[i] = pIndices->at(i);
+		indices = pIndices->data();
+		// for (int i = 0; i < indexSize; ++i)
+		// 	indices[i] = pIndices->at(i);
 
 		CreateVAO(pidVAO, pidVBO, pidEBO, &vertices, vertexSize * sizeof(float), &indices, indexSize * sizeof(unsigned int));
 
-		// No idea if I have to do this or if it's automatically done at scope end
+		// Pointer is not automatically deleted at end of scope
 		delete vertices;
 		delete indices;
 	}
