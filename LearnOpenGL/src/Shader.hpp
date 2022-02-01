@@ -17,8 +17,16 @@ namespace Engine
 		 * @param pVertexPath The file path to the vertex shader
 		 * @param pFragmentPath The file path to the fragment shader
 		 */
-		Shader(const char* pVertexPath, const char* pFragmentPath);
+		Shader(string pVertexPath, string pFragmentPath);
+
+		// Copy constructors
+		Shader(const Shader& pOther);
+		Shader(Shader&& pOther);
+		Shader& operator=(const Shader& pOther);
+		Shader& operator=(Shader&& pOther);
+
 		~Shader() {}
+
 		/**
 		 * @brief Destroys the shader but only if it was ever initliased
 		 *
@@ -61,6 +69,10 @@ namespace Engine
 		void SetMat4(const string& pName, glm::mat4 pValue) const;
 
 	private:
+		void CreateVertexShader();
+		void CreatFragmentShader();
+		void CreateShaderProgram();
+
 		/**
 		 * @brief Checks a shader for errors while loading and logs them
 		 *
@@ -71,8 +83,6 @@ namespace Engine
 
 		bool m_shaderLoaded = false;
 		unsigned int m_idProgram, m_idVertex, m_idFragment;
-		string m_vertexString, m_fragmentString;
-		ifstream m_vertexFile;
-		ifstream m_fragmentFile;
+		string m_vertexPath, m_fragmentPath;
 	};
 }
