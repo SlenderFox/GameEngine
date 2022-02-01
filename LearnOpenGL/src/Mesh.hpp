@@ -1,9 +1,12 @@
 #pragma once
 #include <vector>
+#include <memory>
 #include "Shader.hpp"
 #include "Texture.hpp"
 
 using std::vector;
+using std::unique_ptr;
+using std::make_unique;
 
 namespace Engine
 {
@@ -12,29 +15,35 @@ namespace Engine
 	public:
 		Mesh();
 		Mesh(vector<float> pVertices, vector<unsigned int> pIndices);
-		Mesh(vector<float>* pVertices, vector<unsigned int>* pIndices);
+		Mesh(unique_ptr<vector<float>> pVertices, unique_ptr<vector<unsigned int>> pIndices);
 
 		// Copy constructors
 		Mesh(const Mesh& pOther);
 		Mesh(Mesh&& pOther);
 		Mesh& operator=(const Mesh& pOther);
 		Mesh& operator=(Mesh&& pOther);
-		
-		~Mesh();
+
+		void Destroy(bool pValidate);
 
 		vector<float>* GetVertices() const;
-		void SetVertices(vector<float> pVertices);
+		void SetVertices(vector<float>* pVertices);
 		vector<unsigned int>* GetIndices() const;
-		void SetIndices(vector<unsigned int> pIndices);
-		unsigned int* GetVAO();
-		unsigned int* GetVBO();
-		unsigned int* GetEBO();
+		void SetIndices(vector<unsigned int>* pIndices);
+		unsigned int* GetVAO() const;
+		unsigned int* GetVBO() const;
+		unsigned int* GetEBO() const;
+		Shader* GetShader() const;
+		Texture* GetTexture() const;
 
 	private:
-		vector<float>* m_vertices = nullptr;
-		vector<unsigned int>* m_indices = nullptr;
+		unique_ptr<vector<float>> m_vertices = nullptr;
+		unique_ptr<vector<unsigned int>> m_indices = nullptr;
+		Shader* m_shaderRef = nullptr;      // A reference to a shader
+		Texture* m_textureRef = nullptr;    // A reference to a texture
 
-		unsigned int m_idVAO = 0U, m_idVBO = 0U, m_idEBO = 0U; // The vertex attribute object, vertex buffer object, and element buffer object
+		unsigned int* m_idVAO = new unsigned int(0U);	// The id for the vertex attribute object
+		unsigned int* m_idVBO = new unsigned int(0U);	// The id for the vertex buffer object
+		unsigned int* m_idEBO = new unsigned int(0U);	// The id for the element buffer object
 
 		// Creates 4 verts with each one having: xyz position, rgb colour and xy texcoord
 		//const float m_vertices[32] =

@@ -1,7 +1,7 @@
 #include "Renderer.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #ifdef _DEBUG
-	#include <iostream>
+ #include <iostream>
 #endif
 
 using glm::vec3;
@@ -11,42 +11,17 @@ namespace Engine
 {
 	bool Renderer::Init()
 	{
-		m_shaderRef = new Shader("../Assets/shaders/cube.vert", "../Assets/shaders/cube.frag");
-		m_textureRef = new Texture();
-		m_textureRef->LoadImages();
-		//m_shaderRef->Use();
-		m_shaderRef->SetInt("texture0", 0);
-		m_shaderRef->SetInt("texture1", 1);
-		m_shaderRef->SetInt("texture2", 2);
-
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);
 
-		// std::vector<float>* vertices = new std::vector<float>();
-		// for (int i = 0; i < 288; ++i)
-		// 	vertices->push_back(m_vertices[i]);
-		// vertices->shrink_to_fit();
-		//
-		// std::vector<unsigned int>* indices = new std::vector<unsigned int>();
-		// for (int i = 0; i < 6; ++i)
-		// 	indices->push_back(m_indices[i]);
-		// indices->shrink_to_fit();
-
-		//test = new Mesh();
 		m_meshes = new vector<unique_ptr<Mesh>>();
-		m_meshes->push_back(std::make_unique<Mesh>());
+		m_meshes->push_back(make_unique<Mesh>());
 
-		//CreateVAO(m_idVAO, m_idVBO, m_idEBO, &m_vertices, sizeof(*m_vertices), &m_indices, sizeof(*m_indices));
-		
-		//CreateVAO(m_idVAO, m_idVBO, m_idEBO, vertices, indices);
-
-		//Mesh* first = (*m_meshes)[0].get();
-
-		CreateVAO(*(*m_meshes)[0].get()->GetVAO(),
-				  *(*m_meshes)[0].get()->GetVBO(),
-				  *(*m_meshes)[0].get()->GetEBO(),
-			  (*m_meshes)[0].get()->GetVertices(),
-			  (*m_meshes)[0].get()->GetIndices());
+		CreateVAO(GetMeshAt(0U)->GetVAO(),
+				  GetMeshAt(0U)->GetVBO(),
+				  GetMeshAt(0U)->GetEBO(),
+			  GetMeshAt(0U)->GetVertices(),
+			  GetMeshAt(0U)->GetIndices());
 
 		return true;
 	}
@@ -55,32 +30,30 @@ namespace Engine
 	{
 		if (pValidate)
 		{
-			glDeleteVertexArrays(1, (*m_meshes)[0].get()->GetVAO());
-			glDeleteBuffers(1, (*m_meshes)[0].get()->GetVBO());
-			glDeleteBuffers(1, (*m_meshes)[0].get()->GetEBO());
-
-			if (m_shaderRef != nullptr)
-				m_shaderRef->Destroy(pValidate);
+			for (unsigned int i = 0; i < m_meshes->size(); ++i)
+			{
+				glDeleteVertexArrays(1, GetMeshAt(i)->GetVAO());
+				glDeleteBuffers(1, GetMeshAt(i)->GetVBO());
+				glDeleteBuffers(1, GetMeshAt(i)->GetEBO());
+				GetMeshAt(i)->Destroy(pValidate);
+			}
 		}
-
-		delete m_shaderRef;
-		delete m_textureRef;
 	}
 
-	void Renderer::CreateVAO(unsigned int& pidVAO, unsigned int& pidVBO, unsigned int& pidEBO,
+	void Renderer::CreateVAO(unsigned int* pidVAO, unsigned int* pidVBO, unsigned int* pidEBO,
 	 float* pVertices[], const size_t pVertexSize, unsigned int* pIndices[], const size_t pIndexSize)
 	{
 		// Creates and assigns to an id the Vertex Array Object, Vertex Buffer Object, and Element Buffer Object
 		// Arguments are number of objects to generate, and an array of uints to have the ids stored in
-		glGenVertexArrays(1, &pidVAO);
-		glGenBuffers(1, &pidVBO);
-		glGenBuffers(1, &pidEBO);
+		glGenVertexArrays(1, pidVAO);
+		glGenBuffers(1, pidVBO);
+		glGenBuffers(1, pidEBO);
 
 		// Binds the vertex array so that the VBO and EBO are neatly stored within
-		glBindVertexArray(pidVAO);
+		glBindVertexArray(*pidVAO);
 
 		// GL_ARRAY_BUFFER effectively works like a pointer, using the id provided to point to the buffer
-		glBindBuffer(GL_ARRAY_BUFFER, pidVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, *pidVBO);
 		// Loads the vertices to the VBO
 		glBufferData(GL_ARRAY_BUFFER, pVertexSize, *pVertices, GL_STATIC_DRAW);
 
@@ -90,7 +63,7 @@ namespace Engine
 		*/
 
 		// This buffer stores the indices that reference the elements of the VBO
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pidEBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *pidEBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, pIndexSize, *pIndices, GL_STATIC_DRAW);
 
 		/*Tells the shader how to use the vertex data provided
@@ -119,27 +92,23 @@ namespace Engine
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
-	void Renderer::CreateVAO(unsigned int& pidVAO, unsigned int& pidVBO, unsigned int& pidEBO,
-		 std::vector<float>* pVertices, std::vector<unsigned int>* pIndices)
+	void Renderer::CreateVAO(unsigned int* pidVAO, unsigned int* pidVBO, unsigned int* pidEBO,
+		 vector<float>* pVertices, vector<unsigned int>* pIndices)
 	{
 		const size_t vertexSize = pVertices->size();
 		const size_t indexSize = pIndices->size();
 
 		float* vertices = new float[vertexSize];
 		vertices = pVertices->data();
-		// for (int i = 0; i < vertexSize; ++i)
-		// 	vertices[i] = pVertices->at(i);
 
 		unsigned int* indices = new unsigned int[indexSize];
 		indices = pIndices->data();
-		// for (int i = 0; i < indexSize; ++i)
-		// 	indices[i] = pIndices->at(i);
 
 		CreateVAO(pidVAO, pidVBO, pidEBO, &vertices, vertexSize * sizeof(float), &indices, indexSize * sizeof(unsigned int));
 
 		// Pointer is not automatically deleted at end of scope
-		delete vertices;
-		delete indices;
+		delete[] vertices;
+		delete[] indices;
 	}
 
 	void Renderer::Draw(glm::mat4 pCamera, double pTime)
@@ -150,11 +119,13 @@ namespace Engine
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Must be set to the current context
-		glBindVertexArray(*(*m_meshes)[0].get()->GetVAO());
+		glBindVertexArray(*GetMeshAt(0U)->GetVAO());
 
-		m_shaderRef->Use();
+		//m_shaderRef->Use();
+		GetMeshAt(0U)->GetShader()->Use();
 
-		m_shaderRef->SetMat4("camera", pCamera);
+		//m_shaderRef->SetMat4("camera", pCamera);
+		GetMeshAt(0U)->GetShader()->SetMat4("camera", pCamera);
 
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -164,9 +135,15 @@ namespace Engine
 			model = glm::translate(model, m_cubePositions[i]);
 			float angle = (float)pTime * 30.0f * ((i + 1) / (i * 0.2f + 1));
 			model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
-			m_shaderRef->SetMat4("model", model);
+			//m_shaderRef->SetMat4("model", model);
+			GetMeshAt(0U)->GetShader()->SetMat4("model", model);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
+	}
+
+	Mesh* Renderer::GetMeshAt(unsigned int pPos)
+	{
+		return (*m_meshes)[pPos].get();
 	}
 }

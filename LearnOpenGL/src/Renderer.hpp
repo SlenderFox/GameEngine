@@ -1,11 +1,7 @@
 #pragma once
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
-#include <memory>
 #include "GameObject.hpp"
 #include "Mesh.hpp"
-
-using std::vector;
-using std::unique_ptr;
 
 namespace Engine
 {
@@ -19,10 +15,32 @@ namespace Engine
 			return sm_instance;
 		}
 
-		void CreateVAO(unsigned int& pidVAO, unsigned int& pidVBO, unsigned int& pidEBO,
+		/**
+		 * @brief Create a Vertex Array Object on the GPU using opengl
+		 * 
+		 * @param pidVAO Storage for the id of the VAO, passed by reference
+		 * @param pidVBO Storage for the id of the VBO, passed by reference
+		 * @param pidEBO Storage for the id of the EBO, passed by reference
+		 * @param pVertices Reference to the array of vertices to be used
+		 * @param pVertexSize The size of the array of vertices
+		 * @param pIndices Reference to the array of indices to be used
+		 * @param pIndexSize The size of the array of indices
+		 */
+		void CreateVAO(unsigned int* pidVAO, unsigned int* pidVBO, unsigned int* pidEBO,
 		 float* pVertices[], const size_t pVertexSize, unsigned int* pIndices[], const size_t pIndexSize);
-		void CreateVAO(unsigned int& pidVAO, unsigned int& pidVBO, unsigned int& pidEBO,
-		 std::vector<float>* pVertices, std::vector<unsigned int>* pIndices);
+		/**
+		 * @brief Create a Vertex Array Object on the GPU using opengl.
+		 * This overload works as a wrapper for the other overload and it is
+		 * recommended you use this one instead.
+		 * 
+		 * @param pidVAO Storage for the id of the VAO, passed by reference
+		 * @param pidVBO Storage for the id of the VBO, passed by reference
+		 * @param pidEBO Storage for the id of the EBO, passed by reference
+		 * @param pVertices Reference to a vector of vertices to be used
+		 * @param pIndices Reference to a vector of indices to be used
+		 */
+		void CreateVAO(unsigned int* pidVAO, unsigned int* pidVBO, unsigned int* pidEBO,
+		 vector<float>* pVertices, vector<unsigned int>* pIndices);
 
 	private:
 		Renderer() = default;
@@ -53,14 +71,15 @@ namespace Engine
 		 * @remark Only Application is able to call this function
 		 */
 		void Draw(glm::mat4 pCamera, double pTime);
+		/**
+		 * @brief Get a pointer to the mesh object at a given position
+		 * 
+		 * @param pPos The position in the array of the mesh
+		 * @return Mesh* The pointer to the mesh object
+		 */
+		Mesh* GetMeshAt(unsigned int pPos);
 
-		Shader* m_shaderRef = nullptr;      // A reference to a shader
-		Texture* m_textureRef = nullptr;    // A reference to a texture
 		vector<unique_ptr<Mesh>>* m_meshes = nullptr;
-
-		//Mesh* test = nullptr;
-
-		unsigned int m_idVAO = 0U, m_idVBO = 0U, m_idEBO = 0U; // The vertex attribute object, vertex buffer object, and element buffer object
 
 		const glm::vec3 m_cubePositions[10] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),

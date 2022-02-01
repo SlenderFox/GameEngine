@@ -24,14 +24,14 @@ namespace Engine
 
 	GameObject& GameObject::operator=(const GameObject& pOther)
 	{
-		GameObject newObj = GameObject(pOther.GetTransform());
-		return newObj;
+		GameObject* newObj = new GameObject(pOther.GetTransform());
+		return *newObj;
 	}
 
 	GameObject& GameObject::operator=(GameObject&& pOther)
 	{
-		GameObject newObj = GameObject(pOther.GetTransform());
-		return newObj;
+		GameObject* newObj = new GameObject(pOther.GetTransform());
+		return *newObj;
 	}
 
 	mat4 GameObject::GetTransform() const
