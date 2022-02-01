@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include "Shader.hpp"
+#include "Texture.hpp"
 
 using std::vector;
 
@@ -11,13 +13,14 @@ namespace Engine
 		Mesh();
 		Mesh(vector<float> pVertices, vector<unsigned int> pIndices);
 		Mesh(vector<float>* pVertices, vector<unsigned int>* pIndices);
-		~Mesh();
 
 		// Copy constructors
 		Mesh(const Mesh& pOther);
 		Mesh(Mesh&& pOther);
 		Mesh& operator=(const Mesh& pOther);
 		Mesh& operator=(Mesh&& pOther);
+		
+		~Mesh();
 
 		vector<float>* GetVertices() const;
 		void SetVertices(vector<float> pVertices);

@@ -28,14 +28,6 @@ namespace Engine
 		m_vertices = pVertices;
 		m_indices = pIndices;
 	}
-
-	Mesh::~Mesh()
-	{
-		m_vertices->clear();
-		m_indices->clear();
-		delete m_vertices;
-		delete m_indices;
-	}
 	
 	Mesh::Mesh(const Mesh& pOther)
 	{
@@ -61,6 +53,14 @@ namespace Engine
 		return newObj;
 	}
 
+	Mesh::~Mesh()
+	{
+		m_vertices->clear();
+		m_indices->clear();
+		delete m_vertices;
+		delete m_indices;
+	}
+	
 	vector<float>* Mesh::GetVertices() const
 	{
 		return m_vertices;

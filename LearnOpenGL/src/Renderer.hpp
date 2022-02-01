@@ -1,9 +1,11 @@
 #pragma once
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
-#include "Shader.hpp"
-#include "Texture.hpp"
-#include "Mesh.hpp"
+#include <memory>
 #include "GameObject.hpp"
+#include "Mesh.hpp"
+
+using std::vector;
+using std::unique_ptr;
 
 namespace Engine
 {
@@ -54,9 +56,9 @@ namespace Engine
 
 		Shader* m_shaderRef = nullptr;      // A reference to a shader
 		Texture* m_textureRef = nullptr;    // A reference to a texture
-		std::vector<Mesh*>* m_meshes = nullptr;
+		vector<unique_ptr<Mesh>>* m_meshes = nullptr;
 
-		Mesh* test = nullptr;
+		//Mesh* test = nullptr;
 
 		unsigned int m_idVAO = 0U, m_idVBO = 0U, m_idEBO = 0U; // The vertex attribute object, vertex buffer object, and element buffer object
 
