@@ -29,6 +29,7 @@ namespace Engine
 		// Shader creation
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
 		m_shaders.get()->push_back(make_unique<Shader>("../Assets/shaders/cube.vert", "../Assets/shaders/cube.frag"));
+		//m_shaders.get()->push_back(make_unique<Shader>());
 
 		// Texture creation
 		m_textures = make_unique<vector<unique_ptr<Texture>>>();

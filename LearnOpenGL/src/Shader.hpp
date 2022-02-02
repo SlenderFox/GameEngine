@@ -5,11 +5,17 @@
 #include <glm/glm.hpp>
 
 using std::string;
-using std::ifstream;
 #pragma endregion
 
 namespace Engine
 {
+	enum class ShaderType : unsigned short
+	{
+		PROGRAM,
+		VERTEX,
+		FRAGMENT
+	};
+
 	class Shader
 	{
 	public:
@@ -36,11 +42,11 @@ namespace Engine
 		 * @param pValidate Whether the shader was even initialised
 		 */
 		void Destroy(bool pValidate);
-		void LoadPaths(string pVertexPath, string pFragmentPath);
 		/**
 		 * @brief Use/activate the shader
 		 */
 		void Use();
+		void LoadPaths(string pVertexPath, string pFragmentPath);
 
 		// Utility uniform functions
 		/**
@@ -75,8 +81,12 @@ namespace Engine
 		bool GetLoaded() const { return m_shaderLoaded; }
 
 	private:
-		void CreateVertexShader();
-		void CreatFragmentShader();
+		void LoadShader(ShaderType pType);
+		bool CompileShader(unsigned int* pId, ShaderType pType, const char* pCode);
+		//void LoadVertexShader();
+		//void LoadFragmentShader();
+		//bool CompileVertexShader(const char* pVertexCode);
+		//bool CompileFragmentShader(const char* pFragmentCode);
 		void CreateShaderProgram();
 
 		/**
@@ -84,8 +94,9 @@ namespace Engine
 		 *
 		 * @param pShaderID The id of the shader to be error checked
 		 * @param pType The type of shader being error checked
+		 * @return true if no error, false if error
 		 */
-		void ShaderErrorChecking(unsigned int* pShaderID, string pType);
+		bool ShaderErrorChecking(unsigned int* pShaderID, ShaderType pType);
 
 		bool m_shaderLoaded = false;
 		unsigned int m_idProgram, m_idVertex, m_idFragment;
