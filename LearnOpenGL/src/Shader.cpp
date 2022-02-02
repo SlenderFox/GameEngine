@@ -10,14 +10,14 @@
 
 namespace Engine
 {
+	Shader::Shader()
+	{
+
+	}
+
 	Shader::Shader(string pVertexPath, string pFragmentPath)
 	{
-		m_vertexPath = pVertexPath;
-		m_fragmentPath = pFragmentPath;
-
-		CreateVertexShader();
-		CreatFragmentShader();
-		CreateShaderProgram();
+		LoadPaths(pVertexPath, pFragmentPath);
 	}
 
 	Shader::Shader(const Shader& pOther)
@@ -48,6 +48,16 @@ namespace Engine
 	{
 		if (pValidate && m_shaderLoaded)
 			glDeleteProgram(m_idProgram);
+	}
+
+	void Shader::LoadPaths(string pVertexPath, string pFragmentPath)
+	{
+		m_vertexPath = pVertexPath;
+		m_fragmentPath = pFragmentPath;
+
+		CreateVertexShader();
+		CreatFragmentShader();
+		CreateShaderProgram();
 	}
 
 	void Shader::Use()

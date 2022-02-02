@@ -9,13 +9,14 @@ using glm::mat4;
 
 namespace Engine
 {
-	bool Renderer::Init()
+	void Renderer::Init()
 	{
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);
 
-		m_meshes = new vector<unique_ptr<Mesh>>();
-		m_meshes->push_back(make_unique<Mesh>());
+		// Mesh creation
+		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
+		m_meshes.get()->push_back(make_unique<Mesh>());
 
 		CreateVAO(GetMeshAt(0U)->GetVAO(),
 				  GetMeshAt(0U)->GetVBO(),
@@ -23,20 +24,112 @@ namespace Engine
 			  GetMeshAt(0U)->GetVertices(),
 			  GetMeshAt(0U)->GetIndices());
 
-		return true;
+		// Shader creation
+		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
+		m_shaders.get()->push_back(make_unique<Shader>("../Assets/shaders/cube.vert", "../Assets/shaders/cube.frag"));
+
+		// Texture creation
+		m_textures = make_unique<vector<unique_ptr<Texture>>>();
+		m_textures.get()->push_back(make_unique<Texture>());
+
+		//GetShaderAt(0U)->LoadPaths("../Assets/shaders/cube.vert", "../Assets/shaders/cube.frag");
+		GetTextureAt(0U)->LoadImages();
+		//GetShaderAt(0U)->Use();
+		GetShaderAt(0U)->SetInt("texture0", 0);
+		GetShaderAt(0U)->SetInt("texture1", 1);
+		GetShaderAt(0U)->SetInt("texture2", 2);
+
+#ifdef _DEBUG
+		if (m_shaders.get() != nullptr)
+			std::cout << "Shader loaded: " << (GetShaderAt(0U)->GetLoaded() ? "True " : "False ");
+
+		if (m_textures.get() != nullptr)
+			std::cout << "Texture loaded: " << (GetTextureAt(0U)->GetLoaded() ? "True" : "False");
+
+		std::cout << std::endl;
+#endif
+
+		// // Old way
+		// m_shaderRef = new Shader("../Assets/shaders/cube.vert", "../Assets/shaders/cube.frag");
+		// m_textureRef = new Texture();
+		// m_textureRef->LoadImages();
+		// //m_shaderRef->Use();
+		// m_shaderRef->SetInt("texture0", 0);
+		// m_shaderRef->SetInt("texture1", 1);
+		// m_shaderRef->SetInt("texture2", 2);
 	}
 
 	void Renderer::Destroy(bool pValidate)
 	{
 		if (pValidate)
 		{
-			for (unsigned int i = 0; i < m_meshes->size(); ++i)
+			for (unsigned int i = 0; i < (*m_meshes.get()).size(); ++i)
 			{
-				glDeleteVertexArrays(1, GetMeshAt(i)->GetVAO());
-				glDeleteBuffers(1, GetMeshAt(i)->GetVBO());
-				glDeleteBuffers(1, GetMeshAt(i)->GetEBO());
-				GetMeshAt(i)->Destroy(pValidate);
+				if (GetMeshAt(i) != nullptr)
+				{
+					glDeleteVertexArrays(1, GetMeshAt(i)->GetVAO());
+					glDeleteBuffers(1, GetMeshAt(i)->GetVBO());
+					glDeleteBuffers(1, GetMeshAt(i)->GetEBO());
+					GetMeshAt(i)->Destroy(pValidate);
+				}
 			}
+
+			// if (m_shaderRef != nullptr)
+			// 	m_shaderRef->Destroy(pValidate);
+			
+			for (unsigned int i = 0; i < (*m_shaders.get()).size(); ++i)
+			{
+				if (GetShaderAt(i) != nullptr)
+					GetShaderAt(i)->Destroy(pValidate);
+			}
+			
+			for (unsigned int i = 0; i < (*m_textures.get()).size(); ++i)
+			{
+				if (GetTextureAt(i) != nullptr)
+					GetTextureAt(i)->Destroy(pValidate);
+			}
+		}
+
+		m_meshes.release();
+		m_shaders.release();
+		m_textures.release();
+
+		//delete m_meshes;
+		//delete m_shaders;
+		//delete m_textures;
+
+		// delete m_shaderRef;
+		// delete m_textureRef;
+	}
+
+	void Renderer::Draw(glm::mat4 pCamera, double pTime)
+	{
+		// Rendering
+
+		// Clears to background colour
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Must be set to the current context
+		glBindVertexArray(*GetMeshAt(0U)->GetVAO());
+
+		//m_shaderRef->Use();
+		GetShaderAt(0U)->Use();
+
+		//m_shaderRef->SetMat4("camera", pCamera);
+		GetShaderAt(0U)->SetMat4("camera", pCamera);
+
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			mat4 model = mat4(1.0f);
+			model = glm::translate(model, m_cubePositions[i]);
+			float angle = (float)pTime * 30.0f * ((i + 1) / (i * 0.2f + 1));
+			model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
+			//m_shaderRef->SetMat4("model", model);
+			GetShaderAt(0U)->SetMat4("model", model);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 	}
 
@@ -111,39 +204,18 @@ namespace Engine
 		delete[] indices;
 	}
 
-	void Renderer::Draw(glm::mat4 pCamera, double pTime)
-	{
-		// Rendering
-
-		// Clears to background colour
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// Must be set to the current context
-		glBindVertexArray(*GetMeshAt(0U)->GetVAO());
-
-		//m_shaderRef->Use();
-		GetMeshAt(0U)->GetShader()->Use();
-
-		//m_shaderRef->SetMat4("camera", pCamera);
-		GetMeshAt(0U)->GetShader()->SetMat4("camera", pCamera);
-
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-		for (unsigned int i = 0; i < 10; i++)
-		{
-			mat4 model = mat4(1.0f);
-			model = glm::translate(model, m_cubePositions[i]);
-			float angle = (float)pTime * 30.0f * ((i + 1) / (i * 0.2f + 1));
-			model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
-			//m_shaderRef->SetMat4("model", model);
-			GetMeshAt(0U)->GetShader()->SetMat4("model", model);
-
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
-	}
-
 	Mesh* Renderer::GetMeshAt(unsigned int pPos)
 	{
-		return (*m_meshes)[pPos].get();
+		return (*m_meshes.get())[pPos].get();
+	}
+
+	Shader* Renderer::GetShaderAt(unsigned int pPos)
+	{
+		return (*m_shaders.get())[pPos].get();
+	}
+
+	Texture* Renderer::GetTextureAt(unsigned int pPos)
+	{
+		return (*m_textures.get())[pPos].get();
 	}
 }

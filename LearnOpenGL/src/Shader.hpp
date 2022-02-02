@@ -11,6 +11,7 @@ namespace Engine
 	class Shader
 	{
 	public:
+		Shader();
 		/**
 		 * @brief Construct a new Shader object
 		 *
@@ -33,6 +34,7 @@ namespace Engine
 		 * @param pValidate Whether the shader was even initialised
 		 */
 		void Destroy(bool pValidate);
+		void LoadPaths(string pVertexPath, string pFragmentPath);
 		/**
 		 * @brief Use/activate the shader
 		 */
@@ -68,6 +70,8 @@ namespace Engine
 		 */
 		void SetMat4(const string& pName, glm::mat4 pValue) const;
 
+		bool GetLoaded() const { return m_shaderLoaded; }
+
 	private:
 		void CreateVertexShader();
 		void CreatFragmentShader();
@@ -83,6 +87,6 @@ namespace Engine
 
 		bool m_shaderLoaded = false;
 		unsigned int m_idProgram, m_idVertex, m_idFragment;
-		string m_vertexPath, m_fragmentPath;
+		string m_vertexPath, m_fragmentPath;	// The file path of the shaders
 	};
 }

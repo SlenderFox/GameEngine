@@ -16,14 +16,6 @@ namespace Engine
 		for (int i = 0; i < 6; ++i)
 			m_indices->push_back(m_indicesArr[i]);
 		m_indices->shrink_to_fit();
-
-		m_shaderRef = new Shader("../Assets/shaders/cube.vert", "../Assets/shaders/cube.frag");
-		m_textureRef = new Texture();
-		m_textureRef->LoadImages();
-		//m_shaderRef->Use();
-		m_shaderRef->SetInt("texture0", 0);
-		m_shaderRef->SetInt("texture1", 1);
-		m_shaderRef->SetInt("texture2", 2);
 	}
 	
 	Mesh::Mesh(vector<float> pVertices, vector<unsigned int> pIndices)
@@ -64,13 +56,8 @@ namespace Engine
 
 	void Mesh::Destroy(bool pValidate)
 	{
-		if (m_shaderRef != nullptr)
-			m_shaderRef->Destroy(pValidate);
-
 		m_vertices->clear();
 		m_indices->clear();
-		delete m_shaderRef;
-		delete m_textureRef;
 		delete m_idVAO;
 		delete m_idVBO;
 		delete m_idEBO;
@@ -109,15 +96,5 @@ namespace Engine
 	unsigned int* Mesh::GetEBO() const
 	{
 		return m_idEBO;
-	}
-
-	Shader* Mesh::GetShader() const
-	{
-		return m_shaderRef;
-	}
-	
-	Texture* Mesh::GetTexture() const
-	{
-		return m_textureRef;
 	}
 }

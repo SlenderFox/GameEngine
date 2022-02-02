@@ -56,7 +56,7 @@ namespace Engine
 		 *
 		 * @return If initlialisation was successful
 		 */
-		bool Init();
+		void Init();
 		/**
 		 * @brief Destroys the renderer but only if it was ever initliased
 		 *
@@ -78,8 +78,14 @@ namespace Engine
 		 * @return Mesh* The pointer to the mesh object
 		 */
 		Mesh* GetMeshAt(unsigned int pPos);
+		Shader* GetShaderAt(unsigned int pPos);
+		Texture* GetTextureAt(unsigned int pPos);
 
-		vector<unique_ptr<Mesh>>* m_meshes = nullptr;
+		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
+		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
+		unique_ptr<vector<unique_ptr<Texture>>> m_textures;
+		//Shader* m_shaderRef = nullptr;      // A reference to a shader
+		//Texture* m_textureRef = nullptr;    // A reference to a texture
 
 		const glm::vec3 m_cubePositions[10] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),

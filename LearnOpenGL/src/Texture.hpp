@@ -5,10 +5,14 @@ namespace Engine
 	class Texture
 	{
 	public:
+		void Destroy(bool pValidate);	
 		/**
 		 * @brief Currently loads a set of hard-coded images from file
 		 */
 		void LoadImages();
+		
+		bool GetLoaded() const { return m_textureLoaded; }
+
 		unsigned int m_idTEX0 = 0, m_idTEX1 = 0, m_idTEX2 = 0;
 
 	private:
@@ -19,9 +23,10 @@ namespace Engine
 		 * @param location Where the image is stored
 		 * @param transparent Whether the image has an alpha channel
 		 */
-		void LoadTexture(unsigned int* texID, const char* location, bool transparent);
+		void LoadTexture(unsigned int* pTexID, const char* pLocation, bool pTransparent);
 
-		int m_texWidth = 0, m_texHeight = 0, m_texColChannels = 0;
-		unsigned char* m_imageData = 0;
+		bool m_textureLoaded = false;
+		//int m_texWidth = 0, m_texHeight = 0, m_texColChannels = 0;
+		//unsigned char* m_imageData = 0;
 	};
 }

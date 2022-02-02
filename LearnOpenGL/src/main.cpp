@@ -10,6 +10,7 @@
 * TODO:
 * Add borderless fullscreen option, use enum for selection
 * App opens to main menu to allow setting changes
+* Texture overhaul
 */
 #include "Project.hpp"
 

@@ -32,14 +32,10 @@ namespace Engine
 		unsigned int* GetVAO() const;
 		unsigned int* GetVBO() const;
 		unsigned int* GetEBO() const;
-		Shader* GetShader() const;
-		Texture* GetTexture() const;
-
+		
 	private:
 		unique_ptr<vector<float>> m_vertices = nullptr;
 		unique_ptr<vector<unsigned int>> m_indices = nullptr;
-		Shader* m_shaderRef = nullptr;      // A reference to a shader
-		Texture* m_textureRef = nullptr;    // A reference to a texture
 
 		unsigned int* m_idVAO = new unsigned int(0U);	// The id for the vertex attribute object
 		unsigned int* m_idVBO = new unsigned int(0U);	// The id for the vertex buffer object

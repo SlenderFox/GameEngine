@@ -203,8 +203,7 @@ namespace Engine
 		m_gladLoaded = true;
 
 		// Initialises the renderer
-		if (!m_rendererInst->Init())
-			return false;
+		m_rendererInst->Init();
 
 		m_cameraRef = new Camera((float)m_winWidth / (float)m_winHeight, 75.0f);
 		//UpdateCamera();
