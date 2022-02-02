@@ -12,6 +12,7 @@ namespace Engine
 		m_transform = pValue;
 	}
 
+	#pragma region Copy constructors
 	GameObject::GameObject(const GameObject& pOther)
 	{
 		m_transform = pOther.GetTransform();
@@ -33,14 +34,18 @@ namespace Engine
 		GameObject* newObj = new GameObject(pOther.GetTransform());
 		return *newObj;
 	}
+	#pragma endregion
 
-	mat4 GameObject::GetTransform() const
-	{
-		return m_transform;
-	}
-
+	#pragma region Setters
 	void GameObject::SetTransform(mat4 pValue)
 	{
 		m_transform = pValue;
 	}
+	#pragma endregion
+	#pragma region Getters
+	mat4 GameObject::GetTransform() const
+	{
+		return m_transform;
+	}
+	#pragma endregion
 }

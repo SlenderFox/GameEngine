@@ -42,24 +42,15 @@ namespace Engine
 		GetShaderAt(0U)->SetInt("texture1", 1);
 		GetShaderAt(0U)->SetInt("texture2", 2);
 
-#ifdef _DEBUG
-		if (m_shaders.get() != nullptr)
-			std::cout << "Shader loaded: " << (GetShaderAt(0U)->GetLoaded() ? "True " : "False ");
+		#ifdef _DEBUG
+		 if (m_shaders.get() != nullptr)
+		 	std::cout << "Shader loaded: " << (GetShaderAt(0U)->GetLoaded() ? "True " : "False ");
 
-		if (m_textures.get() != nullptr)
-			std::cout << "Texture loaded: " << (GetTextureAt(0U)->GetLoaded() ? "True" : "False");
+		 if (m_textures.get() != nullptr)
+		 	std::cout << "Texture loaded: " << (GetTextureAt(0U)->GetLoaded() ? "True" : "False");
 
-		std::cout << std::endl;
-#endif
-
-		// // Old way
-		// m_shaderRef = new Shader("../Assets/shaders/cube.vert", "../Assets/shaders/cube.frag");
-		// m_textureRef = new Texture();
-		// m_textureRef->LoadImages();
-		// //m_shaderRef->Use();
-		// m_shaderRef->SetInt("texture0", 0);
-		// m_shaderRef->SetInt("texture1", 1);
-		// m_shaderRef->SetInt("texture2", 2);
+		 std::cout << std::endl;
+		#endif
 	}
 
 	void Renderer::Destroy(bool pValidate)
@@ -77,9 +68,6 @@ namespace Engine
 				}
 			}
 
-			// if (m_shaderRef != nullptr)
-			// 	m_shaderRef->Destroy(pValidate);
-			
 			for (unsigned int i = 0; i < (*m_shaders.get()).size(); ++i)
 			{
 				if (GetShaderAt(i) != nullptr)
@@ -96,13 +84,6 @@ namespace Engine
 		m_meshes.release();
 		m_shaders.release();
 		m_textures.release();
-
-		//delete m_meshes;
-		//delete m_shaders;
-		//delete m_textures;
-
-		// delete m_shaderRef;
-		// delete m_textureRef;
 	}
 
 	void Renderer::Draw(glm::mat4 pCamera, double pTime)
@@ -115,10 +96,8 @@ namespace Engine
 		// Must be set to the current context
 		glBindVertexArray(*GetMeshAt(0U)->GetVAO());
 
-		//m_shaderRef->Use();
 		GetShaderAt(0U)->Use();
 
-		//m_shaderRef->SetMat4("camera", pCamera);
 		GetShaderAt(0U)->SetMat4("camera", pCamera);
 
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -129,7 +108,6 @@ namespace Engine
 			model = glm::translate(model, m_cubePositions[i]);
 			float angle = (float)pTime * 30.0f * ((i + 1) / (i * 0.2f + 1));
 			model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
-			//m_shaderRef->SetMat4("model", model);
 			GetShaderAt(0U)->SetMat4("model", model);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -207,6 +185,7 @@ namespace Engine
 		delete[] indices;
 	}
 
+	#pragma region Getters
 	Mesh* Renderer::GetMeshAt(unsigned int pPos)
 	{
 		return (*m_meshes.get())[pPos].get();
@@ -221,4 +200,5 @@ namespace Engine
 	{
 		return (*m_textures.get())[pPos].get();
 	}
+	#pragma endregion
 }

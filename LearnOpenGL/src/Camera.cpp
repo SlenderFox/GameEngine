@@ -16,6 +16,7 @@ using glm::inverse;
 
 namespace Engine
 {
+	#pragma region Constructors
 	Camera::Camera(float pAspectRatio)
 	{
 		SetTransform(mat4(1.0f));
@@ -57,36 +58,12 @@ namespace Engine
 		SetAspectRatio(pAspectRatio);
 		SetFovH(pFovH);
 	}
+	#pragma endregion
 
 	void Camera::LookAt(vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
 	{
 		m_view = glm::lookAt(pFrom, pTo, pUp);
 		m_transform = inverse(m_view);
-	}
-
-	void Camera::SetAspectRatio(float pAspectRatio)
-	{
-		m_aspectRatio = pAspectRatio;
-	}
-
-	void Camera::SetFovH(float pFovH)
-	{
-		m_fovH = pFovH;
-		if (m_fovH > 120.0f)
-			m_fovH = 120.0f;
-		else if (m_fovH < 1.0f)
-			m_fovH = 1.0f;
-		UpdateFovV();
-	}
-
-	void Camera::SetFovV(float pFovV)
-	{
-		m_fovV = pFovV;
-		if (m_fovV > 120.0f)
-			m_fovV = 120.0f;
-		else if (m_fovV < 1.0f)
-			m_fovV = 1.0f;
-		UpdateFovH();
 	}
 
 	void Camera::ModifyFovH(float pValue)
@@ -121,6 +98,87 @@ namespace Engine
 		SetProjection(m_fovV);
 	}
 
+	#pragma region Setters
+	void Camera::SetTransform(mat4 pValue)
+	{
+		m_transform = pValue;
+		m_view = inverse(m_transform);
+	}
+
+	void Camera::SetView(mat4 pValue)
+	{
+		m_view = pValue;
+		m_transform = inverse(m_view);
+	}
+
+	void Camera::SetProjection(mat4 pValue)
+	{
+		m_projection = pValue;
+	}
+
+	void Camera::SetProjection(float pFovV)
+	{
+		m_projection = perspective(radians(pFovV), m_aspectRatio, 0.1f, 100.0f);
+		#ifdef _DEBUG
+		 std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
+		#endif
+	}
+
+	void Camera::SetPosition(vec3 pValue)
+	{
+		m_transform[3] = vec4(pValue, m_transform[3][3]);
+		m_view = inverse(m_transform);
+	}
+
+	void Camera::Translate(vec3 pValue)
+	{
+		m_transform[3] = vec4((vec3)m_transform[3] + pValue, m_transform[3][3]);
+		m_view = inverse(m_transform);
+	}
+
+	void Camera::SetRight(vec3 pValue)
+	{
+		m_transform[0] = vec4(pValue, 0);
+		m_view = inverse(m_transform);
+	}
+
+	void Camera::SetUp(vec3 pValue)
+	{
+		m_transform[1] = vec4(pValue, 0);
+		m_view = inverse(m_transform);
+	}
+
+	void Camera::SetForward(vec3 pValue)
+	{
+		m_transform[2] = vec4(pValue, 0);
+		m_view = inverse(m_transform);
+	}
+	
+	void Camera::SetAspectRatio(float pAspectRatio)
+	{
+		m_aspectRatio = pAspectRatio;
+	}
+
+	void Camera::SetFovH(float pFovH)
+	{
+		m_fovH = pFovH;
+		if (m_fovH > 120.0f)
+			m_fovH = 120.0f;
+		else if (m_fovH < 1.0f)
+			m_fovH = 1.0f;
+		UpdateFovV();
+	}
+
+	void Camera::SetFovV(float pFovV)
+	{
+		m_fovV = pFovV;
+		if (m_fovV > 120.0f)
+			m_fovV = 120.0f;
+		else if (m_fovV < 1.0f)
+			m_fovV = 1.0f;
+		UpdateFovH();
+	}
+
 	void Camera::SetClearColour(vec4 pValue)
 	{
 		glClearColor(pValue.x, pValue.y, pValue.z, pValue.a);
@@ -145,21 +203,11 @@ namespace Engine
 	{
 		glClearColor(pRed, pGreen, pBlue, pAlpha);
 	}
-
-	mat4 Camera::WorldToCameraMatrix()
-	{
-		return m_projection * m_view;
-	}
-
+	#pragma endregion
+	#pragma region Getters
 	mat4 Camera::GetTransform() const
 	{
 		return m_transform;
-	}
-
-	void Camera::SetTransform(mat4 pValue)
-	{
-		m_transform = pValue;
-		m_view = inverse(m_transform);
 	}
 
 	mat4 Camera::GetView() const
@@ -167,45 +215,14 @@ namespace Engine
 		return m_view;
 	}
 
-	void Camera::SetView(mat4 pValue)
-	{
-		m_view = pValue;
-		m_transform = inverse(m_view);
-	}
-
 	mat4 Camera::GetProjection() const
 	{
 		return m_projection;
 	}
 
-	void Camera::SetProjection(mat4 pValue)
-	{
-		m_projection = pValue;
-	}
-
-	void Camera::SetProjection(float pFovV)
-	{
-		m_projection = perspective(radians(pFovV), m_aspectRatio, 0.1f, 100.0f);
-#ifdef _DEBUG
-		std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
-#endif
-	}
-
 	vec3 Camera::GetPosition() const
 	{
 		return (vec3)m_transform[3];
-	}
-
-	void Camera::SetPosition(vec3 pValue)
-	{
-		m_transform[3] = vec4(pValue, m_transform[3][3]);
-		m_view = inverse(m_transform);
-	}
-
-	void Camera::Translate(vec3 pValue)
-	{
-		m_transform[3] = vec4((vec3)m_transform[3] + pValue, m_transform[3][3]);
-		m_view = inverse(m_transform);
 	}
 
 	vec3 Camera::GetRight() const
@@ -214,21 +231,9 @@ namespace Engine
 		return -(vec3)m_transform[0];
 	}
 
-	void Camera::SetRight(vec3 pValue)
-	{
-		m_transform[0] = vec4(pValue, 0);
-		m_view = inverse(m_transform);
-	}
-
 	vec3 Camera::GetUp() const
 	{
 		return (vec3)m_transform[1];
-	}
-
-	void Camera::SetUp(vec3 pValue)
-	{
-		m_transform[1] = vec4(pValue, 0);
-		m_view = inverse(m_transform);
 	}
 
 	vec3 Camera::GetForward() const
@@ -236,10 +241,10 @@ namespace Engine
 		// The camera is horizontally reversed
 		return -(vec3)m_transform[2];
 	}
-
-	void Camera::SetForward(vec3 pValue)
+	
+	mat4 Camera::GetWorldToCameraMatrix()
 	{
-		m_transform[2] = vec4(pValue, 0);
-		m_view = inverse(m_transform);
+		return m_projection * m_view;
 	}
+	#pragma endregion
 }

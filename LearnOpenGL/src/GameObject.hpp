@@ -10,14 +10,20 @@ namespace Engine
 	public:
 		GameObject();
 		GameObject(mat4 pValue);
-		// Copy constructors
+
+		#pragma region Copy constructors
 		GameObject(const GameObject& pOther);
 		GameObject(GameObject&& pOther) noexcept;
 		GameObject& operator=(const GameObject& pOther);
 		GameObject& operator=(GameObject&& pOther) noexcept;
+		#pragma endregion
 
-		virtual mat4 GetTransform() const;
+		#pragma region Setters
 		virtual void SetTransform(mat4 pValue);
+		#pragma endregion
+		#pragma region Getters
+		virtual mat4 GetTransform() const;
+		#pragma endregion
 
 	protected:
 		mat4 m_transform = mat4(1);

@@ -29,6 +29,7 @@ namespace Engine
 		LoadPaths(pVertexPath, pFragmentPath);
 	}
 
+	#pragma region Copy constructors
 	Shader::Shader(const Shader& pOther)
 	{
 		m_vertexPath = pOther.m_vertexPath;
@@ -52,6 +53,7 @@ namespace Engine
 		Shader* newObj = new Shader(pOther.m_vertexPath, pOther.m_fragmentPath);
 		return *newObj;
 	}
+	#pragma endregion
 
 	void Shader::Destroy(bool pValidate)
 	{
@@ -181,158 +183,6 @@ namespace Engine
 		return ShaderErrorChecking(pId, pType);
 	}
 
-	// void Shader::LoadVertexShader()
-	// {
-	// 	#pragma region Fallback code
-	// 	 const char* vertexFallback = "#version 330 core\n\
-	// 	 layout (location = 0) in vec3 aPos;\
-	// 	 layout (location = 1) in vec3 aCol;\
-	// 	 layout (location = 2) in vec2 aTexCoord;\
-	// 	 out vec3 colour;\
-	// 	 out vec2 texCoord;\
-	// 	 uniform mat4 camera;\
-	// 	 uniform mat4 model;\
-	// 	 void main() {\
-	// 	  gl_Position = camera * model * vec4(aPos, 1.0);\
-	// 	  colour = aCol;\
-	// 	  texCoord = aTexCoord;\
-	// 	 }";
-	// 	#pragma endregion
-	//
-	// 	// Must be defined out here
-	// 	const char* vertexCode;
-	// 	ifstream vertexFile;
-	// 	string vertexString;
-	//
-	// 	// Ensure ifstream objects can throw exceptions
-	// 	vertexFile.exceptions(ifstream::failbit | ifstream::badbit);
-	//
-	// 	// 1. retrieve the vertex source code from filePath
-	// 	try
-	// 	{
-	// 		/* For both vertex and fragment we:
-	// 		* Open files
-	// 		* Read file's buffer contents into streams
-	// 		* Close file handlers
-	// 		* Convert stream into string
-	// 		*/
-	// 		stringstream vertexStream;
-	// 		vertexFile.open(m_vertexPath);
-	// 		vertexStream << vertexFile.rdbuf();
-	// 		vertexFile.close();
-	// 		vertexString = vertexStream.str();
-	// 		vertexCode = vertexString.c_str();
-	// 	}
-	// 	catch (ifstream::failure e)
-	// 	{
-	// 		#ifdef _DEBUG
-	// 		 printf("ERROR::SHADER::VERTEX::FILE_NOT_SUCCESFULLY_READ\n");
-	// 		#endif
-	//
-	// 		vertexCode = vertexFallback;
-	// 	}
-	//
-	// 	// 2. compile shaders
-	// 	if (!CompileShader(&m_idVertex, ShaderType::VERTEX, vertexCode))
-	// 	{
-	// 		#ifdef _DEBUG
-	// 		 printf("ERROR::SHADER::VERTEX::USING_FALLBACK_CODE\n");
-	// 		#endif
-	// 		if (!CompileShader(&m_idVertex, ShaderType::VERTEX, vertexFallback))
-	// 		{
-	// 			#ifdef _DEBUG
-	// 		 	 printf("ERROR::SHADER::VERTEX::FALLBACK_CODE_FAILURE\n");
-	// 			#endif
-	// 			exit(0);
-	// 		}
-	// 	}
-	// }
-	//
-	// void Shader::LoadFragmentShader()
-	// {
-	// 	#pragma region Fallback code
-	// 	const char* fragmentFallback = "#version 330 core\n\
-	// 	 out vec4 FragCol;\
-	// 	 in vec3 colour;\
-	// 	 in vec2 texCoord;\
-	// 	 void main() {\
-	// 	  FragCol = vec4(colour, 1);\
-	// 	 }";
-	// 	#pragma endregion
-	//
-	// 	// Must be defined out here
-	// 	const char* fragmentCode;
-	// 	ifstream fragmentFile;
-	// 	string fragmentString;
-	//
-	// 	// Ensure ifstream objects can throw exceptions
-	// 	fragmentFile.exceptions(ifstream::failbit | ifstream::badbit);
-	//
-	// 	// 1. retrieve the fragment source code from filePath
-	// 	try
-	// 	{
-	// 		/* For both vertex and fragment we:
-	// 		* Open files
-	// 		* Read file's buffer contents into streams
-	// 		* Close file handlers
-	// 		* Convert stream into string
-	// 		*/
-	// 		stringstream fragmentStream;
-	// 		fragmentFile.open(m_fragmentPath);
-	// 		fragmentStream << fragmentFile.rdbuf();
-	// 		fragmentFile.close();
-	// 		fragmentString = fragmentStream.str();
-	// 		fragmentCode = fragmentString.c_str();
-	// 	}
-	// 	catch (ifstream::failure e)
-	// 	{
-	// 		#ifdef _DEBUG
-	// 		 printf("ERROR::SHADER::FRAGMENT::FILE_NOT_SUCCESFULLY_READ\n");
-	// 		#endif
-	//
-	// 		fragmentCode = fragmentFallback;
-	// 	}
-	//
-	// 	// 2. compile shaders
-	// 	if (!CompileShader(&m_idFragment, ShaderType::FRAGMENT, fragmentCode))
-	// 	{
-	// 		#ifdef _DEBUG
-	// 		 printf("ERROR::SHADER::FRAGMENT::USING_FALLBACK_CODE\n");
-	// 		#endif
-	// 		if (!CompileShader(&m_idFragment, ShaderType::FRAGMENT, fragmentFallback))
-	// 		{
-	// 			#ifdef _DEBUG
-	// 		 	 printf("ERROR::SHADER::FRAGMENT::FALLBACK_CODE_FAILURE\n");
-	// 			#endif
-	// 			exit(0);
-	// 		}
-	// 	}
-	// }
-	//
-	// bool Shader::CompileVertexShader(const char* pVertexCode)
-	// {
-	// 	// Creates the vertex shader object and assigns to an id
-	// 	m_idVertex = glCreateShader(GL_VERTEX_SHADER);
-	// 	// Loads the vertex shader into the object
-	// 	glShaderSource(m_idVertex, 1, &pVertexCode, NULL);
-	// 	// Compiles the shader at run-time
-	// 	glCompileShader(m_idVertex);
-	// 	// Performs error checking on the vertex shader
-	// 	return ShaderErrorChecking(&m_idVertex, "VERTEX");
-	// }
-	//
-	// bool Shader::CompileFragmentShader(const char* pFragmentCode)
-	// {
-	// 	// Creates the fragment shader object and assigns to an id
-	// 	m_idFragment = glCreateShader(GL_FRAGMENT_SHADER);
-	// 	// Loads the fragment shader into the object
-	// 	glShaderSource(m_idFragment, 1, &pFragmentCode, NULL);
-	// 	// Compiles the fragment at run-time
-	// 	glCompileShader(m_idFragment);
-	// 	// Performs error checking on the fragment shader
-	// 	return ShaderErrorChecking(&m_idFragment, "FRAGMENT");
-	// }
-
 	void Shader::CreateShaderProgram()
 	{
 		// Creates a shader program object assigned to id, this sets it as the active shader
@@ -390,6 +240,7 @@ namespace Engine
 		return true;
 	}
 
+	#pragma region Setters
 	void Shader::SetBool(const string& pName, bool pValue) const
 	{
 		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), (int)pValue);
@@ -409,4 +260,5 @@ namespace Engine
 	{
 		glUniformMatrix4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, glm::value_ptr(pValue));
 	}
+	#pragma endregion
 }

@@ -28,11 +28,12 @@ namespace Engine
 		 */
 		Shader(string pVertexPath, string pFragmentPath);
 
-		// Copy constructors
+		#pragma region Copy constructors
 		Shader(const Shader& pOther);
 		Shader(Shader&& pOther) noexcept;
 		Shader& operator=(const Shader& pOther);
 		Shader& operator=(Shader&& pOther) noexcept;
+		#pragma endregion
 
 		~Shader() {}
 
@@ -48,6 +49,7 @@ namespace Engine
 		void Use();
 		void LoadPaths(string pVertexPath, string pFragmentPath);
 
+		#pragma region Setters
 		// Utility uniform functions
 		/**
 		 * @brief Assigns data to a bool uniform in the shader
@@ -77,16 +79,13 @@ namespace Engine
 		 * @param pValue The value assigned to the uniform
 		 */
 		void SetMat4(const string& pName, glm::mat4 pValue) const;
+		#pragma endregion
 
 		bool GetLoaded() const { return m_shaderLoaded; }
 
 	private:
 		void LoadShader(ShaderType pType);
 		bool CompileShader(unsigned int* pId, ShaderType pType, const char* pCode);
-		//void LoadVertexShader();
-		//void LoadFragmentShader();
-		//bool CompileVertexShader(const char* pVertexCode);
-		//bool CompileFragmentShader(const char* pFragmentCode);
 		void CreateShaderProgram();
 
 		/**

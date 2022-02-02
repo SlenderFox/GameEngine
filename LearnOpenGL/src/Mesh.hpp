@@ -19,21 +19,26 @@ namespace Engine
 		Mesh(vector<float> pVertices, vector<unsigned int> pIndices);
 		Mesh(unique_ptr<vector<float>> pVertices, unique_ptr<vector<unsigned int>> pIndices);
 
-		// Copy constructors
+		#pragma region Copy constructors
 		Mesh(const Mesh& pOther);
 		Mesh(Mesh&& pOther) noexcept;
 		Mesh& operator=(const Mesh& pOther);
 		Mesh& operator=(Mesh&& pOther) noexcept;
+		#pragma endregion
 
 		void Destroy(bool pValidate);
 
-		vector<float>* GetVertices() const;
+		#pragma region Setters
 		void SetVertices(vector<float>* pVertices);
-		vector<unsigned int>* GetIndices() const;
 		void SetIndices(vector<unsigned int>* pIndices);
+		#pragma endregion
+		#pragma region Getters
+		vector<float>* GetVertices() const;
+		vector<unsigned int>* GetIndices() const;
 		unsigned int* GetVAO() const;
 		unsigned int* GetVBO() const;
 		unsigned int* GetEBO() const;
+		#pragma endregion
 		
 	private:
 		unique_ptr<vector<float>> m_vertices = nullptr;

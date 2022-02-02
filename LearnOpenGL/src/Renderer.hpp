@@ -73,6 +73,8 @@ namespace Engine
 		 * @remark Only Application is able to call this function
 		 */
 		void Draw(glm::mat4 pCamera, double pTime);
+
+		#pragma region Getters
 		/**
 		 * @brief Get a pointer to the mesh object at a given position
 		 * 
@@ -80,8 +82,21 @@ namespace Engine
 		 * @return Mesh* The pointer to the mesh object
 		 */
 		Mesh* GetMeshAt(unsigned int pPos);
+		/**
+		 * @brief Get a pointer to the shader object at a given position
+		 * 
+		 * @param pPos The position in the array of the shader
+		 * @return Shader* The pointer to the shader object
+		 */
 		Shader* GetShaderAt(unsigned int pPos);
+		/**
+		 * @brief Get a pointer to the texture object at a given position
+		 * 
+		 * @param pPos The position in the array of the texture
+		 * @return Texture* The pointer to the texture object
+		 */
 		Texture* GetTextureAt(unsigned int pPos);
+		#pragma endregion
 
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;

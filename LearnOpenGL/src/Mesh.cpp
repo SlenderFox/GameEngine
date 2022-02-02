@@ -30,6 +30,7 @@ namespace Engine
 		m_indices = make_unique<vector<unsigned int>>(*pIndices);
 	}
 	
+	#pragma region Copy constructors
 	Mesh::Mesh(const Mesh& pOther)
 	{
 		m_vertices = make_unique<vector<float>>(*pOther.GetVertices());
@@ -53,6 +54,7 @@ namespace Engine
 		Mesh* newObj = new Mesh(*pOther.GetVertices(), *pOther.GetIndices());
 		return *newObj;
 	}
+	#pragma endregion
 
 	void Mesh::Destroy(bool pValidate)
 	{
@@ -63,24 +65,26 @@ namespace Engine
 		delete m_idEBO;
 	}
 	
-	vector<float>* Mesh::GetVertices() const
-	{
-		return m_vertices.get();
-	}
-
+	#pragma region Setters
 	void Mesh::SetVertices(vector<float>* pVertices)
 	{
 		m_vertices = make_unique<vector<float>>(*pVertices);
 	}
 
-	vector<unsigned int>* Mesh::GetIndices() const
-	{
-		return m_indices.get();
-	}
-
 	void Mesh::SetIndices(vector<unsigned int>* pIndices)
 	{
 		m_indices = make_unique<vector<unsigned int>>(*pIndices);
+	}
+	#pragma endregion
+	#pragma region Getters
+	vector<float>* Mesh::GetVertices() const
+	{
+		return m_vertices.get();
+	}
+
+	vector<unsigned int>* Mesh::GetIndices() const
+	{
+		return m_indices.get();
 	}
 
 	unsigned int* Mesh::GetVAO() const
@@ -97,4 +101,5 @@ namespace Engine
 	{
 		return m_idEBO;
 	}
+	#pragma endregion
 }

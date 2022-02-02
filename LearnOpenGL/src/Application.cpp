@@ -121,7 +121,7 @@ namespace Engine
 
 				//m_cameraRef->SetView(glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
-				m_rendererInst->Draw(m_cameraRef->WorldToCameraMatrix(), m_currentTime);
+				m_rendererInst->Draw(m_cameraRef->GetWorldToCameraMatrix(), m_currentTime);
 
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(m_window);
