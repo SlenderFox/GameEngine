@@ -1,3 +1,4 @@
+#pragma region
 #pragma once
 #include <string>
 #include <fstream>
@@ -5,6 +6,7 @@
 
 using std::string;
 using std::ifstream;
+#pragma endregion
 
 namespace Engine
 {

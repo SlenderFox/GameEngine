@@ -1,3 +1,4 @@
+#pragma region
 #include "Camera.hpp"
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,6 +12,7 @@ using glm::tan;
 using glm::perspective;
 using glm::degrees;
 using glm::inverse;
+#pragma endregion
 
 namespace Engine
 {

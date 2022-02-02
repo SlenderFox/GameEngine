@@ -1,3 +1,4 @@
+#pragma region
 #include "Shader.hpp"
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include <glm/gtc/type_ptr.hpp>
@@ -7,6 +8,7 @@
  using std::cout;
  using std::endl;
 #endif
+#pragma endregion
 
 namespace Engine
 {

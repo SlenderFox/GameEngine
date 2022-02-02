@@ -1,9 +1,11 @@
+#pragma region
 #pragma once
 #include "GameObject.hpp"
 
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
+#pragma endregion
 
 namespace Engine
 {

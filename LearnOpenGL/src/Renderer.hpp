@@ -1,7 +1,9 @@
+#pragma region
 #pragma once
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include "GameObject.hpp"
 #include "Mesh.hpp"
+#pragma endregion
 
 namespace Engine
 {

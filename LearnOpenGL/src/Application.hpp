@@ -1,9 +1,11 @@
+#pragma region
 #pragma once
 #include "Renderer.hpp"
 #include "Input.hpp"
 #include "Camera.hpp"
 
 struct GLFWwindow;
+#pragma endregion
 
 namespace Engine
 {

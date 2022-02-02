@@ -1,3 +1,4 @@
+#pragma region
 #include "Renderer.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #ifdef _DEBUG
@@ -6,6 +7,7 @@
 
 using glm::vec3;
 using glm::mat4;
+#pragma endregion
 
 namespace Engine
 {

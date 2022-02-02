@@ -1,3 +1,4 @@
+#pragma region
 #include "Application.hpp"
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -25,6 +26,7 @@ void scroll_callback(GLFWwindow* window, double pOffsetX, double pOffsetY)
 {
 	Engine::Application::GetApplication()->ScrollCallback(pOffsetX, pOffsetY);
 }
+#pragma endregion
 
 namespace Engine
 {
