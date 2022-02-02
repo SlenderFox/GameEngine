@@ -35,7 +35,7 @@ namespace Engine
 		m_fragmentPath = pOther.m_fragmentPath;
 	}
 	
-	Shader::Shader(Shader&& pOther)
+	Shader::Shader(Shader&& pOther) noexcept
 	{
 		m_vertexPath = pOther.m_vertexPath;
 		m_fragmentPath = pOther.m_fragmentPath;
@@ -47,7 +47,7 @@ namespace Engine
 		return *newObj;
 	}
 	
-	Shader& Shader::operator=(Shader&& pOther)
+	Shader& Shader::operator=(Shader&& pOther) noexcept
 	{
 		Shader* newObj = new Shader(pOther.m_vertexPath, pOther.m_fragmentPath);
 		return *newObj;

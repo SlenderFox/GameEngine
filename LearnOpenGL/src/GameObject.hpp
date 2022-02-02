@@ -12,9 +12,9 @@ namespace Engine
 		GameObject(mat4 pValue);
 		// Copy constructors
 		GameObject(const GameObject& pOther);
-		GameObject(GameObject&& pOther);
+		GameObject(GameObject&& pOther) noexcept;
 		GameObject& operator=(const GameObject& pOther);
-		GameObject& operator=(GameObject&& pOther);
+		GameObject& operator=(GameObject&& pOther) noexcept;
 
 		virtual mat4 GetTransform() const;
 		virtual void SetTransform(mat4 pValue);

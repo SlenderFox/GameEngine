@@ -21,9 +21,9 @@ namespace Engine
 
 		// Copy constructors
 		Mesh(const Mesh& pOther);
-		Mesh(Mesh&& pOther);
+		Mesh(Mesh&& pOther) noexcept;
 		Mesh& operator=(const Mesh& pOther);
-		Mesh& operator=(Mesh&& pOther);
+		Mesh& operator=(Mesh&& pOther) noexcept;
 
 		void Destroy(bool pValidate);
 

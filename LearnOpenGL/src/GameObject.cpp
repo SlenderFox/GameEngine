@@ -17,7 +17,7 @@ namespace Engine
 		m_transform = pOther.GetTransform();
 	}
 
-	GameObject::GameObject(GameObject&& pOther)
+	GameObject::GameObject(GameObject&& pOther) noexcept
 	{
 		m_transform = pOther.GetTransform();
 	}
@@ -28,7 +28,7 @@ namespace Engine
 		return *newObj;
 	}
 
-	GameObject& GameObject::operator=(GameObject&& pOther)
+	GameObject& GameObject::operator=(GameObject&& pOther) noexcept
 	{
 		GameObject* newObj = new GameObject(pOther.GetTransform());
 		return *newObj;

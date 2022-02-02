@@ -36,7 +36,7 @@ namespace Engine
 		m_indices = make_unique<vector<unsigned int>>(*pOther.GetIndices());
 	}
 
-	Mesh::Mesh(Mesh&& pOther)
+	Mesh::Mesh(Mesh&& pOther) noexcept
 	{
 		m_vertices = make_unique<vector<float>>(*pOther.GetVertices());
 		m_indices = make_unique<vector<unsigned int>>(*pOther.GetIndices());
@@ -48,7 +48,7 @@ namespace Engine
 		return *newObj;
 	}
 
-	Mesh& Mesh::operator=(Mesh&& pOther)
+	Mesh& Mesh::operator=(Mesh&& pOther) noexcept
 	{
 		Mesh* newObj = new Mesh(*pOther.GetVertices(), *pOther.GetIndices());
 		return *newObj;

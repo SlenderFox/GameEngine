@@ -30,9 +30,9 @@ namespace Engine
 
 		// Copy constructors
 		Shader(const Shader& pOther);
-		Shader(Shader&& pOther);
+		Shader(Shader&& pOther) noexcept;
 		Shader& operator=(const Shader& pOther);
-		Shader& operator=(Shader&& pOther);
+		Shader& operator=(Shader&& pOther) noexcept;
 
 		~Shader() {}
 
