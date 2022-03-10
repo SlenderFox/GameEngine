@@ -205,10 +205,6 @@ namespace Engine
 	}
 	#pragma endregion
 	#pragma region Getters
-	mat4 Camera::GetTransform() const
-	{
-		return m_transform;
-	}
 
 	mat4 Camera::GetView() const
 	{
@@ -218,11 +214,6 @@ namespace Engine
 	mat4 Camera::GetProjection() const
 	{
 		return m_projection;
-	}
-
-	vec3 Camera::GetPosition() const
-	{
-		return (vec3)m_transform[3];
 	}
 
 	vec3 Camera::GetRight() const

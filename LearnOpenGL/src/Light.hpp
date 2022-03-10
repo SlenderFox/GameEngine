@@ -6,12 +6,13 @@ namespace Engine
 	class Light : GameObject
 	{
 	public:
-		Light(glm::vec3 pColour);
+		Light(vec3 pColour);
+		Light(vec3 pPosition, vec3 pColour);
 
-		glm::vec3 GetColour() const;
-		void SetColour(glm::vec3 pColour);
+		void SetColour(vec3 pColour);
+		vec3 GetColour() const;
 
 	private:
-		glm::vec3 m_lightColour = glm::vec3(1);
+		vec3 m_lightColour = vec3(1);
 	};
 }

@@ -41,11 +41,58 @@ namespace Engine
 	{
 		m_transform = pValue;
 	}
+
+	void GameObject::SetPosition(vec3 pValue)
+	{
+		m_transform[3] = vec4(pValue, m_transform[3][3]);
+	}
+
+	void GameObject::Translate(vec3 pValue)
+	{
+		m_transform[3] = vec4((vec3)m_transform[3] + pValue, m_transform[3][3]);
+	}
+
+	void GameObject::SetRight(vec3 pValue)
+	{
+		m_transform[0] = vec4(pValue, 0);
+	}
+
+	void GameObject::SetUp(vec3 pValue)
+	{
+		m_transform[1] = vec4(pValue, 0);
+	}
+
+	void GameObject::SetForward(vec3 pValue)
+	{
+		m_transform[2] = vec4(pValue, 0);
+	}
 	#pragma endregion
 	#pragma region Getters
 	mat4 GameObject::GetTransform() const
 	{
 		return m_transform;
+	}
+
+	vec3 GameObject::GetPosition() const
+	{
+		return (vec3)m_transform[3];
+	}
+
+	vec3 GameObject::GetRight() const
+	{
+		// The camera is horizontally reversed
+		return -(vec3)m_transform[0];
+	}
+
+	vec3 GameObject::GetUp() const
+	{
+		return (vec3)m_transform[1];
+	}
+
+	vec3 GameObject::GetForward() const
+	{
+		// The camera is horizontally reversed
+		return -(vec3)m_transform[2];
 	}
 	#pragma endregion
 }

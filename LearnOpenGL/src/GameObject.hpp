@@ -1,6 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
 
+using glm::vec3;
+using glm::vec4;
 using glm::mat4;
 
 namespace Engine
@@ -20,9 +22,18 @@ namespace Engine
 
 		#pragma region Setters
 		virtual void SetTransform(mat4 pValue);
+		virtual void SetPosition(vec3 pValue);
+		virtual void Translate(vec3 pValue);
+		virtual void SetRight(vec3 pValue);
+		virtual void SetUp(vec3 pValue);
+		virtual void SetForward(vec3 pValue);
 		#pragma endregion
 		#pragma region Getters
 		virtual mat4 GetTransform() const;
+		virtual vec3 GetPosition() const;
+		virtual vec3 GetRight() const;
+		virtual vec3 GetUp() const;
+		virtual vec3 GetForward() const;
 		#pragma endregion
 
 	protected:

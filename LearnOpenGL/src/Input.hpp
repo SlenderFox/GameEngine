@@ -18,6 +18,7 @@ namespace Engine
 		void ProcessInput(GLFWwindow* pWindow);
 
 	private:
+		#pragma region Constructors
 		Input() = default;
 		~Input() {};
 		// Delete copy/move so extra instances can't be created/moved.
@@ -25,5 +26,6 @@ namespace Engine
 		Input& operator=(const Input&) = delete;
 		Input(Input&&) = delete;
 		Input& operator=(Input&&) = delete;
+		#pragma endregion
 	};
 }

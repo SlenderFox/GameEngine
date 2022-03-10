@@ -136,17 +136,17 @@ namespace Engine
 
 	bool Application::Init(string pTitle, bool pFullscreen)
 	{
-#ifdef _DEBUG
-		// Moves the console window
-		MoveWindow(GetConsoleWindow(), 0, 0, 600, 600, TRUE);
-#endif
+		#ifdef _DEBUG
+		 // Moves the console window
+		 MoveWindow(GetConsoleWindow(), 0, 0, 600, 600, TRUE);
+		#endif
 
 		// glfw: initialise and configure
 		if (glfwInit() == GLFW_FALSE)
 		{
-#ifdef _DEBUG
-			cout << "GLFW failed to initialise" << endl;
-#endif
+			#ifdef _DEBUG
+			 cout << "GLFW failed to initialise" << endl;
+			#endif
 			return false;
 		}
 
@@ -166,9 +166,9 @@ namespace Engine
 			(pFullscreen ? glfwGetPrimaryMonitor() : nullptr), nullptr);
 		if (m_window == nullptr)
 		{
-#ifdef _DEBUG
-			cout << "Failed to create GLFW window" << endl;
-#endif
+			#ifdef _DEBUG
+			 cout << "Failed to create GLFW window" << endl;
+			#endif
 			return false;
 		}
 		glfwMakeContextCurrent(m_window);
@@ -197,9 +197,9 @@ namespace Engine
 		// glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
-#ifdef _DEBUG
-			cout << "Failed to initialise GLAD" << endl;
-#endif
+			#ifdef _DEBUG
+			 cout << "Failed to initialise GLAD" << endl;
+			#endif
 			return false;
 		}
 		m_gladLoaded = true;
@@ -275,11 +275,11 @@ namespace Engine
 		float speed;
 		vec3 translation = vec3();
 
-		// Toggle fullscreen
-		if (glfwGetKey(m_window, GLFW_KEY_F11) == GLFW_PRESS)
-		{
+		// // Toggle fullscreen
+		// if (glfwGetKey(m_window, GLFW_KEY_F11) == GLFW_PRESS)
+		// {
 
-		}
+		// }
 
 		// SlowDown
 		if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)

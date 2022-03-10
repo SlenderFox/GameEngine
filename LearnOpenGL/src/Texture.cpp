@@ -12,32 +12,45 @@
 
 namespace Engine
 {
+	Texture::Texture()
+	{
+		// Makes sure the images are oriented correctly when loaded
+		stbi_set_flip_vertically_on_load(true);
+	}
+
+	Texture::Texture(string pLocation)
+	{
+		// Makes sure the images are oriented correctly when loaded
+		stbi_set_flip_vertically_on_load(true);
+
+		//glGenTextures(1, &m_idTex);
+	}
+
 	void Texture::Destroy(bool pValidate)
 	{
 		if (pValidate)
 		{
 			glDeleteTextures(1, &m_idTEX0);
 			glDeleteTextures(1, &m_idTEX1);
-			glDeleteTextures(1, &m_idTEX2);
+			//glDeleteTextures(1, &m_idTEX2);
+			
+			//glDeleteTextures(1, &m_idTex);
 		}
 	}
-
+	
 	void Texture::LoadImages()
 	{
 		// Generates two texture objects
 		glGenTextures(1, &m_idTEX0);
 		glGenTextures(1, &m_idTEX1);
-		glGenTextures(1, &m_idTEX2);
-
-		// Makes sure the images are oriented correctly when loaded
-		stbi_set_flip_vertically_on_load(true);
+		//glGenTextures(1, &m_idTEX2);
 
 		glActiveTexture(GL_TEXTURE0);
 		LoadTexture(&m_idTEX0, "../Assets/textures/greybox.png", false);
 		glActiveTexture(GL_TEXTURE1);
-		LoadTexture(&m_idTEX1, "../Assets/textures/container.jpg", false);
-		glActiveTexture(GL_TEXTURE2);
-		LoadTexture(&m_idTEX2, "../Assets/textures/awesomeface.png", true);
+		LoadTexture(&m_idTEX1, "../Assets/textures/troll.png", true);
+		//glActiveTexture(GL_TEXTURE2);
+		//LoadTexture(&m_idTEX2, "../Assets/textures/awesomeface.png", true);
 
 		m_textureLoaded = true;
 	}
@@ -46,7 +59,7 @@ namespace Engine
 	{
 		float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-		// Rmember this works like a pointer to the object using the ID
+		// Remember this works like a pointer to the object using the ID
 		glBindTexture(GL_TEXTURE_2D, *pTexID);
 		// Sets some parameters to the currently bound texture object
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColour);
@@ -77,12 +90,12 @@ namespace Engine
 
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
-#ifdef _DEBUG
-		else
-		{
-			cout << "Failed to load texture " << pTexID << endl;
-		}
-#endif
+		#ifdef _DEBUG
+		 else
+		 {
+		 	cout << "Failed to load texture " << pTexID << endl;
+		 }
+		#endif
 
 		// Frees the image memory
 		stbi_image_free(m_imageData);

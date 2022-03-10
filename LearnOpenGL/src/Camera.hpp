@@ -1,10 +1,6 @@
 #pragma region
 #pragma once
 #include "GameObject.hpp"
-
-using glm::vec3;
-using glm::vec4;
-using glm::mat4;
 #pragma endregion
 
 namespace Engine
@@ -54,7 +50,7 @@ namespace Engine
 		void SetProjection(mat4 pValue);
 		void SetProjection(float pFovV);
 
-		void SetPosition(vec3 pValue);
+		void SetPosition(vec3 pValue) override;
 		void Translate(vec3 pValue);
 
 		void SetRight(vec3 pValue);
@@ -118,11 +114,8 @@ namespace Engine
 		void SetClearColour(float pRed, float pGreen, float pBlue, float pAlpha);
 		#pragma endregion
 		#pragma region Getters
-		mat4 GetTransform() const override;
 		mat4 GetView() const;
 		mat4 GetProjection() const;
-
-		vec3 GetPosition() const;
 
 		vec3 GetRight() const;
 		vec3 GetUp() const;

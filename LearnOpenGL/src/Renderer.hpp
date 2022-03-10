@@ -45,6 +45,7 @@ namespace Engine
 		 vector<float>* pVertices, vector<unsigned int>* pIndices);
 
 	private:
+		#pragma region Constructors
 		Renderer() = default;
 		~Renderer() {}
 		// Delete copy/move so extra instances can't be created/moved.
@@ -52,6 +53,7 @@ namespace Engine
 		Renderer& operator=(const Renderer&) = delete;
 		Renderer(Renderer&&) = delete;
 		Renderer& operator=(Renderer&&) = delete;
+		#pragma endregion
 
 		/**
 		 * @brief Initlialises the renderer

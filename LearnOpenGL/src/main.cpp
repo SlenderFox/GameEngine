@@ -11,6 +11,7 @@
 * Add borderless fullscreen option, use enum for selection
 * App opens to main menu to allow setting changes
 * Texture overhaul
+* Maybe make it one instance of the class supplying requested textures when needed
 */
 #include "Project.hpp"
 

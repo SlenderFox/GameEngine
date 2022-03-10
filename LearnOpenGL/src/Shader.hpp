@@ -84,8 +84,24 @@ namespace Engine
 		bool GetLoaded() const { return m_shaderLoaded; }
 
 	private:
+		/**
+		 * @brief Loads the shader code from file
+		 * 
+		 * @param pType The type of shader to load: VERTEX, FRAGMENT
+		 */
 		void LoadShader(ShaderType pType);
+		/**
+		 * @brief Compiles a specified shader
+		 * 
+		 * @param pId The shader id
+		 * @param pType The type of shader to compile: VERTEX, FRAGMENT
+		 * @param pCode The shader code
+		 * @return If shader compilation was successful
+		 */
 		bool CompileShader(unsigned int* pId, ShaderType pType, const char* pCode);
+		/**
+		 * @brief Create a Shader Program object and link the vertex and fragment code
+		 */
 		void CreateShaderProgram();
 
 		/**

@@ -1,11 +1,18 @@
+#pragma region 
 #pragma once
+#include <string>
+
+using std::string;
+#pragma endregion
 
 namespace Engine
 {
 	class Texture
 	{
 	public:
-		void Destroy(bool pValidate);	
+		Texture();
+		Texture(string pLocation);
+		void Destroy(bool pValidate);
 		/**
 		 * @brief Currently loads a set of hard-coded images from file
 		 */
@@ -13,7 +20,8 @@ namespace Engine
 		
 		bool GetLoaded() const { return m_textureLoaded; }
 
-		unsigned int m_idTEX0 = 0, m_idTEX1 = 0, m_idTEX2 = 0;
+		unsigned int m_idTEX0 = 0U, m_idTEX1 = 0U, m_idTEX2 = 0U;
+		//unsigned int m_idTex = 0U;
 
 	private:
 		/**
@@ -23,10 +31,10 @@ namespace Engine
 		 * @param location Where the image is stored
 		 * @param transparent Whether the image has an alpha channel
 		 */
-		void LoadTexture(unsigned int* pTexID, const char* pLocation, bool pTransparent);
+		static void LoadTexture(unsigned int* pTexID, const char* pLocation, bool pTransparent);
+
+		//uint32_t BitMap;
 
 		bool m_textureLoaded = false;
-		//int m_texWidth = 0, m_texHeight = 0, m_texColChannels = 0;
-		//unsigned char* m_imageData = 0;
 	};
 }

@@ -68,6 +68,14 @@ namespace Engine
 		//virtual void Draw() = 0;
 
 	private:
+		#pragma region Constructors
+		// Delete copy/move so extra instances can't be created/moved.
+		Application(const Application&) = delete;
+		Application& operator=(const Application&) = delete;
+		Application(Application&&) = delete;
+		Application& operator=(Application&&) = delete;
+		#pragma endregion
+
 		/**
 		 * @brief Called At the start of Run() for app initialisation
 		 *

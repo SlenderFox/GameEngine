@@ -40,23 +40,24 @@ namespace Engine
 		//GetShaderAt(0U)->Use();
 		GetShaderAt(0U)->SetInt("texture0", 0);
 		GetShaderAt(0U)->SetInt("texture1", 1);
-		GetShaderAt(0U)->SetInt("texture2", 2);
+		//GetShaderAt(0U)->SetInt("texture2", 2);
 
-		#ifdef _DEBUG
-		 if (m_shaders.get() != nullptr)
-		 	std::cout << "Shader loaded: " << (GetShaderAt(0U)->GetLoaded() ? "True " : "False ");
-
-		 if (m_textures.get() != nullptr)
-		 	std::cout << "Texture loaded: " << (GetTextureAt(0U)->GetLoaded() ? "True" : "False");
-
-		 std::cout << std::endl;
-		#endif
+		// #ifdef _DEBUG
+		//  if (m_shaders.get() != nullptr)
+		//  	std::cout << "Shader loaded: " << (GetShaderAt(0U)->GetLoaded() ? "True " : "False ");
+		//
+		//  if (m_textures.get() != nullptr)
+		//  	std::cout << "Texture loaded: " << (GetTextureAt(0U)->GetLoaded() ? "True" : "False");
+		//
+		//  std::cout << std::endl;
+		// #endif
 	}
 
 	void Renderer::Destroy(bool pValidate)
 	{
 		if (pValidate)
 		{
+			// Destroy all meshes
 			for (unsigned int i = 0; i < (*m_meshes.get()).size(); ++i)
 			{
 				if (GetMeshAt(i) != nullptr)
@@ -68,12 +69,14 @@ namespace Engine
 				}
 			}
 
+			// Destroy all shaders
 			for (unsigned int i = 0; i < (*m_shaders.get()).size(); ++i)
 			{
 				if (GetShaderAt(i) != nullptr)
 					GetShaderAt(i)->Destroy(pValidate);
 			}
 			
+			// Destroy all textures
 			for (unsigned int i = 0; i < (*m_textures.get()).size(); ++i)
 			{
 				if (GetTextureAt(i) != nullptr)
@@ -81,6 +84,7 @@ namespace Engine
 			}
 		}
 
+		// Tell the unique pointers they are no longer needed
 		m_meshes.release();
 		m_shaders.release();
 		m_textures.release();
@@ -149,14 +153,14 @@ namespace Engine
 		* p6: Offset, for some reason a void*
 		*/
 		// Position attribute
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
-		// Colour attribute
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
+		// // Colour attribute
+		// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		// glEnableVertexAttribArray(1);
 		// Texcoord attribute
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
 
 		// Unbinds the vertex array
 		glBindVertexArray(0);

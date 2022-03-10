@@ -2,18 +2,24 @@
 
 namespace Engine
 {
-	Light::Light(glm::vec3 pColour)
+	Light::Light(vec3 pColour)
 	{
 		m_lightColour = pColour;
 	}
 
-	glm::vec3 Light::GetColour() const
+	
+	Light::Light(vec3 pPosition, vec3 pColour)
+	{
+		
+	}
+
+	void Light::SetColour(vec3 pColour)
+	{
+		m_lightColour = pColour;
+	}
+
+	vec3 Light::GetColour() const
 	{
 		return m_lightColour;
-	}
-
-	void Light::SetColour(glm::vec3 pColour)
-	{
-		m_lightColour = pColour;
 	}
 }
