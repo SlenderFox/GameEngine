@@ -73,6 +73,13 @@ namespace Engine
 		 */
 		void SetFloat(const string& pName, float pValue) const;
 		/**
+		 * @brief ssigns data to a vec3 uniform in the shader
+		 * 
+		 * @param pName The name of the uniform
+		 * @param pValue The value assigned to the uniform
+		 */
+		void SetVec3(const string& pName, glm::vec3 pValue) const;
+		/**
 		 * @brief Assigns data to a mat4 uniform in the shader
 		 *
 		 * @param pName The name of the uniform

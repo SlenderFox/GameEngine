@@ -5,7 +5,7 @@
 
 namespace Engine
 {
-	class Camera : GameObject
+	class Camera : public GameObject
 	{
 	public:
 		#pragma region Constructors

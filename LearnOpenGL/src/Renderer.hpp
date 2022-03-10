@@ -1,8 +1,10 @@
 #pragma region
 #pragma once
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
+#include "Camera.hpp"
 #include "GameObject.hpp"
 #include "Mesh.hpp"
+#include "Light.hpp"
 #pragma endregion
 
 namespace Engine
@@ -74,7 +76,7 @@ namespace Engine
 		 * @param pTime TEMPORARY! Used for basic shape animation
 		 * @remark Only Application is able to call this function
 		 */
-		void Draw(glm::mat4 pCamera, double pTime);
+		void Draw(mat4 pCamera, double pTime);
 
 		#pragma region Getters
 		/**
@@ -100,13 +102,16 @@ namespace Engine
 		Texture* GetTextureAt(unsigned int pPos);
 		#pragma endregion
 
+		Camera* m_cameraRef = nullptr;      // A reference to a camera
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
 		unique_ptr<vector<unique_ptr<Texture>>> m_textures;
 		//Shader* m_shaderRef = nullptr;      // A reference to a shader
 		//Texture* m_textureRef = nullptr;    // A reference to a texture
 
-		const glm::vec3 m_cubePositions[10] = {
+		Light* m_light = nullptr;
+
+		const vec3 m_cubePositions[10] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
 			glm::vec3(2.0f,  5.0f, -15.0f),
 			glm::vec3(-1.5f, -2.2f, -2.5f),

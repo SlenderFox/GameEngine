@@ -11,6 +11,7 @@
 
 using std::stringstream;
 using std::ifstream;
+using glm::vec3;
 #pragma endregion
 
 namespace Engine
@@ -254,6 +255,11 @@ namespace Engine
 	void Shader::SetFloat(const string& pName, float pValue) const
 	{
 		glUniform1f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
+	}
+
+	void Shader::SetVec3(const string& pName, vec3 pValue) const
+	{
+		glUniform3f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue.x, pValue.y, pValue.z);
 	}
 
 	void Shader::SetMat4(const string& pName, glm::mat4 pValue) const

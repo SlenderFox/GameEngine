@@ -5,8 +5,6 @@
  #include <iostream>
 #endif
 
-using glm::vec3;
-using glm::mat4;
 #pragma endregion
 
 namespace Engine
@@ -41,6 +39,13 @@ namespace Engine
 		GetShaderAt(0U)->SetInt("texture0", 0);
 		GetShaderAt(0U)->SetInt("texture1", 1);
 		//GetShaderAt(0U)->SetInt("texture2", 2);
+
+		vec3 ambient = vec3(0.2f);
+		GetShaderAt(0U)->SetVec3("ambient", ambient);
+		m_light = new Light(vec3(-6, 2, -4), vec3(1.0f));
+		GetShaderAt(0U)->SetVec3("lightPos", m_light->GetPosition());
+		GetShaderAt(0U)->SetVec3("lightCol", m_light->GetColour());
+		GetShaderAt(0U)->SetVec3("viewPos", m_cameraRef->GetPosition());
 
 		// #ifdef _DEBUG
 		//  if (m_shaders.get() != nullptr)
@@ -88,6 +93,8 @@ namespace Engine
 		m_meshes.release();
 		m_shaders.release();
 		m_textures.release();
+
+		delete m_cameraRef;
 	}
 
 	void Renderer::Draw(glm::mat4 pCamera, double pTime)
@@ -110,8 +117,8 @@ namespace Engine
 		{
 			mat4 model = mat4(1.0f);
 			model = glm::translate(model, m_cubePositions[i]);
-			float angle = (float)pTime * 30.0f * ((i + 1) / (i * 0.2f + 1));
-			model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
+			//float angle = (float)pTime * 30.0f * ((i + 1) / (i * 0.2f + 1));
+			//model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
 			GetShaderAt(0U)->SetMat4("model", model);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -153,14 +160,18 @@ namespace Engine
 		* p6: Offset, for some reason a void*
 		*/
 		// Position attribute
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
+		// Normal attribute
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
+		// Texcoord attribute
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+		glEnableVertexAttribArray(2);
 		// // Colour attribute
 		// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 		// glEnableVertexAttribArray(1);
 		// Texcoord attribute
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
 
 		// Unbinds the vertex array
 		glBindVertexArray(0);

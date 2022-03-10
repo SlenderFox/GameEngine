@@ -205,7 +205,6 @@ namespace Engine
 	}
 	#pragma endregion
 	#pragma region Getters
-
 	mat4 Camera::GetView() const
 	{
 		return m_view;

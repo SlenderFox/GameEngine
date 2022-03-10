@@ -2,7 +2,6 @@
 #pragma once
 #include "Renderer.hpp"
 #include "Input.hpp"
-#include "Camera.hpp"
 
 struct GLFWwindow;
 #pragma endregion
@@ -97,7 +96,6 @@ namespace Engine
 		GLFWwindow* m_window = nullptr;     // A reference to the window
 		Renderer* m_rendererInst = nullptr; // A reference to the renderer instance
 		Input* m_inputInst = nullptr;       // A reference to the input instance
-		Camera* m_cameraRef = nullptr;      // A reference to a camera
 
 		bool m_gladLoaded = false;                          // Whether glad has loaded or not
 		unsigned int m_winWidth = 0U, m_winHeight = 0U;     // The width and height of the window

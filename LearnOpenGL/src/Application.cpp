@@ -51,7 +51,6 @@ namespace Engine
 		m_rendererInst->Destroy(m_gladLoaded);
 		delete m_rendererInst;
 		delete m_inputInst;
-		delete m_cameraRef;
 		// Don't need to delete m_window as it is handled by glfwTerminate()
 	}
 
@@ -108,7 +107,7 @@ namespace Engine
 				}
 
 				// Skip drawing if minimised, restricts fps to 15
-				if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) != 0)
+				if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) == GLFW_TRUE)
 				{
 					if (m_deltaTime < 50)
 						Sleep(50);
@@ -121,7 +120,7 @@ namespace Engine
 
 				//m_cameraRef->SetView(glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
-				m_rendererInst->Draw(m_cameraRef->GetWorldToCameraMatrix(), m_currentTime);
+				m_rendererInst->Draw(m_rendererInst->m_cameraRef->GetWorldToCameraMatrix(), m_currentTime);
 
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(m_window);
@@ -204,13 +203,13 @@ namespace Engine
 		}
 		m_gladLoaded = true;
 
+		m_rendererInst->m_cameraRef = new Camera((float)m_winWidth / (float)m_winHeight, 75.0f);
+		//UpdateCamera();
+		m_rendererInst->m_cameraRef->SetClearColour(0.1f, 0.1f, 0.1f);
+		m_rendererInst->m_cameraRef->SetPosition({ 0.0f, 0.0f, 6.0f });
+
 		// Initialises the renderer
 		m_rendererInst->Init();
-
-		m_cameraRef = new Camera((float)m_winWidth / (float)m_winHeight, 75.0f);
-		//UpdateCamera();
-		m_cameraRef->SetClearColour(0.2f, 0.2f, 0.2f);
-		m_cameraRef->SetPosition({ 0.0f, 0.0f, 6.0f });
 
 		if (!Startup())
 			return false;
@@ -223,7 +222,7 @@ namespace Engine
 		m_winWidth = pWidth;
 		m_winHeight = pHeight;
 
-		if (m_cameraRef != nullptr && pWidth > 0 && pHeight > 0)
+		if (m_rendererInst->m_cameraRef != nullptr && pWidth > 0 && pHeight > 0)
 		{
 			UpdateCamera();
 		}
@@ -231,8 +230,8 @@ namespace Engine
 
 	void Application::UpdateCamera()
 	{
-		m_cameraRef->SetAspectRatio((float)m_winWidth / (float)m_winHeight);
-		m_cameraRef->UpdateFovV();
+		m_rendererInst->m_cameraRef->SetAspectRatio((float)m_winWidth / (float)m_winHeight);
+		m_rendererInst->m_cameraRef->UpdateFovV();
 	}
 
 	void Application::MouseCallback(double pPosX, double pPosY)
@@ -260,14 +259,14 @@ namespace Engine
 		vec3 right = glm::normalize(glm::cross(vec3(0, 1, 0), forward));
 		vec3 up = glm::cross(forward, right);
 
-		m_cameraRef->SetRight(right);
-		m_cameraRef->SetUp(up);
-		m_cameraRef->SetForward(forward);
+		m_rendererInst->m_cameraRef->SetRight(right);
+		m_rendererInst->m_cameraRef->SetUp(up);
+		m_rendererInst->m_cameraRef->SetForward(forward);
 	}
 
 	void Application::ScrollCallback(double pOffsetX, double pOffsetY)
 	{
-		m_cameraRef->ModifyFovH((float)pOffsetY * -3.0f);
+		m_rendererInst->m_cameraRef->ModifyFovH((float)pOffsetY * -3.0f);
 	}
 
 	void Application::ProcessInput()
@@ -292,23 +291,23 @@ namespace Engine
 
 		// Forwards
 		if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS)
-			translation += speed * (float)m_deltaTime * m_cameraRef->GetForward();
+			translation += speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetForward();
 		// Backwards
 		if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS)
-			translation -= speed * (float)m_deltaTime * m_cameraRef->GetForward();
+			translation -= speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetForward();
 		// Left
 		if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS)
-			translation += speed * (float)m_deltaTime * m_cameraRef->GetRight();
+			translation += speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetRight();
 		// Right
 		if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS)
-			translation -= speed * (float)m_deltaTime * m_cameraRef->GetRight();
+			translation -= speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetRight();
 		// Up
 		if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)
-			translation += speed * (float)m_deltaTime * m_cameraRef->GetUp();
+			translation += speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetUp();
 		// Down
 		if (glfwGetKey(m_window, GLFW_KEY_C) == GLFW_PRESS)
-			translation -= speed * (float)m_deltaTime * m_cameraRef->GetUp();
+			translation -= speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetUp();
 
-		m_cameraRef->Translate(translation);
+		m_rendererInst->m_cameraRef->Translate(translation);
 	}
 }

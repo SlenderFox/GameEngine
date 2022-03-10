@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class Light : GameObject
+	class Light : public GameObject
 	{
 	public:
 		Light(vec3 pColour);
