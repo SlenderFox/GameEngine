@@ -84,9 +84,9 @@ namespace Engine
 						m_frameTimer -= secondsPerUpdate;
 						m_fps = (unsigned int)((float)m_framesPerSecond / secondsPerUpdate);
 						m_framesPerSecond = 0U;
-// #ifdef _DEBUG
-//                         printf("fps: %*u, current frame time: %3.7f \n", 2, m_fps, m_deltaTime);
-// #endif
+						// #ifdef _DEBUG
+                        //  printf("fps: %*u, current frame time: %3.7f \n", 2, m_fps, m_deltaTime);
+						// #endif
 					}
 				}
 
@@ -115,12 +115,7 @@ namespace Engine
 					continue;
 				}
 
-				//float camX = (float)sin(m_currentTime * speed) * radius;
-				//float camZ = (float)cos(m_currentTime * speed) * radius;
-
-				//m_cameraRef->SetView(glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-
-				m_rendererInst->Draw(m_rendererInst->m_cameraRef->GetWorldToCameraMatrix(), m_currentTime);
+				m_rendererInst->Draw(m_currentTime);
 
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(m_window);
@@ -140,6 +135,7 @@ namespace Engine
 		 MoveWindow(GetConsoleWindow(), 0, 0, 600, 600, TRUE);
 		#endif
 
+#pragma region glfw
 		// glfw: initialise and configure
 		if (glfwInit() == GLFW_FALSE)
 		{
@@ -152,7 +148,6 @@ namespace Engine
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		//glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
 		// Already set by default
 		//glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -192,6 +187,7 @@ namespace Engine
 		//glfwSetWindowAspectRatio(m_window, 16, 9);
 		//int* monCount = 0;
 		//GLFWmonitor** monitors = glfwGetMonitors(monCount);
+#pragma endregion
 
 		// glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -203,18 +199,17 @@ namespace Engine
 		}
 		m_gladLoaded = true;
 
-		m_rendererInst->m_cameraRef = new Camera((float)m_winWidth / (float)m_winHeight, 75.0f);
 		//UpdateCamera();
-		m_rendererInst->m_cameraRef->SetClearColour(0.1f, 0.1f, 0.1f);
-		m_rendererInst->m_cameraRef->SetPosition({ 0.0f, 0.0f, 6.0f });
 
 		// Initialises the renderer
-		m_rendererInst->Init();
+		m_rendererInst->Init((float)m_winWidth / (float)m_winHeight);
 
-		if (!Startup())
-			return false;
+		// if (!Startup())
+		// 	return false;
 
-		return true;
+		// return true;
+
+		return Startup();
 	}
 
 	void Application::SetDimensions(unsigned int pWidth, unsigned int pHeight)

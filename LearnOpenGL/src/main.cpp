@@ -14,6 +14,7 @@
 * Maybe make it one instance of the class supplying requested textures when needed
 * Make camera in renderer less scuffed
 */
+
 #include "Project.hpp"
 
 int main()

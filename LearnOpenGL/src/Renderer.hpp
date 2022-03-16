@@ -62,7 +62,7 @@ namespace Engine
 		 *
 		 * @return If initlialisation was successful
 		 */
-		void Init();
+		void Init(float pAspect);
 		/**
 		 * @brief Destroys the renderer but only if it was ever initliased
 		 *
@@ -76,7 +76,7 @@ namespace Engine
 		 * @param pTime TEMPORARY! Used for basic shape animation
 		 * @remark Only Application is able to call this function
 		 */
-		void Draw(mat4 pCamera, double pTime);
+		void Draw(double pTime);
 
 		#pragma region Getters
 		/**

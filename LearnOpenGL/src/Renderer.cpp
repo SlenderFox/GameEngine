@@ -9,8 +9,13 @@
 
 namespace Engine
 {
-	void Renderer::Init()
+	void Renderer::Init(float pAspect)
 	{
+		// Initialise camera
+		m_cameraRef = new Camera(pAspect, 75.0f);
+		m_cameraRef->SetClearColour(0.1f, 0.1f, 0.1f);
+		m_cameraRef->SetPosition({ 0.0f, 0.0f, 6.0f });
+
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);
 
@@ -97,7 +102,7 @@ namespace Engine
 		delete m_cameraRef;
 	}
 
-	void Renderer::Draw(glm::mat4 pCamera, double pTime)
+	void Renderer::Draw(double pTime)
 	{
 		// Rendering
 
@@ -109,7 +114,7 @@ namespace Engine
 
 		GetShaderAt(0U)->Use();
 
-		GetShaderAt(0U)->SetMat4("camera", pCamera);
+		GetShaderAt(0U)->SetMat4("camera", m_cameraRef->GetWorldToCameraMatrix());
 
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
