@@ -35,5 +35,5 @@ void main()
     vec3 phong = (ambient + diffuse + specular);
 
     //FragCol = texCol * vec4(phong, 1);
-    FragCol = vec4(phong, 1);
+    FragCol = vec4(phong, 1.0);
 }

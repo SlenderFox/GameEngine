@@ -11,13 +11,14 @@ out vec3 FragPos;
 
 uniform mat4 camera;
 uniform mat4 model;
+uniform mat3 transposeInverseOfModel;
 
 void main()
 {
    //gl_Position = vec4(aPos, 1.0);
    gl_Position = camera * model * vec4(aPos, 1.0);
    FragPos = vec3(model * vec4(aPos, 1.0));  // Vertex position in world space
-   Normal = mat3(transpose(inverse(model))) * aNormal;
+   Normal = transposeInverseOfModel * aNormal;
    TexCoord = aTexCoord;
    //colour = aCol;
 }

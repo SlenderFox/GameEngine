@@ -262,6 +262,11 @@ namespace Engine
 		glUniform3f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue.x, pValue.y, pValue.z);
 	}
 
+	void Shader::SetMat3(const string& pName, glm::mat3 pValue) const
+	{
+		glUniformMatrix3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, glm::value_ptr(pValue));
+	}
+
 	void Shader::SetMat4(const string& pName, glm::mat4 pValue) const
 	{
 		glUniformMatrix4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, glm::value_ptr(pValue));

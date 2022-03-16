@@ -125,6 +125,8 @@ namespace Engine
 			//float angle = (float)pTime * 30.0f * ((i + 1) / (i * 0.2f + 1));
 			//model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
 			GetShaderAt(0U)->SetMat4("model", model);
+			glm::mat3 transposeInverseOfModel = glm::mat3(glm::transpose(glm::inverse(model)));
+			GetShaderAt(0U)->SetMat3("transposeInverseOfModel", transposeInverseOfModel);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
