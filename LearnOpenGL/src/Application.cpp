@@ -97,14 +97,14 @@ namespace Engine
 				// Temporary
 				ProcessInput();
 
-				Update(m_deltaTime);
-
 				// Calls fixed update 60 times per second
 				if (m_fixedTimer >= m_fixedDeltaTime)
 				{
 					m_fixedTimer -= m_fixedDeltaTime;
 					FixedUpdate(m_fixedDeltaTime);
 				}
+
+				Update(m_deltaTime);
 
 				// Skip drawing if minimised, restricts fps to 15
 				if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) == GLFW_TRUE)
