@@ -15,7 +15,7 @@ namespace Engine
 			return sm_instance;
 		}
 
-		void ProcessInput(GLFWwindow* pWindow);
+		//void ProcessInput(GLFWwindow* pWindow);
 
 	private:
 		#pragma region Constructors

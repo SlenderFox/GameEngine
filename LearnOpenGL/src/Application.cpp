@@ -92,9 +92,6 @@ namespace Engine
 
 				// Input
 				glfwPollEvents();
-				m_inputInst->ProcessInput(m_window);
-
-				// Temporary
 				ProcessInput();
 
 				// Calls fixed update 60 times per second
@@ -268,24 +265,32 @@ namespace Engine
 
 	void Application::ProcessInput()
 	{
-		float speed;
-		vec3 translation = vec3();
-
-		// // Toggle fullscreen
+		// End application
+		if (glfwGetKey(m_window, GLFW_KEY_END) == GLFW_PRESS)
+			glfwSetWindowShouldClose(m_window, true);
+		// Render triangles normally
+		if (glfwGetKey(m_window, GLFW_KEY_F1) == GLFW_PRESS)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		// Render triangles as lines
+		if (glfwGetKey(m_window, GLFW_KEY_F2) == GLFW_PRESS)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		// Toggle fullscreen
 		// if (glfwGetKey(m_window, GLFW_KEY_F11) == GLFW_PRESS)
 		// {
 
 		// }
 
+		float speed = 8;
 		// SlowDown
 		if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-			speed = 2;
+			speed *= 0.25f;
 		// SpeedUp
 		else if (glfwGetKey(m_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-			speed = 16;
+			speed *= 3;
 		else
 			speed = 8;
 
+		vec3 translation = vec3();
 		// Forwards
 		if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS)
 			translation += speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetForward();
