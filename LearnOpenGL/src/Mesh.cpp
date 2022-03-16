@@ -3,19 +3,29 @@
 
 namespace Engine
 {
-	Mesh::Mesh()
+	Mesh::Mesh(uint8_t pType)
 	{
 		m_vertices = make_unique<vector<float>>();
 		m_indices = make_unique<vector<unsigned int>>();
 
-		// For testing purposes
-		for (int i = 0; i < 288; ++i)
-			m_vertices->push_back(m_verticesArr[i]);
-		m_vertices->shrink_to_fit();
+		if (pType == 0)
+		{
+			// For testing purposes
+			for (int i = 0; i < 288; ++i)
+				m_vertices->push_back(m_cubeVerticesArr[i]);
+			m_vertices->shrink_to_fit();
 
-		for (int i = 0; i < 6; ++i)
-			m_indices->push_back(m_indicesArr[i]);
-		m_indices->shrink_to_fit();
+			for (int i = 0; i < 6; ++i)
+				m_indices->push_back(m_indicesArr[i]);
+			m_indices->shrink_to_fit();
+		}
+		else
+		{
+			// For testing purposes
+			for (int i = 0; i < 288; ++i)
+				m_vertices->push_back(m_lightVerticesArr[i]);
+			m_vertices->shrink_to_fit();
+		}
 	}
 	
 	Mesh::Mesh(vector<float> pVertices, vector<unsigned int> pIndices)

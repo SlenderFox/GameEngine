@@ -3,7 +3,6 @@ out vec4 FragCol;
 
 in vec3 Normal;
 in vec2 TexCoord;
-//in vec3 colour;
 in vec3 FragPos;
 
 uniform sampler2D texture0;
@@ -34,6 +33,6 @@ void main()
 
     vec3 phong = (ambient + diffuse + specular);
 
-    //FragCol = texCol * vec4(phong, 1);
-    FragCol = vec4(phong, 1.0);
+    FragCol = texCol * vec4(phong, 1);
+    //FragCol = vec4(phong, 1.0);
 }

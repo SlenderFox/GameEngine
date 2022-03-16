@@ -21,18 +21,17 @@ namespace Engine
 
 		// Mesh creation
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
-		m_meshes.get()->push_back(make_unique<Mesh>());
+		m_meshes.get()->push_back(make_unique<Mesh>(0));
 
 		CreateVAO(GetMeshAt(0U)->GetVAO(),
-				  GetMeshAt(0U)->GetVBO(),
-				  GetMeshAt(0U)->GetEBO(),
-			  GetMeshAt(0U)->GetVertices(),
-			  GetMeshAt(0U)->GetIndices());
+			GetMeshAt(0U)->GetVBO(),
+			GetMeshAt(0U)->GetEBO(),
+			GetMeshAt(0U)->GetVertices(),
+			GetMeshAt(0U)->GetIndices());
 
 		// Shader creation
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
 		m_shaders.get()->push_back(make_unique<Shader>("../Assets/shaders/cube.vert", "../Assets/shaders/cube.frag"));
-		//m_shaders.get()->push_back(make_unique<Shader>());
 
 		// Texture creation
 		m_textures = make_unique<vector<unique_ptr<Texture>>>();
@@ -50,6 +49,15 @@ namespace Engine
 		m_light = new Light(vec3(-6, 2, -4), vec3(1.0f));
 		GetShaderAt(0U)->SetVec3("lightPos", m_light->GetPosition());
 		GetShaderAt(0U)->SetVec3("lightCol", m_light->GetColour());
+
+		m_meshes.get()->push_back(make_unique<Mesh>(1));
+
+		// Light cube
+		CreateLightVAO(GetMeshAt(1U)->GetVAO(),
+			GetMeshAt(1U)->GetVBO(),
+			GetMeshAt(1U)->GetVertices());
+		
+		m_shaders.get()->push_back(make_unique<Shader>("../Assets/shaders/light.vert", "../Assets/shaders/light.frag"));
 
 		// #ifdef _DEBUG
 		//  if (m_shaders.get() != nullptr)
@@ -107,6 +115,15 @@ namespace Engine
 
 		// Clears to background colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Light cube rendering
+		glBindVertexArray(*GetMeshAt(1U)->GetVAO());
+		GetShaderAt(1U)->Use();
+		mat4 lightModel = mat4(1.0f);
+		lightModel = glm::translate(lightModel, m_light->GetPosition());
+		GetShaderAt(1U)->SetMat4("model", lightModel);
+		GetShaderAt(1U)->SetMat4("camera", m_cameraRef->GetWorldToCameraMatrix());
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Must be set to the current context
 		glBindVertexArray(*GetMeshAt(0U)->GetVAO());
@@ -175,10 +192,6 @@ namespace Engine
 		// Texcoord attribute
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 		glEnableVertexAttribArray(2);
-		// // Colour attribute
-		// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-		// glEnableVertexAttribArray(1);
-		// Texcoord attribute
 
 		// Unbinds the vertex array
 		glBindVertexArray(0);
@@ -189,7 +202,7 @@ namespace Engine
 	}
 
 	void Renderer::CreateVAO(unsigned int* pidVAO, unsigned int* pidVBO, unsigned int* pidEBO,
-		 vector<float>* pVertices, vector<unsigned int>* pIndices)
+	 vector<float>* pVertices, vector<unsigned int>* pIndices)
 	{
 		const size_t vertexSize = pVertices->size();
 		const size_t indexSize = pIndices->size();
@@ -205,6 +218,46 @@ namespace Engine
 		// Pointer is not automatically deleted at end of scope
 		delete[] vertices;
 		delete[] indices;
+	}
+
+	void Renderer::CreateLightVAO(unsigned int* pidVAO, unsigned int* pidVBO, float* pVertices[], const size_t pVertexSize)
+	{
+		glGenVertexArrays(1, pidVAO);
+		glGenBuffers(1, pidVBO);
+		glBindVertexArray(*pidVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, *pidVBO);
+		glBufferData(GL_ARRAY_BUFFER, pVertexSize, *pVertices, GL_STATIC_DRAW);
+
+		/*Tells the shader how to use the vertex data provided
+		* p1: Which vertex attribute we want to configure in the vertex shader (location = 0)
+		* p2: Vertex size (vec3)
+		* p3: The type of data (vec is using floats)
+		* p4: Whether we want to normalise the data
+		* p5: Stride, because the data is tightly packed this can be 0
+		* p6: Offset, for some reason a void*
+		*/
+		// Position attribute
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+		// Colour attribute
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
+
+		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
+	void Renderer::CreateLightVAO(unsigned int* pidVAO, unsigned int* pidVBO, vector<float>* pVertices)
+	{
+		const size_t vertexSize = pVertices->size();
+
+		float* vertices = new float[vertexSize];
+		vertices = pVertices->data();
+
+		CreateLightVAO(pidVAO, pidVBO, &vertices, vertexSize * sizeof(float));
+
+		// Pointer is not automatically deleted at end of scope
+		delete[] vertices;
 	}
 
 	#pragma region Getters

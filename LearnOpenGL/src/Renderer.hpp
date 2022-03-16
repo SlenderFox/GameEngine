@@ -46,6 +46,10 @@ namespace Engine
 		void CreateVAO(unsigned int* pidVAO, unsigned int* pidVBO, unsigned int* pidEBO,
 		 vector<float>* pVertices, vector<unsigned int>* pIndices);
 
+		// Temporary
+		void CreateLightVAO(unsigned int* pidVAO, unsigned int* pidVBO, float* pVertices[], const size_t pVertexSize);
+		void CreateLightVAO(unsigned int* pidVAO, unsigned int* pidVBO, vector<float>* pVertices);
+
 	private:
 		#pragma region Constructors
 		Renderer() = default;
