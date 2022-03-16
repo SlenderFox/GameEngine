@@ -50,7 +50,6 @@ namespace Engine
 		m_light = new Light(vec3(-6, 2, -4), vec3(1.0f));
 		GetShaderAt(0U)->SetVec3("lightPos", m_light->GetPosition());
 		GetShaderAt(0U)->SetVec3("lightCol", m_light->GetColour());
-		GetShaderAt(0U)->SetVec3("viewPos", m_cameraRef->GetPosition());
 
 		// #ifdef _DEBUG
 		//  if (m_shaders.get() != nullptr)
@@ -115,6 +114,7 @@ namespace Engine
 		GetShaderAt(0U)->Use();
 
 		GetShaderAt(0U)->SetMat4("camera", m_cameraRef->GetWorldToCameraMatrix());
+		GetShaderAt(0U)->SetVec3("viewPos", m_cameraRef->GetPosition());
 
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
