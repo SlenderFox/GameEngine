@@ -283,7 +283,7 @@ namespace Engine
 		float speed = 8;
 		// SlowDown
 		if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-			speed *= 0.25f;
+			speed *= 0.2f;
 		// SpeedUp
 		else if (glfwGetKey(m_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 			speed *= 3;

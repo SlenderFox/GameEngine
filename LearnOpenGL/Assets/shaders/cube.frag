@@ -35,4 +35,8 @@ void main()
 
     FragCol = texCol * vec4(phong, 1);
     //FragCol = vec4(phong, 1.0);
+    
+    //ivec2 expand = ivec2(TexCoord);
+    //vec2 back = vec2(expand);
+    //FragCol = vec4(TexCoord, 0, 1);
 }

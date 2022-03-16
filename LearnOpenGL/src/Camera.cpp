@@ -73,6 +73,9 @@ namespace Engine
 			m_fovH = 120.0f;
 		else if (m_fovH < 1.0f)
 			m_fovH = 1.0f;
+		// #ifdef _DEBUG
+		//  std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
+		// #endif
 		UpdateFovV();
 	}
 
@@ -83,6 +86,9 @@ namespace Engine
 			m_fovV = 120.0f;
 		else if (m_fovV < 1.0f)
 			m_fovV = 1.0f;
+		// #ifdef _DEBUG
+		//  std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
+		// #endif
 		UpdateFovH();
 	}
 
@@ -118,10 +124,7 @@ namespace Engine
 
 	void Camera::SetProjection(float pFovV)
 	{
-		m_projection = perspective(radians(pFovV), m_aspectRatio, 0.1f, 100.0f);
-		// #ifdef _DEBUG
-		//  std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
-		// #endif
+		m_projection = perspective(radians(pFovV), m_aspectRatio, 0.001f, 1000.0f);
 	}
 
 	void Camera::SetPosition(vec3 pValue)
@@ -166,6 +169,9 @@ namespace Engine
 			m_fovH = 120.0f;
 		else if (m_fovH < 1.0f)
 			m_fovH = 1.0f;
+		// #ifdef _DEBUG
+		//  std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
+		// #endif
 		UpdateFovV();
 	}
 
@@ -176,6 +182,9 @@ namespace Engine
 			m_fovV = 120.0f;
 		else if (m_fovV < 1.0f)
 			m_fovV = 1.0f;
+		// #ifdef _DEBUG
+		//  std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
+		// #endif
 		UpdateFovH();
 	}
 
