@@ -154,6 +154,7 @@ namespace Engine
 		//glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
 		//glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
 		//glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
+		
 
 		// glfw window creation
 		m_window = glfwCreateWindow(m_winWidth, m_winHeight, pTitle.c_str(),
@@ -173,6 +174,9 @@ namespace Engine
 			glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
 			glfwSetWindowPos(m_window, (int)((monWidth - m_winWidth) * 0.5f), (int)((monHeight - m_winHeight) * 0.5f));
 		}
+
+		glfwSetWindowSizeLimits(m_window, 320, 180, GLFW_DONT_CARE, GLFW_DONT_CARE);
+		glfwSetWindowAspectRatio(m_window, 16, 9);
 
 		glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 
@@ -198,8 +202,6 @@ namespace Engine
 			return false;
 		}
 		m_gladLoaded = true;
-
-		//UpdateCamera();
 
 		// Initialises the renderer
 		m_rendererInst->Init((float)m_winWidth / (float)m_winHeight);

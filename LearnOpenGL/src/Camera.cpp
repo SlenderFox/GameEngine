@@ -119,9 +119,9 @@ namespace Engine
 	void Camera::SetProjection(float pFovV)
 	{
 		m_projection = perspective(radians(pFovV), m_aspectRatio, 0.1f, 100.0f);
-		#ifdef _DEBUG
-		 std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
-		#endif
+		// #ifdef _DEBUG
+		//  std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
+		// #endif
 	}
 
 	void Camera::SetPosition(vec3 pValue)
