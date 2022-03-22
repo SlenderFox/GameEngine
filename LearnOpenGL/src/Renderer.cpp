@@ -46,7 +46,7 @@ namespace Engine
 
 		vec3 ambient = vec3(0.2f);
 		GetShaderAt(0U)->SetVec3("ambient", ambient);
-		m_light = new Light(vec3(-6, 2, -4), vec3(1.0f));
+		m_light = new Light(vec3(-6, 2, -4), vec3(0.1f, 0.6f, 0.9f));
 		GetShaderAt(0U)->SetVec3("lightPos", m_light->GetPosition());
 		GetShaderAt(0U)->SetVec3("lightCol", m_light->GetColour());
 
@@ -58,6 +58,7 @@ namespace Engine
 			GetMeshAt(1U)->GetVertices());
 		
 		m_shaders.get()->push_back(make_unique<Shader>("../Assets/shaders/light.vert", "../Assets/shaders/light.frag"));
+		GetShaderAt(1U)->SetVec3("colour", m_light->GetColour());
 
 		// #ifdef _DEBUG
 		//  if (m_shaders.get() != nullptr)
@@ -127,13 +128,9 @@ namespace Engine
 
 		// Must be set to the current context
 		glBindVertexArray(*GetMeshAt(0U)->GetVAO());
-
 		GetShaderAt(0U)->Use();
-
 		GetShaderAt(0U)->SetMat4("camera", m_cameraRef->GetWorldToCameraMatrix());
 		GetShaderAt(0U)->SetVec3("viewPos", m_cameraRef->GetPosition());
-
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		for (unsigned int i = 0; i < 10; i++)
 		{
@@ -147,6 +144,8 @@ namespace Engine
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
+
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	}
 
 	void Renderer::CreateVAO(unsigned int* pidVAO, unsigned int* pidVBO, unsigned int* pidEBO,
@@ -237,11 +236,11 @@ namespace Engine
 		* p6: Offset, for some reason a void*
 		*/
 		// Position attribute
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 		glEnableVertexAttribArray(0);
-		// Colour attribute
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
+		// // Colour attribute
+		// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+		// glEnableVertexAttribArray(1);
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
