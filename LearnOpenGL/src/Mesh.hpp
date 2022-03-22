@@ -48,20 +48,8 @@ namespace Engine
 		unsigned int* m_idVBO = new unsigned int(0U);	// The id for the vertex buffer object
 		unsigned int* m_idEBO = new unsigned int(0U);	// The id for the element buffer object
 
-		/*
-		// Creates 4 verts with each one having: xyz position, rgb colour and xy texcoord
-		const float m_vertices[32] =
-		{
-			// Positions          // Colours          // Texture coords
-			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // Top left 
-			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // Top right
-			 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // Bottom right
-			-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f    // Bottom left
-		};
-		*/
-
 		float* m_cubeVerticesArr = new float[288] {
-			// Positions          // Normals			// Texture coords
+			// Positions		   // Normals			  // Texture coords
 		    -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 0.0f,
 		     0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    1.0f, 0.0f,
 		     0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    1.0f, 1.0f,
@@ -106,49 +94,49 @@ namespace Engine
 		};
 
 		// Creates a cube, doesn't use EBO
-		float* m_lightVerticesArr = new float[216] {
-			// Positions          // Colours       
-			-0.1f, -0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f, -0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f,  0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f,  0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f,  0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f, -0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
+		float* m_lightVerticesArr = new float[108] {
+			// Positions        
+			-0.1f, -0.1f, -0.1f,
+			 0.1f, -0.1f, -0.1f,
+			 0.1f,  0.1f, -0.1f,
+			 0.1f,  0.1f, -0.1f,
+			-0.1f,  0.1f, -0.1f,
+			-0.1f, -0.1f, -0.1f,
 
-			-0.1f, -0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f, -0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f,  0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f,  0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f,  0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f, -0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
+			-0.1f, -0.1f,  0.1f,
+			 0.1f, -0.1f,  0.1f,
+			 0.1f,  0.1f,  0.1f,
+			 0.1f,  0.1f,  0.1f,
+			-0.1f,  0.1f,  0.1f,
+			-0.1f, -0.1f,  0.1f,
 
-			-0.1f,  0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f,  0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f, -0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f, -0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f, -0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f,  0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
+			-0.1f,  0.1f,  0.1f,
+			-0.1f,  0.1f, -0.1f,
+			-0.1f, -0.1f, -0.1f,
+			-0.1f, -0.1f, -0.1f,
+			-0.1f, -0.1f,  0.1f,
+			-0.1f,  0.1f,  0.1f,
 
-			 0.1f,  0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f,  0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f, -0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f, -0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f, -0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f,  0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
+			 0.1f,  0.1f,  0.1f,
+			 0.1f,  0.1f, -0.1f,
+			 0.1f, -0.1f, -0.1f,
+			 0.1f, -0.1f, -0.1f,
+			 0.1f, -0.1f,  0.1f,
+			 0.1f,  0.1f,  0.1f,
 
-			-0.1f, -0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f, -0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f, -0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f, -0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f, -0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f, -0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
+			-0.1f, -0.1f, -0.1f,
+			 0.1f, -0.1f, -0.1f,
+			 0.1f, -0.1f,  0.1f,
+			 0.1f, -0.1f,  0.1f,
+			-0.1f, -0.1f,  0.1f,
+			-0.1f, -0.1f, -0.1f,
 
-			-0.1f,  0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f,  0.1f, -0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f,  0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			 0.1f,  0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f,  0.1f,  0.1f,  1.0f, 1.0f, 1.0f,
-			-0.1f,  0.1f, -0.1f,  1.0f, 1.0f, 1.0f
+			-0.1f,  0.1f, -0.1f,
+			 0.1f,  0.1f, -0.1f,
+			 0.1f,  0.1f,  0.1f,
+			 0.1f,  0.1f,  0.1f,
+			-0.1f,  0.1f,  0.1f,
+			-0.1f,  0.1f, -0.1f
 		};
 
 		// How to construct the triangles using the verts

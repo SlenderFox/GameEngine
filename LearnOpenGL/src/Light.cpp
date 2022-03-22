@@ -6,7 +6,6 @@ namespace Engine
 	{
 		m_lightColour = pColour;
 	}
-
 	
 	Light::Light(vec3 pPosition, vec3 pColour)
 	{
