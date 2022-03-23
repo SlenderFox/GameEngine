@@ -257,9 +257,34 @@ namespace Engine
 		glUniform1f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
+	void Shader::SetVec2(const string& pName, float pX, float pY) const
+	{
+		glUniform2f(glGetUniformLocation(m_idProgram, pName.c_str()), pX, pY);
+	}
+
+	void Shader::SetVec2(const string& pName, glm::vec2 pValue) const
+	{
+		glUniform2f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue.x, pValue.y);
+	}
+
+	void Shader::SetVec3(const string& pName, float pX, float pY, float pZ) const
+	{
+		glUniform3f(glGetUniformLocation(m_idProgram, pName.c_str()), pX, pY, pZ);
+	}
+
 	void Shader::SetVec3(const string& pName, vec3 pValue) const
 	{
 		glUniform3f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue.x, pValue.y, pValue.z);
+	}
+
+	void Shader::SetVec4(const string& pName, float pX, float pY, float pZ, float pW) const
+	{
+		glUniform4f(glGetUniformLocation(m_idProgram, pName.c_str()), pX, pY, pZ, pW);
+	}
+
+	void Shader::SetVec4(const string& pName, glm::vec4 pValue) const
+	{
+		glUniform4f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue.x, pValue.y, pValue.z, pValue.w);
 	}
 
 	void Shader::SetMat3(const string& pName, glm::mat3 pValue) const

@@ -10,7 +10,7 @@ namespace Engine
 
 		if (pType == 0)
 		{
-			// For testing purposes
+			// Makes cube with pos, normal, and texcoord
 			for (int i = 0; i < 288; ++i)
 				m_vertices->push_back(m_cubeVerticesArr[i]);
 			m_vertices->shrink_to_fit();
@@ -21,8 +21,8 @@ namespace Engine
 		}
 		else
 		{
-			// For testing purposes
-			for (int i = 0; i < 288; ++i)
+			// Makes the light cube
+			for (int i = 0; i < 108; ++i)
 				m_vertices->push_back(m_lightVerticesArr[i]);
 			m_vertices->shrink_to_fit();
 		}

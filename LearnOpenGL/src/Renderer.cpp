@@ -44,15 +44,18 @@ namespace Engine
 		GetShaderAt(0U)->SetInt("texture1", 1);
 		//GetShaderAt(0U)->SetInt("texture2", 2);
 
-		vec3 ambient = vec3(0.2f);
-		GetShaderAt(0U)->SetVec3("ambient", ambient);
-		m_light = new Light(vec3(-6, 2, -4), vec3(0.1f, 0.6f, 0.9f));
-		GetShaderAt(0U)->SetVec3("lightPos", m_light->GetPosition());
-		GetShaderAt(0U)->SetVec3("lightCol", m_light->GetColour());
-
-		m_meshes.get()->push_back(make_unique<Mesh>(1));
+		m_light = new Light(vec3(-6, 2, -4), vec3(1.0f, 1.0f, 1.0f));
+		GetShaderAt(0U)->SetVec3("light.position", m_light->GetPosition());
+		GetShaderAt(0U)->SetVec3("light.ambient", m_light->GetColour() * 0.2f);
+		GetShaderAt(0U)->SetVec3("light.diffuse", m_light->GetColour());
+		GetShaderAt(0U)->SetVec3("light.specular", m_light->GetColour());
+		GetShaderAt(0U)->SetVec3("material.ambient", 0.24725f, 0.1995f, 0.0745f);
+		GetShaderAt(0U)->SetVec3("material.diffuse", 0.75164f, 0.60648f, 0.22648f);
+		GetShaderAt(0U)->SetVec3("material.specular", 0.628281f, 0.555802f, 0.366065f);
+		GetShaderAt(0U)->SetFloat("material.shininess", 102.4f);
 
 		// Light cube
+		m_meshes.get()->push_back(make_unique<Mesh>(1));
 		CreateLightVAO(GetMeshAt(1U)->GetVAO(),
 			GetMeshAt(1U)->GetVBO(),
 			GetMeshAt(1U)->GetVertices());
@@ -122,8 +125,8 @@ namespace Engine
 		GetShaderAt(1U)->Use();
 		mat4 lightModel = mat4(1.0f);
 		lightModel = glm::translate(lightModel, m_light->GetPosition());
-		GetShaderAt(1U)->SetMat4("model", lightModel);
 		GetShaderAt(1U)->SetMat4("camera", m_cameraRef->GetWorldToCameraMatrix());
+		GetShaderAt(1U)->SetMat4("model", lightModel);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Must be set to the current context
@@ -136,8 +139,8 @@ namespace Engine
 		{
 			mat4 model = mat4(1.0f);
 			model = glm::translate(model, m_cubePositions[i]);
-			//float angle = (float)pTime * 30.0f * ((i + 1) / (i * 0.2f + 1));
-			//model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
+			float angle = (float)pTime * 10.0f * ((i + 1) / (i * 0.2f + 1));
+			model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
 			GetShaderAt(0U)->SetMat4("model", model);
 			glm::mat3 transposeInverseOfModel = glm::mat3(glm::transpose(glm::inverse(model)));
 			GetShaderAt(0U)->SetMat3("transposeInverseOfModel", transposeInverseOfModel);
