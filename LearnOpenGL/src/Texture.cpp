@@ -46,9 +46,9 @@ namespace Engine
 		//glGenTextures(1, &m_idTEX2);
 
 		glActiveTexture(GL_TEXTURE0);
-		LoadTexture(&m_idTEX0, "../Assets/textures/greybox.png", false);
+		LoadTexture(&m_idTEX0, "../Assets/textures/container2.png", true);
 		glActiveTexture(GL_TEXTURE1);
-		LoadTexture(&m_idTEX1, "../Assets/textures/troll.png", true);
+		LoadTexture(&m_idTEX1, "../Assets/textures/container2_specular.png", true);
 		//glActiveTexture(GL_TEXTURE2);
 		//LoadTexture(&m_idTEX2, "../Assets/textures/awesomeface.png", true);
 

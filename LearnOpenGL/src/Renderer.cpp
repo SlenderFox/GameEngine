@@ -40,19 +40,22 @@ namespace Engine
 		//GetShaderAt(0U)->LoadPaths("../Assets/shaders/cube.vert", "../Assets/shaders/cube.frag");
 		GetTextureAt(0U)->LoadImages();
 		//GetShaderAt(0U)->Use();
-		GetShaderAt(0U)->SetInt("texture0", 0);
-		GetShaderAt(0U)->SetInt("texture1", 1);
+		//GetShaderAt(0U)->SetInt("texture0", 0);
+		//GetShaderAt(0U)->SetInt("texture1", 1);
 		//GetShaderAt(0U)->SetInt("texture2", 2);
 
+		//GetShaderAt(0U)->SetVec3("material.diffuse", 0.75164f, 0.60648f, 0.22648f);
+		//GetShaderAt(0U)->SetVec3("material.specular", 0.3f, 0.3f, 0.3f);
+		GetShaderAt(0U)->SetInt("material.diffuse", 0);
+		GetShaderAt(0U)->SetInt("material.specular", 1);
+		GetShaderAt(0U)->SetFloat("material.shininess", 64.0f);
+
+		// Light
 		m_light = new Light(vec3(-6, 2, -4), vec3(1.0f, 1.0f, 1.0f));
 		GetShaderAt(0U)->SetVec3("light.position", m_light->GetPosition());
-		GetShaderAt(0U)->SetVec3("light.ambient", m_light->GetColour() * 0.2f);
+		GetShaderAt(0U)->SetVec3("light.ambient", m_light->GetColour() * 0.05f);
 		GetShaderAt(0U)->SetVec3("light.diffuse", m_light->GetColour());
 		GetShaderAt(0U)->SetVec3("light.specular", m_light->GetColour());
-		GetShaderAt(0U)->SetVec3("material.ambient", 0.24725f, 0.1995f, 0.0745f);
-		GetShaderAt(0U)->SetVec3("material.diffuse", 0.75164f, 0.60648f, 0.22648f);
-		GetShaderAt(0U)->SetVec3("material.specular", 0.628281f, 0.555802f, 0.366065f);
-		GetShaderAt(0U)->SetFloat("material.shininess", 102.4f);
 
 		// Light cube
 		m_meshes.get()->push_back(make_unique<Mesh>(1));
