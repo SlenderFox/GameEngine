@@ -52,10 +52,11 @@ namespace Engine
 
 		// Light
 		m_light = new Light(vec3(-6, 2, -4), vec3(1.0f, 1.0f, 1.0f));
-		GetShaderAt(0U)->SetVec3("light.position", m_light->GetPosition());
-		GetShaderAt(0U)->SetVec3("light.ambient", m_light->GetColour() * 0.05f);
-		GetShaderAt(0U)->SetVec3("light.diffuse", m_light->GetColour());
-		GetShaderAt(0U)->SetVec3("light.specular", m_light->GetColour());
+		m_directionalLight = new LightDirectional(vec3(0, -1, 0), vec3(1.0f));
+		GetShaderAt(0U)->SetVec3("light.direction", m_directionalLight->GetDirection());
+		GetShaderAt(0U)->SetVec3("light.ambient", m_directionalLight->GetColour() * 0.05f);
+		GetShaderAt(0U)->SetVec3("light.diffuse", m_directionalLight->GetColour());
+		GetShaderAt(0U)->SetVec3("light.specular", m_directionalLight->GetColour());
 
 		// Light cube
 		m_meshes.get()->push_back(make_unique<Mesh>(1));

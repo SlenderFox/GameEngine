@@ -7,17 +7,17 @@ using glm::mat4;
 
 namespace Engine
 {
-	class GameObject
+	class Transform
 	{
 	public:
-		GameObject();
-		GameObject(mat4 pValue);
+		Transform();
+		Transform(mat4 pValue);
 
 		#pragma region Copy constructors
-		GameObject(const GameObject& pOther);
-		GameObject(GameObject&& pOther) noexcept;
-		GameObject& operator=(const GameObject& pOther);
-		GameObject& operator=(GameObject&& pOther) noexcept;
+		Transform(const Transform& pOther);
+		Transform(Transform&& pOther) noexcept;
+		Transform& operator=(const Transform& pOther);
+		Transform& operator=(Transform&& pOther) noexcept;
 		#pragma endregion
 
 		#pragma region Setters

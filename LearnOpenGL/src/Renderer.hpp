@@ -2,7 +2,6 @@
 #pragma once
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include "Camera.hpp"
-#include "GameObject.hpp"
 #include "Mesh.hpp"
 #include "Light.hpp"
 #pragma endregion
@@ -114,6 +113,7 @@ namespace Engine
 		//Texture* m_textureRef = nullptr;    // A reference to a texture
 
 		Light* m_light = nullptr;
+		LightDirectional* m_directionalLight = nullptr;
 
 		const vec3 m_cubePositions[10] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),

@@ -1,11 +1,11 @@
 #pragma region
 #pragma once
-#include "GameObject.hpp"
+#include "Transform.hpp"
 #pragma endregion
 
 namespace Engine
 {
-	class Camera : public GameObject
+	class Camera : public Transform
 	{
 	public:
 		#pragma region Constructors
