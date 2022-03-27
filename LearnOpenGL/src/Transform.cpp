@@ -47,6 +47,11 @@ namespace Engine
 		m_transform[3] = vec4(pValue, m_transform[3][3]);
 	}
 
+	void Transform::SetPosition(vec4 pValue)
+	{
+		m_transform[3] = pValue;
+	}
+
 	void Transform::Translate(vec3 pValue)
 	{
 		m_transform[3] = vec4((vec3)m_transform[3] + pValue, m_transform[3][3]);
@@ -73,14 +78,14 @@ namespace Engine
 		return m_transform;
 	}
 
-	vec3 Transform::GetPosition() const
+	vec4 Transform::GetPosition() const
 	{
-		return (vec3)m_transform[3];
+		return m_transform[3];
 	}
 
 	vec3 Transform::GetRight() const
 	{
-		// The camera is horizontally reversed
+		// The transform is horizontally reversed
 		return -(vec3)m_transform[0];
 	}
 
@@ -91,7 +96,7 @@ namespace Engine
 
 	vec3 Transform::GetForward() const
 	{
-		// The camera is horizontally reversed
+		// The transform is horizontally reversed
 		return -(vec3)m_transform[2];
 	}
 	#pragma endregion

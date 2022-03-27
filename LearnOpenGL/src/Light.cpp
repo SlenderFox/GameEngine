@@ -2,17 +2,52 @@
 
 namespace Engine
 {
-	Light::Light(vec3 pColour)
+	Light::Light(LightType pType) : m_type(pType)
 	{
-		m_lightColour = pColour;
-	}
-	
-	Light::Light(vec3 pPosition, vec3 pColour)
-	{
-		SetPosition(pPosition);
-		m_lightColour = pColour;
+		//m_transform = mat4(1);
 	}
 
+	Light::Light(LightType pType, mat4 pTransform) : m_type(pType)
+	{
+		SetTransform(pTransform);
+	}
+
+	Light::Light(LightType pType, vec4 pPosition) : m_type(pType)
+	{
+		//m_transform = mat4(1);
+		SetPosition(pPosition);
+	}
+
+	Light::Light(LightType pType, vec3 pDirection) : m_type(pType)
+	{
+		//m_transform = mat4(1);
+		SetForward(pDirection);
+	}
+
+	Light::Light(LightType pType, mat4 pTransform, vec3 pColour) : m_type(pType), m_lightColour(pColour)
+	{
+		SetTransform(pTransform);
+	}
+
+	Light::Light(LightType pType, vec4 pPosition, vec3 pColour) : m_type(pType), m_lightColour(pColour)
+	{
+		//m_transform = mat4(1);
+		SetPosition(pPosition);
+	}
+
+	Light::Light(LightType pType, vec3 pDirection, vec3 pColour) : m_type(pType), m_lightColour(pColour)
+	{
+		//m_transform = mat4(1);
+		SetForward(pDirection);
+	}
+
+	Light::Light(LightType pType, vec4 pPosition, vec3 pDirection, vec3 pColour) : m_type(pType), m_lightColour(pColour)
+	{
+		//m_transform = mat4(1);
+		SetPosition(pPosition);
+		SetForward(pDirection);
+	}
+	
 	void Light::SetColour(vec3 pColour)
 	{
 		m_lightColour = pColour;
@@ -23,25 +58,8 @@ namespace Engine
 		return m_lightColour;
 	}
 
-	LightDirectional::LightDirectional(vec3 pColour)
+	vec3 Light::GetDirection() const
 	{
-		m_direction = glm::vec3(0, -1, 0);
-		m_lightColour = pColour;
-	}
-
-	LightDirectional::LightDirectional(vec3 pDirection, vec3 pColour)
-	{
-		m_direction = pDirection;
-		m_lightColour = pColour;
-	}
-
-	void LightDirectional::SetDirection(vec3 pValue)
-	{
-		m_direction = pValue;
-	}
-
-	vec3 LightDirectional::GetDirection() const
-	{
-		return m_direction;
+		return GetForward();
 	}
 }

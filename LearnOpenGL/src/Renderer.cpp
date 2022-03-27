@@ -50,12 +50,12 @@ namespace Engine
 		GetShaderAt(0U)->SetFloat("material.shininess", 32.0f);
 
 		// Light
-		m_light = new Light(vec3(-6, 2, -4), vec3(1.0f, 1.0f, 1.0f));
-		m_directionalLight = new LightDirectional(vec3(0, -1, 0), vec3(1.0f));
-		GetShaderAt(0U)->SetVec4("light.vector", vec4(m_directionalLight->GetDirection(), 0));
-		GetShaderAt(0U)->SetVec3("light.ambient", m_directionalLight->GetColour() * 0.15f);
-		GetShaderAt(0U)->SetVec3("light.diffuse", m_directionalLight->GetColour());
-		GetShaderAt(0U)->SetVec3("light.specular", m_directionalLight->GetColour());
+		//m_light = new Light(LightType::Directional, vec3(0, -1, 0), vec3(1.0f, 1.0f, 1.0f));
+		m_light = new Light(LightType::Point, vec4(-6, 2, -2, 1), vec3(1.0f, 1.0f, 1.0f));
+		GetShaderAt(0U)->SetVec4("light.vector", m_light->GetPosition());
+		GetShaderAt(0U)->SetVec3("light.ambient", m_light->GetColour() * 0.15f);
+		GetShaderAt(0U)->SetVec3("light.diffuse", m_light->GetColour());
+		GetShaderAt(0U)->SetVec3("light.specular", m_light->GetColour());
 
 		// Light cube
 		m_meshes.get()->push_back(make_unique<Mesh>(1));
@@ -127,7 +127,7 @@ namespace Engine
 		glBindVertexArray(*GetMeshAt(1U)->GetVAO());
 		GetShaderAt(1U)->Use();
 		mat4 lightModel = mat4(1.0f);
-		lightModel = glm::translate(lightModel, m_light->GetPosition());
+		lightModel = glm::translate(lightModel, vec3(m_light->GetPosition()));
 		GetShaderAt(1U)->SetMat4("camera", m_cameraRef->GetWorldToCameraMatrix());
 		GetShaderAt(1U)->SetMat4("model", (mat4)lightModel);
 		glDrawArrays(GL_TRIANGLES, 0, 36);

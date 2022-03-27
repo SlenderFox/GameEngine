@@ -17,13 +17,6 @@ namespace Engine
 		 * @brief Currently loads a set of hard-coded images from file
 		 */
 		void LoadImages();
-		
-		//bool GetLoaded() const { return m_textureLoaded; }
-
-		unsigned int m_idTEX0 = 0U, m_idTEX1 = 0U, m_idTEX2 = 0U;
-		//unsigned int m_idTex = 0U;
-
-	private:
 		/**
 		 * @brief Loads an image from a file into vram (I'm assuming) as a texture
 		 * 
@@ -31,9 +24,14 @@ namespace Engine
 		 * @return uint8_t The ID for the texture (max 32 textures so this will be more than enough)
 		 */
 		static uint8_t LoadTexture(const char* pPath);
+		
+		//bool GetLoaded() const { return m_textureLoaded; }
 
+		unsigned int m_idTEX0 = 0U, m_idTEX1 = 0U, m_idTEX2 = 0U;
+		//unsigned int m_idTex = 0U;
+
+	private:
 		//uint32_t BitMap;
-
 		//bool m_textureLoaded = false;
 	};
 }
