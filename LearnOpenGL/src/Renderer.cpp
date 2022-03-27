@@ -37,7 +37,6 @@ namespace Engine
 		m_textures = make_unique<vector<unique_ptr<Texture>>>();
 		m_textures.get()->push_back(make_unique<Texture>());
 
-		//GetShaderAt(0U)->LoadPaths("../Assets/shaders/cube.vert", "../Assets/shaders/cube.frag");
 		GetTextureAt(0U)->LoadImages();
 		//GetShaderAt(0U)->Use();
 		//GetShaderAt(0U)->SetInt("texture0", 0);

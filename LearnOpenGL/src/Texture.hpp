@@ -18,7 +18,7 @@ namespace Engine
 		 */
 		void LoadImages();
 		
-		bool GetLoaded() const { return m_textureLoaded; }
+		//bool GetLoaded() const { return m_textureLoaded; }
 
 		unsigned int m_idTEX0 = 0U, m_idTEX1 = 0U, m_idTEX2 = 0U;
 		//unsigned int m_idTex = 0U;
@@ -26,15 +26,14 @@ namespace Engine
 	private:
 		/**
 		 * @brief Loads an image from a file into vram (I'm assuming) as a texture
-		 *
-		 * @param texID Which id to load the texture into
-		 * @param location Where the image is stored
-		 * @param transparent Whether the image has an alpha channel
+		 * 
+		 * @param pPath The location of the image file
+		 * @return uint8_t The ID for the texture (max 32 textures so this will be more than enough)
 		 */
-		static void LoadTexture(unsigned int* pTexID, const char* pLocation, bool pTransparent);
+		static uint8_t LoadTexture(const char *pPath);
 
 		//uint32_t BitMap;
 
-		bool m_textureLoaded = false;
+		//bool m_textureLoaded = false;
 	};
 }
