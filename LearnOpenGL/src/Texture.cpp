@@ -50,7 +50,7 @@ namespace Engine
 		//m_textureLoaded = true;
 	}
 
-	uint8_t Texture::LoadTexture(const char *pPath)
+	uint8_t Texture::LoadTexture(const char* pPath)
 	{
 		float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		unsigned int texID;

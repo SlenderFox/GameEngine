@@ -30,7 +30,7 @@ namespace Engine
 		 * @param pPath The location of the image file
 		 * @return uint8_t The ID for the texture (max 32 textures so this will be more than enough)
 		 */
-		static uint8_t LoadTexture(const char *pPath);
+		static uint8_t LoadTexture(const char* pPath);
 
 		//uint32_t BitMap;
 
