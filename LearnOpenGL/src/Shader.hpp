@@ -103,6 +103,13 @@ namespace Engine
 		 */
 		void SetInt(const string& pName, int pValue) const;
 		/**
+		 * @brief Assigns data to a uint uniform in the shader
+		 * 
+		 * @param pName The name of the uniform
+		 * @param pValue The value assigned to the uniform
+		 */
+		void SetUint(const string& pName, unsigned int pValue) const;
+		/**
 		 * @brief Assigns data to a float uniform in the shader
 		 *
 		 * @param pName The name of the uniform

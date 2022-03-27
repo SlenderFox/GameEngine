@@ -252,6 +252,11 @@ namespace Engine
 		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
+	void Shader::SetUint(const string& pName, unsigned int pValue) const
+	{
+		glUniform1ui(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
+	}
+
 	void Shader::SetFloat(const string& pName, float pValue) const
 	{
 		glUniform1f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);

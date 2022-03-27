@@ -28,7 +28,6 @@ namespace Engine
 		//bool GetLoaded() const { return m_textureLoaded; }
 
 		unsigned int m_idTEX0 = 0U, m_idTEX1 = 0U, m_idTEX2 = 0U;
-		//unsigned int m_idTex = 0U;
 
 	private:
 		//uint32_t BitMap;
