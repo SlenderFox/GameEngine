@@ -47,13 +47,13 @@ namespace Engine
 		//GetShaderAt(0U)->SetVec3("material.specular", 0.3f, 0.3f, 0.3f);
 		GetShaderAt(0U)->SetInt("material.diffuse", 0);
 		GetShaderAt(0U)->SetInt("material.specular", 1);
-		GetShaderAt(0U)->SetFloat("material.shininess", 64.0f);
+		GetShaderAt(0U)->SetFloat("material.shininess", 32.0f);
 
 		// Light
 		m_light = new Light(vec3(-6, 2, -4), vec3(1.0f, 1.0f, 1.0f));
 		m_directionalLight = new LightDirectional(vec3(0, -1, 0), vec3(1.0f));
-		GetShaderAt(0U)->SetVec3("light.direction", m_directionalLight->GetDirection());
-		GetShaderAt(0U)->SetVec3("light.ambient", m_directionalLight->GetColour() * 0.05f);
+		GetShaderAt(0U)->SetVec4("light.vector", vec4(m_directionalLight->GetDirection(), 0));
+		GetShaderAt(0U)->SetVec3("light.ambient", m_directionalLight->GetColour() * 0.15f);
 		GetShaderAt(0U)->SetVec3("light.diffuse", m_directionalLight->GetColour());
 		GetShaderAt(0U)->SetVec3("light.specular", m_directionalLight->GetColour());
 
@@ -129,7 +129,7 @@ namespace Engine
 		mat4 lightModel = mat4(1.0f);
 		lightModel = glm::translate(lightModel, m_light->GetPosition());
 		GetShaderAt(1U)->SetMat4("camera", m_cameraRef->GetWorldToCameraMatrix());
-		GetShaderAt(1U)->SetMat4("model", lightModel);
+		GetShaderAt(1U)->SetMat4("model", (mat4)lightModel);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Must be set to the current context
@@ -142,11 +142,11 @@ namespace Engine
 		{
 			mat4 model = mat4(1.0f);
 			model = glm::translate(model, m_cubePositions[i]);
-			float angle = (float)pTime * 10.0f * ((i + 1) / (i * 0.2f + 1));
+			float angle = (float)pTime * 5.0f * ((i + 1) / (i * 0.2f + 1));
 			model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
-			GetShaderAt(0U)->SetMat4("model", model);
-			glm::mat3 transposeInverseOfModel = glm::mat3(glm::transpose(glm::inverse(model)));
-			GetShaderAt(0U)->SetMat3("transposeInverseOfModel", transposeInverseOfModel);
+			GetShaderAt(0U)->SetMat4("model", (mat4)model);
+			mat3 transposeInverseOfModel = mat3(glm::transpose(glm::inverse(model)));
+			GetShaderAt(0U)->SetMat3("transposeInverseOfModel", (mat3)transposeInverseOfModel);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}

@@ -66,7 +66,7 @@ namespace Engine
 		 * @param pCode The shader code
 		 * @return If shader compilation was successful
 		 */
-		bool CompileShader(unsigned int* pId, ShaderType pType, const char* pCode);
+		bool CompileShader(unsigned int *pId, ShaderType pType, const char *pCode);
 		/**
 		 * @brief Create a Shader Program object and link the vertex and fragment code
 		 */
@@ -79,7 +79,7 @@ namespace Engine
 		 * @param pType The type of shader being error checked
 		 * @return true if no error, false if error
 		 */
-		bool ShaderErrorChecking(unsigned int* pShaderID, ShaderType pType);
+		bool ShaderErrorChecking(unsigned int *pShaderID, ShaderType pType);
 
 		bool m_shaderLoaded = false;
 		unsigned int m_idProgram, m_idVertex, m_idFragment;
@@ -94,21 +94,21 @@ namespace Engine
 		 * @param pName The name of the uniform
 		 * @param pValue The value assigned to the uniform
 		 */
-		void SetBool(const string& pName, bool pValue) const;
+		void SetBool(const string &pName, bool pValue) const;
 		/**
 		 * @brief Assigns data to a int uniform in the shader
 		 *
 		 * @param pName The name of the uniform
 		 * @param pValue The value assigned to the uniform
 		 */
-		void SetInt(const string& pName, int pValue) const;
+		void SetInt(const string &pName, int pValue) const;
 		/**
 		 * @brief Assigns data to a float uniform in the shader
 		 *
 		 * @param pName The name of the uniform
 		 * @param pValue The value assigned to the uniform
 		 */
-		void SetFloat(const string& pName, float pValue) const;
+		void SetFloat(const string &pName, float pValue) const;
 		/**
 		 * @brief Assigns data to a vec2 uniform in the shader
 		 * 
@@ -116,14 +116,21 @@ namespace Engine
 		 * @param pX The first value assigned to the uniform
 		 * @param pY The second value assigned to the uniform
 		 */
-		void SetVec2(const string& pName, float pX, float pY) const;
+		void SetVec2(const string &pName, float pX, float pY) const;
 		/**
 		 * @brief Assigns data to a vec2 uniform in the shader
 		 * 
 		 * @param pName The name of the uniform
 		 * @param pValue The value assigned to the uniform
 		 */
-		void SetVec2(const string& pName, glm::vec2 pValue) const;
+		void SetVec2(const string &pName, glm::vec2 pValue) const;
+		/**
+		 * @brief Assigns data to a vec2 uniform in the shader
+		 * 
+		 * @param pName The name of the uniform
+		 * @param pValue The value assigned to the uniform, passed by reference
+		 */
+		void SetVec2(const string &pName, glm::vec2 &pValue) const;
 		/**
 		 * @brief Assigns data to a vec3 uniform in the shader
 		 * 
@@ -132,14 +139,21 @@ namespace Engine
 		 * @param pY The second value assigned to the uniform
 		 * @param pZ The third value assigned to the uniform
 		 */
-		void SetVec3(const string& pName, float pX, float pY, float pZ) const;
+		void SetVec3(const string &pName, float pX, float pY, float pZ) const;
 		/**
 		 * @brief Assigns data to a vec3 uniform in the shader
 		 * 
 		 * @param pName The name of the uniform
 		 * @param pValue The value assigned to the uniform
 		 */
-		void SetVec3(const string& pName, glm::vec3 pValue) const;
+		void SetVec3(const string &pName, glm::vec3 pValue) const;
+		/**
+		 * @brief Assigns data to a vec3 uniform in the shader
+		 * 
+		 * @param pName The name of the uniform
+		 * @param pValue The value assigned to the uniform, passed by reference
+		 */
+		void SetVec3(const string &pName, glm::vec3 &pValue) const;
 		/**
 		 * @brief Assigns data to a vec4 uniform in the shader
 		 * 
@@ -149,28 +163,49 @@ namespace Engine
 		 * @param pZ The third value assigned to the uniform
 		 * @param pW The fourth value assigned to the uniform
 		 */
-		void SetVec4(const string& pName, float pX, float pY, float pZ, float pW) const;
+		void SetVec4(const string &pName, float pX, float pY, float pZ, float pW) const;
 		/**
 		 * @brief Assigns data to a vec4 uniform in the shader
 		 * 
 		 * @param pName The name of the uniform
 		 * @param pValue The value assigned to the uniform
 		 */
-		void SetVec4(const string& pName, glm::vec4 pValue) const;
+		void SetVec4(const string &pName, glm::vec4 pValue) const;
+		/**
+		 * @brief Set the Vec 4 object
+		 * 
+		 * @param pName The name of the uniform
+		 * @param pValue The value assigned to the uniform, passed by reference
+		 */
+		void SetVec4(const string &pName, glm::vec4 &pValue) const;
 		/**
 		 * @brief Assigns data to a mat3 uniform in the shader
 		 * 
 		 * @param pName The name of the uniform
 		 * @param pValue The value assigned to the uniform
 		 */
-		void SetMat3(const string& pName, glm::mat3 pValue) const;
+		void SetMat3(const string &pName, glm::mat3 pValue) const;
+		/**
+		 * @brief Assigns data to a mat3 uniform in the shader
+		 * 
+		 * @param pName The name of the uniform
+		 * @param pValue The value assigned to the uniform, passed by reference
+		 */
+		void SetMat3(const string &pName, glm::mat3 &pValue) const;
 		/**
 		 * @brief Assigns data to a mat4 uniform in the shader
 		 *
 		 * @param pName The name of the uniform
 		 * @param pValue The value assigned to the uniform
 		 */
-		void SetMat4(const string& pName, glm::mat4 pValue) const;
+		void SetMat4(const string &pName, glm::mat4 pValue) const;
+		/**
+		 * @brief Assigns data to a mat4 uniform in the shader
+		 * 
+		 * @param pName The name of the uniform
+		 * @param pValue The value assigned to the uniform, passed by reference
+		 */
+		void SetMat4(const string &pName, glm::mat4 &pValue) const;
 		#pragma endregion
 	};
 }
