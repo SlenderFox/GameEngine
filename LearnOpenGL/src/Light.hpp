@@ -33,13 +33,13 @@ namespace Engine
 		vec3 GetColour() const;
 		vec4 GetDirection() const;
 		float GetAngle() const;
-		float GetSharpness() const;
+		float GetBlur() const;
 		#pragma endregion
 
 	private:
 		LightType m_type;
 		vec3 m_lightColour;
 		float m_angle;		// Only for spotlights
-		float m_sharpness;	// Only for spotlights
+		float m_blur;	// Only for spotlights
 	};
 }

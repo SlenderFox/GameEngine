@@ -62,20 +62,20 @@ namespace Engine
 	}
 	// Spot
 	Light::Light(LightType pType, mat4 pTransform, float pAngle, float pSharpness)
-	 : m_type(pType), m_angle(pAngle), m_sharpness(pSharpness)
+	 : m_type(pType), m_angle(pAngle), m_blur(pSharpness)
 	{
 		SetTransform(pTransform);
 		m_lightColour = vec3(1);
 	}
 	// Spot
 	Light::Light(LightType pType, mat4 pTransform, vec3 pColour, float pAngle, float pSharpness)
-	 : m_type(pType), m_lightColour(pColour), m_angle(pAngle), m_sharpness(pSharpness)
+	 : m_type(pType), m_lightColour(pColour), m_angle(pAngle), m_blur(pSharpness)
 	{
 		SetTransform(pTransform);
 	}
 	// Spot
 	Light::Light(LightType pType, vec4 pPosition, vec3 pDirection, vec3 pColour, float pAngle, float pSharpness)
-	 : m_type(pType), m_lightColour(pColour), m_angle(pAngle), m_sharpness(pSharpness)
+	 : m_type(pType), m_lightColour(pColour), m_angle(pAngle), m_blur(pSharpness)
 	{
 		//m_transform = mat4(1);
 		SetPosition(pPosition);
@@ -109,9 +109,9 @@ namespace Engine
 		return m_angle;
 	}
 	
-	float Light::GetSharpness() const
+	float Light::GetBlur() const
 	{
-		return m_sharpness;
+		return m_blur;
 	}
 	#pragma endregion
 }

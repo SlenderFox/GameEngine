@@ -51,14 +51,14 @@ namespace Engine
 
 		// Light
 		//m_light = new Light(LightType::Directional, vec3(0, -1, 0), vec3(1.0f));
-		m_light = new Light(LightType::Point, vec4(-4, 2, -2, 1), vec3(1.0f));
-		//m_light = new Light(LightType::Spot, vec4(4, 3, 3, 1), vec3(-0.7f, -0.6f, -1), vec3(1.0f),
-		// glm::cos(glm::radians(20.0f)), glm::cos(glm::radians(1.0f)));
+		//m_light = new Light(LightType::Point, vec4(-4, 2, -2, 1), vec3(1.0f));
+		m_light = new Light(LightType::Spot, vec4(4.5f, 3, 3.5f, 1), vec3(-0.7f, -0.6f, -1), vec3(1.0f),
+		 glm::cos(glm::radians(15.0f)), glm::cos(glm::radians(17.0f)));
 		GetShaderAt(0U)->SetUint("light.type", (unsigned int)m_light->GetType());
 		GetShaderAt(0U)->SetVec4("light.position", m_light->GetPosition());
 		GetShaderAt(0U)->SetVec4("light.direction", m_light->GetDirection());
 		GetShaderAt(0U)->SetFloat("light.cutoff", m_light->GetAngle());
-		GetShaderAt(0U)->SetFloat("light.sharpness", m_light->GetSharpness());
+		GetShaderAt(0U)->SetFloat("light.blur", m_light->GetBlur());
 
 		GetShaderAt(0U)->SetVec3("light.ambient", m_light->GetColour() * 0.15f);
 		GetShaderAt(0U)->SetVec3("light.diffuse", m_light->GetColour());
