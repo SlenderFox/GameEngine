@@ -33,7 +33,8 @@ namespace Engine
 		vec3 GetColour() const;
 		vec4 GetDirection() const;
 		float GetAngle() const;
-		float GetBlur() const;
+		float GetBlur();
+		float GetBlurRaw() const;
 		#pragma endregion
 
 	private:
