@@ -1,4 +1,5 @@
 #include "Light.hpp"
+#include "math.h"
 
 namespace Engine
 {
@@ -109,7 +110,12 @@ namespace Engine
 		return m_angle;
 	}
 	
-	float Light::GetBlur() const
+	float Light::GetBlur()
+	{
+		return std::sinf(glm::radians(90 * m_blur));
+	}
+
+	float Light::GetBlurRaw() const
 	{
 		return m_blur;
 	}

@@ -53,7 +53,7 @@ namespace Engine
 		//m_light = new Light(LightType::Directional, vec3(0, -1, 0), vec3(1.0f));
 		//m_light = new Light(LightType::Point, vec4(-4, 2, -2, 1), vec3(1.0f));
 		m_light = new Light(LightType::Spot, vec4(4.5f, 3, 3.5f, 1), vec3(-0.7f, -0.6f, -1), vec3(1.0f),
-		 glm::cos(glm::radians(15.0f)), glm::cos(glm::radians(17.0f)));
+		 glm::cos(glm::radians(17.0f)), 0.0f);
 		GetShaderAt(0U)->SetUint("light.type", (unsigned int)m_light->GetType());
 		GetShaderAt(0U)->SetVec4("light.position", m_light->GetPosition());
 		GetShaderAt(0U)->SetVec4("light.direction", m_light->GetDirection());
