@@ -48,7 +48,7 @@ namespace Engine
 		GetShaderAt(0U)->SetInt("material.diffuse", 0);
 		GetShaderAt(0U)->SetInt("material.specular", 1);
 		GetShaderAt(0U)->SetFloat("material.shininess", 32.0f);
-
+		// Test
 		// Light
 		//m_light = new Light(LightType::Directional, vec3(0, -1, 0), vec3(1.0f));
 		//m_light = new Light(LightType::Point, vec4(-4, 2, -2, 1), vec3(1.0f));
