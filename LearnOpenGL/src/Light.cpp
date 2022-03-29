@@ -83,12 +83,22 @@ namespace Engine
 		SetForward(pDirection);
 	}
 	#pragma endregion
-	
+	#pragma region Setters
 	void Light::SetColour(vec3 pColour)
 	{
 		m_lightColour = pColour;
 	}
-	
+
+	void Light::SetAngle(float pValue)
+	{
+		m_angle = pValue;
+	}
+
+	void Light::SetBlur(float pValue)
+	{
+		m_blur = pValue;
+	}
+	#pragma endregion
 	#pragma region Getters
 	LightType Light::GetType() const
 	{
@@ -105,7 +115,12 @@ namespace Engine
 		return vec4(GetForward(), 0);
 	}
 	
-	float Light::GetAngle() const
+	float Light::GetAngle()
+	{
+		return std::cosf(glm::radians(m_angle));
+	}
+	
+	float Light::GetAngleRaw() const
 	{
 		return m_angle;
 	}
