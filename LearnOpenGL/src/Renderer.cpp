@@ -43,30 +43,48 @@ namespace Engine
 		//GetShaderAt(0U)->SetInt("texture1", 1);
 		//GetShaderAt(0U)->SetInt("texture2", 2);
 
-		//GetShaderAt(0U)->SetVec3("material.diffuse", 0.75164f, 0.60648f, 0.22648f);
-		//GetShaderAt(0U)->SetVec3("material.specular", 0.3f, 0.3f, 0.3f);
-		GetShaderAt(0U)->SetInt("material.diffuse", 0);
-		GetShaderAt(0U)->SetInt("material.specular", 1);
-		GetShaderAt(0U)->SetFloat("material.shininess", 32.0f);
+		GetShaderAt(0U)->SetInt("u_material.diffuse", 0);
+		GetShaderAt(0U)->SetInt("u_material.specular", 1);
+		GetShaderAt(0U)->SetFloat("u_material.shininess", 32.0f);
 
-		// Light
-		//m_light = new Light(LightType::Directional, vec3(0, -1, 0), vec3(1.0f));
-		//m_light = new Light(LightType::Point, vec4(-4, 2, -2, 1), vec3(1.0f));
-		m_light = new Light(LightType::Spot, vec4(4.5f, 3, 3.5f, 1), vec3(-0.7f, -0.6f, -1), vec3(1.0f), 17.0f, 0.0f);
-		GetShaderAt(0U)->SetUint("light.type", (unsigned int)m_light->GetType());
-		GetShaderAt(0U)->SetVec4("light.position", m_light->GetPosition());
-		GetShaderAt(0U)->SetVec4("light.direction", m_light->GetDirection());
-		GetShaderAt(0U)->SetFloat("light.cutoff", m_light->GetAngle());
-		GetShaderAt(0U)->SetFloat("light.blur", m_light->GetBlur());
+		// Lights
+		// Directional
+		m_lightDirectional = new Light(LightType::Directional, vec3(0, -1, 0), vec3(0.8f));
+		GetShaderAt(0U)->SetVec3("u_directional.colour.ambient", m_lightDirectional->GetColour() * 0.15f);
+		GetShaderAt(0U)->SetVec3("u_directional.colour.diffuse", m_lightDirectional->GetColour());
+		GetShaderAt(0U)->SetVec3("u_directional.colour.specular", m_lightDirectional->GetColour());
+		GetShaderAt(0U)->SetVec4("u_directional.direction", m_lightDirectional->GetDirection());
 
-		GetShaderAt(0U)->SetVec3("light.ambient", m_light->GetColour() * 0.15f);
-		GetShaderAt(0U)->SetVec3("light.diffuse", m_light->GetColour());
-		GetShaderAt(0U)->SetVec3("light.specular", m_light->GetColour());
-		
-		GetShaderAt(0U)->SetFloat("light.linear", 0.045f);
-		GetShaderAt(0U)->SetFloat("light.quadratic", 0.0075f);
+		// Point
+		m_lightPoint = new Light(LightType::Point, vec4(-4, 2, -2, 1), vec3(1.0f));
+		//GetShaderAt(0U)->SetVec3("u_pointLights[0].colour.ambient", m_lightPoint->GetColour() * 0.15f);
+		GetShaderAt(0U)->SetVec3("u_pointLights[0].colour.diffuse", m_lightPoint->GetColour());
+		GetShaderAt(0U)->SetVec3("u_pointLights[0].colour.specular", m_lightPoint->GetColour());
+		GetShaderAt(0U)->SetVec4("u_pointLights[0].position", m_lightPoint->GetPosition());
+		GetShaderAt(0U)->SetFloat("u_pointLights[0].linear", 0.045f);
+		GetShaderAt(0U)->SetFloat("u_pointLights[0].quadratic", 0.0075f);
 
-		if (m_light->GetType() != LightType::Directional)
+		//GetShaderAt(0U)->SetUint("u_light.type", (unsigned int)m_lightPoint->GetType());
+		//GetShaderAt(0U)->SetVec3("u_light.colour.ambient", m_lightPoint->GetColour() * 0.15f);
+		//GetShaderAt(0U)->SetVec3("u_light.colour.diffuse", m_lightPoint->GetColour());
+		//GetShaderAt(0U)->SetVec3("u_light.colour.specular", m_lightPoint->GetColour());
+		//GetShaderAt(0U)->SetVec4("u_light.position", m_lightPoint->GetPosition());
+		//GetShaderAt(0U)->SetFloat("u_light.linear", 0.045f);
+		//GetShaderAt(0U)->SetFloat("u_light.quadratic", 0.0075f);
+
+		// Spot
+		m_lightSpot = new Light(LightType::Spot, vec4(4.5f, 3, 3.5f, 1), vec3(-0.7f, -0.6f, -1), vec3(1.0f), 17.0f, 0.2f);
+		//GetShaderAt(0U)->SetVec3("u_spotLights[0].colour.ambient", m_lightSpot->GetColour() * 0.15f);
+		GetShaderAt(0U)->SetVec3("u_spotLights[0].colour.diffuse", m_lightSpot->GetColour());
+		GetShaderAt(0U)->SetVec3("u_spotLights[0].colour.specular", m_lightSpot->GetColour());
+		GetShaderAt(0U)->SetVec4("u_spotLights[0].position", m_lightSpot->GetPosition());
+		GetShaderAt(0U)->SetVec4("u_spotLights[0].direction", m_lightSpot->GetDirection());
+		GetShaderAt(0U)->SetFloat("u_spotLights[0].linear", 0.045f);
+		GetShaderAt(0U)->SetFloat("u_spotLights[0].quadratic", 0.0075f);
+		GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
+		GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
+
+		// Point light cube
 		{
 			// Light cube vertex data
 			m_meshes.get()->push_back(make_unique<Mesh>(1));
@@ -76,11 +94,28 @@ namespace Engine
 
 			// Light cube shader
 			m_shaders.get()->push_back(make_unique<Shader>("../Assets/shaders/light.vert", "../Assets/shaders/light.frag"));
-			GetShaderAt(1U)->SetVec3("colour", m_light->GetColour());
+			GetShaderAt(1U)->SetVec3("u_colour", m_lightPoint->GetColour());
 
 			mat4 lightModel = mat4(1.0f);
-			lightModel = glm::translate(lightModel, vec3(m_light->GetPosition()));
-			GetShaderAt(1U)->SetMat4("model", (mat4)lightModel);
+			lightModel = glm::translate(lightModel, vec3(m_lightPoint->GetPosition()));
+			GetShaderAt(1U)->SetMat4("u_model", (mat4)lightModel);
+		}
+
+		// Spot light cube
+		{
+			// Light cube vertex data
+			m_meshes.get()->push_back(make_unique<Mesh>(1));
+			CreateLightVAO(GetMeshAt(2U)->GetVAO(),
+				GetMeshAt(2U)->GetVBO(),
+				GetMeshAt(2U)->GetVertices());
+
+			// Light cube shader
+			m_shaders.get()->push_back(make_unique<Shader>("../Assets/shaders/light.vert", "../Assets/shaders/light.frag"));
+			GetShaderAt(2U)->SetVec3("u_colour", m_lightSpot->GetColour());
+
+			mat4 lightModel = mat4(1.0f);
+			lightModel = glm::translate(lightModel, vec3(m_lightSpot->GetPosition()));
+			GetShaderAt(2U)->SetMat4("u_model", (mat4)lightModel);
 		}
 
 		// #ifdef _DEBUG
@@ -140,23 +175,29 @@ namespace Engine
 		// Clears to background colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (m_light->GetType() != LightType::Directional)
+		// Point light cube
 		{
 			// Light cube rendering
 			glBindVertexArray(*GetMeshAt(1U)->GetVAO());
 			GetShaderAt(1U)->Use();
-			//mat4 lightModel = mat4(1.0f);
-			//lightModel = glm::translate(lightModel, vec3(m_light->GetPosition()));
-			GetShaderAt(1U)->SetMat4("camera", m_cameraRef->GetWorldToCameraMatrix());
-			//GetShaderAt(1U)->SetMat4("model", (mat4)lightModel);
+			GetShaderAt(1U)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+
+		// Spot light cube
+		{
+			// Light cube rendering
+			glBindVertexArray(*GetMeshAt(2U)->GetVAO());
+			GetShaderAt(2U)->Use();
+			GetShaderAt(2U)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
 		// Must be set to the current context
 		glBindVertexArray(*GetMeshAt(0U)->GetVAO());
 		GetShaderAt(0U)->Use();
-		GetShaderAt(0U)->SetMat4("camera", m_cameraRef->GetWorldToCameraMatrix());
-		GetShaderAt(0U)->SetVec3("viewPos", m_cameraRef->GetPosition());
+		GetShaderAt(0U)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
+		GetShaderAt(0U)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
 
 		for (unsigned int i = 0; i < 10; i++)
 		{
@@ -164,9 +205,9 @@ namespace Engine
 			model = glm::translate(model, m_cubePositions[i]);
 			float angle = (float)pTime * 5.0f * ((i + 1) / (i * 0.2f + 1));
 			model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
-			GetShaderAt(0U)->SetMat4("model", (mat4)model);
+			GetShaderAt(0U)->SetMat4("u_model", (mat4)model);
 			mat3 transposeInverseOfModel = mat3(glm::transpose(glm::inverse(model)));
-			GetShaderAt(0U)->SetMat3("transposeInverseOfModel", (mat3)transposeInverseOfModel);
+			GetShaderAt(0U)->SetMat3("u_transposeInverseOfModel", (mat3)transposeInverseOfModel);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}

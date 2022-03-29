@@ -64,6 +64,7 @@ namespace Engine
 		 * @param pFixedDeltaTime The time between every fixed update, should be roughly 0.0166-
 		 */
 		virtual void FixedUpdate(double pFixedDeltaTime) = 0;
+		//virtual void LateUpdate(double pDeltaTime) = 0;
 		//virtual void Draw() = 0;
 
 	private:

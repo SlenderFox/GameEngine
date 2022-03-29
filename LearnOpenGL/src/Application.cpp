@@ -284,39 +284,43 @@ namespace Engine
 		// Spotlight cone
 		if (glfwGetKey(m_window, GLFW_KEY_T) == GLFW_PRESS)
 		{
-			float current = m_rendererInst->m_light->GetAngleRaw();
+			Light* spotLight = m_rendererInst->m_lightSpot;
+			float current = spotLight->GetAngleRaw();
 			if (current + scale * 10 <= 90.0f)
 			{
-				m_rendererInst->m_light->SetAngle(current + scale * 10);
-				m_rendererInst->GetShaderAt(0U)->SetFloat("light.cutoff", m_rendererInst->m_light->GetAngle());
+				spotLight->SetAngle(current + scale * 10);
+				m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", spotLight->GetAngle());
 			}
 		}
 		if (glfwGetKey(m_window, GLFW_KEY_G) == GLFW_PRESS)
 		{
-			float current = m_rendererInst->m_light->GetAngleRaw();
+			Light* spotLight = m_rendererInst->m_lightSpot;
+			float current = spotLight->GetAngleRaw();
 			if (current - scale * 10 >= 0.0f)
 			{
-				m_rendererInst->m_light->SetAngle(current - scale * 10);
-				m_rendererInst->GetShaderAt(0U)->SetFloat("light.cutoff", m_rendererInst->m_light->GetAngle());
+				spotLight->SetAngle(current - scale * 10);
+				m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", spotLight->GetAngle());
 			}
 		}
 		// Blur
 		if (glfwGetKey(m_window, GLFW_KEY_Y) == GLFW_PRESS)
 		{
-			float current = m_rendererInst->m_light->GetBlurRaw();
+			Light* spotLight = m_rendererInst->m_lightSpot;
+			float current = spotLight->GetBlurRaw();
 			if (current + scale <= 1.0f)
 			{
-				m_rendererInst->m_light->SetBlur(current + scale);
-				m_rendererInst->GetShaderAt(0U)->SetFloat("light.blur", m_rendererInst->m_light->GetBlur());
+				spotLight->SetBlur(current + scale);
+				m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", spotLight->GetBlur());
 			}
 		}
 		if (glfwGetKey(m_window, GLFW_KEY_H) == GLFW_PRESS)
 		{
-			float current = m_rendererInst->m_light->GetBlurRaw();
+			Light* spotLight = m_rendererInst->m_lightSpot;
+			float current = spotLight->GetBlurRaw();
 			if (current - scale >= 0.0f)
 			{
-				m_rendererInst->m_light->SetBlur(current - scale);
-				m_rendererInst->GetShaderAt(0U)->SetFloat("light.blur", m_rendererInst->m_light->GetBlur());
+				spotLight->SetBlur(current - scale);
+				m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", spotLight->GetBlur());
 			}
 		}
 

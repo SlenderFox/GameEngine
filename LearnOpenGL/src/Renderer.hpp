@@ -112,7 +112,9 @@ namespace Engine
 		//Shader* m_shaderRef = nullptr;      // A reference to a shader
 		//Texture* m_textureRef = nullptr;    // A reference to a texture
 
-		Light* m_light = nullptr;
+		Light* m_lightDirectional = nullptr;
+		Light* m_lightPoint = nullptr;
+		Light* m_lightSpot = nullptr;
 
 		const vec3 m_cubePositions[10] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
