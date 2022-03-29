@@ -33,8 +33,8 @@ namespace Engine
 		#pragma endregion
 		#pragma region Getters
 		LightType GetType() const;
-		vec3 GetColour() const;
 		vec4 GetDirection() const;
+		vec3 GetColour() const;
 		float GetAngle();
 		float GetAngleRaw() const;
 		float GetBlur();

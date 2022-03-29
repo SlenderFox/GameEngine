@@ -217,9 +217,7 @@ namespace Engine
 		m_winHeight = pHeight;
 
 		if (m_rendererInst->m_cameraRef != nullptr && pWidth > 0 && pHeight > 0)
-		{
 			UpdateCamera();
-		}
 	}
 
 	void Application::UpdateCamera()
@@ -280,15 +278,15 @@ namespace Engine
 
 		// }
 
-		const float scale = 0.005f;
+		const float spotlightSpeed = 0.005f;
 		// Spotlight cone
 		if (glfwGetKey(m_window, GLFW_KEY_T) == GLFW_PRESS)
 		{
 			Light* spotLight = m_rendererInst->m_lightSpot;
 			float current = spotLight->GetAngleRaw();
-			if (current + scale * 10 <= 90.0f)
+			if (current + spotlightSpeed * 10 <= 90.0f)
 			{
-				spotLight->SetAngle(current + scale * 10);
+				spotLight->SetAngle(current + spotlightSpeed * 10);
 				m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", spotLight->GetAngle());
 			}
 		}
@@ -296,9 +294,9 @@ namespace Engine
 		{
 			Light* spotLight = m_rendererInst->m_lightSpot;
 			float current = spotLight->GetAngleRaw();
-			if (current - scale * 10 >= 0.0f)
+			if (current - spotlightSpeed * 10 >= 0.0f)
 			{
-				spotLight->SetAngle(current - scale * 10);
+				spotLight->SetAngle(current - spotlightSpeed * 10);
 				m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", spotLight->GetAngle());
 			}
 		}
@@ -307,9 +305,9 @@ namespace Engine
 		{
 			Light* spotLight = m_rendererInst->m_lightSpot;
 			float current = spotLight->GetBlurRaw();
-			if (current + scale <= 1.0f)
+			if (current + spotlightSpeed <= 1.0f)
 			{
-				spotLight->SetBlur(current + scale);
+				spotLight->SetBlur(current + spotlightSpeed);
 				m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", spotLight->GetBlur());
 			}
 		}
@@ -317,42 +315,42 @@ namespace Engine
 		{
 			Light* spotLight = m_rendererInst->m_lightSpot;
 			float current = spotLight->GetBlurRaw();
-			if (current - scale >= 0.0f)
+			if (current - spotlightSpeed >= 0.0f)
 			{
-				spotLight->SetBlur(current - scale);
+				spotLight->SetBlur(current - spotlightSpeed);
 				m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", spotLight->GetBlur());
 			}
 		}
 
-		float speed = 8;
+		float moveSpeed = 8;
 		// SlowDown
 		if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-			speed *= 0.2f;
+			moveSpeed *= 0.2f;
 		// SpeedUp
 		else if (glfwGetKey(m_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-			speed *= 3;
+			moveSpeed *= 3;
 		else
-			speed = 8;
+			moveSpeed = 8;
 
 		vec3 translation = vec3();
 		// Forwards
 		if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS)
-			translation += speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetForward();
+			translation += moveSpeed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetForward();
 		// Backwards
 		if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS)
-			translation -= speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetForward();
+			translation -= moveSpeed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetForward();
 		// Left
 		if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS)
-			translation += speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetRight();
+			translation += moveSpeed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetRight();
 		// Right
 		if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS)
-			translation -= speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetRight();
+			translation -= moveSpeed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetRight();
 		// Up
 		if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)
-			translation += speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetUp();
+			translation += moveSpeed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetUp();
 		// Down
 		if (glfwGetKey(m_window, GLFW_KEY_C) == GLFW_PRESS)
-			translation -= speed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetUp();
+			translation -= moveSpeed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetUp();
 
 		m_rendererInst->m_cameraRef->Translate(translation);
 	}

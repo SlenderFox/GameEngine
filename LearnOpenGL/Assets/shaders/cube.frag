@@ -1,11 +1,8 @@
 #version 330 core
 #define normalise normalize
+
 const int NR_POINT_LIGHTS = 10;
 const int NR_SPOT_LIGHTS = 10;
-// Light types
-const uint type_directional = 0U;
-const uint type_point = 1U;
-const uint type_spot = 2U;
 
 // I/O
 out vec4 FragCol;
@@ -25,41 +22,22 @@ struct Colour {
 	vec3 specular;
 };
 
-struct Light {
-	uint type;
-	vec4 position;
-	vec4 direction;
-
-	float cutoff;
-	float blur;
-
-	Colour colour;
-	
-	float linear;
-	float quadratic;
-};
-
 struct LightDirectional {
 	Colour colour;
-
 	vec4 direction;
 };
 
 struct LightPoint {
 	Colour colour;
-
 	vec4 position;
-
 	float linear;
 	float quadratic;
 };
 
 struct LightSpot {
 	Colour colour;
-
 	vec4 position;
 	vec4 direction;
-	
 	float linear;
 	float quadratic;
 	float cutoff;
@@ -69,7 +47,6 @@ struct LightSpot {
 uniform vec3 u_viewPos;
 uniform Material u_material;
 
-uniform Light u_light;
 uniform LightDirectional u_directional;
 uniform LightPoint[NR_POINT_LIGHTS] u_pointLights;
 uniform LightSpot[NR_SPOT_LIGHTS] u_spotLights;
@@ -91,20 +68,6 @@ vec3 PhongShading(Colour pColour, vec3 pLightDir, float pIntensity)
 	vec3 ambient = pColour.ambient * diffuseTex;
 	vec3 diffuse = pColour.diffuse * diffuseTex * diff * pIntensity;
 	vec3 specular = pColour.specular * specularTex * spec * pIntensity;
-
-	// vec3 diffuseTex = texture(u_material.diffuse, TexCoord).rgb;
-	// vec3 normal = normalise(Normal);
-	// // Ambient
-	// vec3 ambient = u_light.colour.ambient * diffuseTex;
-	// // Diffuse
-	// float diff = max(dot(normal, lightDir), 0.0);
-	// vec3 diffuse = u_light.colour.diffuse * diff * diffuseTex * pIntensity;
-	// // Specular
-	// vec3 viewDir = normalise(u_viewPos - FragPos);
-	// vec3 reflectDir = reflect(-lightDir, normal);
-	// float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_material.shininess);
-	// vec3 specular = u_light.colour.specular * spec * texture(u_material.specular, TexCoord).rgb * pIntensity;
-
 	return ambient + diffuse + specular;
 }
 
@@ -175,37 +138,4 @@ void main()
 
 	FragCol = vec4(result, 1);
 	return;
-
-	//---------------------------------------------
-
-	// vec3 lightDir;
-	// float attenuation = 1;
-
-	// if (u_light.type == type_directional) {
-	// 	lightDir = normalise(u_light.direction.xyz);
-	// } else {
-	// 	// Point or spotlight
-	// 	vec3 lightDiff = u_light.position.xyz - FragPos;
-	// 	lightDir = normalise(lightDiff);
-	// 	// Light fading over distance
-	// 	float lightDist = length(lightDiff);
-	// 	attenuation = 1.0 / (1.0 + u_light.linear * lightDist + u_light.quadratic * (lightDist * lightDist));
-	// }
-
-	// float intensity = 1;
-	// // Soft edges
-	// if (u_light.type == type_spot) {
-	// 	float theta = dot(lightDir, normalise(u_light.direction.xyz));
-	// 	// l(1-c)+c scales light.blur from 0-1 to light.cutoff-1
-	// 	float epsilon = (u_light.blur * (1 - u_light.cutoff) + u_light.cutoff) - u_light.cutoff;
-	// 	intensity = clamp((theta - u_light.cutoff) / epsilon, 0.0, 1.0);
-
-	// 	// if (TexCoord.x < 0.02 || TexCoord.y < 0.02 || TexCoord.x > 0.98 || TexCoord.y > 0.98) {
-	// 	// 	FragCol = vec4(intensity, intensity, intensity, 1);
-	// 	// 	return;
-	// 	// }
-	// }
-
-	// vec3 phong = PhongShading(u_light.colour, lightDir, intensity) * attenuation;
-	// FragCol = vec4(phong, 1.0);
 }

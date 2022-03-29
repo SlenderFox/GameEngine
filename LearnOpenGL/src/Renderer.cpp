@@ -11,13 +11,13 @@ namespace Engine
 {
 	void Renderer::Init(float pAspect)
 	{
+		// Enables the use of the depth buffer
+		glEnable(GL_DEPTH_TEST);
+
 		// Initialise camera
 		m_cameraRef = new Camera(pAspect, 75.0f);
 		m_cameraRef->SetClearColour(0.1f, 0.1f, 0.1f);
 		m_cameraRef->SetPosition({ 0.0f, 0.0f, 6.0f });
-
-		// Enables the use of the depth buffer
-		glEnable(GL_DEPTH_TEST);
 
 		// Mesh creation
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
@@ -36,12 +36,7 @@ namespace Engine
 		// Texture creation
 		m_textures = make_unique<vector<unique_ptr<Texture>>>();
 		m_textures.get()->push_back(make_unique<Texture>());
-
 		GetTextureAt(0U)->LoadImages();
-		//GetShaderAt(0U)->Use();
-		//GetShaderAt(0U)->SetInt("texture0", 0);
-		//GetShaderAt(0U)->SetInt("texture1", 1);
-		//GetShaderAt(0U)->SetInt("texture2", 2);
 
 		GetShaderAt(0U)->SetInt("u_material.diffuse", 0);
 		GetShaderAt(0U)->SetInt("u_material.specular", 1);
@@ -63,14 +58,6 @@ namespace Engine
 		GetShaderAt(0U)->SetVec4("u_pointLights[0].position", m_lightPoint->GetPosition());
 		GetShaderAt(0U)->SetFloat("u_pointLights[0].linear", 0.045f);
 		GetShaderAt(0U)->SetFloat("u_pointLights[0].quadratic", 0.0075f);
-
-		//GetShaderAt(0U)->SetUint("u_light.type", (unsigned int)m_lightPoint->GetType());
-		//GetShaderAt(0U)->SetVec3("u_light.colour.ambient", m_lightPoint->GetColour() * 0.15f);
-		//GetShaderAt(0U)->SetVec3("u_light.colour.diffuse", m_lightPoint->GetColour());
-		//GetShaderAt(0U)->SetVec3("u_light.colour.specular", m_lightPoint->GetColour());
-		//GetShaderAt(0U)->SetVec4("u_light.position", m_lightPoint->GetPosition());
-		//GetShaderAt(0U)->SetFloat("u_light.linear", 0.045f);
-		//GetShaderAt(0U)->SetFloat("u_light.quadratic", 0.0075f);
 
 		// Spot
 		m_lightSpot = new Light(LightType::Spot, vec4(4.5f, 3, 3.5f, 1), vec3(-0.7f, -0.6f, -1), vec3(1.0f), 17.0f, 0.2f);

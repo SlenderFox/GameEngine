@@ -105,14 +105,14 @@ namespace Engine
 		return m_type;
 	}
 
-	vec3 Light::GetColour() const
-	{
-		return m_lightColour;
-	}
-
 	vec4 Light::GetDirection() const
 	{
 		return vec4(GetForward(), 0);
+	}
+	
+	vec3 Light::GetColour() const
+	{
+		return m_lightColour;
 	}
 	
 	float Light::GetAngle()
