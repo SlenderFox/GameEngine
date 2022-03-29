@@ -26,13 +26,17 @@ namespace Engine
 		Light(LightType pType, vec4 pPosition, vec3 pDirection, vec3 pColour, float pAngle, float pSharpness);	// Spot
 		~Light() {}
 		#pragma endregion
-
+		#pragma region Setters
 		void SetColour(vec3 pColour);
+		void SetAngle(float pValue);
+		void SetBlur(float pValue);
+		#pragma endregion
 		#pragma region Getters
 		LightType GetType() const;
 		vec3 GetColour() const;
 		vec4 GetDirection() const;
-		float GetAngle() const;
+		float GetAngle();
+		float GetAngleRaw() const;
 		float GetBlur();
 		float GetBlurRaw() const;
 		#pragma endregion

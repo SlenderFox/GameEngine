@@ -74,16 +74,14 @@ void main()
 	// Soft edges
 	if (light.type == type_spot) {
 		float theta = dot(lightDir, normalise(light.direction.xyz));
-		//float epsilon = light.cutoff - light.blur;
-		//intensity = clamp((theta - light.blur) / epsilon, 0.0, 1.0);
 		// l(1-c)+c scales light.blur from 0-1 to light.cutoff-1
 		float epsilon = (light.blur * (1 - light.cutoff) + light.cutoff) - light.cutoff;
 		intensity = clamp((theta - light.cutoff) / epsilon, 0.0, 1.0);
 
-		if (TexCoord.x < 0.02 || TexCoord.y < 0.02 || TexCoord.x > 0.98 || TexCoord.y > 0.98) {
-			FragCol = vec4(intensity, intensity, intensity, 1);
-			return;
-		}
+		// if (TexCoord.x < 0.02 || TexCoord.y < 0.02 || TexCoord.x > 0.98 || TexCoord.y > 0.98) {
+		// 	FragCol = vec4(intensity, intensity, intensity, 1);
+		// 	return;
+		// }
 	}
 
 	vec3 phong = PhongShading(lightDir, intensity) * attenuation;

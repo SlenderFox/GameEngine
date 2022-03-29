@@ -280,6 +280,46 @@ namespace Engine
 
 		// }
 
+		const float scale = 0.005f;
+		// Spotlight cone
+		if (glfwGetKey(m_window, GLFW_KEY_T) == GLFW_PRESS)
+		{
+			float current = m_rendererInst->m_light->GetAngleRaw();
+			if (current + scale * 10 <= 90.0f)
+			{
+				m_rendererInst->m_light->SetAngle(current + scale * 10);
+				m_rendererInst->GetShaderAt(0U)->SetFloat("light.cutoff", m_rendererInst->m_light->GetAngle());
+			}
+		}
+		if (glfwGetKey(m_window, GLFW_KEY_G) == GLFW_PRESS)
+		{
+			float current = m_rendererInst->m_light->GetAngleRaw();
+			if (current - scale * 10 >= 0.0f)
+			{
+				m_rendererInst->m_light->SetAngle(current - scale * 10);
+				m_rendererInst->GetShaderAt(0U)->SetFloat("light.cutoff", m_rendererInst->m_light->GetAngle());
+			}
+		}
+		// Blur
+		if (glfwGetKey(m_window, GLFW_KEY_Y) == GLFW_PRESS)
+		{
+			float current = m_rendererInst->m_light->GetBlurRaw();
+			if (current + scale <= 1.0f)
+			{
+				m_rendererInst->m_light->SetBlur(current + scale);
+				m_rendererInst->GetShaderAt(0U)->SetFloat("light.blur", m_rendererInst->m_light->GetBlur());
+			}
+		}
+		if (glfwGetKey(m_window, GLFW_KEY_H) == GLFW_PRESS)
+		{
+			float current = m_rendererInst->m_light->GetBlurRaw();
+			if (current - scale >= 0.0f)
+			{
+				m_rendererInst->m_light->SetBlur(current - scale);
+				m_rendererInst->GetShaderAt(0U)->SetFloat("light.blur", m_rendererInst->m_light->GetBlur());
+			}
+		}
+
 		float speed = 8;
 		// SlowDown
 		if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
