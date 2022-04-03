@@ -1,5 +1,6 @@
 #pragma once
 #include "Transform.hpp"
+#include "Mesh.hpp"
 #include <vector>
 
 using std::vector;

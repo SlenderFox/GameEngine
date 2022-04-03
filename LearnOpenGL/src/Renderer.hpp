@@ -109,8 +109,6 @@ namespace Engine
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
 		unique_ptr<vector<unique_ptr<Texture>>> m_textures;
-		//Shader* m_shaderRef = nullptr;      // A reference to a shader
-		//Texture* m_textureRef = nullptr;    // A reference to a texture
 
 		Light* m_lightDirectional = nullptr;
 		Light* m_lightPoint = nullptr;

@@ -329,8 +329,6 @@ namespace Engine
 		// SpeedUp
 		else if (glfwGetKey(m_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 			moveSpeed *= 3;
-		else
-			moveSpeed = 8;
 
 		vec3 translation = vec3();
 		// Forwards
