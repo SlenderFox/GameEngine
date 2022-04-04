@@ -326,10 +326,5 @@ namespace Engine
 	{
 		return (*m_shaders.get())[pPos].get();
 	}
-
-	// Texture* Renderer::GetTextureAt(unsigned int pPos)
-	// {
-	// 	return (*m_textures.get())[pPos].get();
-	// }
 	#pragma endregion
 }
