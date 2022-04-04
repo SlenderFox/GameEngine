@@ -11,8 +11,8 @@ in vec3 Normal;
 in vec2 TexCoord;
 
 struct Material {
-	sampler2D diffuse;
-	sampler2D specular;
+	sampler2D texture_diffuse0;
+	sampler2D texture_specular0;
 	float shininess;
 };
 
@@ -57,8 +57,8 @@ vec3 m_viewDir;
 vec3 PhongShading(Colour pColour, vec3 pLightDir, float pIntensity)
 {	
 	//Textures
-	vec3 diffuseTex = texture(u_material.diffuse, TexCoord).rgb;
-	vec3 specularTex = texture(u_material.specular, TexCoord).rgb;
+	vec3 diffuseTex = texture(u_material.texture_diffuse0, TexCoord).rgb;
+	vec3 specularTex = texture(u_material.texture_specular0, TexCoord).rgb;
 	// Diffuse shading
 	float diff = max(dot(m_normal, pLightDir), 0.0);
 	// Specular shading
@@ -78,7 +78,7 @@ float CalculateAttentuation(float pDist, float pLinear, float pQuadratic)
 
 vec3 CalculateDirectionalLighting(LightDirectional pLight)
 {
-	vec3 lightDir = normalize(u_directional.direction.xyz);
+	vec3 lightDir = normalise(u_directional.direction.xyz);
 	return PhongShading(pLight.colour, lightDir, 1);
 }
 
@@ -90,7 +90,7 @@ vec3 CalculatePointLight(LightPoint pLight)
 
 	// Point or spotlight
 	vec3 lightDiff = pLight.position.xyz - FragPos;
-	vec3 lightDir = normalize(lightDiff);
+	vec3 lightDir = normalise(lightDiff);
 	// Light fading over distance
 	float lightDist = length(lightDiff);
 	float attenuation = CalculateAttentuation(lightDist, pLight.linear, pLight.quadratic);
@@ -106,14 +106,14 @@ vec3 CalculateSpotLight(LightSpot pLight)
 
 	// Point or spotlight
 	vec3 lightDiff = pLight.position.xyz - FragPos;
-	vec3 lightDir = normalize(lightDiff);
+	vec3 lightDir = normalise(lightDiff);
 	// Light fading over distance
 	float lightDist = length(lightDiff);
 	float attenuation = CalculateAttentuation(lightDist, pLight.linear, pLight.quadratic);
 
 	// Soft edges
 	float intensity = 1;
-	float theta = dot(lightDir, normalize(pLight.direction.xyz));
+	float theta = dot(lightDir, normalise(pLight.direction.xyz));
 	// l(1-c)+c scales light.blur from 0-1 to light.cutoff-1
 	float epsilon = (pLight.blur * (1 - pLight.cutoff) + pLight.cutoff) - pLight.cutoff;
 	intensity = clamp((theta - pLight.cutoff) / epsilon, 0.0, 1.0);
@@ -124,8 +124,8 @@ vec3 CalculateSpotLight(LightSpot pLight)
 void main()
 {
 	// Important vectors
-	m_normal = normalize(Normal);
-	m_viewDir = normalize(u_viewPos - FragPos);
+	m_normal = normalise(Normal);
+	m_viewDir = normalise(u_viewPos - FragPos);
 
 	// Only one directional light allowed
 	vec3 result = CalculateDirectionalLighting(u_directional);

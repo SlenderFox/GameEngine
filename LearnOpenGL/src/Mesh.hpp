@@ -1,23 +1,29 @@
 #pragma region
 #pragma once
-#include <vector>
-#include <memory>
+#include <glm/glm.hpp>
+#include "Material.hpp"
 #include "Shader.hpp"
-#include "Texture.hpp"
 
-using std::vector;
-using std::unique_ptr;
-using std::make_unique;
+using glm::vec2;
+using glm::vec3;
 #pragma endregion
 
 namespace Engine
 {
+	struct Vertex {
+		vec3 position;
+		vec3 normal;
+		vec2 texCoords;
+	};
+
 	class Mesh
 	{
 	public:
-		Mesh(uint8_t pType);
-		Mesh(vector<float> pVertices, vector<unsigned int> pIndices);
-		Mesh(unique_ptr<vector<float>> pVertices, unique_ptr<vector<unsigned int>> pIndices);
+		Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices, vector<Texture> pTextures);
+		Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices);
+		Mesh(unique_ptr<vector<Vertex>> pVertices, unique_ptr<vector<unsigned int>> pIndices, unique_ptr<vector<Texture>> pTextures);
+		Mesh(unique_ptr<vector<Vertex>> pVertices, unique_ptr<vector<unsigned int>> pIndices);
+		Mesh();
 
 		#pragma region Copy constructors
 		Mesh(const Mesh& pOther);
@@ -28,121 +34,41 @@ namespace Engine
 
 		void Destroy(bool pValidate);
 
+		void LoadTextures(Shader &pShader);
+		//void Draw(Shader &pShader);
+
+		static vector<Vertex> GenerateVertices();
+		static vector<unsigned int> GenerateIndices();
+
 		#pragma region Setters
-		void SetVertices(vector<float>* pVertices);
+		void SetVertices(vector<Vertex>* pVertices);
 		void SetIndices(vector<unsigned int>* pIndices);
+		void SetTextures(vector<Texture>* pTextures);
 		#pragma endregion
 		#pragma region Getters
-		vector<float>* GetVertices() const;
+		vector<Vertex>* GetVertices() const;
+		vector<float>* GetVerticesOld() const;
 		vector<unsigned int>* GetIndices() const;
+		vector<Texture>* GetTextures() const;
 		unsigned int* GetVAO() const;
 		unsigned int* GetVBO() const;
 		unsigned int* GetEBO() const;
 		#pragma endregion
 		
 	private:
-		unique_ptr<vector<float>> m_vertices = nullptr;
+		static float* s_cubeVerticesArr;
+		static unsigned int* s_indicesArr;
+
+		void SetupMesh();
+		void SetupMeshOld();
+
+		unique_ptr<vector<Vertex>> m_vertices = nullptr;
+		unique_ptr<vector<float>> m_verticesOld = nullptr;
 		unique_ptr<vector<unsigned int>> m_indices = nullptr;
+        unique_ptr<vector<Texture>> m_textures = nullptr;
 
 		unsigned int* m_idVAO = new unsigned int(0U);	// The id for the vertex attribute object
 		unsigned int* m_idVBO = new unsigned int(0U);	// The id for the vertex buffer object
 		unsigned int* m_idEBO = new unsigned int(0U);	// The id for the element buffer object
-
-		float* m_cubeVerticesArr = new float[288] {
-			// Positions		   // Normals			  // Texture coords
-		    -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 0.0f,
-		     0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    1.0f, 0.0f,
-		     0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    1.0f, 1.0f,
-		     0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    1.0f, 1.0f,
-		    -0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 1.0f,
-		    -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 0.0f,
-    
-		    -0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    0.0f, 0.0f,
-		     0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    1.0f, 0.0f,
-		     0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    1.0f, 1.0f,
-		     0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    1.0f, 1.0f,
-		    -0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    0.0f, 1.0f,
-		    -0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    0.0f, 0.0f,
-    
-		    -0.5f,  0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,    1.0f, 0.0f,
-		    -0.5f,  0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,    1.0f, 1.0f,
-		    -0.5f, -0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,    0.0f, 1.0f,
-		    -0.5f, -0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,    0.0f, 1.0f,
-		    -0.5f, -0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,    0.0f, 0.0f,
-		    -0.5f,  0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,    1.0f, 0.0f,
-    
-		     0.5f,  0.5f,  0.5f,    1.0f,  0.0f,  0.0f,    1.0f, 0.0f,
-		     0.5f,  0.5f, -0.5f,    1.0f,  0.0f,  0.0f,    1.0f, 1.0f,
-		     0.5f, -0.5f, -0.5f,    1.0f,  0.0f,  0.0f,    0.0f, 1.0f,
-		     0.5f, -0.5f, -0.5f,    1.0f,  0.0f,  0.0f,    0.0f, 1.0f,
-		     0.5f, -0.5f,  0.5f,    1.0f,  0.0f,  0.0f,    0.0f, 0.0f,
-		     0.5f,  0.5f,  0.5f,    1.0f,  0.0f,  0.0f,    1.0f, 0.0f,
-    
-		    -0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,    0.0f, 1.0f,
-		     0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,    1.0f, 1.0f,
-		     0.5f, -0.5f,  0.5f,    0.0f, -1.0f,  0.0f,    1.0f, 0.0f,
-		     0.5f, -0.5f,  0.5f,    0.0f, -1.0f,  0.0f,    1.0f, 0.0f,
-		    -0.5f, -0.5f,  0.5f,    0.0f, -1.0f,  0.0f,    0.0f, 0.0f,
-		    -0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,    0.0f, 1.0f,
-    
-		    -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,    0.0f, 1.0f,
-		     0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,    1.0f, 1.0f,
-		     0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,    1.0f, 0.0f,
-		     0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,    1.0f, 0.0f,
-		    -0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,    0.0f, 0.0f,
-		    -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,    0.0f, 1.0f
-		};
-
-		// Creates a cube, doesn't use EBO
-		float* m_lightVerticesArr = new float[108] {
-			// Positions        
-			-0.1f, -0.1f, -0.1f,
-			 0.1f, -0.1f, -0.1f,
-			 0.1f,  0.1f, -0.1f,
-			 0.1f,  0.1f, -0.1f,
-			-0.1f,  0.1f, -0.1f,
-			-0.1f, -0.1f, -0.1f,
-
-			-0.1f, -0.1f,  0.1f,
-			 0.1f, -0.1f,  0.1f,
-			 0.1f,  0.1f,  0.1f,
-			 0.1f,  0.1f,  0.1f,
-			-0.1f,  0.1f,  0.1f,
-			-0.1f, -0.1f,  0.1f,
-
-			-0.1f,  0.1f,  0.1f,
-			-0.1f,  0.1f, -0.1f,
-			-0.1f, -0.1f, -0.1f,
-			-0.1f, -0.1f, -0.1f,
-			-0.1f, -0.1f,  0.1f,
-			-0.1f,  0.1f,  0.1f,
-
-			 0.1f,  0.1f,  0.1f,
-			 0.1f,  0.1f, -0.1f,
-			 0.1f, -0.1f, -0.1f,
-			 0.1f, -0.1f, -0.1f,
-			 0.1f, -0.1f,  0.1f,
-			 0.1f,  0.1f,  0.1f,
-
-			-0.1f, -0.1f, -0.1f,
-			 0.1f, -0.1f, -0.1f,
-			 0.1f, -0.1f,  0.1f,
-			 0.1f, -0.1f,  0.1f,
-			-0.1f, -0.1f,  0.1f,
-			-0.1f, -0.1f, -0.1f,
-
-			-0.1f,  0.1f, -0.1f,
-			 0.1f,  0.1f, -0.1f,
-			 0.1f,  0.1f,  0.1f,
-			 0.1f,  0.1f,  0.1f,
-			-0.1f,  0.1f,  0.1f,
-			-0.1f,  0.1f, -0.1f
-		};
-
-		// How to construct the triangles using the verts
-		unsigned int* m_indicesArr = new unsigned int[6] {
-			0U, 1U, 2U,    // Triangle one
-			0U, 2U, 3U     // Triangle two
-		};
 	};
 }

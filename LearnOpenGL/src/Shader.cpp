@@ -25,33 +25,31 @@ namespace Engine
 		CreateShaderProgram();
 	}
 
-	Shader::Shader(string pVertexPath, string pFragmentPath)
+	Shader::Shader(string pShaderPath)
 	{
-		LoadPaths(pVertexPath, pFragmentPath);
+		LoadPaths(pShaderPath);
 	}
 
 	#pragma region Copy constructors
 	Shader::Shader(const Shader& pOther)
 	{
-		m_vertexPath = pOther.m_vertexPath;
-		m_fragmentPath = pOther.m_fragmentPath;
+		m_shaderPath = pOther.m_shaderPath;
 	}
 	
 	Shader::Shader(Shader&& pOther) noexcept
 	{
-		m_vertexPath = pOther.m_vertexPath;
-		m_fragmentPath = pOther.m_fragmentPath;
+		m_shaderPath = pOther.m_shaderPath;
 	}
 	
 	Shader& Shader::operator=(const Shader& pOther)
 	{
-		Shader* newObj = new Shader(pOther.m_vertexPath, pOther.m_fragmentPath);
+		Shader* newObj = new Shader(pOther.m_shaderPath);
 		return *newObj;
 	}
 	
 	Shader& Shader::operator=(Shader&& pOther) noexcept
 	{
-		Shader* newObj = new Shader(pOther.m_vertexPath, pOther.m_fragmentPath);
+		Shader* newObj = new Shader(pOther.m_shaderPath);
 		return *newObj;
 	}
 	#pragma endregion
@@ -67,13 +65,12 @@ namespace Engine
 		glUseProgram(m_idProgram);
 	}
 
-	void Shader::LoadPaths(string pVertexPath, string pFragmentPath)
+	void Shader::LoadPaths(string pShaderPath)
 	{
-		m_vertexPath = pVertexPath;
-		m_fragmentPath = pFragmentPath;
+		m_shaderPath = pShaderPath;
 
 		//LoadVertexShader();
-		//LoadFragmentShader();
+		//LoadFragmentShadepShaderPathr();
 		LoadShader(ShaderType::VERTEX);
 		LoadShader(ShaderType::FRAGMENT);
 		CreateShaderProgram();
@@ -91,25 +88,80 @@ namespace Engine
 
 		#pragma region Fallback code
 		 const char* vertexFallback = "#version 330 core\n\
-		 layout (location = 0) in vec3 aPos;\
-		 layout (location = 1) in vec3 aCol;\
-		 layout (location = 2) in vec2 aTexCoord;\
-		 out vec3 colour;\
-		 out vec2 texCoord;\
-		 uniform mat4 camera;\
-		 uniform mat4 model;\
-		 void main() {\
-		  gl_Position = camera * model * vec4(aPos, 1.0);\
-		  colour = aCol;\
-		  texCoord = aTexCoord;\
-		 }";
+layout (location=0) in vec3 aPos;\
+layout (location=1) in vec3 aNormal;\
+layout (location=2) in vec2 aTexCoord;\
+out vec3 FragPos;\
+out vec3 Normal;\
+out vec2 TexCoord;\
+uniform mat4 u_camera;\
+uniform mat4 u_model;\
+uniform mat3 u_transposeInverseOfModel;\
+void main(){\
+gl_Position=u_camera*u_model*vec4(aPos,1.0);\
+FragPos=vec3(u_model*vec4(aPos,1.0));\
+Normal=u_transposeInverseOfModel*aNormal;\
+TexCoord=aTexCoord;}";
 		 const char* fragmentFallback = "#version 330 core\n\
-		 out vec4 FragCol;\
-		 in vec3 colour;\
-		 in vec2 texCoord;\
-		 void main() {\
-		  FragCol = vec4(colour, 1);\
-		 }";
+#define normalise normalize\
+const int NR_POINT_LIGHTS=10;\
+const int NR_SPOT_LIGHTS=10;\
+out vec4 FragCol;\
+in vec3 FragPos;\
+in vec3 Normal;\
+in vec2 TexCoord;\
+struct Material {sampler2D texture_diffuse0;sampler2D texture_specular0;float shininess;};\
+struct Colour {vec3 ambient;vec3 diffuse;vec3 specular;};\
+struct LightDirectional {Colour colour;vec4 direction;};\
+struct LightPoint {Colour colour;vec4 position;float linear;float quadratic;};\
+struct LightSpot {Colour colour;vec4 position;vec4 direction;float linear;float quadratic;float cutoff;float blur;};\
+uniform vec3 u_viewPos;\
+uniform Material u_material;\
+uniform LightDirectional u_directional;\
+uniform LightPoint[NR_POINT_LIGHTS] u_pointLights;\
+uniform LightSpot[NR_SPOT_LIGHTS] u_spotLights;\
+vec3 m_normal;\
+vec3 m_viewDir;\
+vec3 PhongShading(Colour pColour,vec3 pLightDir,float pIntensity){\
+vec3 diffuseTex=texture(u_material.texture_diffuse0,TexCoord).rgb;\
+vec3 specularTex=texture(u_material.texture_specular0,TexCoord).rgb;\
+float diff=max(dot(m_normal,pLightDir),0.0);\
+vec3 reflectDir=reflect(-pLightDir,m_normal);\
+float spec=pow(max(dot(m_viewDir,reflectDir),0.0),u_material.shininess);\
+vec3 ambient=pColour.ambient*diffuseTex;\
+vec3 diffuse=pColour.diffuse*diffuseTex*diff*pIntensity;\
+vec3 specular=pColour.specular*specularTex*spec*pIntensity;\
+return ambient+diffuse+specular;}\
+float CalculateAttentuation(float pDist,float pLinear,float pQuadratic){\
+return 1.0/(1.0+pLinear*pDist+pQuadratic*(pDist*pDist));}\
+vec3 CalculateDirectionalLighting(LightDirectional pLight){\
+vec3 lightDir=normalize(u_directional.direction.xyz);\
+return PhongShading(pLight.colour,lightDir,1);}\
+vec3 CalculatePointLight(LightPoint pLight){\
+if (length(pLight.linear)==0)return vec3(0);\
+vec3 lightDiff=pLight.position.xyz-FragPos;\
+vec3 lightDir=normalize(lightDiff);\
+float lightDist=length(lightDiff);\
+float attenuation=CalculateAttentuation(lightDist,pLight.linear,pLight.quadratic);\
+return PhongShading(pLight.colour,lightDir,1)*attenuation;}\
+vec3 CalculateSpotLight(LightSpot pLight){\
+if (length(pLight.linear)==0)return vec3(0);\
+vec3 lightDiff=pLight.position.xyz-FragPos;\
+vec3 lightDir=normalize(lightDiff);\
+float lightDist=length(lightDiff);\
+float attenuation=CalculateAttentuation(lightDist, pLight.linear, pLight.quadratic);\
+float intensity=1;\
+float theta=dot(lightDir,normalize(pLight.direction.xyz));\
+float epsilon=(pLight.blur*(1-pLight.cutoff)+pLight.cutoff)-pLight.cutoff;\
+intensity=clamp((theta-pLight.cutoff)/epsilon,0.0,1.0);\
+return PhongShading(pLight.colour,lightDir,intensity)*attenuation;}\
+void main(){\
+m_normal=normalize(Normal);\
+m_viewDir=normalize(u_viewPos-FragPos);\
+vec3 result=CalculateDirectionalLighting(u_directional);\
+for(int i=0;i<NR_POINT_LIGHTS;++i)result+=CalculatePointLight(u_pointLights[i]);\
+for(int i=0;i<NR_SPOT_LIGHTS;++i)result+=CalculateSpotLight(u_spotLights[i]);\
+FragCol=vec4(result,1);return;}";
 		#pragma endregion
 
 		// Must be defined out here
@@ -130,7 +182,7 @@ namespace Engine
 			* Convert stream into string
 			*/
 			stringstream codeStream;
-			inStream.open((pType == ShaderType::VERTEX ? m_vertexPath : m_fragmentPath));
+			inStream.open((pType == ShaderType::VERTEX ? m_shaderPath + string(".vert") : m_shaderPath + string(".frag")));
 			codeStream << inStream.rdbuf();
 			inStream.close();
 			codeString = codeStream.str();
