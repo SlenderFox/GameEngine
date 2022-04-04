@@ -1,6 +1,5 @@
 #pragma region
 #pragma once
-#include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include "Camera.hpp"
 #include "Mesh.hpp"
 #include "Light.hpp"
@@ -29,8 +28,8 @@ namespace Engine
 		 * @param pIndices Reference to the array of indices to be used
 		 * @param pIndexSize The size of the array of indices
 		 */
-		void CreateVAO(unsigned int* pidVAO, unsigned int* pidVBO, unsigned int* pidEBO,
-		 float* pVertices[], const size_t pVertexSize, unsigned int* pIndices[], const size_t pIndexSize);
+		// void CreateVAO(unsigned int* pidVAO, unsigned int* pidVBO, unsigned int* pidEBO,
+		//  float* pVertices[], const size_t pVertexSize, unsigned int* pIndices[], const size_t pIndexSize);
 		/**
 		 * @brief Create a Vertex Array Object on the GPU using opengl.
 		 * This overload works as a wrapper for the other overload and it is
@@ -42,12 +41,12 @@ namespace Engine
 		 * @param pVertices Reference to a vector of vertices to be used
 		 * @param pIndices Reference to a vector of indices to be used
 		 */
-		void CreateVAO(unsigned int* pidVAO, unsigned int* pidVBO, unsigned int* pidEBO,
-		 vector<float>* pVertices, vector<unsigned int>* pIndices);
+		// void CreateVAO(unsigned int* pidVAO, unsigned int* pidVBO, unsigned int* pidEBO,
+		//  vector<float>* pVertices, vector<unsigned int>* pIndices);
 
 		// Temporary
-		void CreateLightVAO(unsigned int* pidVAO, unsigned int* pidVBO, float* pVertices[], const size_t pVertexSize);
-		void CreateLightVAO(unsigned int* pidVAO, unsigned int* pidVBO, vector<float>* pVertices);
+		//void CreateLightVAO(unsigned int* pidVAO, unsigned int* pidVBO, float* pVertices[], const size_t pVertexSize);
+		//void CreateLightVAO(unsigned int* pidVAO, unsigned int* pidVBO, vector<float>* pVertices);
 
 	private:
 		#pragma region Constructors
@@ -96,19 +95,11 @@ namespace Engine
 		 * @return Shader* The pointer to the shader object
 		 */
 		Shader* GetShaderAt(unsigned int pPos);
-		/**
-		 * @brief Get a pointer to the texture object at a given position
-		 * 
-		 * @param pPos The position in the array of the texture
-		 * @return Texture* The pointer to the texture object
-		 */
-		Texture* GetTextureAt(unsigned int pPos);
 		#pragma endregion
 
-		Camera* m_cameraRef = nullptr;      // A reference to a camera
+		Camera* m_cameraRef = nullptr;	// A reference to a camera
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
-		unique_ptr<vector<unique_ptr<Texture>>> m_textures;
 
 		Light* m_lightDirectional = nullptr;
 		Light* m_lightPoint = nullptr;

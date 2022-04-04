@@ -26,7 +26,7 @@ namespace Engine
 		 * @param pVertexPath The file path to the vertex shader
 		 * @param pFragmentPath The file path to the fragment shader
 		 */
-		Shader(string pVertexPath, string pFragmentPath);
+		Shader(string pShaderPath);
 
 		#pragma region Copy constructors
 		Shader(const Shader& pOther);
@@ -47,7 +47,7 @@ namespace Engine
 		 * @brief Use/activate the shader
 		 */
 		void Use();
-		void LoadPaths(string pVertexPath, string pFragmentPath);
+		void LoadPaths(string pShaderPath);
 
 		bool GetLoaded() const { return m_shaderLoaded; }
 
@@ -83,7 +83,7 @@ namespace Engine
 
 		bool m_shaderLoaded = false;
 		unsigned int m_idProgram, m_idVertex, m_idFragment;
-		string m_vertexPath, m_fragmentPath;	// The file path of the shaders
+		string m_shaderPath;	// The file path of the shaders
 
 		#pragma region Setters
 	public:

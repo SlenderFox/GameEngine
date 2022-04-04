@@ -1,8 +1,7 @@
 #pragma region
-#include "Texture.hpp"
-#include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
+#include "Texture.hpp"
 #ifdef _DEBUG
  #include <iostream>
  using std::cout;
@@ -12,70 +11,61 @@
 
 namespace Engine
 {
-	Texture::Texture()
+	unsigned int Texture::s_idTex[32];
+	unsigned int Texture::s_numTex;
+
+	Texture::Texture(const char* pPath, TexType pType) : m_type(pType)
 	{
-		// Makes sure the images are oriented correctly when loaded
-		stbi_set_flip_vertically_on_load(true);
+		m_id = LoadTexture(pPath);
 	}
 
-	Texture::Texture(string pLocation)
+	void Texture::Destroy()
 	{
-		// Makes sure the images are oriented correctly when loaded
-		stbi_set_flip_vertically_on_load(true);
 
-		//glGenTextures(1, &m_idTex);
 	}
 
-	void Texture::Destroy(bool pValidate)
+	// Static
+	void Texture::UnloadAll(bool pValidate)
 	{
 		if (pValidate)
 		{
-			glDeleteTextures(1, &m_idTEX0);
-			glDeleteTextures(1, &m_idTEX1);
-			//glDeleteTextures(1, &m_idTEX2);
-			
-			//glDeleteTextures(1, &m_idTex);
+			for (unsigned int i = 0; i < s_numTex; ++i)
+			{
+				glDeleteTextures(1, &s_idTex[i]);
+			}
 		}
-	}
-	
-	void Texture::LoadImages()
-	{
-		glActiveTexture(GL_TEXTURE0);
-		m_idTEX0 = LoadTexture("../Assets/textures/container2.png");
-		glActiveTexture(GL_TEXTURE1);
-		m_idTEX1 = LoadTexture("../Assets/textures/container2_specular.png");
-		//glActiveTexture(GL_TEXTURE2);
-		//LoadTexture(&m_idTEX2, "../Assets/textures/awesomeface.png", true);
-
-		//m_textureLoaded = true;
 	}
 
 	uint8_t Texture::LoadTexture(const char* pPath)
 	{
-		float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		unsigned int texID;
-		// Generates a texture object in vram
-		glGenTextures(1, &texID);
 		#ifdef _DEBUG
-		 if (texID > UINT8_MAX)
+		 if (s_numTex > 31)
 		 {
-			cout << "Texture ID has exceeded UINT8_MAX: " << texID << " for file path: " << pPath << endl;
+			cout << "Texture ID has exceeded max possible (32): " << s_numTex << "\nfor file path: " << pPath << endl;
 		 	return UINT8_MAX;
 		 }
 		#endif
-		// Remember this works like a pointer to the object using the ID
-		glBindTexture(GL_TEXTURE_2D, texID);
-		// Sets some parameters to the currently bound texture object
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColour);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		// Makes sure the images are oriented correctly when loaded
+		stbi_set_flip_vertically_on_load(true);
 
 		int texWidth = 0, texHeight = 0, numComponents = 0;
 		unsigned char* imageData = stbi_load(pPath, &texWidth, &texHeight, &numComponents, 0);
 		if (imageData)
 		{
+			float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+			// Generates a texture object in vram
+			glActiveTexture(GL_TEXTURE0 + s_numTex);
+			glGenTextures(1, &s_idTex[s_numTex]);
+			// Remember this works like a pointer to the object using the ID
+			glBindTexture(GL_TEXTURE_2D, s_idTex[s_numTex]);
+			// Sets some parameters to the currently bound texture object
+			glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColour);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
 			GLenum format;
 			switch (numComponents)
 			{
@@ -100,7 +90,9 @@ namespace Engine
 
 			// Frees the image memory
 			stbi_image_free(imageData);
-			return (uint8_t)texID;
+
+			// Assigns the id then increments the total number of textures loaded
+			return s_idTex[s_numTex++];
 		}
 		#ifdef _DEBUG
 		 else
@@ -109,5 +101,26 @@ namespace Engine
 			return UINT8_MAX;
 		 }
 		#endif
+	}
+
+	// Static
+	unsigned int Texture::GetNumTex()
+	{
+		return s_numTex;
+	}
+
+	unsigned int Texture::GetId() const
+	{
+		return m_id;
+	}
+
+	string Texture::GetType() const
+	{
+		switch (m_type)
+		{
+			case TexType::diffuse: return string("texture_diffuse");
+			case TexType::specular: return string("texture_specular");
+			default: return string("ERROR");
+		}
 	}
 }

@@ -57,7 +57,8 @@
         "xlocmon": "cpp",
         "xloctime": "cpp",
         "xstddef": "cpp",
-        "xtr1common": "cpp"
+        "xtr1common": "cpp",
+        "format": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }
