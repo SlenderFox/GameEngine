@@ -17,12 +17,12 @@ namespace Engine
 	class Texture
 	{
 	public:
-		static void UnloadAll(bool pValidate);
-		static unsigned int GetNumTex();
-
 		Texture(const char* pPath, TexType pType);
 		void Destroy();
 
+		static void UnloadAll(bool pValidate);
+
+		static unsigned int GetNumTex();
 		unsigned int GetId() const;
 		string GetType() const;
 		

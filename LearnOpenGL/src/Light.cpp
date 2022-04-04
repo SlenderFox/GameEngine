@@ -6,7 +6,7 @@ namespace Engine
 	#pragma region Constructors
 	// Generic
 	Light::Light(LightType pType)
-	 : m_type(pType)
+	 : m_type(pType), m_angle(17.0f), m_blur(0.2f)
 	{
 		//m_transform = mat4(1);
 		m_lightColour = vec3(1);
@@ -14,7 +14,7 @@ namespace Engine
 	}
 	// Generic
 	Light::Light(LightType pType, mat4 pTransform)
-	 : m_type(pType)
+	 : m_type(pType), m_angle(17.0f), m_blur(0.2f)
 	{
 		SetTransform(pTransform);
 		m_lightColour = vec3(1);
@@ -22,14 +22,14 @@ namespace Engine
 	}
 	// Generic
 	Light::Light(LightType pType, mat4 pTransform, vec3 pColour)
-	 : m_type(pType), m_lightColour(pColour)
+	 : m_type(pType), m_lightColour(pColour), m_angle(17.0f), m_blur(0.2f)
 	{
 		SetTransform(pTransform);
 		m_angle = glm::cos(glm::radians(20.0f));
 	}
 	// Directional
 	Light::Light(LightType pType, vec3 pDirection)
-	 : m_type(pType)
+	 : m_type(pType), m_angle(17.0f), m_blur(0.2f)
 	{
 		//m_transform = mat4(1);
 		SetForward(pDirection);
@@ -38,7 +38,7 @@ namespace Engine
 	}
 	// Directional
 	Light::Light(LightType pType, vec3 pDirection, vec3 pColour)
-	 : m_type(pType), m_lightColour(pColour)
+	 : m_type(pType), m_lightColour(pColour), m_angle(17.0f), m_blur(0.2f)
 	{
 		//m_transform = mat4(1);
 		SetForward(pDirection);
@@ -46,7 +46,7 @@ namespace Engine
 	}
 	// Point
 	Light::Light(LightType pType, vec4 pPosition)
-	 : m_type(pType)
+	 : m_type(pType), m_angle(17.0f), m_blur(0.2f)
 	{
 		//m_transform = mat4(1);
 		SetPosition(pPosition);
@@ -55,28 +55,28 @@ namespace Engine
 	}
 	// Point
 	Light::Light(LightType pType, vec4 pPosition, vec3 pColour)
-	 : m_type(pType), m_lightColour(pColour)
+	 : m_type(pType), m_lightColour(pColour), m_angle(17.0f), m_blur(0.2f)
 	{
 		//m_transform = mat4(1);
 		SetPosition(pPosition);
 		m_angle = glm::cos(glm::radians(20.0f));
 	}
 	// Spot
-	Light::Light(LightType pType, mat4 pTransform, float pAngle, float pSharpness)
-	 : m_type(pType), m_angle(pAngle), m_blur(pSharpness)
+	Light::Light(LightType pType, mat4 pTransform, float pAngle, float pBlur)
+	 : m_type(pType), m_angle(pAngle), m_blur(pBlur)
 	{
 		SetTransform(pTransform);
 		m_lightColour = vec3(1);
 	}
 	// Spot
-	Light::Light(LightType pType, mat4 pTransform, vec3 pColour, float pAngle, float pSharpness)
-	 : m_type(pType), m_lightColour(pColour), m_angle(pAngle), m_blur(pSharpness)
+	Light::Light(LightType pType, mat4 pTransform, vec3 pColour, float pAngle, float pBlur)
+	 : m_type(pType), m_lightColour(pColour), m_angle(pAngle), m_blur(pBlur)
 	{
 		SetTransform(pTransform);
 	}
 	// Spot
-	Light::Light(LightType pType, vec4 pPosition, vec3 pDirection, vec3 pColour, float pAngle, float pSharpness)
-	 : m_type(pType), m_lightColour(pColour), m_angle(pAngle), m_blur(pSharpness)
+	Light::Light(LightType pType, vec4 pPosition, vec3 pDirection, vec3 pColour, float pAngle, float pBlur)
+	 : m_type(pType), m_lightColour(pColour), m_angle(pAngle), m_blur(pBlur)
 	{
 		//m_transform = mat4(1);
 		SetPosition(pPosition);

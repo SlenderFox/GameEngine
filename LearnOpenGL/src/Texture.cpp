@@ -21,7 +21,7 @@ namespace Engine
 
 	void Texture::Destroy()
 	{
-
+		glDeleteTextures(1, &s_idTex[m_id]);
 	}
 
 	// Static
@@ -29,10 +29,7 @@ namespace Engine
 	{
 		if (pValidate)
 		{
-			for (unsigned int i = 0; i < s_numTex; ++i)
-			{
-				glDeleteTextures(1, &s_idTex[i]);
-			}
+			glDeleteTextures(s_numTex, s_idTex);
 		}
 	}
 
@@ -103,6 +100,7 @@ namespace Engine
 		#endif
 	}
 
+	#pragma region Getters
 	// Static
 	unsigned int Texture::GetNumTex()
 	{
@@ -123,4 +121,5 @@ namespace Engine
 			default: return string("ERROR");
 		}
 	}
+	#pragma endregion
 }

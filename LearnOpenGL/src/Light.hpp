@@ -21,9 +21,9 @@ namespace Engine
 		Light(LightType pType, vec3 pDirection, vec3 pColour);		// Directional
 		Light(LightType pType, vec4 pPosition);						// Point
 		Light(LightType pType, vec4 pPosition, vec3 pColour);		// Point
-		Light(LightType pType, mat4 pTransform, float pAngle, float pSharpness);								// Spot
-		Light(LightType pType, mat4 pTransform, vec3 pColour, float pAngle, float pSharpness);					// Spot
-		Light(LightType pType, vec4 pPosition, vec3 pDirection, vec3 pColour, float pAngle, float pSharpness);	// Spot
+		Light(LightType pType, mat4 pTransform, float pAngle, float pBlur);									// Spot
+		Light(LightType pType, mat4 pTransform, vec3 pColour, float pAngle, float pBlur);					// Spot
+		Light(LightType pType, vec4 pPosition, vec3 pDirection, vec3 pColour, float pAngle, float pBlur);	// Spot
 		~Light() {}
 		#pragma endregion
 		#pragma region Setters
@@ -45,6 +45,6 @@ namespace Engine
 		LightType m_type;
 		vec3 m_lightColour;
 		float m_angle;		// Only for spotlights
-		float m_blur;	// Only for spotlights
+		float m_blur;		// Only for spotlights
 	};
 }

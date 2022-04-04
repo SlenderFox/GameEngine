@@ -1,17 +1,15 @@
 /*Following: https://learnopengl.com/
 * Enable/disable console through
 * [Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)]
-* At: https://learnopengl.com/Model-Loading/Mesh
+* At: https://learnopengl.com/Model-Loading/Model
 * Resolutions:
 * 800, 600
 * 1280, 720
 * 1600, 900
 * 1920, 1080
 * TODO:
-* Add borderless fullscreen option, use enum for selection
-* App opens to main menu to allow setting changes
-* Texture overhaul
-* Maybe make it one instance of the class supplying requested textures when needed
+* Fix spotlight not adjusting in real time
+* Maybe add static SetVariable functions in shaderr
 */
 
 #include "Project.hpp"

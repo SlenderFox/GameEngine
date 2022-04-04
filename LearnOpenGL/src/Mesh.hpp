@@ -19,10 +19,8 @@ namespace Engine
 	class Mesh
 	{
 	public:
-		Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices, vector<Texture> pTextures);
-		Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices);
-		Mesh(unique_ptr<vector<Vertex>> pVertices, unique_ptr<vector<unsigned int>> pIndices, unique_ptr<vector<Texture>> pTextures);
-		Mesh(unique_ptr<vector<Vertex>> pVertices, unique_ptr<vector<unsigned int>> pIndices);
+		Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices, vector<Texture> pTextures = vector<Texture>());
+		Mesh(unique_ptr<vector<Vertex>> pVertices, unique_ptr<vector<unsigned int>> pIndices, unique_ptr<vector<Texture>> pTextures = make_unique<vector<Texture>>());
 		Mesh();
 
 		#pragma region Copy constructors
@@ -47,7 +45,6 @@ namespace Engine
 		#pragma endregion
 		#pragma region Getters
 		vector<Vertex>* GetVertices() const;
-		vector<float>* GetVerticesOld() const;
 		vector<unsigned int>* GetIndices() const;
 		vector<Texture>* GetTextures() const;
 		unsigned int* GetVAO() const;
@@ -60,10 +57,8 @@ namespace Engine
 		static unsigned int* s_indicesArr;
 
 		void SetupMesh();
-		void SetupMeshOld();
 
 		unique_ptr<vector<Vertex>> m_vertices = nullptr;
-		unique_ptr<vector<float>> m_verticesOld = nullptr;
 		unique_ptr<vector<unsigned int>> m_indices = nullptr;
         unique_ptr<vector<Texture>> m_textures = nullptr;
 

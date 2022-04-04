@@ -56,21 +56,21 @@ namespace Engine
 		24U, 25U, 26U, 27U, 28U, 29U,	// Face 5
 		30U, 31U, 32U, 33U, 34U, 35U	// Face 6
 	};
+	
+	Mesh::Mesh()
+	{
+		m_vertices = make_unique<vector<Vertex>>(GenerateVertices());
+		m_indices = make_unique<vector<unsigned int>>(GenerateIndices());
+		m_textures = make_unique<vector<Texture>>();
+		
+		SetupMesh();
+	}
 
 	Mesh::Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices, vector<Texture> pTextures)
 	{
 		m_vertices = make_unique<vector<Vertex>>(pVertices);
 		m_indices = make_unique<vector<unsigned int>>(pIndices);
 		m_textures = make_unique<vector<Texture>>(pTextures);
-
-		SetupMesh();
-	}
-	
-	Mesh::Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices)
-	{
-		m_vertices = make_unique<vector<Vertex>>(pVertices);
-		m_indices = make_unique<vector<unsigned int>>(pIndices);
-		m_textures = make_unique<vector<Texture>>();
 
 		SetupMesh();
 	}
@@ -82,31 +82,6 @@ namespace Engine
 		m_textures = make_unique<vector<Texture>>(*pTextures);
 		
 		SetupMesh();
-	}
-	
-	Mesh::Mesh(unique_ptr<vector<Vertex>> pVertices, unique_ptr<vector<unsigned int>> pIndices)
-	{
-		m_vertices = make_unique<vector<Vertex>>(*pVertices);
-		m_indices = make_unique<vector<unsigned int>>(*pIndices);
-		m_textures = make_unique<vector<Texture>>();
-		
-		SetupMesh();
-	}
-
-	// TEMP
-	Mesh::Mesh()
-	{
-		m_vertices = make_unique<vector<Vertex>>(GenerateVertices());
-		m_indices = make_unique<vector<unsigned int>>(GenerateIndices());
-		m_textures = make_unique<vector<Texture>>();
-
-		m_verticesOld = make_unique<vector<float>>();
-		// Makes cube with pos, normal, and texcoord
-		for (int i = 0; i < 288; ++i)
-			m_verticesOld->push_back(s_cubeVerticesArr[i]);
-		m_verticesOld->shrink_to_fit();
-		
-		SetupMeshOld();
 	}
 	
 	#pragma region Copy constructors
@@ -149,8 +124,8 @@ namespace Engine
 		GetVertices()->clear();
 		m_vertices.release();
 		// TEMP
-		GetVerticesOld()->clear();
-		m_verticesOld.release();
+		//GetVerticesOld()->clear();
+		//m_verticesOld.release();
 		GetIndices()->clear();
 		m_indices.release();
 		GetTextures()->clear();
@@ -280,57 +255,6 @@ namespace Engine
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
-	void Mesh::SetupMeshOld()
-	{
-		// Creates and assigns to an id the Vertex Array Object, Vertex Buffer Object, and Element Buffer Object
-		// Arguments are number of objects to generate, and an array of uints to have the ids stored in
-		glGenVertexArrays(1, m_idVAO);
-		glGenBuffers(1, m_idVBO);
-		glGenBuffers(1, m_idEBO);
-
-		// Binds the vertex array so that the VBO and EBO are neatly stored within
-		glBindVertexArray(*m_idVAO);
-
-		// GL_ARRAY_BUFFER effectively works like a pointer, using the id provided to point to the buffer
-		glBindBuffer(GL_ARRAY_BUFFER, *m_idVBO);
-		// Loads the vertices to the VBO
-		glBufferData(GL_ARRAY_BUFFER, GetVerticesOld()->size() * sizeof(float), &(*GetVerticesOld())[0], GL_STATIC_DRAW);
-
-		/*GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
-		* GL_STATIC_DRAW: the data is set only once and used many times.
-		*GL_DYNAMIC_DRAW: the data is changed a lot and used many times.
-		*/
-
-		// This buffer stores the indices that reference the elements of the VBO
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *m_idEBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, GetIndices()->size() * sizeof(unsigned int), &(*GetIndices())[0], GL_STATIC_DRAW);
-
-		/*Tells the shader how to use the vertex data provided
-		* p1: Which vertex attribute we want to configure in the vertex shader (location = 0)
-		* p2: Vertex size (vec3)
-		* p3: The type of data (vec is using floats)
-		* p4: Whether we want to normalise the data
-		* p5: Stride, how big each chunk of data is
-		* p6: Offset, for some reason a void*
-		*/
-		// Position attribute
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-		// Normal attribute
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-		// Texcoord attribute
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-
-		// Unbinds the vertex array
-		glBindVertexArray(0);
-		// Unbinds the GL_ARRAY_BUFFER
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		// Unbinds the GL_ELEMENT_ARRAY_BUFFER
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
-
 	#pragma region Setters
 	void Mesh::SetVertices(vector<Vertex>* pVertices)
 	{
@@ -353,11 +277,6 @@ namespace Engine
 		return m_vertices.get();
 	}
 	
-	vector<float>* Mesh::GetVerticesOld() const
-	{
-		return m_verticesOld.get();
-	}
-
 	vector<unsigned int>* Mesh::GetIndices() const
 	{
 		return m_indices.get();
