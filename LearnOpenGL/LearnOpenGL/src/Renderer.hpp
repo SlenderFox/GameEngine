@@ -50,6 +50,7 @@ namespace Engine
 		void Draw(double pTime);
 
 		void CreateBoxScene();
+		void RenderBoxScene(double pTime);
 
 		#pragma region Getters
 		/**
