@@ -49,14 +49,9 @@ namespace Engine
 		 */
 		void Draw(double pTime);
 
+		void CreateBoxScene();
+
 		#pragma region Getters
-		/**
-		 * @brief Get a pointer to the model object at a given position
-		 * 
-		 * @param pPos The position in the array of models
-		 * @return Model* The pointer to the model object
-		 */
-		//Model* GetModelAt(unsigned int pPos);
 		/**
 		 * @brief Get a pointer to the mesh object at a given position
 		 * 
@@ -74,9 +69,9 @@ namespace Engine
 		#pragma endregion
 
 		Camera* m_cameraRef = nullptr;	// A reference to a camera
-		//unique_ptr<vector<unique_ptr<Model>>> m_models;
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
+		//Model* m_model;
 
 		Light* m_lightDirectional = nullptr;
 		Light* m_lightPoint = nullptr;

@@ -23,12 +23,10 @@ namespace Engine
 	void Model::Destroy(bool pValidate)
 	{
 		// Destroy all meshes
-		for (unsigned int i = 0; i <(*m_meshes.get()).size(); ++i)
+		for (unsigned int i = 0; i < (*m_meshes.get()).size(); ++i)
 		{
 			if (GetMeshAt(i) != nullptr)
-			{
 				GetMeshAt(i)->Destroy(pValidate);
-			}
 		}
 
 		// Tell the unique pointers they are no longer needed
@@ -39,7 +37,7 @@ namespace Engine
 	void Model::Draw(Shader& pShader)
 	{
 		pShader.Use();
-		for (unsigned int i = 0; i <(*m_meshes.get()).size(); ++i)
+		for (unsigned int i = 0; i < (*m_meshes.get()).size(); ++i)
 			GetMeshAt(i)->Draw(pShader);
 	}
 
@@ -62,13 +60,13 @@ namespace Engine
 	void Model::ProcessNode(aiNode* pNode, const aiScene* pScene)
 	{
 		// Process all the node's meshes (if any)
-		for (unsigned int i = 0; i <pNode->mNumMeshes; ++i)
+		for (unsigned int i = 0; i < pNode->mNumMeshes; ++i)
 		{
 			aiMesh* mesh = pScene->mMeshes[pNode->mMeshes[i]];
 			m_meshes.get()->push_back(make_unique<Mesh>(ProcessMesh(mesh, pScene)));
 		}
 		// Then do the same for each of it's children
-		for (unsigned int i = 0; i <pNode->mNumChildren; ++i)
+		for (unsigned int i = 0; i < pNode->mNumChildren; ++i)
 		{
 			ProcessNode(pNode->mChildren[i], pScene);
 		}
@@ -80,7 +78,7 @@ namespace Engine
 		vector<unsigned int> indices;
 		vector<Texture> textures;
 		// Process vertex positions, normals, and texture coordinates
-		for (unsigned int i = 0; i <pMesh->mNumVertices; ++i)
+		for (unsigned int i = 0; i < pMesh->mNumVertices; ++i)
 		{
 			Vertex vertex;
 			vertex.position = vec3(pMesh->mVertices[i].x, pMesh->mVertices[i].y, pMesh->mVertices[i].z);
@@ -92,10 +90,10 @@ namespace Engine
 			vertices.push_back(vertex);
 		}
 		// Process indices
-		for (unsigned int i = 0; i <pMesh->mNumFaces; ++i)
+		for (unsigned int i = 0; i < pMesh->mNumFaces; ++i)
 		{
 			aiFace face = pMesh->mFaces[i];
-			for (unsigned int j = 0; j <face.mNumIndices; ++j)
+			for (unsigned int j = 0; j < face.mNumIndices; ++j)
 				indices.push_back(face.mIndices[j]);
 		}
 
@@ -115,12 +113,12 @@ namespace Engine
 	vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType)
 	{
 		vector<Texture> textures;
-		for (unsigned int i = 0; i <pMat->GetTextureCount(pType); ++i)
+		for (unsigned int i = 0; i < pMat->GetTextureCount(pType); ++i)
 		{
 			aiString str;
 			pMat->GetTexture(pType, i, &str);
 			bool skip = false;
-			for (unsigned int j = 0; j <m_loadedTextures.get()->size(); ++j)
+			for (unsigned int j = 0; j < m_loadedTextures.get()->size(); ++j)
 			{
 				if (std::strcmp(GetTextureAt(j)->m_path.data(), str.C_Str()) == 0)
 				{

@@ -9,7 +9,7 @@ using std::string;
 
 namespace Engine
 {
-	enum class ShaderType : unsigned short
+	enum class ShaderType : uint8_t
 	{
 		PROGRAM,
 		VERTEX,

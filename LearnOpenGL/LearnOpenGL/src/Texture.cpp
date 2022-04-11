@@ -17,6 +17,7 @@ namespace Engine
 
 	Texture::Texture(const char* pPath, TexType pType) : m_type(pType)
 	{
+		m_path = pPath;
 		m_id = LoadTexture(pPath);
 	}
 
