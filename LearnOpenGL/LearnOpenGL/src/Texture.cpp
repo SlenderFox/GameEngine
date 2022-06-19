@@ -38,7 +38,7 @@ namespace Engine
 	uint8_t Texture::LoadTexture(const char* pPath)
 	{
 		#ifdef _DEBUG
-		 cout << "\xC0Loading texture \"" << pPath << "\"(" << s_numTex << ")";
+		 cout << "Loading texture \"" << pPath << "\"(" << s_numTex << ")";
 		#endif
 
 		if (s_numTex > 31)

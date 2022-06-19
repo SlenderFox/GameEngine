@@ -288,7 +288,8 @@ namespace Engine
 			if (current + spotlightSpeed * 10 <= 90.0f)
 			{
 				spotLight->SetAngle(current + spotlightSpeed * 10);
-				m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", spotLight->GetAngle());
+				// Dunno why but calling this through m_renderInst doesn't work
+				//m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", spotLight->GetAngle());
 			}
 		}
 		if (glfwGetKey(m_window, GLFW_KEY_G) == GLFW_PRESS)
@@ -298,7 +299,7 @@ namespace Engine
 			if (current - spotlightSpeed * 10 >= 0.0f)
 			{
 				spotLight->SetAngle(current - spotlightSpeed * 10);
-				m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", spotLight->GetAngle());
+				//m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", spotLight->GetAngle());
 			}
 		}
 		// Blur
@@ -309,17 +310,17 @@ namespace Engine
 			if (current + spotlightSpeed <= 1.0f)
 			{
 				spotLight->SetBlur(current + spotlightSpeed);
-				m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", spotLight->GetBlur());
+				//m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", spotLight->GetBlur());
 			}
 		}
 		if (glfwGetKey(m_window, GLFW_KEY_H) == GLFW_PRESS)
 		{
 			Light* spotLight = m_rendererInst->m_lightSpot;
 			float current = spotLight->GetBlurRaw();
-			if (current - spotlightSpeed >= 0.0f)
+			if (current - spotlightSpeed > 0.0f)
 			{
 				spotLight->SetBlur(current - spotlightSpeed);
-				m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", spotLight->GetBlur());
+				//m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", spotLight->GetBlur());
 			}
 		}
 

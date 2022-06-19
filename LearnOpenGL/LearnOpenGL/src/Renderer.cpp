@@ -25,7 +25,7 @@ namespace Engine
 		// Initialise lights
 		m_lightDirectional = new Light(LightType::Directional, vec3(0, -1, 0), vec3(0.8f));
 		m_lightPoint = new Light(LightType::Point, vec4(-4, 2, -2, 1), vec3(1.0f));
-		m_lightSpot = new Light(LightType::Spot, vec4(4.5f, 3, 3.5f, 1), vec3(-0.7f, -0.6f, -1), vec3(1.0f), 17.0f, 0.2f);
+		m_lightSpot = new Light(LightType::Spot, vec4(4.5f, 3, 3.5f, 1), vec3(-0.7f, -0.6f, -1), vec3(1.0f), 17.0f, 0.1f);
 
 		// Initialise shader array
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
@@ -87,10 +87,6 @@ namespace Engine
 
 	void Renderer::CreateModelScene()
 	{
-		#ifdef _DEBUG
-		 cout << "Loading Model" << endl;
-		#endif
-
 		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));
 		m_model = new Model((char*)"assets/models/backpack/backpack.obj");
 	}
@@ -121,7 +117,13 @@ namespace Engine
 	 	m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/cube"));
 
 	 	vector<Texture> textures = vector<Texture>();
+		#ifdef _DEBUG
+		 cout << "\xC0";
+		#endif
 	 	textures.push_back(Texture("assets/textures/container2.png", TexType::diffuse));
+		#ifdef _DEBUG
+		 cout << "\xC0";
+		#endif
 	 	textures.push_back(Texture("assets/textures/container2_specular.png", TexType::specular));
  
 	 	m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices(), textures));
@@ -183,6 +185,9 @@ namespace Engine
 	 		GetShaderAt(i)->Use();
 	 		GetShaderAt(i)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
 	 		GetShaderAt(i)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
+			// I don't like updating this every frame but I don't really have a choice
+			GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
+			GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
 	 		if (i > 0)
 	 			GetMeshAt(i)->Draw(GetShaderAt(i));
 	 		else
