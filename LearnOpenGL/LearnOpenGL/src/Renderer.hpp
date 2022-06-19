@@ -3,6 +3,7 @@
 #include "Model.hpp"
 #include "Camera.hpp"
 #include "Light.hpp"
+#define LEGACY
 #pragma endregion
 
 namespace Engine
@@ -50,17 +51,7 @@ namespace Engine
 		void Draw(double pTime);
 
 		void CreateModelScene();
-		void CreateBoxScene();
-		void RenderBoxScene(double pTime);
 
-		#pragma region Getters
-		/**
-		 * @brief Get a pointer to the mesh object at a given position
-		 * 
-		 * @param pPos The position in the array of meshes
-		 * @return Mesh* The pointer to the mesh object
-		 */
-		Mesh* GetMeshAt(unsigned int pPos);
 		/**
 		 * @brief Get a pointer to the shader object at a given position
 		 * 
@@ -68,18 +59,14 @@ namespace Engine
 		 * @return Shader* The pointer to the shader object
 		 */
 		Shader* GetShaderAt(unsigned int pPos);
-		#pragma endregion
 
 		Camera* m_cameraRef = nullptr;	// A reference to a camera
 		Model* m_model = nullptr;
-		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
 
 		Light* m_lightDirectional = nullptr;
 		Light* m_lightPoint = nullptr;
 		Light* m_lightSpot = nullptr;
-
-		const bool m_bModel = false;
 
 		const vec3 m_cubePositions[10] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
@@ -93,5 +80,12 @@ namespace Engine
 			glm::vec3(1.5f,  0.2f, -1.5f),
 			glm::vec3(-1.3f,  1.0f, -1.5f)
 		};
+
+		#ifdef LEGACY
+		 void CreateBoxScene();
+		 void RenderBoxScene(double pTime);
+		 Mesh* GetMeshAt(unsigned int pPos);
+		 unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
+		#endif
 	};
 }
