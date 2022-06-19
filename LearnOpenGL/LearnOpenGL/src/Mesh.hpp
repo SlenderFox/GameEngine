@@ -33,7 +33,7 @@ namespace Engine
 		void Destroy(bool pValidate);
 
 		void LoadTextures(Shader& pShader);
-		void Draw(Shader& pShader);
+		void Draw(Shader* pShader);
 
 		static vector<Vertex> GenerateVertices();
 		static vector<unsigned int> GenerateIndices();

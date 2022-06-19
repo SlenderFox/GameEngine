@@ -44,6 +44,6 @@ namespace Engine
 
 		unsigned int m_id = 0;
 		TexType m_type = TexType::diffuse;
-		string m_path;
+		string m_file;
 	};
 }

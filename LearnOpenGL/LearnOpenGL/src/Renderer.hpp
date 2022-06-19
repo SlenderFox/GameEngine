@@ -49,6 +49,7 @@ namespace Engine
 		 */
 		void Draw(double pTime);
 
+		void CreateModelScene();
 		void CreateBoxScene();
 		void RenderBoxScene(double pTime);
 
@@ -70,13 +71,15 @@ namespace Engine
 		#pragma endregion
 
 		Camera* m_cameraRef = nullptr;	// A reference to a camera
+		Model* m_model = nullptr;
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
-		//Model* m_model;
 
 		Light* m_lightDirectional = nullptr;
 		Light* m_lightPoint = nullptr;
 		Light* m_lightSpot = nullptr;
+
+		const bool m_bModel = false;
 
 		const vec3 m_cubePositions[10] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),

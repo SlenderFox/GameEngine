@@ -130,7 +130,7 @@ namespace Engine
 	{
 		#ifdef _DEBUG
 		 // Moves the console window
-		 MoveWindow(GetConsoleWindow(), 0, 0, 600, 600, TRUE);
+		 MoveWindow(GetConsoleWindow(), -7, 0, 1000, 600, TRUE);
 		#endif
 
 #pragma region glfw

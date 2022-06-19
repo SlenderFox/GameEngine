@@ -17,7 +17,7 @@ namespace Engine
 
 	Texture::Texture(const char* pPath, TexType pType) : m_type(pType)
 	{
-		m_path = pPath;
+		m_file = pPath;
 		m_id = LoadTexture(pPath);
 	}
 
@@ -38,12 +38,16 @@ namespace Engine
 	uint8_t Texture::LoadTexture(const char* pPath)
 	{
 		#ifdef _DEBUG
-		 if (s_numTex > 31)
-		 {
-			cout << "Texture ID has exceeded max possible (32): " << s_numTex << "\nfor file path: " << pPath << endl;
-		 	return UINT8_MAX;
-		 }
+		 cout << "\xC0Loading texture \"" << pPath << "\"(" << s_numTex << ")";
 		#endif
+
+		if (s_numTex > 31)
+		{
+			#ifdef _DEBUG
+			 cout << "\nFailed to load texture: Exceeded max texture id " << s_numTex << endl;
+			#endif
+			return UINT8_MAX;
+		}
 
 		// Makes sure the images are oriented correctly when loaded
 		stbi_set_flip_vertically_on_load(true);
@@ -73,7 +77,7 @@ namespace Engine
 				case 4: format = GL_RGBA; break;
 				default: 
 				#ifdef _DEBUG
-				 cout << "Failed to load texture " << pPath << endl;
+				 cout << "\nFailed to load texture: Too many components" << endl;
 				#endif
 				return UINT8_MAX;
 			}
@@ -94,29 +98,22 @@ namespace Engine
 			// Frees the image memory
 			stbi_image_free(imageData);
 
+			#ifdef _DEBUG
+			 cout << "...Success!" << endl;
+			#endif
+
 			// Assigns the id then increments the total number of textures loaded
 			return s_idTex[s_numTex++];
 		}
 		#ifdef _DEBUG
 		 else
 		 {
-		 	cout << "Failed to load texture " << pPath << endl;
+		 	cout << "\nFailed to load texture: No file found" << endl;
 			return UINT8_MAX;
 		 }
 		#endif
 	}
 
-	#pragma region Setters
-	// void Texture::SetId(unsigned int pValue)
-	// {
-	// 	m_id = pValue;
-	// }
-
-	// void Texture::SetType(TexType pValue)
-	// {
-	// 	m_type = pValue;
-	// }
-	#pragma endregion
 	#pragma region Getters
 	// Static
 	unsigned int Texture::GetNumTex()

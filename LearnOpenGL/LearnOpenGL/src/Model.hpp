@@ -17,7 +17,7 @@ namespace Engine
 		Model(char* pPath);
 		void Destroy(bool pValidate);
 
-		void Draw(Shader& pShader);
+		void Draw(Shader* pShader);
 
 		/**
 		 * @brief Get a pointer to the mesh object at a given position

@@ -140,7 +140,7 @@ namespace Engine
 	{
 		unsigned int diffuseNr = 0;
 		unsigned int specularNr = 0;
-		for (int i = 0; i < GetTextures()->size(); ++i)
+		for (unsigned int i = 0; i < GetTextures()->size(); ++i)
 		{
 			glActiveTexture(GL_TEXTURE0 + i); // Activate proper texture unit before binding
 			// Retrieve texture number (the N in diffuse_textureN)
@@ -157,10 +157,11 @@ namespace Engine
 		glActiveTexture(GL_TEXTURE0);
 	}
 
-	void Mesh::Draw(Shader& pShader)
+	void Mesh::Draw(Shader* pShader)
 	{
 		// Draw mesh
 		glBindVertexArray(*m_idVAO);
+		// This causes an error ↓
 		glDrawElements(GL_TRIANGLES, GetIndices()->size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}

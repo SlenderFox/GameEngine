@@ -34,15 +34,8 @@ namespace Engine
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 
-		CreateBoxScene();
-
-		// #ifdef _DEBUG
-		//  if (m_meshes.get() != nullptr)
-		//  	cout << "Meshes loaded: " << (GetMeshAt(0U) ? "True " : "False ");
-		//  if (m_shaders.get() != nullptr)
-		//  	cout << "Shader loaded: " << (GetShaderAt(0U)->GetLoaded() ? "True" : "False");
-		//  cout << endl;
-		// #endif
+		if (m_bModel) CreateModelScene();
+		else CreateBoxScene();
 	}
 
 	void Renderer::Destroy(bool pValidate)
@@ -53,9 +46,7 @@ namespace Engine
 			for (unsigned int i = 0; i < (*m_meshes.get()).size(); ++i)
 			{
 				if (GetMeshAt(i) != nullptr)
-				{
 					GetMeshAt(i)->Destroy(pValidate);
-				}
 			}
 
 			// Destroy all shaders
@@ -67,6 +58,9 @@ namespace Engine
 			
 			// Unload all textures from memory once finished
 			Texture::UnloadAll(pValidate);
+
+			if (m_model != nullptr)
+				m_model->Destroy(pValidate);
 		}
 
 		// Tell the unique pointers they are no longer needed
@@ -74,20 +68,34 @@ namespace Engine
 		m_shaders.release();
 
 		delete m_cameraRef;
+		delete m_model;
 	}
 
 	void Renderer::Draw(double pTime)
 	{
-		// Rendering
-
 		// Clears to background colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		RenderBoxScene(pTime);
+		if (m_bModel) m_model->Draw(GetShaderAt(0U));
+		else RenderBoxScene(pTime);
+	}
+
+	void Renderer::CreateModelScene()
+	{
+		#ifdef _DEBUG
+		 cout << "Loading Model" << endl;
+		#endif
+
+		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));
+		m_model = new Model((char*)"assets/models/backpack/backpack.obj");
 	}
 
 	void Renderer::CreateBoxScene()
 	{
+		#ifdef _DEBUG
+		 cout << "Loading Boxes" << endl;
+		#endif
+
 		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/cube"));
 
 		vector<Texture> textures = vector<Texture>();
@@ -154,7 +162,7 @@ namespace Engine
 			GetShaderAt(i)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
 			GetShaderAt(i)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
 			if (i > 0)
-				GetMeshAt(i)->Draw(*GetShaderAt(i));
+				GetMeshAt(i)->Draw(GetShaderAt(i));
 			else
 			{
 				for (unsigned int j = 0; j < 10; j++)
@@ -166,7 +174,7 @@ namespace Engine
 					GetShaderAt(0U)->SetMat4("u_model", (mat4)model);
 					mat3 transposeInverseOfModel = mat3(glm::transpose(glm::inverse(model)));
 					GetShaderAt(0U)->SetMat3("u_transposeInverseOfModel", (mat3)transposeInverseOfModel);
-					GetMeshAt(i)->Draw(*GetShaderAt(i));
+					GetMeshAt(i)->Draw(GetShaderAt(i));
 				}
 			}
 		}

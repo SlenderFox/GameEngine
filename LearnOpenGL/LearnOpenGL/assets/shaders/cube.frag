@@ -8,7 +8,7 @@ const int NR_SPOT_LIGHTS = 10;
 out vec4 FragCol;
 in vec3 FragPos;
 in vec3 Normal;
-in vec2 TexCoord;
+in vec2 TexCoords;
 
 struct Material {
 	sampler2D texture_diffuse0;
@@ -57,8 +57,8 @@ vec3 m_viewDir;
 vec3 PhongShading(Colour pColour, vec3 pLightDir, float pIntensity)
 {	
 	//Textures
-	vec3 diffuseTex = texture(u_material.texture_diffuse0, TexCoord).rgb;
-	vec3 specularTex = texture(u_material.texture_specular0, TexCoord).rgb;
+	vec3 diffuseTex = texture(u_material.texture_diffuse0, TexCoords).rgb;
+	vec3 specularTex = texture(u_material.texture_specular0, TexCoords).rgb;
 	// Diffuse shading
 	float diff = max(dot(m_normal, pLightDir), 0.0);
 	// Specular shading
