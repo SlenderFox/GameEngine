@@ -1,7 +1,6 @@
 #pragma region
 #pragma once
 #include "Model.hpp"
-#include "Camera.hpp"
 #include "Light.hpp"
 #define LEGACY
 #pragma endregion

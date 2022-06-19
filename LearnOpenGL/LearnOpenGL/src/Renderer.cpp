@@ -81,7 +81,7 @@ namespace Engine
 		#ifdef LEGACY
 		 RenderBoxScene(pTime);
 		#else
-		 m_model->Draw(GetShaderAt(0U));
+		 m_model->Draw(GetShaderAt(0U), m_cameraRef);
 		#endif
 	}
 

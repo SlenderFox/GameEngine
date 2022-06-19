@@ -3,6 +3,7 @@
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
+#include "glm/gtc/matrix_transform.hpp"
 #ifdef _DEBUG
  #include <iostream>
  using std::cout;
@@ -34,9 +35,15 @@ namespace Engine
 		m_loadedTextures.release();
 	}
 
-	void Model::Draw(Shader* pShader)
+	void Model::Draw(Shader* pShader, Camera* pCamera)
 	{
 		pShader->Use();
+		pShader->SetMat4("u_camera", pCamera->GetWorldToCameraMatrix());
+	 	pShader->SetVec3("u_viewPos", pCamera->GetPosition());
+		mat4 model = mat4(1.0f);
+		pShader->SetMat4("u_model", (mat4)model);
+	 	mat3 transposeInverseOfModel = mat3(glm::transpose(glm::inverse(model)));
+	 	pShader->SetMat3("u_transposeInverseOfModel", (mat3)transposeInverseOfModel);
 		for (unsigned int i = 0; i < m_meshes->size(); ++i)
 		{
 			GetMeshAt(i)->Draw(pShader);
