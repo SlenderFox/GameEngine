@@ -124,9 +124,6 @@ namespace Engine
 
 		GetVertices()->clear();
 		m_vertices.release();
-		// TEMP
-		//GetVerticesOld()->clear();
-		//m_verticesOld.release();
 		GetIndices()->clear();
 		m_indices.release();
 		GetTextures()->clear();
@@ -161,9 +158,8 @@ namespace Engine
 	{
 		// Draw mesh
 		glBindVertexArray(*m_idVAO);
-		// This causes an error ↓
-		GLsizei count = GetIndices()->size();
-		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
+		// Error thown here caused by model ↓
+		glDrawElements(GL_TRIANGLES, GetIndices()->size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
 
