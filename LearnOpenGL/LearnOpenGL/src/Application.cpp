@@ -85,9 +85,10 @@ namespace Engine
 						m_frameTimer -= secondsPerUpdate;
 						m_fps = (unsigned int)((float)m_framesPerSecond / secondsPerUpdate);
 						m_framesPerSecond = 0U;
-						// #ifdef _DEBUG
-                        //  printf("fps: %*u, current frame time: %3.7f \n", 2, m_fps, m_deltaTime);
-						// #endif
+						#ifdef _DEBUG
+						 //printf("fps: %*u, current frame time: %3.7f \n", 2, m_fps, m_deltaTime);
+						 glfwSetWindowTitle(m_window, (m_title + " " + std::to_string(m_fps)).c_str());
+						#endif
 					}
 				}
 
@@ -102,7 +103,7 @@ namespace Engine
 					FixedUpdate(m_fixedDeltaTime);
 				}
 
-				Update(m_deltaTime);
+				//Update(m_deltaTime);
 
 				// Skip drawing if minimised, restricts fps to 15
 				if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) == GLFW_TRUE)
@@ -155,7 +156,7 @@ namespace Engine
 		
 
 		// glfw window creation
-		m_window = glfwCreateWindow(m_winWidth, m_winHeight, pTitle.c_str(),
+		m_window = glfwCreateWindow(m_winWidth, m_winHeight, (m_title = pTitle).c_str(),
 			(pFullscreen ? glfwGetPrimaryMonitor() : nullptr), nullptr);
 		if (m_window == nullptr)
 		{

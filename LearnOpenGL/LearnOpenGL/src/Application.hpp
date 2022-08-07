@@ -106,5 +106,7 @@ namespace Engine
 
 		double m_mouseLastX = 400.0, m_mouseLastY = 300.0;  // Mouse position in the last frame
 		double m_yaw = 90.0, m_pitch = 0.0;                 // The rotation of the camera
+
+		string m_title = "Title error";				// The tile of the window
 	};
 }

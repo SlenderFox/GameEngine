@@ -17,7 +17,7 @@
 int main()
 {
 	Project* app = new Project();
-	app->Run(1600, 900, "OpenGL", false);
+	app->Run(1600, 900, "OpenGL Application", false);
 	delete app;
 	return 0;
 }
