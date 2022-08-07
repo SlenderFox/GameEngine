@@ -82,7 +82,6 @@ namespace Engine
 		 RenderBoxScene(pTime);
 		#else
 		 m_model->Draw(GetShaderAt(0U), m_cameraRef);
-		 //RenderModelScene(pTime);
 		#endif
 	}
 
@@ -90,38 +89,6 @@ namespace Engine
 	{
 		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));
 		m_model = new Model((char*)"assets/models/backpack/backpack.obj");
-	}
-
-	void Renderer::RenderModelScene(double pTime)
-	{
-		GetShaderAt(0U)->Use();
-		GetShaderAt(0U)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
-	 	GetShaderAt(0U)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
-
-		vector<Mesh*> meshes = vector<Mesh*>();
-		// Create local copy of meshes
-		if (true) {
-			for (int i = 0; i < m_model->m_meshes.get()->size(); ++i)
-			{
-				meshes.push_back(m_model->m_meshes.get()->at(i).get());
-			}
-		} else {
-			meshes.push_back(new Mesh(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		}
-
-		for (unsigned int i = 0; i < meshes.size(); ++i)
-		{
-			glBindVertexArray(*(meshes.at(i)->GetVAO()));
-			
-			mat4 model = mat4(1.0f);
-			//model = glm::translate(model, m_cubePositions[j]);
-			//float angle = (float)pTime * 5.0f * ((j + 1) / (j * 0.2f + 1));
-			// = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
-			GetShaderAt(0U)->SetMat4("u_model", (mat4)model);
-			mat3 transposeInverseOfModel = mat3(glm::transpose(glm::inverse(model)));
-			GetShaderAt(0U)->SetMat3("u_transposeInverseOfModel", (mat3)transposeInverseOfModel);
-			meshes.at(i)->Draw(GetShaderAt(0U));
-		}
 	}
 
 	Shader* Renderer::GetShaderAt(unsigned int pPos)

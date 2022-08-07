@@ -39,7 +39,7 @@ bld/
 *.slo
 *.lo
 *.o
-*.obj
+//*.obj
 *.link
 *.dll
 *.gch

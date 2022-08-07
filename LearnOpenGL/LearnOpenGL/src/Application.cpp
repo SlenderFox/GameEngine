@@ -77,19 +77,14 @@ namespace Engine
 				++m_frames;
 				++m_framesPerSecond;
 
+				// Doing this allows me to updates fps as often as I want
+				float secondsPerUpdate = 0.5f;
+				if (m_frameTimer >= secondsPerUpdate)
 				{
-					// Doing this allows me to updates fps as often as I want
-					float secondsPerUpdate = 0.5f;
-					if (m_frameTimer >= secondsPerUpdate)
-					{
-						m_frameTimer -= secondsPerUpdate;
-						m_fps = (unsigned int)((float)m_framesPerSecond / secondsPerUpdate);
-						m_framesPerSecond = 0U;
-						#ifdef _DEBUG
-						 //printf("fps: %*u, current frame time: %3.7f \n", 2, m_fps, m_deltaTime);
-						 glfwSetWindowTitle(m_window, (m_title + " " + std::to_string(m_fps)).c_str());
-						#endif
-					}
+					m_frameTimer -= secondsPerUpdate;
+					m_fps = (unsigned int)((float)m_framesPerSecond / secondsPerUpdate);
+					m_framesPerSecond = 0U;
+					glfwSetWindowTitle(m_window, (m_title + " " + std::to_string(m_fps)).c_str());
 				}
 
 				// Input

@@ -85,6 +85,7 @@ namespace Engine
 		SetupMesh();
 	}
 	
+	// These are probably bad
 	#pragma region Copy constructors
 	Mesh::Mesh(const Mesh& pOther)
 	{
@@ -158,7 +159,6 @@ namespace Engine
 	{
 		// Draw mesh
 		glBindVertexArray(*m_idVAO);
-		// Error thown here caused by model ↓
 		glDrawElements(GL_TRIANGLES, GetIndices()->size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
