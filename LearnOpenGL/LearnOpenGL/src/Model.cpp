@@ -18,6 +18,7 @@ namespace Engine
 		// Mesh creation
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 		m_loadedTextures = make_unique<vector<Texture>>();
+		// Fucked up something in this ↓
 		LoadModel(pPath);
 	}
 
@@ -78,7 +79,8 @@ namespace Engine
 		for (unsigned int i = 0; i < pNode->mNumMeshes; ++i)
 		{
 			aiMesh* mesh = pScene->mMeshes[pNode->mMeshes[i]];
-			m_meshes.get()->push_back(make_unique<Mesh>(ProcessMesh(mesh, pScene)));
+			// Likely point of failure, copy constructor
+			m_meshes.get()->push_back(ProcessMesh(mesh, pScene));
 		}
 		// Then do the same for each of it's children
 		for (unsigned int i = 0; i < pNode->mNumChildren; ++i)
@@ -87,7 +89,7 @@ namespace Engine
 		}
 	}
 
-	Mesh Model::ProcessMesh(aiMesh* pMesh, const aiScene* pScene)
+	unique_ptr<Mesh> Model::ProcessMesh(aiMesh* pMesh, const aiScene* pScene)
 	{
 		vector<Vertex> vertices;
 		vector<unsigned int> indices;
@@ -141,7 +143,7 @@ namespace Engine
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 
-		return Mesh(vertices, indices, textures);
+		return make_unique<Mesh>(vertices, indices, textures);
 	}
 
 	vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType)
