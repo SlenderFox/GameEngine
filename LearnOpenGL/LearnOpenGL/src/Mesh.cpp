@@ -158,7 +158,6 @@ namespace Engine
 	{
 		// Draw mesh
 		glBindVertexArray(*m_idVAO);
-		// Error thown here caused by model ↓
 		glDrawElements(GL_TRIANGLES, GetIndices()->size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}

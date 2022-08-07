@@ -50,7 +50,6 @@ namespace Engine
 		void Draw(double pTime);
 
 		void CreateModelScene();
-		void RenderModelScene(double pTime);
 
 		/**
 		 * @brief Get a pointer to the shader object at a given position

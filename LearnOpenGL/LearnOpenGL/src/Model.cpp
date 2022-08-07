@@ -18,7 +18,6 @@ namespace Engine
 		// Mesh creation
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 		m_loadedTextures = make_unique<vector<Texture>>();
-		// Fucked up something in this ↓
 		LoadModel(pPath);
 	}
 
@@ -79,7 +78,6 @@ namespace Engine
 		for (unsigned int i = 0; i < pNode->mNumMeshes; ++i)
 		{
 			aiMesh* mesh = pScene->mMeshes[pNode->mMeshes[i]];
-			// Likely point of failure, copy constructor
 			m_meshes.get()->push_back(ProcessMesh(mesh, pScene));
 		}
 		// Then do the same for each of it's children
