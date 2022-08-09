@@ -54,6 +54,15 @@ uniform LightSpot[NR_SPOT_LIGHTS] u_spotLights;
 vec3 m_normal;
 vec3 m_viewDir;
 
+float near = 0.1;
+float far = 500.0;
+
+float LineariseDepth(float pDepth)
+{
+	float z = pDepth * 2.0 - 1.0; // Back to ndc
+	return (2.0 * near * far) / (far + near - z * (far - near));
+}
+
 vec3 PhongShading(Colour pColour, vec3 pLightDir, float pIntensity)
 {	
 	//Textures
@@ -137,5 +146,6 @@ void main()
 		result += CalculateSpotLight(u_spotLights[i]);
 
 	FragCol = vec4(result, 1);
+	//FragCol = vec4(vec3(LineariseDepth(gl_FragCoord.z) / far), 1.0);
 	return;
 }

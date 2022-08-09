@@ -50,6 +50,8 @@ namespace Engine
 		void Draw(double pTime);
 
 		void CreateModelScene();
+		void CreateBoxScene();
+		void RenderBoxScene(double pTime);
 
 		/**
 		 * @brief Get a pointer to the shader object at a given position
@@ -58,10 +60,12 @@ namespace Engine
 		 * @return Shader* The pointer to the shader object
 		 */
 		Shader* GetShaderAt(unsigned int pPos);
+		Mesh* GetMeshAt(unsigned int pPos);
 
 		Camera* m_cameraRef = nullptr;	// A reference to a camera
 		Model* m_model = nullptr;
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
+		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
 
 		Light* m_lightDirectional = nullptr;
 		Light* m_lightPoint = nullptr;
@@ -79,12 +83,5 @@ namespace Engine
 			glm::vec3(1.5f,  0.2f, -1.5f),
 			glm::vec3(-1.3f,  1.0f, -1.5f)
 		};
-
-		#ifdef LEGACY
-		 void CreateBoxScene();
-		 void RenderBoxScene(double pTime);
-		 Mesh* GetMeshAt(unsigned int pPos);
-		 unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
-		#endif
 	};
 }

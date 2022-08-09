@@ -124,7 +124,7 @@ namespace Engine
 
 	void Camera::SetProjection(float pFovV)
 	{
-		m_projection = perspective(radians(pFovV), m_aspectRatio, 0.001f, 1000.0f);
+		m_projection = perspective(radians(pFovV), m_aspectRatio, 0.1f, 500.0f);
 	}
 
 	void Camera::SetPosition(vec3 pValue)

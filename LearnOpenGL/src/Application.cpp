@@ -84,7 +84,7 @@ namespace Engine
 					m_frameTimer -= secondsPerUpdate;
 					m_fps = (unsigned int)((float)m_framesPerSecond / secondsPerUpdate);
 					m_framesPerSecond = 0U;
-					glfwSetWindowTitle(m_window, (m_title + " " + std::to_string(m_fps)).c_str());
+					glfwSetWindowTitle(m_window, (m_title + " | FPS: " + std::to_string(m_fps)).c_str());
 				}
 
 				// Input
@@ -124,12 +124,6 @@ namespace Engine
 
 	bool Application::Init(string pTitle, bool pFullscreen)
 	{
-		#ifdef _DEBUG
-		 // Moves the console window
-		 MoveWindow(GetConsoleWindow(), -7, 0, 1000, 600, TRUE);
-		#endif
-
-#pragma region glfw
 		// glfw: initialise and configure
 		if (glfwInit() == GLFW_FALSE)
 		{
@@ -162,15 +156,20 @@ namespace Engine
 		}
 		glfwMakeContextCurrent(m_window);
 
-		{
-			// Moves the window to the center of the workarea
-			int monPosX, monPosY, monWidth, monHeight;
-			glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
-			glfwSetWindowPos(m_window, (int)((monWidth - m_winWidth) * 0.5f), (int)((monHeight - m_winHeight) * 0.5f));
-		}
+		int monPosX, monPosY, monWidth, monHeight;
+		glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
+		#ifdef _DEBUG
+		 // Moves the window to the lower right of the window
+		 glfwSetWindowPos(m_window, 2, (int)((monHeight - m_winHeight) * 0.5f));
+		 // Moves the console window
+		 MoveWindow(GetConsoleWindow(), m_winWidth - 3, 0, 900, 600, TRUE);
+		#else
+		 // Moves the window to the center of the workarea
+		 glfwSetWindowPos(m_window, (int)((monWidth - m_winWidth) * 0.5f), (int)((monHeight - m_winHeight) * 0.5f));
+		#endif
 
 		glfwSetWindowSizeLimits(m_window, 320, 180, GLFW_DONT_CARE, GLFW_DONT_CARE);
-		glfwSetWindowAspectRatio(m_window, 16, 9);
+		//glfwSetWindowAspectRatio(m_window, 16, 9);
 
 		glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 
@@ -185,7 +184,6 @@ namespace Engine
 		//glfwSetWindowAspectRatio(m_window, 16, 9);
 		//int* monCount = 0;
 		//GLFWmonitor** monitors = glfwGetMonitors(monCount);
-#pragma endregion
 
 		// glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -284,6 +282,9 @@ namespace Engine
 			if (current + spotlightSpeed * 10 <= 90.0f)
 			{
 				spotLight->SetAngle(current + spotlightSpeed * 10);
+				#ifdef _DEBUG
+		  		 printf("Cutoff: %f | Blur: %f\n", spotLight->GetAngleRaw(), spotLight->GetBlurRaw());
+		 		#endif
 				// Dunno why but calling this through m_renderInst doesn't work
 				//m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", spotLight->GetAngle());
 			}
@@ -295,6 +296,9 @@ namespace Engine
 			if (current - spotlightSpeed * 10 >= 0.0f)
 			{
 				spotLight->SetAngle(current - spotlightSpeed * 10);
+				#ifdef _DEBUG
+		  		 printf("Cutoff: %f | Blur: %f\n", spotLight->GetAngleRaw(), spotLight->GetBlurRaw());
+		 		#endif
 				//m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", spotLight->GetAngle());
 			}
 		}
@@ -306,6 +310,9 @@ namespace Engine
 			if (current + spotlightSpeed <= 1.0f)
 			{
 				spotLight->SetBlur(current + spotlightSpeed);
+				#ifdef _DEBUG
+		  		 printf("Cutoff: %f | Blur: %f\n", spotLight->GetAngleRaw(), spotLight->GetBlurRaw());
+		 		#endif
 				//m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", spotLight->GetBlur());
 			}
 		}
@@ -316,6 +323,9 @@ namespace Engine
 			if (current - spotlightSpeed > 0.0f)
 			{
 				spotLight->SetBlur(current - spotlightSpeed);
+				#ifdef _DEBUG
+		  		 printf("Cutoff: %f | Blur: %f\n", spotLight->GetAngleRaw(), spotLight->GetBlurRaw());
+		 		#endif
 				//m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", spotLight->GetBlur());
 			}
 		}
