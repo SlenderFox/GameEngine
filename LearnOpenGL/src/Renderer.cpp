@@ -85,19 +85,7 @@ namespace Engine
 		#ifdef LEGACY
 		 RenderBoxScene(pTime);
 		#else
-		 GetShaderAt(2U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
-		 GetShaderAt(2U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
-		 m_model->Draw(GetShaderAt(2U), m_cameraRef);
-
-		 for (unsigned int i = 0; i < m_meshes.get()->size(); ++i)
-		 {
-		 	glBindVertexArray(*GetMeshAt(i)->GetVAO());
-		 	GetShaderAt(i)->Use();
-		 	GetShaderAt(i)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
-		 	GetShaderAt(i)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
-		 	// I don't like updating this every frame but I don't really have a choice
-		 	GetMeshAt(i)->Draw(GetShaderAt(i));
-		 }
+		 RenderModelScene(pTime);
 		#endif
 	}
 
@@ -121,54 +109,29 @@ namespace Engine
 		lightModel = glm::translate(lightModel, vec3(m_lightSpot->GetPosition()));
 		GetShaderAt(1U)->SetMat4("u_model", (mat4)lightModel);
 
-		#pragma region Shader
-		 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));	// 2U
-		 GetShaderAt(2U)->SetFloat("u_material.shininess", 32.0f);
-		 // Directional
-		 GetShaderAt(2U)->SetVec3("u_directional.colour.ambient", m_lightDirectional->GetColour() * 0.15f);
-		 GetShaderAt(2U)->SetVec3("u_directional.colour.diffuse", m_lightDirectional->GetColour());
-		 GetShaderAt(2U)->SetVec3("u_directional.colour.specular", m_lightDirectional->GetColour());
-		 GetShaderAt(2U)->SetVec4("u_directional.direction", m_lightDirectional->GetDirection());
-
-		 // Point
-		 //GetShaderAt(2U)->SetVec3("u_pointLights[0].colour.ambient", m_lightPoint->GetColour() * 0.15f);
-		 GetShaderAt(2U)->SetVec3("u_pointLights[0].colour.diffuse", m_lightPoint->GetColour());
-		 GetShaderAt(2U)->SetVec3("u_pointLights[0].colour.specular", m_lightPoint->GetColour());
-		 GetShaderAt(2U)->SetVec4("u_pointLights[0].position", m_lightPoint->GetPosition());
-		 GetShaderAt(2U)->SetFloat("u_pointLights[0].linear", 0.045f);
-		 GetShaderAt(2U)->SetFloat("u_pointLights[0].quadratic", 0.0075f);
-
-		 // Spot
-		 //GetShaderAt(2U)->SetVec3("u_spotLights[0].colour.ambient", m_lightSpot->GetColour() * 0.15f);
-		 GetShaderAt(2U)->SetVec3("u_spotLights[0].colour.diffuse", m_lightSpot->GetColour());
-		 GetShaderAt(2U)->SetVec3("u_spotLights[0].colour.specular", m_lightSpot->GetColour());
-		 GetShaderAt(2U)->SetVec4("u_spotLights[0].position", m_lightSpot->GetPosition());
-		 GetShaderAt(2U)->SetVec4("u_spotLights[0].direction", m_lightSpot->GetDirection());
-		 GetShaderAt(2U)->SetFloat("u_spotLights[0].linear", 0.045f);
-		 GetShaderAt(2U)->SetFloat("u_spotLights[0].quadratic", 0.0075f);
-		 GetShaderAt(2U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
-		 GetShaderAt(2U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
-		#pragma endregion
+		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));		// 2U
+		LoadShaderUniforms(GetShaderAt(2U));
 
 		m_model = new Model((char*)"assets/models/backpack/backpack.obj");
 	}
 
-	Shader* Renderer::GetShaderAt(unsigned int pPos)
+	void Renderer::RenderModelScene(double pTime)
 	{
-		if (m_shaders.get() == nullptr)
-			return nullptr;
+		GetShaderAt(2U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
+		GetShaderAt(2U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
+		m_model->Draw(GetShaderAt(2U), m_cameraRef);
 
-		if (pPos > m_shaders.get()->size() - 1)
+		for (unsigned int i = 0; i < m_meshes.get()->size(); ++i)
 		{
-			#ifdef _DEBUG
-			 cout << "Attempting to access shader outside array size\n";
-			#endif
-			return nullptr;
+			glBindVertexArray(*GetMeshAt(i)->GetVAO());
+			GetShaderAt(i)->Use();
+			GetShaderAt(i)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
+			GetShaderAt(i)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
+			// I don't like updating this every frame but I don't really have a choice
+			GetMeshAt(i)->Draw(GetShaderAt(i));
 		}
-
-		return (*m_shaders.get())[pPos].get();
 	}
-
+	
 	void Renderer::CreateBoxScene()
 	{
 	#ifdef _DEBUG
@@ -188,36 +151,10 @@ namespace Engine
 	textures.push_back(Texture("assets/textures/container2_specular.png", TexType::specular));
  
 	m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices(), textures));
-
 	GetMeshAt(0U)->LoadTextures(*GetShaderAt(0U));
-	GetShaderAt(0U)->SetFloat("u_material.shininess", 32.0f);
+	LoadShaderUniforms(GetShaderAt(0U));
 
 	#pragma region Lights
-	 // Directional
-	 GetShaderAt(0U)->SetVec3("u_directional.colour.ambient", m_lightDirectional->GetColour() * 0.15f);
-	 GetShaderAt(0U)->SetVec3("u_directional.colour.diffuse", m_lightDirectional->GetColour());
-	 GetShaderAt(0U)->SetVec3("u_directional.colour.specular", m_lightDirectional->GetColour());
-	 GetShaderAt(0U)->SetVec4("u_directional.direction", m_lightDirectional->GetDirection());
-
-	 // Point
-	 //GetShaderAt(0U)->SetVec3("u_pointLights[0].colour.ambient", m_lightPoint->GetColour() * 0.15f);
-	 GetShaderAt(0U)->SetVec3("u_pointLights[0].colour.diffuse", m_lightPoint->GetColour());
-	 GetShaderAt(0U)->SetVec3("u_pointLights[0].colour.specular", m_lightPoint->GetColour());
-	 GetShaderAt(0U)->SetVec4("u_pointLights[0].position", m_lightPoint->GetPosition());
-	 GetShaderAt(0U)->SetFloat("u_pointLights[0].linear", 0.045f);
-	 GetShaderAt(0U)->SetFloat("u_pointLights[0].quadratic", 0.0075f);
-
-	 // Spot
-	 //GetShaderAt(0U)->SetVec3("u_spotLights[0].colour.ambient", m_lightSpot->GetColour() * 0.15f);
-	 GetShaderAt(0U)->SetVec3("u_spotLights[0].colour.diffuse", m_lightSpot->GetColour());
-	 GetShaderAt(0U)->SetVec3("u_spotLights[0].colour.specular", m_lightSpot->GetColour());
-	 GetShaderAt(0U)->SetVec4("u_spotLights[0].position", m_lightSpot->GetPosition());
-	 GetShaderAt(0U)->SetVec4("u_spotLights[0].direction", m_lightSpot->GetDirection());
-	 GetShaderAt(0U)->SetFloat("u_spotLights[0].linear", 0.045f);
-	 GetShaderAt(0U)->SetFloat("u_spotLights[0].quadratic", 0.0075f);
-	 GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
-	 GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
-
 	 // Point light cube
 	 m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
 	 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
@@ -266,6 +203,51 @@ namespace Engine
 				}
 			}
 		}
+	}
+
+	void Renderer::LoadShaderUniforms(Shader* pShader)
+	{
+		pShader->SetFloat("u_material.shininess", 32.0f);
+		// Directional
+		pShader->SetVec3("u_directional.colour.ambient", m_lightDirectional->GetColour() * 0.15f);
+		pShader->SetVec3("u_directional.colour.diffuse", m_lightDirectional->GetColour());
+		pShader->SetVec3("u_directional.colour.specular", m_lightDirectional->GetColour());
+		pShader->SetVec4("u_directional.direction", m_lightDirectional->GetDirection());
+
+		// Point
+		//pShader->SetVec3("u_pointLights[0].colour.ambient", m_lightPoint->GetColour() * 0.15f);
+		pShader->SetVec3("u_pointLights[0].colour.diffuse", m_lightPoint->GetColour());
+		pShader->SetVec3("u_pointLights[0].colour.specular", m_lightPoint->GetColour());
+		pShader->SetVec4("u_pointLights[0].position", m_lightPoint->GetPosition());
+		pShader->SetFloat("u_pointLights[0].linear", 0.045f);
+		pShader->SetFloat("u_pointLights[0].quadratic", 0.0075f);
+
+		// Spot
+		//pShader->SetVec3("u_spotLights[0].colour.ambient", m_lightSpot->GetColour() * 0.15f);
+		pShader->SetVec3("u_spotLights[0].colour.diffuse", m_lightSpot->GetColour());
+		pShader->SetVec3("u_spotLights[0].colour.specular", m_lightSpot->GetColour());
+		pShader->SetVec4("u_spotLights[0].position", m_lightSpot->GetPosition());
+		pShader->SetVec4("u_spotLights[0].direction", m_lightSpot->GetDirection());
+		pShader->SetFloat("u_spotLights[0].linear", 0.045f);
+		pShader->SetFloat("u_spotLights[0].quadratic", 0.0075f);
+		pShader->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
+		pShader->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
+	}
+
+	Shader* Renderer::GetShaderAt(unsigned int pPos)
+	{
+		if (m_shaders.get() == nullptr)
+			return nullptr;
+
+		if (pPos > m_shaders.get()->size() - 1)
+		{
+			#ifdef _DEBUG
+			 cout << "Attempting to access shader outside array size\n";
+			#endif
+			return nullptr;
+		}
+
+		return (*m_shaders.get())[pPos].get();
 	}
 
 	Mesh* Renderer::GetMeshAt(unsigned int pPos)

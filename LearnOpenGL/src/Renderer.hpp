@@ -50,8 +50,11 @@ namespace Engine
 		void Draw(double pTime);
 
 		void CreateModelScene();
+		void RenderModelScene(double pTime);
 		void CreateBoxScene();
 		void RenderBoxScene(double pTime);
+		
+		void LoadShaderUniforms(Shader* pShader);
 
 		/**
 		 * @brief Get a pointer to the shader object at a given position
