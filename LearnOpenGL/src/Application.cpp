@@ -269,65 +269,25 @@ namespace Engine
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		// Toggle fullscreen
 		// if (glfwGetKey(m_window, GLFW_KEY_F11) == GLFW_PRESS)
-		// {
+		// { }
 
-		// }
-
-		const float spotlightSpeed = 0.005f;
 		// Spotlight cone
 		if (glfwGetKey(m_window, GLFW_KEY_T) == GLFW_PRESS)
 		{
-			Light* spotLight = m_rendererInst->m_lightSpot;
-			float current = spotLight->GetAngleRaw();
-			if (current + spotlightSpeed * 10 <= 90.0f)
-			{
-				spotLight->SetAngle(current + spotlightSpeed * 10);
-				#ifdef _DEBUG
-		  		 printf("Cutoff: %f | Blur: %f\n", spotLight->GetAngleRaw(), spotLight->GetBlurRaw());
-		 		#endif
-				// Dunno why but calling this through m_renderInst doesn't work
-				//m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", spotLight->GetAngle());
-			}
+			m_rendererInst->ModifySpotlightAngle(0.05f);
 		}
 		if (glfwGetKey(m_window, GLFW_KEY_G) == GLFW_PRESS)
 		{
-			Light* spotLight = m_rendererInst->m_lightSpot;
-			float current = spotLight->GetAngleRaw();
-			if (current - spotlightSpeed * 10 >= 0.0f)
-			{
-				spotLight->SetAngle(current - spotlightSpeed * 10);
-				#ifdef _DEBUG
-		  		 printf("Cutoff: %f | Blur: %f\n", spotLight->GetAngleRaw(), spotLight->GetBlurRaw());
-		 		#endif
-				//m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", spotLight->GetAngle());
-			}
+			m_rendererInst->ModifySpotlightAngle(-0.05f);
 		}
-		// Blur
+		// Spotlight blur
 		if (glfwGetKey(m_window, GLFW_KEY_Y) == GLFW_PRESS)
 		{
-			Light* spotLight = m_rendererInst->m_lightSpot;
-			float current = spotLight->GetBlurRaw();
-			if (current + spotlightSpeed <= 1.0f)
-			{
-				spotLight->SetBlur(current + spotlightSpeed);
-				#ifdef _DEBUG
-		  		 printf("Cutoff: %f | Blur: %f\n", spotLight->GetAngleRaw(), spotLight->GetBlurRaw());
-		 		#endif
-				//m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", spotLight->GetBlur());
-			}
+			m_rendererInst->ModifySpotlightBlur(-0.005f);
 		}
 		if (glfwGetKey(m_window, GLFW_KEY_H) == GLFW_PRESS)
 		{
-			Light* spotLight = m_rendererInst->m_lightSpot;
-			float current = spotLight->GetBlurRaw();
-			if (current - spotlightSpeed > 0.0f)
-			{
-				spotLight->SetBlur(current - spotlightSpeed);
-				#ifdef _DEBUG
-		  		 printf("Cutoff: %f | Blur: %f\n", spotLight->GetAngleRaw(), spotLight->GetBlurRaw());
-		 		#endif
-				//m_rendererInst->GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", spotLight->GetBlur());
-			}
+			m_rendererInst->ModifySpotlightBlur(0.005f);
 		}
 
 		float moveSpeed = 8;

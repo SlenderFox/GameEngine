@@ -25,7 +25,7 @@ namespace Engine
 		// Initialise lights
 		m_lightDirectional = new Light(LightType::Directional, vec3(0, -1, 0), vec3(0.8f));
 		m_lightPoint = new Light(LightType::Point, vec4(-4, 2, -2, 1), vec3(1.0f));
-		m_lightSpot = new Light(LightType::Spot, vec4(4.5f, 3, 3.5f, 1), vec3(-0.7f, -0.6f, -1), vec3(1.0f), 17.0f, 0.1f);
+		m_lightSpot = new Light(LightType::Spot, vec4(4.5f, 3, 4.5f, 1), vec3(-0.9f, -0.6f, -1), vec3(1.0f), 10.0f, 0.23f);
 
 		// Initialise shader array
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
@@ -91,25 +91,26 @@ namespace Engine
 
 	void Renderer::CreateModelScene()
 	{
-		// Point light cube
-		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));		// 0U
-		GetMeshAt(0U)->LoadTextures(*GetShaderAt(0U));
-		GetShaderAt(0U)->SetVec3("u_colour", m_lightPoint->GetColour());
-		mat4 lightModel = mat4(1.0f);
-		lightModel = glm::translate(lightModel, vec3(m_lightPoint->GetPosition()));
-		GetShaderAt(0U)->SetMat4("u_model", (mat4)lightModel);
-
-		// Spot light cube
-		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));		// 1U
-		GetMeshAt(1U)->LoadTextures(*GetShaderAt(1U));
-		GetShaderAt(1U)->SetVec3("u_colour", m_lightSpot->GetColour());
-		lightModel = mat4(1.0f);
-		lightModel = glm::translate(lightModel, vec3(m_lightSpot->GetPosition()));
-		GetShaderAt(1U)->SetMat4("u_model", (mat4)lightModel);
 
 		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));		// 2U
+		//// Point light cube
+		//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
+		//m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
+		//GetMeshAt(0U)->LoadTextures(*GetShaderAt(0U));
+		//GetShaderAt(0U)->SetVec3("u_colour", m_lightPoint->GetColour());
+		//mat4 lightModel = mat4(1.0f);
+		//lightModel = glm::translate(lightModel, vec3(m_lightPoint->GetPosition()));
+		//GetShaderAt(0U)->SetMat4("u_model", (mat4)lightModel);
+		//
+		//// Spot light cube
+		//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
+		//m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
+		//GetMeshAt(1U)->LoadTextures(*GetShaderAt(1U));
+		//GetShaderAt(1U)->SetVec3("u_colour", m_lightSpot->GetColour());
+		//lightModel = mat4(1.0f);
+		//lightModel = glm::translate(lightModel, vec3(m_lightSpot->GetPosition()));
+		//GetShaderAt(1U)->SetMat4("u_model", (mat4)lightModel);
+		CreateGenericLights();
 		LoadShaderUniforms(GetShaderAt(2U));
 
 		m_model = new Model((char*)"assets/models/backpack/backpack.obj");
@@ -117,17 +118,14 @@ namespace Engine
 
 	void Renderer::RenderModelScene(double pTime)
 	{
-		GetShaderAt(2U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
-		GetShaderAt(2U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
 		m_model->Draw(GetShaderAt(2U), m_cameraRef);
 
 		for (unsigned int i = 0; i < m_meshes.get()->size(); ++i)
 		{
 			glBindVertexArray(*GetMeshAt(i)->GetVAO());
-			GetShaderAt(i)->Use();
+			GetShaderAt(i)->Use();	// Needed for when drawing directly from mesh
 			GetShaderAt(i)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
 			GetShaderAt(i)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
-			// I don't like updating this every frame but I don't really have a choice
 			GetMeshAt(i)->Draw(GetShaderAt(i));
 		}
 	}
@@ -154,25 +152,24 @@ namespace Engine
 	GetMeshAt(0U)->LoadTextures(*GetShaderAt(0U));
 	LoadShaderUniforms(GetShaderAt(0U));
 
-	#pragma region Lights
-	 // Point light cube
-	 m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-	 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
-	 GetMeshAt(1U)->LoadTextures(*GetShaderAt(1U));
-	 GetShaderAt(1U)->SetVec3("u_colour", m_lightPoint->GetColour());
-	 mat4 lightModel = mat4(1.0f);
-	 lightModel = glm::translate(lightModel, vec3(m_lightPoint->GetPosition()));
-	 GetShaderAt(1U)->SetMat4("u_model", (mat4)lightModel);
-
-	 // Spot light cube
-	 m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-	 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
-	 GetMeshAt(2U)->LoadTextures(*GetShaderAt(2U));
-	 GetShaderAt(2U)->SetVec3("u_colour", m_lightSpot->GetColour());
-	 lightModel = mat4(1.0f);
-	 lightModel = glm::translate(lightModel, vec3(m_lightSpot->GetPosition()));
-	 GetShaderAt(2U)->SetMat4("u_model", (mat4)lightModel);
-	#pragma endregion
+	CreateGenericLights();
+	//// Point light cube
+	//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
+	//m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
+	//GetMeshAt(1U)->LoadTextures(*GetShaderAt(1U));
+	//GetShaderAt(1U)->SetVec3("u_colour", m_lightPoint->GetColour());
+	//mat4 lightModel = mat4(1.0f);
+	//lightModel = glm::translate(lightModel, vec3(m_lightPoint->GetPosition()));
+	//GetShaderAt(1U)->SetMat4("u_model", (mat4)lightModel);
+	//
+	//// Spot light cube
+	//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
+	//m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
+	//GetMeshAt(2U)->LoadTextures(*GetShaderAt(2U));
+	//GetShaderAt(2U)->SetVec3("u_colour", m_lightSpot->GetColour());
+	//lightModel = mat4(1.0f);
+	//lightModel = glm::translate(lightModel, vec3(m_lightSpot->GetPosition()));
+	//GetShaderAt(2U)->SetMat4("u_model", (mat4)lightModel);
 	}
 
 	void Renderer::RenderBoxScene(double pTime)
@@ -183,9 +180,6 @@ namespace Engine
 			GetShaderAt(i)->Use();
 			GetShaderAt(i)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
 			GetShaderAt(i)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
-			// I don't like updating this every frame but I don't really have a choice
-			GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
-			GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
 			if (i > 0)
 				GetMeshAt(i)->Draw(GetShaderAt(i));
 			else
@@ -203,6 +197,31 @@ namespace Engine
 				}
 			}
 		}
+	}
+
+	void Renderer::CreateGenericLights()
+	{
+		// ----- Point light cube -----
+		// Done before so one lower
+		unsigned int pointMeshID = m_meshes.get()->size();
+		unsigned int pointShaderID = m_shaders.get()->size();
+		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
+		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
+
+		GetMeshAt(pointMeshID)->LoadTextures(*GetShaderAt(pointShaderID));
+		GetShaderAt(pointShaderID)->SetVec3("u_colour", m_lightPoint->GetColour());
+		GetShaderAt(pointShaderID)->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
+
+		// ----- Spot light cube -----
+		// Done before so one lower
+		unsigned int spotMeshID = m_meshes.get()->size();
+		unsigned int spotShaderID = m_shaders.get()->size();
+		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
+		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
+
+		GetMeshAt(spotMeshID)->LoadTextures(*GetShaderAt(spotShaderID));
+		GetShaderAt(spotShaderID)->SetVec3("u_colour", m_lightSpot->GetColour());
+		GetShaderAt(spotShaderID)->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
 	}
 
 	void Renderer::LoadShaderUniforms(Shader* pShader)
@@ -232,6 +251,40 @@ namespace Engine
 		pShader->SetFloat("u_spotLights[0].quadratic", 0.0075f);
 		pShader->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
 		pShader->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
+	}
+
+	void Renderer::ModifySpotlightAngle(float pValue)
+	{
+		float newValue = m_lightSpot->GetAngleRaw() + pValue;
+		if (newValue <= 90.0f && newValue >= 0.0f)
+		{
+			m_lightSpot->SetAngle(newValue);
+			#ifdef LEGACY
+			 GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
+			#else
+			 GetShaderAt(2U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
+			#endif
+			//#ifdef _DEBUG
+			// printf("Cutoff: %f | Blur: %f\n", m_lightSpot->GetAngleRaw(), m_lightSpot->GetBlurRaw());
+			//#endif
+		}
+	}
+
+	void Renderer::ModifySpotlightBlur(float pValue)
+	{
+		float newValue = m_lightSpot->GetBlurRaw() + pValue;
+		if (newValue <= 1.0f && newValue > 0.0f)
+		{
+			m_lightSpot->SetBlur(newValue);
+			#ifdef LEGACY
+			 GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
+			#else
+			 GetShaderAt(2U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
+			#endif
+			//#ifdef _DEBUG
+			// printf("Cutoff: %f | Blur: %f\n", m_lightSpot->GetAngleRaw(), m_lightSpot->GetBlurRaw());
+			//#endif
+		}
 	}
 
 	Shader* Renderer::GetShaderAt(unsigned int pPos)

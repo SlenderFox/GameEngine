@@ -43,7 +43,6 @@ namespace Engine
 		/**
 		 * @brief Draws the scene
 		 *
-		 * @param pCamera TEMPORARY! The viewprojection matrix used as the camera
 		 * @param pTime TEMPORARY! Used for basic shape animation
 		 * @remark Only Application is able to call this function
 		 */
@@ -54,14 +53,12 @@ namespace Engine
 		void CreateBoxScene();
 		void RenderBoxScene(double pTime);
 		
+		void CreateGenericLights();
 		void LoadShaderUniforms(Shader* pShader);
 
-		/**
-		 * @brief Get a pointer to the shader object at a given position
-		 * 
-		 * @param pPos The position in the array of shaders
-		 * @return Shader* The pointer to the shader object
-		 */
+		void ModifySpotlightAngle(float pValue);
+		void ModifySpotlightBlur(float pValue);
+
 		Shader* GetShaderAt(unsigned int pPos);
 		Mesh* GetMeshAt(unsigned int pPos);
 

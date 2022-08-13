@@ -46,7 +46,7 @@ namespace Engine
 		/**
 		 * @brief Use/activate the shader
 		 */
-		void Use();
+		void Use() const;
 		void LoadPaths(string pShaderPath);
 
 		bool GetLoaded() const { return m_shaderLoaded; }
