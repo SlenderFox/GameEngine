@@ -91,8 +91,6 @@ namespace Engine
 
 	void Renderer::CreateModelScene()
 	{
-
-		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));		// 2U
 		//// Point light cube
 		//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
 		//m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
@@ -111,9 +109,13 @@ namespace Engine
 		//lightModel = glm::translate(lightModel, vec3(m_lightSpot->GetPosition()));
 		//GetShaderAt(1U)->SetMat4("u_model", (mat4)lightModel);
 		CreateGenericLights();
+
+		//m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));
+		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/cube"));
 		LoadShaderUniforms(GetShaderAt(2U));
 
-		m_model = new Model((char*)"assets/models/backpack/backpack.obj");
+		//m_model = new Model((char*)"assets/models/backpack/backpack.obj");
+		m_model = new Model((char*)"assets/models/cube/cube.obj");
 	}
 
 	void Renderer::RenderModelScene(double pTime)
