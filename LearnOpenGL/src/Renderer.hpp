@@ -58,11 +58,12 @@ namespace Engine
 		void ModifySpotlightAngle(float pValue);
 		void ModifySpotlightBlur(float pValue);
 
+		Model* GetModelAt(unsigned int pPos);
 		Shader* GetShaderAt(unsigned int pPos);
 		Mesh* GetMeshAt(unsigned int pPos);
 
 		Camera* m_cameraRef = nullptr;	// A reference to a camera
-		Model* m_model = nullptr;
+		unique_ptr<vector<unique_ptr<Model>>> m_models;
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
 

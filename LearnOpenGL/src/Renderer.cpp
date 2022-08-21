@@ -5,7 +5,7 @@
 #define LEGACY 0
 #define CUBE 1
 #define BACKPACK 2
-#define RENDERMODE BACKPACK
+#define RENDERMODE CUBE
 #ifdef _DEBUG
  #include <iostream>
  using std::cout;
@@ -30,7 +30,8 @@ namespace Engine
 		m_lightPoint = new Light(LightType::Point, vec4(-4, 2, -2, 1), vec3(1.0f));
 		m_lightSpot = new Light(LightType::Spot, vec4(4.5f, 3, 4.5f, 1), vec3(-0.9f, -0.6f, -1), vec3(1.0f), 10.0f, 0.23f);
 
-		// Initialise shader array
+		// Initialise arrays
+		m_models = make_unique<vector<unique_ptr<Model>>>();
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 
@@ -45,6 +46,18 @@ namespace Engine
 	{
 		if (pValidate)
 		{
+			if (m_models)
+			{
+				// Loop though all shaders and call destroy on them, then release the "smart" pointer
+				for (unsigned int i = 0; i < (*m_models.get()).size(); ++i)
+				{
+					if (GetModelAt(i) != nullptr)
+						GetModelAt(i)->Destroy(pValidate);
+				}
+				// Smart pointer needs to be manually released or it throws an error :|
+				m_models.release();
+			}
+
 			if (m_shaders)
 			{
 				// Loop though all shaders and call destroy on them, then release the "smart" pointer
@@ -71,13 +84,9 @@ namespace Engine
 			
 			// Unload all textures from memory once finished
 			Texture::UnloadAll(pValidate);
-
-			if (m_model != nullptr)
-				m_model->Destroy(pValidate);
 		}
 
 		delete m_cameraRef;
-		delete m_model;
 	}
 
 	void Renderer::Draw(double pTime)
@@ -98,17 +107,18 @@ namespace Engine
 
 		#if RENDERMODE == BACKPACK
 		 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));
-		 m_model = new Model((char*)"assets/models/backpack/backpack.obj");
+		 m_models.get()->push_back(make_unique<Model>((char*)"assets/models/backpack/backpack.obj"));
 		#else
 		 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/cube"));
-		 m_model = new Model((char*)"assets/models/cube/cube.obj");
+		 m_models.get()->push_back(make_unique<Model>((char*)"assets/models/cube/cube.obj"));
 		#endif
 		LoadShaderUniforms(GetShaderAt(2U));
 	}
 
 	void Renderer::RenderModelScene(double pTime)
 	{
-		m_model->Draw(GetShaderAt(2U), m_cameraRef);
+		for (unsigned int i = 0; i < m_models.get()->size(); ++i)
+			GetModelAt(i)->Draw(GetShaderAt(2U), m_cameraRef);
 
 		for (unsigned int i = 0; i < m_meshes.get()->size(); ++i)
 		{
@@ -258,6 +268,22 @@ namespace Engine
 			// printf("Cutoff: %f | Blur: %f\n", m_lightSpot->GetAngleRaw(), m_lightSpot->GetBlurRaw());
 			//#endif
 		}
+	}
+
+	Model* Renderer::GetModelAt(unsigned int pPos)
+	{
+		if (m_models.get() == nullptr)
+			return nullptr;
+
+		if (pPos > m_models.get()->size() - 1)
+		{
+			#ifdef _DEBUG
+			 cout << "Attempting to access model outside array size\n";
+			#endif
+			return nullptr;
+		}
+
+		return (*m_models.get())[pPos].get();
 	}
 
 	Shader* Renderer::GetShaderAt(unsigned int pPos)
