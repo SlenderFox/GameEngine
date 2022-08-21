@@ -2,7 +2,6 @@
 #pragma once
 #include "Model.hpp"
 #include "Light.hpp"
-//#define LEGACY
 #pragma endregion
 
 namespace Engine

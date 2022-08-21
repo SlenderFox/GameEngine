@@ -7,6 +7,10 @@
  using std::cout;
  using std::endl;
 #endif
+#define LEGACY 0
+#define CUBE 1
+#define BACKPACK 2
+#define RENDERMODE BACKPACK
 
 #pragma endregion
 
@@ -31,7 +35,7 @@ namespace Engine
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 
-		#ifdef LEGACY
+		#if RENDERMODE == LEGACY
 		 CreateBoxScene();
 		#else
 		 CreateModelScene();
@@ -82,7 +86,7 @@ namespace Engine
 		// Clears to background colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		#ifdef LEGACY
+		#if RENDERMODE == LEGACY
 		 RenderBoxScene(pTime);
 		#else
 		 RenderModelScene(pTime);
@@ -91,31 +95,16 @@ namespace Engine
 
 	void Renderer::CreateModelScene()
 	{
-		//// Point light cube
-		//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		//m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
-		//GetMeshAt(0U)->LoadTextures(*GetShaderAt(0U));
-		//GetShaderAt(0U)->SetVec3("u_colour", m_lightPoint->GetColour());
-		//mat4 lightModel = mat4(1.0f);
-		//lightModel = glm::translate(lightModel, vec3(m_lightPoint->GetPosition()));
-		//GetShaderAt(0U)->SetMat4("u_model", (mat4)lightModel);
-		//
-		//// Spot light cube
-		//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		//m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
-		//GetMeshAt(1U)->LoadTextures(*GetShaderAt(1U));
-		//GetShaderAt(1U)->SetVec3("u_colour", m_lightSpot->GetColour());
-		//lightModel = mat4(1.0f);
-		//lightModel = glm::translate(lightModel, vec3(m_lightSpot->GetPosition()));
-		//GetShaderAt(1U)->SetMat4("u_model", (mat4)lightModel);
 		CreateGenericLights();
 
-		//m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));
-		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/cube"));
+		#if RENDERMODE == BACKPACK
+		 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));
+		 m_model = new Model((char*)"assets/models/backpack/backpack.obj");
+		#else
+		 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/cube"));
+		 m_model = new Model((char*)"assets/models/cube/cube.obj");
+		#endif
 		LoadShaderUniforms(GetShaderAt(2U));
-
-		//m_model = new Model((char*)"assets/models/backpack/backpack.obj");
-		m_model = new Model((char*)"assets/models/cube/cube.obj");
 	}
 
 	void Renderer::RenderModelScene(double pTime)
@@ -155,23 +144,6 @@ namespace Engine
 	LoadShaderUniforms(GetShaderAt(0U));
 
 	CreateGenericLights();
-	//// Point light cube
-	//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-	//m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
-	//GetMeshAt(1U)->LoadTextures(*GetShaderAt(1U));
-	//GetShaderAt(1U)->SetVec3("u_colour", m_lightPoint->GetColour());
-	//mat4 lightModel = mat4(1.0f);
-	//lightModel = glm::translate(lightModel, vec3(m_lightPoint->GetPosition()));
-	//GetShaderAt(1U)->SetMat4("u_model", (mat4)lightModel);
-	//
-	//// Spot light cube
-	//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-	//m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
-	//GetMeshAt(2U)->LoadTextures(*GetShaderAt(2U));
-	//GetShaderAt(2U)->SetVec3("u_colour", m_lightSpot->GetColour());
-	//lightModel = mat4(1.0f);
-	//lightModel = glm::translate(lightModel, vec3(m_lightSpot->GetPosition()));
-	//GetShaderAt(2U)->SetMat4("u_model", (mat4)lightModel);
 	}
 
 	void Renderer::RenderBoxScene(double pTime)
@@ -261,7 +233,7 @@ namespace Engine
 		if (newValue <= 90.0f && newValue >= 0.0f)
 		{
 			m_lightSpot->SetAngle(newValue);
-			#ifdef LEGACY
+			#if RENDERMODE == LEGACY
 			 GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
 			#else
 			 GetShaderAt(2U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
@@ -278,7 +250,7 @@ namespace Engine
 		if (newValue <= 1.0f && newValue > 0.0f)
 		{
 			m_lightSpot->SetBlur(newValue);
-			#ifdef LEGACY
+			#if RENDERMODE == LEGACY
 			 GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
 			#else
 			 GetShaderAt(2U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
