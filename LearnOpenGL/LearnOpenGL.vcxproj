@@ -26,7 +26,6 @@
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Project.cpp" />
@@ -41,7 +40,6 @@
     <ClInclude Include="src\Entity.hpp" />
     <ClInclude Include="src\Input.hpp" />
     <ClInclude Include="src\Light.hpp" />
-    <ClInclude Include="src\Material.hpp" />
     <ClInclude Include="src\Mesh.hpp" />
     <ClInclude Include="src\Model.hpp" />
     <ClInclude Include="src\Project.hpp" />

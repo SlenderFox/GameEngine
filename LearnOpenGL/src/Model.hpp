@@ -1,10 +1,6 @@
 #pragma region
 #pragma once
 #include "Mesh.hpp"
-#include "Camera.hpp"
-using glm::vec4;
-using glm::mat3;
-using glm::mat4;
 
 struct aiNode;
 struct aiMesh;

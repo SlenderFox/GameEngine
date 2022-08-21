@@ -1,7 +1,6 @@
 #pragma region
 #pragma once
-#include "Model.hpp"
-#include "Light.hpp"
+#include "Entity.hpp"
 #pragma endregion
 
 namespace Engine

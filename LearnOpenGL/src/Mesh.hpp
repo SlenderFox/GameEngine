@@ -1,11 +1,12 @@
 #pragma region
 #pragma once
-#include "glm/glm.hpp"
-#include "Material.hpp"
+#include <vector>
+#include <memory>
 #include "Shader.hpp"
 
-using glm::vec2;
-using glm::vec3;
+using std::vector;
+using std::unique_ptr;
+using std::make_unique;
 #pragma endregion
 
 namespace Engine

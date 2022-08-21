@@ -1,10 +1,8 @@
 #pragma region
 #pragma once
-#include <string>
 #include <fstream>
-#include "glm/glm.hpp"
-
-using std::string;
+#include "Light.hpp"
+#include "Texture.hpp"
 #pragma endregion
 
 namespace Engine

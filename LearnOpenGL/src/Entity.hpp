@@ -1,7 +1,5 @@
 #pragma once
-#include "Transform.hpp"
-#include "Mesh.hpp"
-#include <vector>
+#include "Model.hpp"
 
 using std::vector;
 
