@@ -122,27 +122,27 @@ namespace Engine
 	
 	void Renderer::CreateBoxScene()
 	{
-	#ifdef _DEBUG
-	 cout << "Loading Boxes" << endl;
-	#endif
-
-	m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/cube"));
-
-	vector<Texture> textures = vector<Texture>();
-	#ifdef _DEBUG
-	 cout << "\xC0";
-	#endif
-	textures.push_back(Texture("assets/textures/container2.png", TexType::diffuse));
-	#ifdef _DEBUG
-	 cout << "\xC0";
-	#endif
-	textures.push_back(Texture("assets/textures/container2_specular.png", TexType::specular));
- 
-	m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices(), textures));
-	GetMeshAt(0U)->LoadTextures(*GetShaderAt(0U));
-	LoadShaderUniforms(GetShaderAt(0U));
-
-	CreateGenericLights();
+		#ifdef _DEBUG
+		 cout << "Loading Boxes" << endl;
+		#endif
+	
+		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/cube"));
+	
+		vector<Texture> textures = vector<Texture>();
+		#ifdef _DEBUG
+		 cout << "\xC0";
+		#endif
+		textures.push_back(Texture("assets/textures/container2.png", TexType::diffuse));
+		#ifdef _DEBUG
+		 cout << "\xC0";
+		#endif
+		textures.push_back(Texture("assets/textures/container2_specular.png", TexType::specular));
+	
+		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices(), textures));
+		GetMeshAt(0U)->LoadTextures(*GetShaderAt(0U));
+		LoadShaderUniforms(GetShaderAt(0U));
+	
+		CreateGenericLights();
 	}
 
 	void Renderer::RenderBoxScene(double pTime)
