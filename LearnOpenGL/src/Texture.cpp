@@ -18,7 +18,7 @@ namespace Engine
 	Texture::Texture(const char* pPath, TexType pType) : m_type(pType)
 	{
 		m_file = pPath;
-		m_id = LoadTexture(pPath);
+		m_id = LoadTextureFromFile(pPath);
 	}
 
 	void Texture::Destroy()
@@ -35,7 +35,7 @@ namespace Engine
 		}
 	}
 
-	uint8_t Texture::LoadTexture(const char* pPath)
+	uint8_t Texture::LoadTextureFromFile(const char* pPath)
 	{
 		#ifdef _DEBUG
 		 cout << "Loading texture " << s_numTex << ": \"" << pPath << "\"";

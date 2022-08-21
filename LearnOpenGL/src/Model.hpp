@@ -30,13 +30,6 @@ namespace Engine
 		 * @return Mesh* The pointer to the mesh object
 		 */
 		Mesh* GetMeshAt(unsigned int pPos);
-		/**
-		 * @brief Get a pointer to the texture object at a given position
-		 * 
-		 * @param pPos The position in the array of the loaded textures
-		 * @return Text* The pointer to the texure object
-		 */
-		Texture* GetTextureAt(unsigned int pPos);
 
 	private:
 		void LoadModel(string pPath);
@@ -45,7 +38,7 @@ namespace Engine
 		vector<Texture> LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType);
 
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
-		unique_ptr<vector<Texture>> m_loadedTextures;
+		vector<Texture> m_loadedTextures;
 		string m_directory;
 	};
 }

@@ -17,7 +17,7 @@ namespace Engine
 	{
 		// Mesh creation
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
-		m_loadedTextures = make_unique<vector<Texture>>();
+		m_loadedTextures = vector<Texture>();
 		LoadModel(pPath);
 	}
 
@@ -32,7 +32,6 @@ namespace Engine
 
 		// Tell the unique pointers they are no longer needed
 		m_meshes.release();
-		m_loadedTextures.release();
 	}
 
 	void Model::Draw(Shader* pShader, Camera* pCamera)
@@ -146,39 +145,41 @@ namespace Engine
 
 	vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType)
 	{
-		vector<Texture> textures;
+		vector<Texture> texturesOut;
 		for (unsigned int i = 0; i < pMat->GetTextureCount(pType); ++i)
 		{
 			aiString file;
 			pMat->GetTexture(pType, i, &file);
 			bool skip = false;
-			for (unsigned int j = 0; j < m_loadedTextures->size(); ++j)
+			// Compares to all currently loaded textures
+			for (unsigned int j = 0; j < m_loadedTextures.size(); ++j)
 			{
-				if (std::strcmp(GetTextureAt(j)->m_file.data(), file.C_Str()) == 0)
+				if (std::strcmp(m_loadedTextures[j].m_file.data(), file.C_Str()) == 0)
 				{
-					textures.push_back(*GetTextureAt(j));
+					// Reuse an existing texture
+					texturesOut.push_back(m_loadedTextures[j]);
 					skip = true;
 					break;
 				}
 			}
 			if (!skip)
 			{
+				// If texture has not been loaded before, load it for the first time
 				#ifdef _DEBUG
 				 cout << "\xC0";
 				#endif
 				string path = m_directory + '/' + string(file.C_Str());
-				Texture texture;
-				texture.m_id = Texture::LoadTexture(path.c_str());
-				texture.m_type = pTexType;
-				texture.m_file = file.C_Str();
-				textures.push_back(texture);
-				m_loadedTextures->push_back(texture);
+				Texture tex;
+				tex.m_id = Texture::LoadTextureFromFile(path.c_str());
+				tex.m_type = pTexType;
+				tex.m_file = file.C_Str();
+				texturesOut.push_back(tex);
+				m_loadedTextures.push_back(tex);
 			}
 		}
-		return textures;
+		return texturesOut;
 	}
 
-	#pragma region Getters
 	Mesh* Model::GetMeshAt(unsigned int pPos)
 	{
 		if (m_meshes.get() == nullptr)
@@ -194,21 +195,4 @@ namespace Engine
 
 		return (*m_meshes.get())[pPos].get();
 	}
-
-	Texture* Model::GetTextureAt(unsigned int pPos)
-	{
-		if (m_loadedTextures.get() == nullptr)
-			return nullptr;
-
-		if (pPos > m_loadedTextures.get()->size() - 1)
-		{
-			#ifdef _DEBUG
-			 cout << "Attempting to access mesh outside array size\n";
-			#endif
-			return nullptr;
-		}
-
-		return &(*m_loadedTextures.get())[pPos];
-	}
-	#pragma endregion
 }
