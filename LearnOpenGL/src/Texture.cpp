@@ -12,28 +12,28 @@
 
 namespace Engine
 {
-	unsigned int Texture::s_idTex[32];
-	unsigned int Texture::s_numTex;
-
 	// Static
+	unsigned int Texture::s_textureIds[32];
+	unsigned int Texture::s_textureCount;
+
 	void Texture::UnloadAll(bool pValidate)
 	{
 		if (pValidate)
 		{
-			glDeleteTextures(s_numTex, s_idTex);
+			glDeleteTextures(s_textureCount, s_textureIds);
 		}
 	}
 
-	uint8_t Texture::LoadTextureFromFile(const char *pPath)
+	uint8_t Texture::LoadTextureFromFile(const char* pPath)
 	{
 		#ifdef _DEBUG
-		 cout << "Loading texture " << s_numTex << ": \"" << pPath << "\"";
+		 cout << "Loading texture " << s_textureCount << ": \"" << pPath << "\"";
 		#endif
 
-		if (s_numTex > 31)
+		if (s_textureCount > 31)
 		{
 			#ifdef _DEBUG
-			 cout << "\nFailed to load texture: Exceeded max texture id " << s_numTex << endl;
+			 cout << "\nFailed to load texture: Exceeded max texture id " << s_textureCount << endl;
 			#endif
 			return UINT8_MAX;
 		}
@@ -42,15 +42,15 @@ namespace Engine
 		stbi_set_flip_vertically_on_load(true);
 
 		int texWidth = 0, texHeight = 0, numComponents = 0;
-		unsigned char *imageData = stbi_load(pPath, &texWidth, &texHeight, &numComponents, 0);
+		unsigned char* imageData = stbi_load(pPath, &texWidth, &texHeight, &numComponents, 0);
 		if (imageData)
 		{
 			float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 			// Generates a texture object in vram
-			glActiveTexture(GL_TEXTURE0 + s_numTex);
-			glGenTextures(1, &s_idTex[s_numTex]);
+			glActiveTexture(GL_TEXTURE0 + s_textureCount);
+			glGenTextures(1, &s_textureIds[s_textureCount]);
 			// Remember this works like a pointer to the object using the ID
-			glBindTexture(GL_TEXTURE_2D, s_idTex[s_numTex]);
+			glBindTexture(GL_TEXTURE_2D, s_textureIds[s_textureCount]);
 			// Sets some parameters to the currently bound texture object
 			glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColour);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -92,7 +92,7 @@ namespace Engine
 			#endif
 
 			// Assigns the id then increments the total number of textures loaded
-			return s_idTex[s_numTex++];
+			return s_textureIds[s_textureCount++];
 		}
 		#ifdef _DEBUG
 		 else
@@ -104,27 +104,20 @@ namespace Engine
 	}
 
 	// Member
-	Texture::Texture(const char *pPath, TexType pType) : m_type(pType)
+	Texture::Texture(string pPath, TexType pType = TexType::diffuse) : m_file(pPath), m_type(pType)
 	{
-		m_file = pPath;
-		m_id = LoadTextureFromFile(pPath);
+		m_id = LoadTextureFromFile(pPath.c_str());
+	}
+
+	Texture::Texture(string pDirectory, string pPath, TexType pType = TexType::diffuse) : m_file(pPath), m_type(pType)
+	{
+		m_id = LoadTextureFromFile((pDirectory + '/' + pPath).c_str());
 	}
 
 	void Texture::Destroy()
 	{
-		glDeleteTextures(1, &s_idTex[m_id]);
-	}
-
-	#pragma region Getters
-	// Static
-	unsigned int Texture::GetNumTex()
-	{
-		return s_numTex;
-	}
-
-	unsigned int Texture::GetId() const
-	{
-		return m_id;
+		// This is currently bad as it leaves a gap in the loaded textures
+		glDeleteTextures(1, &s_textureIds[m_id]);
 	}
 
 	string Texture::GetType() const
@@ -136,5 +129,4 @@ namespace Engine
 			default: return string("ERROR");
 		}
 	}
-	#pragma endregion
 }

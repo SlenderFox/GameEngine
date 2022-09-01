@@ -157,7 +157,7 @@ namespace Engine
 			// Compares to all currently loaded textures
 			for (unsigned int j = 0; j < m_loadedTextures.size(); ++j)
 			{
-				if (std::strcmp(m_loadedTextures[j].m_file.data(), file.C_Str()) == 0)
+				if (std::strcmp(m_loadedTextures[j].GetFile().data(), file.C_Str()) == 0)
 				{
 					// Reuse an existing texture
 					texturesOut.push_back(m_loadedTextures[j]);
@@ -171,11 +171,13 @@ namespace Engine
 				#ifdef _DEBUG
 				 cout << "\xC0";
 				#endif
-				string path = m_directory + '/' + string(file.C_Str());
-				Texture tex;
-				tex.m_id = Texture::LoadTextureFromFile(path.c_str());
-				tex.m_type = pTexType;
-				tex.m_file = file.C_Str();
+				Texture tex = Texture(m_directory, string(file.C_Str()), pTexType);
+
+				//string path = m_directory + '/' + string(file.C_Str());
+				//tex.m_id = Texture::LoadTextureFromFile(path.c_str());
+				//tex.m_type = pTexType;
+				//tex.m_file = file.C_Str();
+
 				texturesOut.push_back(tex);
 				m_loadedTextures.push_back(tex);
 			}

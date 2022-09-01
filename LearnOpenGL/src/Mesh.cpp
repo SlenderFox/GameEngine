@@ -180,7 +180,7 @@ namespace Engine
 		unsigned int specularNr = 0;
 		for (unsigned int i = 0; i < GetTextures()->size(); ++i)
 		{
-			glActiveTexture(GL_TEXTURE0 + i); // Activate proper texture unit before binding
+			glActiveTexture(GL_TEXTURE0 + m_textures.get()->at(i).GetId()); // Activate proper texture unit before binding
 			// Retrieve texture number (the N in diffuse_textureN)
 			string number;
 			string name = GetTextures()->at(i).GetType();
