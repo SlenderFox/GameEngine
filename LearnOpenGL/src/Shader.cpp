@@ -11,7 +11,6 @@
 
 using std::stringstream;
 using std::ifstream;
-using glm::vec3;
 #pragma endregion
 
 namespace Engine

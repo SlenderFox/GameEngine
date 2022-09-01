@@ -2,15 +2,17 @@
 #include "Renderer.hpp"
 #include "glad/glad.h" // Include glad to get all the required OpenGL headers
 #include "glm/gtc/matrix_transform.hpp"
-#define LEGACY 0
-#define CUBE 1
-#define BACKPACK 2
-#define RENDERMODE CUBE
+
 #ifdef _DEBUG
  #include <iostream>
  using std::cout;
  using std::endl;
 #endif
+
+#define LEGACY 0
+#define CUBE 1
+#define BACKPACK 2
+#define RENDERMODE BACKPACK
 #pragma endregion
 
 namespace Engine
@@ -160,7 +162,7 @@ namespace Engine
 		for (unsigned int i = 0; i < m_meshes.get()->size(); ++i)
 		{
 			glBindVertexArray(*GetMeshAt(i)->GetVAO());
-			GetShaderAt(i)->Use();
+			GetShaderAt(i)->Use();	// Needed for when drawing directly from mesh
 			GetShaderAt(i)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
 			GetShaderAt(i)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
 			if (i > 0)
@@ -186,28 +188,27 @@ namespace Engine
 	{
 		// ----- Point light cube -----
 		// Done before so one lower
-		unsigned int pointMeshID = m_meshes.get()->size();
-		unsigned int pointShaderID = m_shaders.get()->size();
+		unsigned int meshID = m_meshes.get()->size();
+		unsigned int shaderID = m_shaders.get()->size();
 		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
 		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
 
-		GetMeshAt(pointMeshID)->LoadTextures(*GetShaderAt(pointShaderID));
-		GetShaderAt(pointShaderID)->SetVec3("u_colour", m_lightPoint->GetColour());
-		GetShaderAt(pointShaderID)->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
+		GetMeshAt(meshID)->LoadTextures(*GetShaderAt(shaderID));
+		GetShaderAt(shaderID)->SetVec3("u_colour", m_lightPoint->GetColour());
+		GetShaderAt(shaderID)->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
 
 		// ----- Spot light cube -----
-		// Done before so one lower
-		unsigned int spotMeshID = m_meshes.get()->size();
-		unsigned int spotShaderID = m_shaders.get()->size();
+		meshID = m_meshes.get()->size();
+		shaderID = m_shaders.get()->size();
 		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
 		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
 
-		GetMeshAt(spotMeshID)->LoadTextures(*GetShaderAt(spotShaderID));
-		GetShaderAt(spotShaderID)->SetVec3("u_colour", m_lightSpot->GetColour());
-		GetShaderAt(spotShaderID)->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
+		GetMeshAt(meshID)->LoadTextures(*GetShaderAt(shaderID));
+		GetShaderAt(shaderID)->SetVec3("u_colour", m_lightSpot->GetColour());
+		GetShaderAt(shaderID)->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
 	}
 
-	void Renderer::LoadShaderUniforms(Shader* pShader)
+	void Renderer::LoadShaderUniforms(Shader *pShader)
 	{
 		pShader->SetFloat("u_material.shininess", 32.0f);
 		// Directional
@@ -270,7 +271,7 @@ namespace Engine
 		}
 	}
 
-	Model* Renderer::GetModelAt(unsigned int pPos)
+	Model *Renderer::GetModelAt(unsigned int pPos)
 	{
 		if (m_models.get() == nullptr)
 			return nullptr;
@@ -286,7 +287,7 @@ namespace Engine
 		return (*m_models.get())[pPos].get();
 	}
 
-	Shader* Renderer::GetShaderAt(unsigned int pPos)
+	Shader *Renderer::GetShaderAt(unsigned int pPos)
 	{
 		if (m_shaders.get() == nullptr)
 			return nullptr;
@@ -302,7 +303,7 @@ namespace Engine
 		return (*m_shaders.get())[pPos].get();
 	}
 
-	Mesh* Renderer::GetMeshAt(unsigned int pPos)
+	Mesh *Renderer::GetMeshAt(unsigned int pPos)
 	{
 		if (m_meshes.get() == nullptr)
 			return nullptr;

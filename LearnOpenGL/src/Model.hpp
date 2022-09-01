@@ -25,13 +25,13 @@ namespace Engine
 		 * @param pPos The position in the array of the mesh
 		 * @return Mesh* The pointer to the mesh object
 		 */
-		Mesh* GetMeshAt(unsigned int pPos);
+		Mesh *GetMeshAt(unsigned int pPos);
 
 	private:
 		void LoadModel(string pPath);
-		void ProcessNode(aiNode* pNode, const aiScene* pScene);
-		unique_ptr<Mesh> ProcessMesh(aiMesh* pMesh, const aiScene* pScene);
-		vector<Texture> LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType);
+		void ProcessNode(aiNode *pNode, const aiScene *pScene);
+		unique_ptr<Mesh> ProcessMesh(aiMesh *pMesh, const aiScene *pScene);
+		vector<Texture> LoadMaterialTextures(aiMaterial *pMat, aiTextureType pType, TexType pTexType);
 
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
 		vector<Texture> m_loadedTextures;

@@ -1,8 +1,8 @@
 #pragma region
+#include "Texture.hpp"
 #include "glad/glad.h" // Include glad to get all the required OpenGL headers
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
-#include "Texture.hpp"
 #ifdef _DEBUG
  #include <iostream>
  using std::cout;
@@ -15,17 +15,6 @@ namespace Engine
 	unsigned int Texture::s_idTex[32];
 	unsigned int Texture::s_numTex;
 
-	Texture::Texture(const char* pPath, TexType pType) : m_type(pType)
-	{
-		m_file = pPath;
-		m_id = LoadTextureFromFile(pPath);
-	}
-
-	void Texture::Destroy()
-	{
-		glDeleteTextures(1, &s_idTex[m_id]);
-	}
-
 	// Static
 	void Texture::UnloadAll(bool pValidate)
 	{
@@ -35,7 +24,7 @@ namespace Engine
 		}
 	}
 
-	uint8_t Texture::LoadTextureFromFile(const char* pPath)
+	uint8_t Texture::LoadTextureFromFile(const char *pPath)
 	{
 		#ifdef _DEBUG
 		 cout << "Loading texture " << s_numTex << ": \"" << pPath << "\"";
@@ -53,7 +42,7 @@ namespace Engine
 		stbi_set_flip_vertically_on_load(true);
 
 		int texWidth = 0, texHeight = 0, numComponents = 0;
-		unsigned char* imageData = stbi_load(pPath, &texWidth, &texHeight, &numComponents, 0);
+		unsigned char *imageData = stbi_load(pPath, &texWidth, &texHeight, &numComponents, 0);
 		if (imageData)
 		{
 			float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -112,6 +101,18 @@ namespace Engine
 			return UINT8_MAX;
 		 }
 		#endif
+	}
+
+	// Member
+	Texture::Texture(const char *pPath, TexType pType) : m_type(pType)
+	{
+		m_file = pPath;
+		m_id = LoadTextureFromFile(pPath);
+	}
+
+	void Texture::Destroy()
+	{
+		glDeleteTextures(1, &s_idTex[m_id]);
 	}
 
 	#pragma region Getters

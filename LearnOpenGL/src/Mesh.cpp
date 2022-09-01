@@ -4,6 +4,7 @@
 
 namespace Engine
 {
+	//Static
 	float* Mesh::s_cubeVerticesArr = new float[288] {
 		// Positions		   // Normals			  // Texture coords
 	    -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 0.0f,
@@ -58,6 +59,45 @@ namespace Engine
 		30U, 31U, 32U, 33U, 34U, 35U	// Face 6
 	};
 	
+	vector<Vertex> Mesh::GenerateVertices()
+	{
+		vector<Vertex> verts = vector<Vertex>();
+
+		// Makes cube with pos, normal, and texcoord
+		for (int i = 0; i < 36; ++i)
+		{
+			Vertex vert;
+			for (int j = 0; j < 8; ++j)
+			{
+				switch (j)
+				{
+					case 0: vert.position.x  = vert.position.x  = s_cubeVerticesArr[i * 8 + j]; break;
+					case 1: vert.position.y  = vert.position.y  = s_cubeVerticesArr[i * 8 + j]; break;
+					case 2: vert.position.z  = vert.position.z  = s_cubeVerticesArr[i * 8 + j]; break;
+					case 3: vert.normal.x    = vert.normal.x    = s_cubeVerticesArr[i * 8 + j]; break;
+					case 4: vert.normal.y    = vert.normal.y    = s_cubeVerticesArr[i * 8 + j]; break;
+					case 5: vert.normal.z    = vert.normal.z    = s_cubeVerticesArr[i * 8 + j]; break;
+					case 6: vert.texCoords.x = vert.texCoords.x = s_cubeVerticesArr[i * 8 + j]; break;
+					case 7: vert.texCoords.y = vert.texCoords.y = s_cubeVerticesArr[i * 8 + j]; break;
+				}
+			}
+			verts.push_back(vert);
+		}
+		verts.shrink_to_fit();
+		return verts;
+	}
+
+	vector<unsigned int> Mesh::GenerateIndices()
+	{
+		vector<unsigned int> inds = vector<unsigned int>();
+
+		for (int i = 0; i < 36; ++i)
+			inds.push_back(s_indicesArr[i]);
+		inds.shrink_to_fit();
+		return inds;
+	}
+
+	//Member
 	Mesh::Mesh()
 	{
 		m_vertices = make_unique<vector<Vertex>>(GenerateVertices());
@@ -157,50 +197,9 @@ namespace Engine
 
 	void Mesh::Draw(Shader* pShader)
 	{
-		// Draw mesh
 		glBindVertexArray(*m_idVAO);
 		glDrawElements(GL_TRIANGLES, GetIndices()->size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
-	}
-
-	// Static
-	vector<Vertex> Mesh::GenerateVertices()
-	{
-		vector<Vertex> verts = vector<Vertex>();
-
-		// Makes cube with pos, normal, and texcoord
-		for (int i = 0; i < 36; ++i)
-		{
-			Vertex vert;
-			for (int j = 0; j < 8; ++j)
-			{
-				switch (j)
-				{
-					case 0: vert.position.x  = vert.position.x  = s_cubeVerticesArr[i * 8 + j]; break;
-					case 1: vert.position.y  = vert.position.y  = s_cubeVerticesArr[i * 8 + j]; break;
-					case 2: vert.position.z  = vert.position.z  = s_cubeVerticesArr[i * 8 + j]; break;
-					case 3: vert.normal.x    = vert.normal.x    = s_cubeVerticesArr[i * 8 + j]; break;
-					case 4: vert.normal.y    = vert.normal.y    = s_cubeVerticesArr[i * 8 + j]; break;
-					case 5: vert.normal.z    = vert.normal.z    = s_cubeVerticesArr[i * 8 + j]; break;
-					case 6: vert.texCoords.x = vert.texCoords.x = s_cubeVerticesArr[i * 8 + j]; break;
-					case 7: vert.texCoords.y = vert.texCoords.y = s_cubeVerticesArr[i * 8 + j]; break;
-				}
-			}
-			verts.push_back(vert);
-		}
-		verts.shrink_to_fit();
-		return verts;
-	}
-
-	// Static
-	vector<unsigned int> Mesh::GenerateIndices()
-	{
-		vector<unsigned int> inds = vector<unsigned int>();
-
-		for (int i = 0; i < 36; ++i)
-			inds.push_back(s_indicesArr[i]);
-		inds.shrink_to_fit();
-		return inds;
 	}
 
 	void Mesh::SetupMesh()
@@ -268,37 +267,6 @@ namespace Engine
 	void Mesh::SetTextures(vector<Texture>* pTextures)
 	{
 		m_textures = make_unique<vector<Texture>>(*pTextures);
-	}
-	#pragma endregion
-	#pragma region Getters
-	vector<Vertex>* Mesh::GetVertices() const
-	{
-		return m_vertices.get();
-	}
-	
-	vector<unsigned int>* Mesh::GetIndices() const
-	{
-		return m_indices.get();
-	}
-
-	vector<Texture>* Mesh::GetTextures() const
-	{
-		return m_textures.get();
-	}
-
-	unsigned int* Mesh::GetVAO() const
-	{
-		return m_idVAO;
-	}
-
-	unsigned int* Mesh::GetVBO() const
-	{
-		return m_idVBO;
-	}
-
-	unsigned int* Mesh::GetEBO() const
-	{
-		return m_idEBO;
 	}
 	#pragma endregion
 }
