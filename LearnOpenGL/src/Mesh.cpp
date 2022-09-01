@@ -124,35 +124,6 @@ namespace Engine
 		
 		SetupMesh();
 	}
-	
-	// These are probably bad
-	#pragma region Copy constructors
-	Mesh::Mesh(const Mesh& pOther)
-	{
-		m_vertices = make_unique<vector<Vertex>>(*pOther.GetVertices());
-		m_indices = make_unique<vector<unsigned int>>(*pOther.GetIndices());
-		m_textures = make_unique<vector<Texture>>(*pOther.GetTextures());
-	}
-
-	Mesh::Mesh(Mesh&& pOther) noexcept
-	{
-		m_vertices = make_unique<vector<Vertex>>(*pOther.GetVertices());
-		m_indices = make_unique<vector<unsigned int>>(*pOther.GetIndices());
-		m_textures = make_unique<vector<Texture>>(*pOther.GetTextures());
-	}
-
-	Mesh& Mesh::operator=(const Mesh& pOther)
-	{
-		Mesh* newObj = new Mesh(*pOther.GetVertices(), *pOther.GetIndices(), *pOther.GetTextures());
-		return *newObj;
-	}
-
-	Mesh& Mesh::operator=(Mesh&& pOther) noexcept
-	{
-		Mesh* newObj = new Mesh(*pOther.GetVertices(), *pOther.GetIndices(), *pOther.GetTextures());
-		return *newObj;
-	}
-	#pragma endregion
 
 	void Mesh::Destroy(bool pValidate)
 	{

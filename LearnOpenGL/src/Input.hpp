@@ -8,6 +8,7 @@ namespace Engine
 	class Input
 	{
 		friend class Application;	// Allowing application access and control
+	// Static
 	public:
 		static Input* GetInstance()
 		{
@@ -17,6 +18,7 @@ namespace Engine
 
 		//void ProcessInput(GLFWwindow* pWindow);
 
+	// Member
 	private:
 		#pragma region Constructors
 		Input() = default;

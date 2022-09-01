@@ -12,6 +12,12 @@ namespace Engine
 
 	class Light : public Transform
 	{
+	private:
+		LightType m_type;
+		vec3 m_lightColour;
+		float m_angle;		// Only for spotlights
+		float m_blur;		// Only for spotlights
+
 	public:
 		#pragma region Constructors
 		Light(LightType pType);										// Generic
@@ -40,11 +46,5 @@ namespace Engine
 		float GetBlur();
 		float GetBlurRaw() const;
 		#pragma endregion
-
-	private:
-		LightType m_type;
-		vec3 m_lightColour;
-		float m_angle;		// Only for spotlights
-		float m_blur;		// Only for spotlights
 	};
 }

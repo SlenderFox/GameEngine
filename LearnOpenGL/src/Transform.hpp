@@ -13,11 +13,14 @@ namespace Engine
 {
 	class Transform
 	{
+	protected:
+		mat4 m_transform = mat4(1);
+
 	public:
+		#pragma region Constructors
 		Transform();
 		Transform(mat4 pValue);
 
-		#pragma region Copy constructors
 		Transform(const Transform& pOther);
 		Transform(Transform&& pOther) noexcept;
 		Transform& operator=(const Transform& pOther);
@@ -40,8 +43,5 @@ namespace Engine
 		virtual vec3 GetUp() const;
 		virtual vec3 GetForward() const;
 		#pragma endregion
-
-	protected:
-		mat4 m_transform = mat4(1);
 	};
 }

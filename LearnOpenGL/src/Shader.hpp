@@ -16,75 +16,26 @@ namespace Engine
 
 	class Shader
 	{
-	public:
-		Shader();
-		/**
-		 * @brief Construct a new Shader object
-		 *
-		 * @param pVertexPath The file path to the vertex shader
-		 * @param pFragmentPath The file path to the fragment shader
-		 */
-		Shader(string pShaderPath);
-
-		#pragma region Copy constructors
-		Shader(const Shader& pOther);
-		Shader(Shader&& pOther) noexcept;
-		Shader& operator=(const Shader& pOther);
-		Shader& operator=(Shader&& pOther) noexcept;
-		#pragma endregion
-
-		~Shader() {}
-
-		/**
-		 * @brief Destroys the shader but only if it was ever initliased
-		 *
-		 * @param pValidate Whether the shader was even initialised
-		 */
-		void Destroy(bool pValidate);
-		/**
-		 * @brief Use/activate the shader
-		 */
-		void Use() const;
-		void LoadPaths(string pShaderPath);
-
-		bool GetLoaded() const { return m_shaderLoaded; }
-
 	private:
-		/**
-		 * @brief Loads the shader code from file
-		 * 
-		 * @param pType The type of shader to load: VERTEX, FRAGMENT
-		 */
-		void LoadShader(ShaderType pType);
-		/**
-		 * @brief Compiles a specified shader
-		 * 
-		 * @param pId The shader id
-		 * @param pType The type of shader to compile: VERTEX, FRAGMENT
-		 * @param pCode The shader code
-		 * @return If shader compilation was successful
-		 */
-		bool CompileShader(unsigned int* pId, ShaderType pType, const char* pCode);
-		/**
-		 * @brief Create a Shader Program object and link the vertex and fragment code
-		 */
-		void CreateShaderProgram();
-
-		/**
-		 * @brief Checks a shader for errors while loading and logs them
-		 *
-		 * @param pShaderID The id of the shader to be error checked
-		 * @param pType The type of shader being error checked
-		 * @return true if no error, false if error
-		 */
-		bool ShaderErrorChecking(unsigned int* pShaderID, ShaderType pType);
-
 		bool m_shaderLoaded = false;
 		unsigned int m_idProgram, m_idVertex, m_idFragment;
 		string m_shaderPath;	// The file path of the shaders
 
-		#pragma region Setters
+		void LoadShader(ShaderType pType);
+		bool CompileShader(unsigned int* pId, ShaderType pType, const char* pCode);
+		void CreateShaderProgram();
+		bool ShaderErrorChecking(unsigned int* pShaderID, ShaderType pType);
+		
 	public:
+		Shader();
+		Shader(string pShaderPath);
+
+		void Destroy(bool pValidate);
+		void Use() const;
+		void LoadPaths(string pShaderPath);
+		bool GetLoaded() const { return m_shaderLoaded; }
+
+		#pragma region Setters
 		// Utility uniform functions
 		/**
 		 * @brief Assigns data to a bool uniform in the shader

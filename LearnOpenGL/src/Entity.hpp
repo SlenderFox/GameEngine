@@ -5,17 +5,17 @@ using std::vector;
 
 namespace Engine
 {
-    class Entity : public Transform
-    {
-    public:
-        Entity();
-        Entity(Entity* pParent);
+	class Entity : public Transform
+	{
+	private:
+		Entity* m_parent = nullptr;
+		vector<Entity*>* m_children = nullptr;
 
-        Entity* GetParent() const;
-        vector<Entity*>* GetChildren() const;
+	public:
+		Entity();
+		Entity(Entity* pParent);
 
-    private:
-        Entity* m_parent = nullptr;
-        vector<Entity*>* m_children = nullptr;
-    };
+		Entity* GetParent() const;
+		vector<Entity*>* GetChildren() const;
+	};
 }

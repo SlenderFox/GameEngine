@@ -45,13 +45,6 @@ namespace Engine
 		Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices, vector<Texture> pTextures = vector<Texture>());
 		Mesh(unique_ptr<vector<Vertex>> pVertices, unique_ptr<vector<unsigned int>> pIndices, unique_ptr<vector<Texture>> pTextures = make_unique<vector<Texture>>());
 
-		#pragma region Copy constructors
-		Mesh(const Mesh& pOther);
-		Mesh(Mesh&& pOther) noexcept;
-		Mesh& operator=(const Mesh& pOther);
-		Mesh& operator=(Mesh&& pOther) noexcept;
-		#pragma endregion
-
 		void Destroy(bool pValidate);
 
 		void LoadTextures(Shader& pShader);

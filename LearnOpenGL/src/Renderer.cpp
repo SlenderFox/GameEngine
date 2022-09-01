@@ -266,7 +266,7 @@ namespace Engine
 			#if RENDERMODE == LEGACY
 			 GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
 			#else
-			 GetShaderAt(2U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
+			 GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
 			#endif
 			//#ifdef _DEBUG
 			// printf("Cutoff: %f | Blur: %f\n", m_lightSpot->GetAngleRaw(), m_lightSpot->GetBlurRaw());
@@ -283,7 +283,7 @@ namespace Engine
 			#if RENDERMODE == LEGACY
 			 GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
 			#else
-			 GetShaderAt(2U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
+			 GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
 			#endif
 			//#ifdef _DEBUG
 			// printf("Cutoff: %f | Blur: %f\n", m_lightSpot->GetAngleRaw(), m_lightSpot->GetBlurRaw());

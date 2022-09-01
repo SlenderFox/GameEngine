@@ -29,30 +29,6 @@ namespace Engine
 		LoadPaths(pShaderPath);
 	}
 
-	#pragma region Copy constructors
-	Shader::Shader(const Shader& pOther)
-	{
-		m_shaderPath = pOther.m_shaderPath;
-	}
-	
-	Shader::Shader(Shader&& pOther) noexcept
-	{
-		m_shaderPath = pOther.m_shaderPath;
-	}
-	
-	Shader& Shader::operator=(const Shader& pOther)
-	{
-		Shader* newObj = new Shader(pOther.m_shaderPath);
-		return *newObj;
-	}
-	
-	Shader& Shader::operator=(Shader&& pOther) noexcept
-	{
-		Shader* newObj = new Shader(pOther.m_shaderPath);
-		return *newObj;
-	}
-	#pragma endregion
-
 	void Shader::Destroy(bool pValidate)
 	{
 		if (pValidate && m_shaderLoaded)

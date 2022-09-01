@@ -198,9 +198,9 @@ namespace Engine
 		glClearColor(pValue.x, pValue.y, pValue.z, 1.0f);
 	}
 
-	void Camera::SetClearColour(vec3 pValue, float pA)
+	void Camera::SetClearColour(vec3 pValue, float pAlpha)
 	{
-		glClearColor(pValue.x, pValue.y, pValue.z, pA);
+		glClearColor(pValue.x, pValue.y, pValue.z, pAlpha);
 	}
 
 	void Camera::SetClearColour(float pRed, float pGreen, float pBlue)

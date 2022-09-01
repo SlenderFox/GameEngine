@@ -8,6 +8,7 @@ namespace Engine
 	class Renderer
 	{
 		friend class Application;	// Allowing application access and control
+	// Static
 	public:
 		static Renderer* GetInstance()
 		{
@@ -15,53 +16,8 @@ namespace Engine
 			return sm_instance;
 		}
 
+	// Member
 	private:
-		#pragma region Constructors
-		Renderer() = default;
-		~Renderer() {}
-		// Delete copy/move so extra instances can't be created/moved.
-		Renderer(const Renderer&) = delete;
-		Renderer& operator=(const Renderer&) = delete;
-		Renderer(Renderer&&) = delete;
-		Renderer& operator=(Renderer&&) = delete;
-		#pragma endregion
-
-		/**
-		 * @brief Initlialises the renderer
-		 *
-		 * @return If initlialisation was successful
-		 */
-		void Init(float pAspect);
-		/**
-		 * @brief Destroys the renderer but only if it was ever initliased
-		 *
-		 * @param pValidate Whether the renderer was even initialised
-		 */
-		void Destroy(bool pValidate);
-		/**
-		 * @brief Draws the scene
-		 *
-		 * @param pTime TEMPORARY! Used for basic shape animation
-		 * @remark Only Application is able to call this function
-		 */
-		void Draw(double pTime);
-
-		void CreateModelScene();
-		void RenderModelScene(double pTime);
-		void CreateBoxScene();
-		void RenderBoxScene(double pTime);
-		
-		void CreateModelLights();
-		void CreateMeshLights();
-		void LoadShaderUniforms(Shader* pShader);
-
-		void ModifySpotlightAngle(float pValue);
-		void ModifySpotlightBlur(float pValue);
-
-		Model* GetModelAt(unsigned int pPos);
-		Shader* GetShaderAt(unsigned int pPos);
-		Mesh* GetMeshAt(unsigned int pPos);
-
 		Camera* m_cameraRef = nullptr;	// A reference to a camera
 		unique_ptr<vector<unique_ptr<Model>>> m_models;
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
@@ -83,5 +39,35 @@ namespace Engine
 			glm::vec3(1.5f,  0.2f, -1.5f),
 			glm::vec3(-1.3f,  1.0f, -1.5f)
 		};
+
+		#pragma region Constructors
+		Renderer() = default;
+		~Renderer() {}
+		// Delete copy/move so extra instances can't be created/moved.
+		Renderer(const Renderer&) = delete;
+		Renderer& operator=(const Renderer&) = delete;
+		Renderer(Renderer&&) = delete;
+		Renderer& operator=(Renderer&&) = delete;
+		#pragma endregion
+
+		void Init(float pAspect);
+		void Destroy(bool pValidate);
+		void Draw(double pTime);
+
+		void CreateModelScene();
+		void RenderModelScene(double pTime);
+		void CreateBoxScene();
+		void RenderBoxScene(double pTime);
+		
+		void CreateModelLights();
+		void CreateMeshLights();
+		void LoadShaderUniforms(Shader* pShader);
+
+		void ModifySpotlightAngle(float pValue);
+		void ModifySpotlightBlur(float pValue);
+
+		Model* GetModelAt(unsigned int pPos);
+		Shader* GetShaderAt(unsigned int pPos);
+		Mesh* GetMeshAt(unsigned int pPos);
 	};
 }

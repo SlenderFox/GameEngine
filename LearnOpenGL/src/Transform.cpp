@@ -2,17 +2,11 @@
 
 namespace Engine
 {
-	Transform::Transform()
-	{
-		m_transform = mat4(1);
-	}
+	#pragma region Constructors
+	Transform::Transform() : m_transform(mat4(1)) { }
 
-	Transform::Transform(mat4 pValue)
-	{
-		m_transform = pValue;
-	}
+	Transform::Transform(mat4 pValue) : m_transform(pValue) {}
 
-	#pragma region Copy constructors
 	Transform::Transform(const Transform& pOther)
 	{
 		m_transform = pOther.GetTransform();

@@ -22,12 +22,6 @@ namespace Engine
 		static unsigned int s_textureCount;		// How many textures have been loaded
 
 	public:
-		/**
-		 * @brief Loads an image from a file into vram (I'm assuming) as a texture
-		 * 
-		 * @param pPath The location of the image file
-		 * @return uint8_t The ID for the texture (max 32 textures so this will be more than enough)
-		 */
 		static uint8_t LoadTextureFromFile(const char* pPath);
 		static void UnloadAll(bool pValidate);
 		static unsigned int GetNumTex() { return s_textureCount; }
