@@ -9,13 +9,13 @@ namespace Engine
     {
     public:
         Entity();
-        Entity(Entity* pParent);
+        Entity(Entity *pParent);
 
-        Entity* GetParent() const;
-        vector<Entity*>* GetChildren() const;
+        Entity *GetParent() const;
+        vector<Entity*> *GetChildren() const;
 
     private:
-        Entity* m_parent = nullptr;
-        vector<Entity*>* m_children = nullptr;
+        Entity *m_parent = nullptr;
+        vector<Entity*> *m_children = nullptr;
     };
 }

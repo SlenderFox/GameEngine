@@ -64,7 +64,7 @@ namespace Engine
 		 * @param pCode The shader code
 		 * @return If shader compilation was successful
 		 */
-		bool CompileShader(unsigned int* pId, ShaderType pType, const char* pCode);
+		bool CompileShader(unsigned int *pId, ShaderType pType, const char *pCode);
 		/**
 		 * @brief Create a Shader Program object and link the vertex and fragment code
 		 */

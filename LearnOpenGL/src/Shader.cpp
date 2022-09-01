@@ -42,13 +42,13 @@ namespace Engine
 	
 	Shader& Shader::operator=(const Shader& pOther)
 	{
-		Shader* newObj = new Shader(pOther.m_shaderPath);
+		Shader *newObj = new Shader(pOther.m_shaderPath);
 		return *newObj;
 	}
 	
 	Shader& Shader::operator=(Shader&& pOther) noexcept
 	{
-		Shader* newObj = new Shader(pOther.m_shaderPath);
+		Shader *newObj = new Shader(pOther.m_shaderPath);
 		return *newObj;
 	}
 	#pragma endregion
@@ -86,7 +86,7 @@ namespace Engine
 		}
 
 		#pragma region Fallback code
-		 const char* vertexFallback = "#version 330 core\n\
+		 const char *vertexFallback = "#version 330 core\n\
 layout (location=0) in vec3 aPos;\
 layout (location=1) in vec3 aNormal;\
 layout (location=2) in vec2 aTexCoord;\
@@ -101,7 +101,7 @@ gl_Position=u_camera*u_model*vec4(aPos,1.0);\
 FragPos=vec3(u_model*vec4(aPos,1.0));\
 Normal=u_transposeInverseOfModel*aNormal;\
 TexCoord=aTexCoord;}";
-		 const char* fragmentFallback = "#version 330 core\n\
+		 const char *fragmentFallback = "#version 330 core\n\
 #define normalise normalize\
 const int NR_POINT_LIGHTS=10;\
 const int NR_SPOT_LIGHTS=10;\
@@ -164,7 +164,7 @@ FragCol=vec4(result,1);return;}";
 		#pragma endregion
 
 		// Must be defined out here
-		const char* code;
+		const char *code;
 		ifstream inStream;
 		string codeString;
 
@@ -175,10 +175,10 @@ FragCol=vec4(result,1);return;}";
 		try
 		{
 			/* For both vertex and fragment we:
-			* Open files
-			* Read file's buffer contents into streams
-			* Close file handlers
-			* Convert stream into string
+			 * Open files
+			 * Read file's buffer contents into streams
+			 * Close file handlers
+			 * Convert stream into string
 			*/
 			stringstream codeStream;
 			inStream.open((pType == ShaderType::VERTEX ? m_shaderPath + string(".vert") : m_shaderPath + string(".frag")));
@@ -212,7 +212,7 @@ FragCol=vec4(result,1);return;}";
 		}
 	}
 
-	bool Shader::CompileShader(unsigned int* pId, ShaderType pType, const char* pCode)
+	bool Shader::CompileShader(unsigned int *pId, ShaderType pType, const char *pCode)
 	{
 		// Creates a shader object and assigns to an id
 		if (pType == ShaderType::PROGRAM)
