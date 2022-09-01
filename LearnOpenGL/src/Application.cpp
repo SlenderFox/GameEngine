@@ -12,18 +12,18 @@
 #endif
 
 // Called when the user resizes the window
-void framebuffer_size_callback(GLFWwindow *pWindow, int pWidth, int pHeight)
+void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight)
 {
 	Engine::Application::GetApplication()->SetDimensions(pWidth, pHeight);
 	glViewport(0, 0, pWidth, pHeight);
 }
 
-void mouse_callback(GLFWwindow *pWindow, double pPosX, double pPosY)
+void mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY)
 {
 	Engine::Application::GetApplication()->MouseCallback(pPosX, pPosY);
 }
 
-void scroll_callback(GLFWwindow *window, double pOffsetX, double pOffsetY)
+void scroll_callback(GLFWwindow* window, double pOffsetX, double pOffsetY)
 {
 	Engine::Application::GetApplication()->ScrollCallback(pOffsetX, pOffsetY);
 }
@@ -31,7 +31,7 @@ void scroll_callback(GLFWwindow *window, double pOffsetX, double pOffsetY)
 
 namespace Engine
 {
-	Application *Application::sm_appRef = nullptr;
+	Application* Application::sm_appRef = nullptr;
 
 	Application::Application()
 	{
@@ -182,8 +182,8 @@ namespace Engine
 		glfwSetScrollCallback(m_window, scroll_callback);
 
 		//glfwSetWindowAspectRatio(m_window, 16, 9);
-		//int *monCount = 0;
-		//GLFWmonitor **monitors = glfwGetMonitors(monCount);
+		//int* monCount = 0; 
+		//GLFWmonitor** monitors = glfwGetMonitors(monCount);
 
 		// glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))

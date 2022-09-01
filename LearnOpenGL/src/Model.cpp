@@ -13,7 +13,7 @@
 
 namespace Engine
 {
-	void Model::Init(char *pPath)
+	void Model::Init(char* pPath)
 	{
 		// Mesh creation
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
@@ -34,7 +34,7 @@ namespace Engine
 		m_meshes.release();
 	}
 
-	void Model::Draw(Camera *pCamera , Shader *pShader)
+	void Model::Draw(Camera* pCamera , Shader* pShader)
 	{
 		if (pCamera == nullptr || pShader == nullptr)
 		{
@@ -58,7 +58,7 @@ namespace Engine
 		 cout << "Loading model \"" << pPath << "\"" << endl;
 		#endif
 		Assimp::Importer importer;
-		const aiScene *scene = importer.ReadFile(pPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene* scene = importer.ReadFile(pPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -74,12 +74,12 @@ namespace Engine
 		#endif
 	}
 	
-	void Model::ProcessNode(aiNode *pNode, const aiScene *pScene)
+	void Model::ProcessNode(aiNode* pNode, const aiScene* pScene)
 	{
 		// Process all the node's meshes (if any)
 		for (unsigned int i = 0; i < pNode->mNumMeshes; ++i)
 		{
-			aiMesh *mesh = pScene->mMeshes[pNode->mMeshes[i]];
+			aiMesh* mesh = pScene->mMeshes[pNode->mMeshes[i]];
 			m_meshes.get()->push_back(ProcessMesh(mesh, pScene));
 		}
 		// Then do the same for each of it's children
@@ -89,7 +89,7 @@ namespace Engine
 		}
 	}
 
-	unique_ptr<Mesh> Model::ProcessMesh(aiMesh *pMesh, const aiScene *pScene)
+	unique_ptr<Mesh> Model::ProcessMesh(aiMesh* pMesh, const aiScene* pScene)
 	{
 		vector<Vertex> vertices;
 		vector<unsigned int> indices;
@@ -136,7 +136,7 @@ namespace Engine
 		// Process material
 		if (pMesh->mMaterialIndex >= 0)
 		{
-			aiMaterial *material = pScene->mMaterials[pMesh->mMaterialIndex];
+			aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
 			vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TexType::diffuse);
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 			vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TexType::specular);
@@ -146,7 +146,7 @@ namespace Engine
 		return make_unique<Mesh>(vertices, indices, textures);
 	}
 
-	vector<Texture> Model::LoadMaterialTextures(aiMaterial *pMat, aiTextureType pType, TexType pTexType)
+	vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType)
 	{
 		vector<Texture> texturesOut;
 		for (unsigned int i = 0; i < pMat->GetTextureCount(pType); ++i)
@@ -183,7 +183,7 @@ namespace Engine
 		return texturesOut;
 	}
 
-	Mesh *Model::GetMeshAt(unsigned int pPos)
+	Mesh* Model::GetMeshAt(unsigned int pPos)
 	{
 		if (m_meshes.get() == nullptr)
 			return nullptr;

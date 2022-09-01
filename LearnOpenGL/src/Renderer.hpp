@@ -9,9 +9,9 @@ namespace Engine
 	{
 		friend class Application;	// Allowing application access and control
 	public:
-		static Renderer *GetInstance()
+		static Renderer* GetInstance()
 		{
-			static Renderer *sm_instance = new Renderer();
+			static Renderer* sm_instance = new Renderer();
 			return sm_instance;
 		}
 
@@ -53,23 +53,23 @@ namespace Engine
 		
 		void CreateModelLights();
 		void CreateMeshLights();
-		void LoadShaderUniforms(Shader *pShader);
+		void LoadShaderUniforms(Shader* pShader);
 
 		void ModifySpotlightAngle(float pValue);
 		void ModifySpotlightBlur(float pValue);
 
-		Model *GetModelAt(unsigned int pPos);
-		Shader *GetShaderAt(unsigned int pPos);
-		Mesh *GetMeshAt(unsigned int pPos);
+		Model* GetModelAt(unsigned int pPos);
+		Shader* GetShaderAt(unsigned int pPos);
+		Mesh* GetMeshAt(unsigned int pPos);
 
-		Camera *m_cameraRef = nullptr;	// A reference to a camera
+		Camera* m_cameraRef = nullptr;	// A reference to a camera
 		unique_ptr<vector<unique_ptr<Model>>> m_models;
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
 
-		Light *m_lightDirectional = nullptr;
-		Light *m_lightPoint = nullptr;
-		Light *m_lightSpot = nullptr;
+		Light* m_lightDirectional = nullptr;
+		Light* m_lightPoint = nullptr;
+		Light* m_lightSpot = nullptr;
 
 		const vec3 m_cubePositions[10] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),

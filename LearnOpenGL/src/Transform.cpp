@@ -25,13 +25,13 @@ namespace Engine
 
 	Transform& Transform::operator=(const Transform& pOther)
 	{
-		Transform *newObj = new Transform(pOther.GetTransform());
+		Transform* newObj = new Transform(pOther.GetTransform());
 		return *newObj;
 	}
 
 	Transform& Transform::operator=(Transform&& pOther) noexcept
 	{
-		Transform *newObj = new Transform(pOther.GetTransform());
+		Transform* newObj = new Transform(pOther.GetTransform());
 		return *newObj;
 	}
 	#pragma endregion

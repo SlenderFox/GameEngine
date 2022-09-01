@@ -9,13 +9,13 @@ namespace Engine
 	{
 		friend class Application;	// Allowing application access and control
 	public:
-		static Input *GetInstance()
+		static Input* GetInstance()
 		{
-			static Input *sm_instance = new Input();
+			static Input* sm_instance = new Input();
 			return sm_instance;
 		}
 
-		//void ProcessInput(GLFWwindow *pWindow);
+		//void ProcessInput(GLFWwindow* pWindow);
 
 	private:
 		#pragma region Constructors

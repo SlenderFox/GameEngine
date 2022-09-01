@@ -214,7 +214,7 @@ namespace Engine
 		glBindVertexArray(*m_idVAO);
 
 		// GL_ARRAY_BUFFER effectively works like a pointer, using the id provided to point to the buffer
-		glBindBuffer(GL_ARRAY_BUFFER, *m_idVBO);
+		glBindBuffer(GL_ARRAY_BUFFER,* m_idVBO);
 		// Loads the vertices to the VBO
 		glBufferData(GL_ARRAY_BUFFER, GetVertices()->size() * sizeof(Vertex), &(*GetVertices())[0], GL_STATIC_DRAW);
 
@@ -224,7 +224,7 @@ namespace Engine
 		*/
 
 		// This buffer stores the indices that reference the elements of the VBO
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *m_idEBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,* m_idEBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, GetIndices()->size() * sizeof(unsigned int), &(*GetIndices())[0], GL_STATIC_DRAW);
 
 		/*Tells the shader how to use the vertex data provided

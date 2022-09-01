@@ -64,7 +64,7 @@ namespace Engine
 		 * @param pCode The shader code
 		 * @return If shader compilation was successful
 		 */
-		bool CompileShader(unsigned int *pId, ShaderType pType, const char *pCode);
+		bool CompileShader(unsigned int* pId, ShaderType pType, const char* pCode);
 		/**
 		 * @brief Create a Shader Program object and link the vertex and fragment code
 		 */
@@ -77,7 +77,7 @@ namespace Engine
 		 * @param pType The type of shader being error checked
 		 * @return true if no error, false if error
 		 */
-		bool ShaderErrorChecking(unsigned int *pShaderID, ShaderType pType);
+		bool ShaderErrorChecking(unsigned int* pShaderID, ShaderType pType);
 
 		bool m_shaderLoaded = false;
 		unsigned int m_idProgram, m_idVertex, m_idFragment;

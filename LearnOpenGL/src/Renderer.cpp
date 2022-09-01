@@ -109,13 +109,13 @@ namespace Engine
 		unsigned int shaderID = m_shaders.get()->size();
 		#if RENDERMODE == BACKPACK
 		 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));
-		 Shader *shaderRef = GetShaderAt(shaderID);
+		 Shader* shaderRef = GetShaderAt(shaderID);
 		 shaderRef->SetMat4("u_model", mat4(1.0f));
 	 	 shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
 		 m_models.get()->push_back(make_unique<Model>((char*)"assets/models/backpack/backpack.obj", m_cameraRef, shaderRef));
 		#else
 		 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/cube"));
-		 Shader *shaderRef = GetShaderAt(shaderID);
+		 Shader* shaderRef = GetShaderAt(shaderID);
 		 shaderRef->SetMat4("u_model", mat4(1.0f));
 	 	 shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
 		 m_models.get()->push_back(make_unique<Model>((char*)"assets/models/cube/cube.obj", m_cameraRef, shaderRef));
@@ -188,7 +188,7 @@ namespace Engine
 		// Done before so one lower
 		unsigned int shaderID = m_shaders.get()->size();
 		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
-		Shader *shaderRef = GetShaderAt(shaderID);
+		Shader* shaderRef = GetShaderAt(shaderID);
 		shaderRef->SetVec3("u_colour", m_lightPoint->GetColour());
 		shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
 	 	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
@@ -228,7 +228,7 @@ namespace Engine
 		GetShaderAt(shaderID)->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
 	}
 
-	void Renderer::LoadShaderUniforms(Shader *pShader)
+	void Renderer::LoadShaderUniforms(Shader* pShader)
 	{
 		pShader->SetFloat("u_material.shininess", 32.0f);
 		// Directional
@@ -291,7 +291,7 @@ namespace Engine
 		}
 	}
 
-	Model *Renderer::GetModelAt(unsigned int pPos)
+	Model* Renderer::GetModelAt(unsigned int pPos)
 	{
 		if (m_models.get() == nullptr)
 			return nullptr;
@@ -307,7 +307,7 @@ namespace Engine
 		return (*m_models.get())[pPos].get();
 	}
 
-	Shader *Renderer::GetShaderAt(unsigned int pPos)
+	Shader* Renderer::GetShaderAt(unsigned int pPos)
 	{
 		if (m_shaders.get() == nullptr)
 			return nullptr;
@@ -323,7 +323,7 @@ namespace Engine
 		return (*m_shaders.get())[pPos].get();
 	}
 
-	Mesh *Renderer::GetMeshAt(unsigned int pPos)
+	Mesh* Renderer::GetMeshAt(unsigned int pPos)
 	{
 		if (m_meshes.get() == nullptr)
 			return nullptr;

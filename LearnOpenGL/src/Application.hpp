@@ -11,7 +11,7 @@ namespace Engine
 	public:
 		virtual ~Application();
 
-		static Application *GetApplication() { return sm_appRef; }
+		static Application* GetApplication() { return sm_appRef; }
 
 		/**
 		 * @brief The entrypoint to the application
@@ -91,10 +91,10 @@ namespace Engine
 		 */
 		void ProcessInput();
 
-		static Application *sm_appRef;		// Static reference to the application
-		GLFWwindow *m_window = nullptr;     // A reference to the window
-		Renderer *m_rendererInst = nullptr; // A reference to the renderer instance
-		Input *m_inputInst = nullptr;       // A reference to the input instance
+		static Application* sm_appRef;		// Static reference to the application
+		GLFWwindow* m_window = nullptr;     // A reference to the window
+		Renderer* m_rendererInst = nullptr; // A reference to the renderer instance
+		Input* m_inputInst = nullptr;       // A reference to the input instance
 
 		bool m_gladLoaded = false;                          // Whether glad has loaded or not
 		unsigned int m_winWidth = 0U, m_winHeight = 0U;     // The width and height of the window
