@@ -44,7 +44,7 @@ namespace Engine
 		void Destroy(bool pValidate);
 
 		void LoadTextures(Shader& pShader);
-		void Draw(Shader* pShader);
+		void Draw();
 
 		#pragma region Setters
 		void SetVertices(vector<Vertex> *pVertices);

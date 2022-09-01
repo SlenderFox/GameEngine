@@ -105,31 +105,29 @@ namespace Engine
 
 	void Renderer::CreateModelScene()
 	{
-		CreateGenericLights();
-
+		
+		unsigned int shaderID = m_shaders.get()->size();
 		#if RENDERMODE == BACKPACK
 		 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));
-		 m_models.get()->push_back(make_unique<Model>((char*)"assets/models/backpack/backpack.obj"));
+		 Shader *shaderRef = GetShaderAt(shaderID);
+		 shaderRef->SetMat4("u_model", mat4(1.0f));
+	 	 shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
+		 m_models.get()->push_back(make_unique<Model>((char*)"assets/models/backpack/backpack.obj", m_cameraRef, shaderRef));
 		#else
 		 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/cube"));
-		 m_models.get()->push_back(make_unique<Model>((char*)"assets/models/cube/cube.obj"));
+		 Shader *shaderRef = GetShaderAt(shaderID);
+		 shaderRef->SetMat4("u_model", mat4(1.0f));
+	 	 shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
+		 m_models.get()->push_back(make_unique<Model>((char*)"assets/models/cube/cube.obj", m_cameraRef, shaderRef));
 		#endif
-		LoadShaderUniforms(GetShaderAt(2U));
+		LoadShaderUniforms(shaderRef);
+		CreateModelLights();
 	}
 
 	void Renderer::RenderModelScene(double pTime)
 	{
 		for (unsigned int i = 0; i < m_models.get()->size(); ++i)
-			GetModelAt(i)->Draw(GetShaderAt(2U), m_cameraRef);
-
-		for (unsigned int i = 0; i < m_meshes.get()->size(); ++i)
-		{
-			glBindVertexArray(*GetMeshAt(i)->GetVAO());
-			GetShaderAt(i)->Use();	// Needed for when drawing directly from mesh
-			GetShaderAt(i)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
-			GetShaderAt(i)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
-			GetMeshAt(i)->Draw(GetShaderAt(i));
-		}
+			GetModelAt(i)->Draw();
 	}
 	
 	void Renderer::CreateBoxScene()
@@ -154,7 +152,7 @@ namespace Engine
 		GetMeshAt(0U)->LoadTextures(*GetShaderAt(0U));
 		LoadShaderUniforms(GetShaderAt(0U));
 	
-		CreateGenericLights();
+		CreateMeshLights();
 	}
 
 	void Renderer::RenderBoxScene(double pTime)
@@ -166,7 +164,7 @@ namespace Engine
 			GetShaderAt(i)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
 			GetShaderAt(i)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
 			if (i > 0)
-				GetMeshAt(i)->Draw(GetShaderAt(i));
+				GetMeshAt(i)->Draw();
 			else
 			{
 				for (unsigned int j = 0; j < 10; j++)
@@ -178,13 +176,35 @@ namespace Engine
 					GetShaderAt(0U)->SetMat4("u_model", (mat4)model);
 					mat3 transposeInverseOfModel = mat3(glm::transpose(glm::inverse(model)));
 					GetShaderAt(0U)->SetMat3("u_transposeInverseOfModel", (mat3)transposeInverseOfModel);
-					GetMeshAt(i)->Draw(GetShaderAt(i));
+					GetMeshAt(i)->Draw();
 				}
 			}
 		}
 	}
 
-	void Renderer::CreateGenericLights()
+	void Renderer::CreateModelLights()
+	{
+		// ----- Point light cube -----
+		// Done before so one lower
+		unsigned int shaderID = m_shaders.get()->size();
+		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
+		Shader *shaderRef = GetShaderAt(shaderID);
+		shaderRef->SetVec3("u_colour", m_lightPoint->GetColour());
+		shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
+	 	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
+		m_models.get()->push_back(make_unique<Model>((char*)"assets/models/cube/cube.obj", m_cameraRef, GetShaderAt(shaderID)));
+
+		// ----- Spot light cube -----
+		shaderID = m_shaders.get()->size();
+		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
+		shaderRef = GetShaderAt(shaderID);
+		shaderRef->SetVec3("u_colour", m_lightSpot->GetColour());
+		shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
+	 	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
+		m_models.get()->push_back(make_unique<Model>((char*)"assets/models/cube/cube.obj", m_cameraRef, GetShaderAt(shaderID)));
+	}
+
+	void Renderer::CreateMeshLights()
 	{
 		// ----- Point light cube -----
 		// Done before so one lower

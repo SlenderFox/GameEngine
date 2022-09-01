@@ -195,7 +195,7 @@ namespace Engine
 		glActiveTexture(GL_TEXTURE0);
 	}
 
-	void Mesh::Draw(Shader* pShader)
+	void Mesh::Draw()
 	{
 		glBindVertexArray(*m_idVAO);
 		glDrawElements(GL_TRIANGLES, GetIndices()->size(), GL_UNSIGNED_INT, 0);

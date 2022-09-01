@@ -13,7 +13,7 @@
 
 namespace Engine
 {
-	Model::Model(char* pPath)
+	void Model::Init(char *pPath)
 	{
 		// Mesh creation
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
@@ -34,18 +34,21 @@ namespace Engine
 		m_meshes.release();
 	}
 
-	void Model::Draw(Shader* pShader, Camera* pCamera)
+	void Model::Draw(Camera *pCamera , Shader *pShader)
 	{
+		if (pCamera == nullptr || pShader == nullptr)
+		{
+			#ifdef _DEBUG
+			 cout << "Drawing failed, either shader or camera are null" << endl;
+			#endif
+			return;
+		}
 		pShader->Use();
 		pShader->SetMat4("u_camera", pCamera->GetWorldToCameraMatrix());
 	 	pShader->SetVec3("u_viewPos", pCamera->GetPosition());
-		mat4 model = mat4(1.0f);
-		pShader->SetMat4("u_model", (mat4)model);
-	 	mat3 transposeInverseOfModel = mat3(glm::transpose(glm::inverse(model)));
-	 	pShader->SetMat3("u_transposeInverseOfModel", (mat3)transposeInverseOfModel);
 		for (unsigned int i = 0; i < m_meshes->size(); ++i)
 		{
-			GetMeshAt(i)->Draw(pShader);
+			GetMeshAt(i)->Draw();
 		}
 	}
 

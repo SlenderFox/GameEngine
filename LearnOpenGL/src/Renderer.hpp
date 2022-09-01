@@ -51,7 +51,8 @@ namespace Engine
 		void CreateBoxScene();
 		void RenderBoxScene(double pTime);
 		
-		void CreateGenericLights();
+		void CreateModelLights();
+		void CreateMeshLights();
 		void LoadShaderUniforms(Shader *pShader);
 
 		void ModifySpotlightAngle(float pValue);
