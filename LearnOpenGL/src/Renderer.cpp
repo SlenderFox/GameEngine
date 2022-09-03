@@ -9,7 +9,7 @@
  using std::endl;
 #endif
 
-#define LEGACY 0
+#define MESH 0
 #define CUBE 1
 #define BACKPACK 2
 #define RENDERMODE BACKPACK
@@ -37,7 +37,7 @@ namespace Engine
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 
-		#if RENDERMODE == LEGACY
+		#if RENDERMODE == MESH
 		 CreateBoxScene();
 		#else
 		 CreateModelScene();
@@ -96,7 +96,7 @@ namespace Engine
 		// Clears to background colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		#if RENDERMODE == LEGACY
+		#if RENDERMODE == MESH
 		 RenderBoxScene(pTime);
 		#else
 		 RenderModelScene(pTime);
@@ -105,21 +105,22 @@ namespace Engine
 
 	void Renderer::CreateModelScene()
 	{
-		
-		unsigned int shaderID = m_shaders.get()->size();
+
+		unsigned int ID;
 		#if RENDERMODE == BACKPACK
-		 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/backpack"));
-		 Shader* shaderRef = GetShaderAt(shaderID);
+		 AddNewShader(ID, "assets/shaders/backpack");
+		 Shader* shaderRef = GetShaderAt(ID);
 		 shaderRef->SetMat4("u_model", mat4(1.0f));
 	 	 shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
-		 m_models.get()->push_back(make_unique<Model>((char*)"assets/models/backpack/backpack.obj", m_cameraRef, shaderRef));
+		 AddNewModel(m_modelID, "assets/models/backpack/backpack.obj", shaderRef);
 		#else
-		 m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/cube"));
-		 Shader* shaderRef = GetShaderAt(shaderID);
+		 AddNewShader(ID, "assets/shaders/cube");
+		 Shader* shaderRef = GetShaderAt(ID);
 		 shaderRef->SetMat4("u_model", mat4(1.0f));
 	 	 shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
-		 m_models.get()->push_back(make_unique<Model>((char*)"assets/models/cube/cube.obj", m_cameraRef, shaderRef));
+		 AddNewModel(m_modelID, "assets/models/cube/cube.obj", shaderRef);
 		#endif
+
 		LoadShaderUniforms(shaderRef);
 		CreateModelLights();
 	}
@@ -185,47 +186,38 @@ namespace Engine
 	void Renderer::CreateModelLights()
 	{
 		// ----- Point light cube -----
-		// Done before so one lower
-		unsigned int shaderID = m_shaders.get()->size();
-		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
-		Shader* shaderRef = GetShaderAt(shaderID);
+		unsigned int discard;
+		Shader* shaderRef = AddNewShader(m_lightPointID, "assets/shaders/light");
 		shaderRef->SetVec3("u_colour", m_lightPoint->GetColour());
 		shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
 	 	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
-		m_models.get()->push_back(make_unique<Model>((char*)"assets/models/cube/cube.obj", m_cameraRef, GetShaderAt(shaderID)));
+		AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
 
 		// ----- Spot light cube -----
-		shaderID = m_shaders.get()->size();
-		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
-		shaderRef = GetShaderAt(shaderID);
+		shaderRef = AddNewShader(m_lightSpotID, "assets/shaders/light");
 		shaderRef->SetVec3("u_colour", m_lightSpot->GetColour());
 		shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
 	 	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
-		m_models.get()->push_back(make_unique<Model>((char*)"assets/models/cube/cube.obj", m_cameraRef, GetShaderAt(shaderID)));
+		AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
 	}
 
 	void Renderer::CreateMeshLights()
 	{
 		// ----- Point light cube -----
-		// Done before so one lower
+		Shader* shaderRef = AddNewShader(m_lightPointID, "assets/shaders/light");
 		unsigned int meshID = m_meshes.get()->size();
-		unsigned int shaderID = m_shaders.get()->size();
 		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
-
-		GetMeshAt(meshID)->LoadTextures(*GetShaderAt(shaderID));
-		GetShaderAt(shaderID)->SetVec3("u_colour", m_lightPoint->GetColour());
-		GetShaderAt(shaderID)->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
+		GetMeshAt(meshID)->LoadTextures(*shaderRef);
+		shaderRef->SetVec3("u_colour", m_lightPoint->GetColour());
+		shaderRef->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
 
 		// ----- Spot light cube -----
+		shaderRef = AddNewShader(m_lightSpotID, "assets/shaders/light");
 		meshID = m_meshes.get()->size();
-		shaderID = m_shaders.get()->size();
 		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/light"));
-
-		GetMeshAt(meshID)->LoadTextures(*GetShaderAt(shaderID));
-		GetShaderAt(shaderID)->SetVec3("u_colour", m_lightSpot->GetColour());
-		GetShaderAt(shaderID)->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
+		GetMeshAt(meshID)->LoadTextures(*shaderRef);
+		shaderRef->SetVec3("u_colour", m_lightSpot->GetColour());
+		shaderRef->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
 	}
 
 	void Renderer::LoadShaderUniforms(Shader* pShader)
@@ -263,14 +255,7 @@ namespace Engine
 		if (newValue <= 90.0f && newValue >= 0.0f)
 		{
 			m_lightSpot->SetAngle(newValue);
-			#if RENDERMODE == LEGACY
-			 GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
-			#else
-			 GetShaderAt(0U)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
-			#endif
-			//#ifdef _DEBUG
-			// printf("Cutoff: %f | Blur: %f\n", m_lightSpot->GetAngleRaw(), m_lightSpot->GetBlurRaw());
-			//#endif
+			GetShaderAt(m_modelID)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
 		}
 	}
 
@@ -280,15 +265,22 @@ namespace Engine
 		if (newValue <= 1.0f && newValue > 0.0f)
 		{
 			m_lightSpot->SetBlur(newValue);
-			#if RENDERMODE == LEGACY
-			 GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
-			#else
-			 GetShaderAt(0U)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
-			#endif
-			//#ifdef _DEBUG
-			// printf("Cutoff: %f | Blur: %f\n", m_lightSpot->GetAngleRaw(), m_lightSpot->GetBlurRaw());
-			//#endif
+			GetShaderAt(m_modelID)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
 		}
+	}
+
+	Model* Renderer::AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef)
+	{
+		id = m_models.get()->size();
+		m_models.get()->push_back(make_unique<Model>((char*)pLocation.c_str(), m_cameraRef, pShaderRef));
+		return GetModelAt(id);
+	}
+
+	Shader* Renderer::AddNewShader(unsigned int &id, string pLocation)
+	{
+		id = m_shaders.get()->size();
+		m_shaders.get()->push_back(make_unique<Shader>(pLocation));
+		return GetShaderAt(id);
 	}
 
 	Model* Renderer::GetModelAt(unsigned int pPos)

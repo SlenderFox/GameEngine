@@ -29,13 +29,9 @@ namespace Engine
 		vector<Texture> LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType);
 
 	public:
-		Model(char* pPath) { Init(pPath); }
-		Model(char* pPath, Camera* pCamera)
-		 : m_cameraRef(pCamera) { Init(pPath); }
-		Model(char* pPath, Shader* pShader)
-		 : m_shaderRef(pShader) { Init(pPath); }
-		Model(char* pPath, Camera* pCamera ,Shader* pShader)
+		Model(char* pPath, Camera* pCamera = nullptr ,Shader* pShader = nullptr)
 		 : m_cameraRef(pCamera), m_shaderRef(pShader) { Init(pPath); }
+
 		void Destroy(bool pValidate);
 
 		void Draw() { Draw(m_cameraRef, m_shaderRef); }

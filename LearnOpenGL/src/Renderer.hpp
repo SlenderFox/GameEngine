@@ -27,6 +27,10 @@ namespace Engine
 		Light* m_lightPoint = nullptr;
 		Light* m_lightSpot = nullptr;
 
+		unsigned int m_modelID;
+		unsigned int m_lightPointID;
+		unsigned int m_lightSpotID;
+
 		const vec3 m_cubePositions[10] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
 			glm::vec3(2.0f,  5.0f, -15.0f),
@@ -65,6 +69,9 @@ namespace Engine
 
 		void ModifySpotlightAngle(float pValue);
 		void ModifySpotlightBlur(float pValue);
+
+		Model* AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef = nullptr);
+		Shader* AddNewShader(unsigned int &id, string pLocation);
 
 		Model* GetModelAt(unsigned int pPos);
 		Shader* GetShaderAt(unsigned int pPos);
