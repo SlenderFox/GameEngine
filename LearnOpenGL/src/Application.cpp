@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Windows.h>	// Needed for Sleep()
+#include <chrono>
 
 // Called when the user resizes the window
 void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight)
@@ -119,6 +120,8 @@ namespace Engine
 
 	bool Application::Init(string pTitle, bool pFullscreen)
 	{
+		auto startTime = std::chrono::high_resolution_clock::now();
+
 		// glfw: initialise and configure
 		if (glfwInit() == GLFW_FALSE)
 		{
@@ -193,12 +196,17 @@ namespace Engine
 		// Initialises the renderer
 		m_rendererInst->Init((float)m_winWidth / (float)m_winHeight);
 
-		// if (!Startup())
-		// 	return false;
+		if (!Startup())
+			return false;
 
-		// return true;
+		// Calculates the time I took to start up
+		auto endTime = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsedTime = endTime - startTime;
+		#ifdef _DEBUG
+		 cout << "Started in " << elapsedTime.count() << " seconds\n";
+		#endif
 
-		return Startup();
+		return true;
 	}
 
 	void Application::SetDimensions(unsigned int pWidth, unsigned int pHeight)
