@@ -7,6 +7,13 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat3;
 using glm::mat4;
+
+#ifdef _DEBUG
+ #include <iostream>
+ using std::cout;
+ using std::endl;
+#endif
+
 #pragma endregion
 
 namespace Engine

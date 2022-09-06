@@ -3,11 +3,14 @@
 #include "glad/glad.h" // Include glad to get all the required OpenGL headers
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
+
 #ifdef _DEBUG
+ // Texture does not inherit from Transform.hpp
  #include <iostream>
  using std::cout;
  using std::endl;
 #endif
+
 #pragma endregion
 
 namespace Engine

@@ -2,9 +2,6 @@
 #include "Camera.hpp"
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include <glm/gtc/matrix_transform.hpp>
-#ifdef _DEBUG
- #include <iostream>
-#endif
 
 using glm::radians;
 using glm::atan;
@@ -73,9 +70,6 @@ namespace Engine
 			m_fovH = 120.0f;
 		else if (m_fovH < 1.0f)
 			m_fovH = 1.0f;
-		// #ifdef _DEBUG
-		//  std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
-		// #endif
 		UpdateFovV();
 	}
 
@@ -86,9 +80,6 @@ namespace Engine
 			m_fovV = 120.0f;
 		else if (m_fovV < 1.0f)
 			m_fovV = 1.0f;
-		// #ifdef _DEBUG
-		//  std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
-		// #endif
 		UpdateFovH();
 	}
 
@@ -169,9 +160,6 @@ namespace Engine
 			m_fovH = 120.0f;
 		else if (m_fovH < 1.0f)
 			m_fovH = 1.0f;
-		// #ifdef _DEBUG
-		//  std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
-		// #endif
 		UpdateFovV();
 	}
 
@@ -182,9 +170,6 @@ namespace Engine
 			m_fovV = 120.0f;
 		else if (m_fovV < 1.0f)
 			m_fovV = 1.0f;
-		// #ifdef _DEBUG
-		//  std::cout << "Field of view set to: " << m_fovH << "H, " << m_fovV << "V" << std::endl;
-		// #endif
 		UpdateFovH();
 	}
 

@@ -3,11 +3,6 @@
 #include <glad/glad.h> // Include glad to get all the required OpenGL headers
 #include <glm/gtc/type_ptr.hpp>
 #include <sstream>
-#ifdef _DEBUG
- #include <iostream>
- using std::cout;
- using std::endl;
-#endif
 
 using std::stringstream;
 using std::ifstream;

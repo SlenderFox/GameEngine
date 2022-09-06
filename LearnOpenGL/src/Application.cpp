@@ -5,11 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Windows.h>	// Needed for Sleep()
-#ifdef _DEBUG
- #include <iostream>
- using std::cout;
- using std::endl;
-#endif
 
 // Called when the user resizes the window
 void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight)

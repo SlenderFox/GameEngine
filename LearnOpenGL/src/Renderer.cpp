@@ -3,12 +3,6 @@
 #include "glad/glad.h" // Include glad to get all the required OpenGL headers
 #include "glm/gtc/matrix_transform.hpp"
 
-#ifdef _DEBUG
- #include <iostream>
- using std::cout;
- using std::endl;
-#endif
-
 #define MESH 0
 #define CUBE 1
 #define BACKPACK 2
