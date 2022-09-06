@@ -3,7 +3,7 @@
 #include "glad/glad.h" // Include glad to get all the required OpenGL headers
 #include "glm/gtc/matrix_transform.hpp"
 
-#define MESH 0
+#define LEGACY 0
 #define CUBE 1
 #define BACKPACK 2
 #define RENDERMODE BACKPACK
@@ -31,7 +31,7 @@ namespace Engine
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 
-		#if RENDERMODE == MESH
+		#if RENDERMODE == LEGACY
 		 CreateBoxScene();
 		#else
 		 CreateModelScene();
@@ -52,6 +52,13 @@ namespace Engine
 				}
 				// Smart pointer needs to be manually released or it throws an error :|
 				m_models.release();
+			}
+
+			// Destroy all textures before meshes
+			for (unsigned int i = 0; i < Model::s_loadedTextures.size(); ++i)
+			{
+				if (Model::s_loadedTextures[i] != nullptr)
+					delete Model::s_loadedTextures[i];
 			}
 
 			if (m_shaders)
@@ -90,7 +97,7 @@ namespace Engine
 		// Clears to background colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		#if RENDERMODE == MESH
+		#if RENDERMODE == LEGACY
 		 RenderBoxScene(pTime);
 		#else
 		 RenderModelScene(pTime);
@@ -100,6 +107,7 @@ namespace Engine
 	void Renderer::CreateModelScene()
 	{
 		CreateModelLights();
+
 		unsigned int ID;
 		#if RENDERMODE == BACKPACK
 		 AddNewShader(ID, "assets/shaders/backpack");
@@ -116,7 +124,6 @@ namespace Engine
 		#endif
 
 		LoadShaderUniforms(shaderRef);
-		
 	}
 
 	void Renderer::RenderModelScene(double pTime)
@@ -267,7 +274,7 @@ namespace Engine
 	Model* Renderer::AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef)
 	{
 		id = m_models.get()->size();
-		m_models.get()->push_back(make_unique<Model>((char*)pLocation.c_str(), m_cameraRef, pShaderRef));
+		m_models.get()->push_back(make_unique<Model>((char*)pLocation.c_str(), pShaderRef, m_cameraRef));
 		return GetModelAt(id);
 	}
 

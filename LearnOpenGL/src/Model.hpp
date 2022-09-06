@@ -13,9 +13,14 @@ namespace Engine
 {
 	class Model
 	{
+		friend class Renderer;
 	private:
-		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
-		vector<Texture*> m_loadedTextures;
+	// Static
+		static vector<Texture*> s_loadedTextures;
+
+	// Member
+		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes = nullptr;
+		vector<Texture*> m_textures;
 		string m_directory;
 
 		// Don't delete these, they are borrowed
@@ -27,17 +32,18 @@ namespace Engine
 		void ProcessNode(aiNode* pNode, const aiScene* pScene);
 		unique_ptr<Mesh> ProcessMesh(aiMesh* pMesh, const aiScene* pScene);
 		vector<Texture*> LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType);
+		void LoadTexturesToShader();
 
 	public:
-		Model(char* pPath, Camera* pCamera = nullptr ,Shader* pShader = nullptr)
-		 : m_cameraRef(pCamera), m_shaderRef(pShader) { Init(pPath); }
+		Model(char* pPath, Shader* pShader, Camera* pCamera = nullptr)
+		 : m_shaderRef(pShader), m_cameraRef(pCamera) { Init(pPath); }
 
 		void Destroy(bool pValidate);
 
-		void Draw() { Draw(m_cameraRef, m_shaderRef); }
-		void Draw(Camera* pCamera) { Draw(pCamera, m_shaderRef); }
-		void Draw(Shader* pShader) { Draw(m_cameraRef, pShader); }
-		void Draw(Camera* pCamera ,Shader* pShader);
+		void Draw() { Draw(m_shaderRef, m_cameraRef); }
+		void Draw(Shader* pShader) { Draw(pShader, m_cameraRef); }
+		void Draw(Camera* pCamera) { Draw(m_shaderRef, pCamera); }
+		void Draw(Shader* pShader, Camera* pCamera);
 
 		void SetCameraRef(Camera* pCamera) { m_cameraRef = pCamera; }
 		void SetShaderRef(Shader* pShader) { m_shaderRef = pShader; }

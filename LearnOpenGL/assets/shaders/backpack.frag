@@ -11,9 +11,9 @@ in vec3 Normal;
 in vec2 TexCoords;
 
 struct Material {
+	float shininess;
 	sampler2D texture_diffuse0;
 	sampler2D texture_specular0;
-	float shininess;
 };
 
 struct Colour {

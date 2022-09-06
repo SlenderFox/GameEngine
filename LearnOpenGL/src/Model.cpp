@@ -8,23 +8,20 @@
 
 namespace Engine
 {
+	// Static
+	vector<Texture*> Model::s_loadedTextures = vector<Texture*>();
+
+	// Member
 	void Model::Init(char* pPath)
 	{
 		// Mesh creation
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
-		m_loadedTextures = vector<Texture*>();
+		m_textures = vector<Texture*>();
 		LoadModel(pPath);
 	}
 
 	void Model::Destroy(bool pValidate)
 	{
-		// Destroy all textures before meshes
-		for (unsigned int i = 0; i < m_loadedTextures.size(); ++i)
-		{
-			if (m_loadedTextures[i] != nullptr)
-				delete m_loadedTextures[i];
-		}
-
 		// Destroy all meshes
 		for (unsigned int i = 0; i < m_meshes->size(); ++i)
 		{
@@ -36,9 +33,9 @@ namespace Engine
 		m_meshes.release();
 	}
 
-	void Model::Draw(Camera* pCamera , Shader* pShader)
+	void Model::Draw(Shader* pShader, Camera* pCamera)
 	{
-		if (pCamera == nullptr || pShader == nullptr)
+		if (pShader == nullptr || pCamera == nullptr)
 		{
 			#ifdef _DEBUG
 			 cout << "Drawing failed, either shader or camera are null" << endl;
@@ -71,6 +68,8 @@ namespace Engine
 		}
 		m_directory = pPath.substr(0, pPath.find_last_of('/'));
 		ProcessNode(scene->mRootNode, scene);
+		LoadTexturesToShader();
+
 		#ifdef _DEBUG
 		 cout << "Done!" << endl;
 		#endif
@@ -95,7 +94,6 @@ namespace Engine
 	{
 		vector<Vertex> vertices;
 		vector<unsigned int> indices;
-		vector<Texture*> textures;
 		// Process vertex positions, normals, and texture coordinates
 		for (unsigned int i = 0; i < pMesh->mNumVertices; ++i)
 		{
@@ -140,45 +138,92 @@ namespace Engine
 		{
 			aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
 			vector<Texture*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TexType::diffuse);
-			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+			m_textures.insert(m_textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 			vector<Texture*> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TexType::specular);
-			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+			m_textures.insert(m_textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 
-		return make_unique<Mesh>(vertices, indices, textures);
+		return make_unique<Mesh>(vertices, indices);
 	}
 
 	vector<Texture*> Model::LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType)
 	{
+		// Textures from this specific node being output
 		vector<Texture*> texturesOut;
 		for (unsigned int i = 0; i < pMat->GetTextureCount(pType); ++i)
 		{
 			aiString file;
 			pMat->GetTexture(pType, i, &file);
-			bool skip = false;
+			bool loadTexture = true;
 			// Compares to all currently loaded textures
-			for (unsigned int j = 0; j < m_loadedTextures.size(); ++j)
+			for (unsigned int j = 0; j < s_loadedTextures.size(); ++j)
 			{
-				if (std::strcmp(m_loadedTextures[j]->GetFile().data(), file.C_Str()) == 0)
+				// If texture is already in the loaded textures vector
+				if (std::strcmp(s_loadedTextures[j]->GetFile().data(), (m_directory + '/' + file.C_Str()).data()) == 0)
 				{
-					// Reuse an existing texture
-					texturesOut.push_back(m_loadedTextures[j]);
-					skip = true;
+					bool reuseTexture = true;
+					for (unsigned int k = 0; k < m_textures.size(); ++k)
+					{
+						// If the texture has already been loaded into this model, don't bother reloading it
+						if (std::strcmp(m_textures[k]->GetFile().data(), (m_directory + '/' + file.C_Str()).data()) == 0)
+						{
+							reuseTexture = false;
+							break;
+						}
+					}
+					// If the texture has not been loaded into this model, reuse it
+					if (reuseTexture)
+					{
+						#ifdef _DEBUG
+						 cout << " \xC3Reusing " << s_loadedTextures[j]->GetFile().data() << endl;
+						#endif
+						texturesOut.push_back(s_loadedTextures[j]);
+					}
+					
+					loadTexture = false;
 					break;
 				}
 			}
-			if (!skip)
+			// If texture has not been loaded before, load it for the first time
+			if (loadTexture)
 			{
-				// If texture has not been loaded before, load it for the first time
 				#ifdef _DEBUG
-				 cout << "\xC0";
+				 cout << " \xD8";
 				#endif
-				Texture* tex = new Texture(m_directory, string(file.C_Str()), pTexType);
+				Texture* tex = new Texture(string(m_directory + '/' + file.C_Str()), pTexType);
 				texturesOut.push_back(tex);
-				m_loadedTextures.push_back(tex);
+				s_loadedTextures.push_back(tex);
 			}
 		}
 		return texturesOut;
+	}
+
+	void Model::LoadTexturesToShader()
+	{
+		unsigned int diffuseNr = 0;
+		unsigned int specularNr = 0;
+		for (unsigned int i = 0; i < m_textures.size(); ++i)
+		{
+			// Retrieve texture number (the N in diffuse_textureN)
+			string name;
+			string number;
+			switch (m_textures[i]->GetType())
+			{
+				case TexType::diffuse:
+					name = "texture_diffuse";
+					number = std::to_string(diffuseNr++);
+					break;
+				case TexType::specular:
+					name = "texture_specular";
+					number = std::to_string(specularNr++);
+					break;
+			}
+
+			#ifdef _DEBUG
+			 cout << " \xC5Loading texID " << m_textures[i]->GetId() << endl;
+			#endif
+			m_shaderRef->SetInt(("u_material." + name + number).c_str(), m_textures[i]->GetId());
+		}
 	}
 
 	Mesh* Model::GetMeshAt(unsigned int pPos)

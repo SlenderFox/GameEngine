@@ -102,8 +102,17 @@ namespace Engine
 	{
 		m_vertices = make_unique<vector<Vertex>>(GenerateVertices());
 		m_indices = make_unique<vector<unsigned int>>(GenerateIndices());
-		m_textures = make_unique<vector<Texture*>>();
+		m_textures = make_unique<vector<Texture*>>(); // Legacy
 		
+		SetupMesh();
+	}
+
+	Mesh::Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices)
+	{
+		m_vertices = make_unique<vector<Vertex>>(pVertices);
+		m_indices = make_unique<vector<unsigned int>>(pIndices);
+		m_textures = make_unique<vector<Texture*>>(); // Legacy
+
 		SetupMesh();
 	}
 
@@ -125,11 +134,11 @@ namespace Engine
 			glDeleteBuffers(1, m_idEBO);
 		}
 
-		GetVertices()->clear();
+		m_vertices.get()->clear();
 		m_vertices.release();
-		GetIndices()->clear();
+		m_indices.get()->clear();
 		m_indices.release();
-		GetTextures()->clear();
+		m_textures.get()->clear();
 		m_textures.release();
 		delete m_idVAO;
 		delete m_idVBO;
@@ -140,20 +149,24 @@ namespace Engine
 	{
 		unsigned int diffuseNr = 0;
 		unsigned int specularNr = 0;
-		for (unsigned int i = 0; i < GetTextures()->size(); ++i)
+		for (unsigned int i = 0; i < m_textures.get()->size(); ++i)
 		{
 			// Retrieve texture number (the N in diffuse_textureN)
+			string name;
 			string number;
-			string name = GetTextures()->at(i)->GetType();
-			if (name == "texture_diffuse")
-				number = std::to_string(diffuseNr++);
-			else if (name == "texture_specular")
-				number = std::to_string(specularNr++);
+			switch (m_textures.get()->at(i)->GetType())
+			{
+				case TexType::diffuse:
+					name = "texture_diffuse";
+					number = std::to_string(diffuseNr++);
+					break;
+				case TexType::specular:
+					name = "texture_specular";
+					number = std::to_string(specularNr++);
+					break;
+			}
 				
-			unsigned int texID = GetTextures()->at(i)->GetId();
-			#ifdef _DEBUG
-			 cout << "Texture ID " << texID << " loaded into shader." << endl;
-			#endif
+			unsigned int texID = m_textures.get()->at(i)->GetId();
 			pShader.SetInt(("u_material." + name + number).c_str(), texID);
 		}
 	}
@@ -161,7 +174,7 @@ namespace Engine
 	void Mesh::Draw()
 	{
 		glBindVertexArray(*m_idVAO);
-		glDrawElements(GL_TRIANGLES, GetIndices()->size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, m_indices.get()->size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
 
@@ -179,7 +192,7 @@ namespace Engine
 		// GL_ARRAY_BUFFER effectively works like a pointer, using the id provided to point to the buffer
 		glBindBuffer(GL_ARRAY_BUFFER,* m_idVBO);
 		// Loads the vertices to the VBO
-		glBufferData(GL_ARRAY_BUFFER, GetVertices()->size() * sizeof(Vertex), &(*GetVertices())[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, m_vertices.get()->size() * sizeof(Vertex), &(*m_vertices.get())[0], GL_STATIC_DRAW);
 
 		/*GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
 		* GL_STATIC_DRAW: the data is set only once and used many times.
@@ -188,7 +201,7 @@ namespace Engine
 
 		// This buffer stores the indices that reference the elements of the VBO
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,* m_idEBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, GetIndices()->size() * sizeof(unsigned int), &(*GetIndices())[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.get()->size() * sizeof(unsigned int), &(*m_indices.get())[0], GL_STATIC_DRAW);
 
 		/*Tells the shader how to use the vertex data provided
 		* p1: Which vertex attribute we want to configure in the vertex shader (location = 0)
@@ -215,21 +228,4 @@ namespace Engine
 		// Unbinds the GL_ELEMENT_ARRAY_BUFFER
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
-
-	#pragma region Setters
-	void Mesh::SetVertices(vector<Vertex>* pVertices)
-	{
-		m_vertices = make_unique<vector<Vertex>>(*pVertices);
-	}
-
-	void Mesh::SetIndices(vector<unsigned int>* pIndices)
-	{
-		m_indices = make_unique<vector<unsigned int>>(*pIndices);
-	}
-
-	void Mesh::SetTextures(vector<Texture*>* pTextures)
-	{
-		m_textures = make_unique<vector<Texture*>>(*pTextures);
-	}
-	#pragma endregion
 }

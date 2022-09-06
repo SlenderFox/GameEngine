@@ -17,7 +17,7 @@ namespace Engine
 {
 	// Static
 	unsigned int Texture::s_textureIds[32];
-	unsigned int Texture::s_textureCount;
+	unsigned int Texture::s_textureCount = 0;
 
 	void Texture::UnloadAll(bool pValidate)
 	{
@@ -36,7 +36,7 @@ namespace Engine
 		if (s_textureCount > 31)
 		{
 			#ifdef _DEBUG
-			 cout << "\nFailed to load texture: Exceeded max texture id " << s_textureCount << endl;
+			 cout << "\nFailed to load texture: Exceeded max texture count (max = 32)" << endl;
 			#endif
 			return UINT8_MAX;
 		}
@@ -94,8 +94,8 @@ namespace Engine
 			 cout << "...Success!" << endl;
 			#endif
 
-			// Assigns the id then increments the total number of textures loaded
-			return s_textureIds[s_textureCount++];
+			// Returns the id before incrementing for the next texture
+			return s_textureCount++;
 		}
 		#ifdef _DEBUG
 		 else
@@ -112,24 +112,9 @@ namespace Engine
 		m_id = LoadTextureFromFile(pPath.c_str());
 	}
 
-	Texture::Texture(string pDirectory, string pPath, TexType pType) : m_file(pPath), m_type(pType)
-	{
-		m_id = LoadTextureFromFile((pDirectory + '/' + pPath).c_str());
-	}
-
 	void Texture::Destroy()
 	{
 		// This is currently bad as it leaves a gap in the loaded textures
 		glDeleteTextures(1, &s_textureIds[m_id]);
-	}
-
-	string Texture::GetType() const
-	{
-		switch (m_type)
-		{
-			case TexType::diffuse: return string("texture_diffuse");
-			case TexType::specular: return string("texture_specular");
-			default: return string("ERROR");
-		}
 	}
 }

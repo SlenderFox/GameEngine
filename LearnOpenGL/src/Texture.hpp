@@ -34,11 +34,10 @@ namespace Engine
 
 	public:
 		Texture(string pPath, TexType pType = TexType::diffuse);
-		Texture(string pDirectory, string pPath, TexType pType = TexType::diffuse);
 		void Destroy();
 
 		unsigned int GetId() const { return m_id; }
-		string GetType() const;
+		TexType GetType() const { return m_type; }
 		string GetFile() const { return m_file; }
 	};
 }

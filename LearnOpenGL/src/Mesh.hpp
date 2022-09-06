@@ -20,13 +20,13 @@ namespace Engine
 	class Mesh
 	{
 	// Static
-	public:
-		static vector<Vertex> GenerateVertices();
-		static vector<unsigned int> GenerateIndices();
-	
 	private:
 		static float* s_cubeVerticesArr;
 		static unsigned int* s_indicesArr;
+
+	public:
+		static vector<Vertex> GenerateVertices();
+		static vector<unsigned int> GenerateIndices();
 
 	// Members
 	private:
@@ -42,22 +42,16 @@ namespace Engine
 
 	public:
 		Mesh();
-		Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices, vector<Texture*> pTextures = vector<Texture*>());
+		Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices);
+		Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices, vector<Texture*> pTextures);
 
 		void Destroy(bool pValidate);
 
+		// Legacy
 		void LoadTexturesToShader(Shader& pShader);
 		void Draw();
 
-		#pragma region Setters
-		void SetVertices(vector<Vertex>* pVertices);
-		void SetIndices(vector<unsigned int>* pIndices);
-		void SetTextures(vector<Texture*>* pTextures);
-		#pragma endregion
 		#pragma region Getters
-		vector<Vertex>* GetVertices() const { return m_vertices.get(); }
-		vector<unsigned int>* GetIndices() const { return m_indices.get(); }
-		vector<Texture*>* GetTextures() const { return m_textures.get(); }
 		unsigned int* GetVAO() const { return m_idVAO; }
 		unsigned int* GetVBO() const { return m_idVBO; }
 		unsigned int* GetEBO() const { return m_idEBO; }
