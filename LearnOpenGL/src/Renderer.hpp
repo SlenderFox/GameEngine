@@ -27,7 +27,7 @@ namespace Engine
 		Light* m_lightPoint = nullptr;
 		Light* m_lightSpot = nullptr;
 
-		unsigned int m_modelID;
+		unsigned int m_modelID = 0;	// Initialised for legacy
 		unsigned int m_lightPointID;
 		unsigned int m_lightSpotID;
 

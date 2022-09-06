@@ -102,26 +102,17 @@ namespace Engine
 	{
 		m_vertices = make_unique<vector<Vertex>>(GenerateVertices());
 		m_indices = make_unique<vector<unsigned int>>(GenerateIndices());
-		m_textures = make_unique<vector<Texture>>();
+		m_textures = make_unique<vector<Texture*>>();
 		
 		SetupMesh();
 	}
 
-	Mesh::Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices, vector<Texture> pTextures)
+	Mesh::Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices, vector<Texture*> pTextures)
 	{
 		m_vertices = make_unique<vector<Vertex>>(pVertices);
 		m_indices = make_unique<vector<unsigned int>>(pIndices);
-		m_textures = make_unique<vector<Texture>>(pTextures);
+		m_textures = make_unique<vector<Texture*>>(pTextures);
 
-		SetupMesh();
-	}
-	
-	Mesh::Mesh(unique_ptr<vector<Vertex>> pVertices, unique_ptr<vector<unsigned int>> pIndices, unique_ptr<vector<Texture>> pTextures)
-	{
-		m_vertices = make_unique<vector<Vertex>>(*pVertices);
-		m_indices = make_unique<vector<unsigned int>>(*pIndices);
-		m_textures = make_unique<vector<Texture>>(*pTextures);
-		
 		SetupMesh();
 	}
 
@@ -145,25 +136,26 @@ namespace Engine
 		delete m_idEBO;
 	}
 	
-	void Mesh::LoadTextures(Shader& pShader)
+	void Mesh::LoadTexturesToShader(Shader& pShader)
 	{
 		unsigned int diffuseNr = 0;
 		unsigned int specularNr = 0;
 		for (unsigned int i = 0; i < GetTextures()->size(); ++i)
 		{
-			glActiveTexture(GL_TEXTURE0 + m_textures.get()->at(i).GetId()); // Activate proper texture unit before binding
 			// Retrieve texture number (the N in diffuse_textureN)
 			string number;
-			string name = GetTextures()->at(i).GetType();
+			string name = GetTextures()->at(i)->GetType();
 			if (name == "texture_diffuse")
 				number = std::to_string(diffuseNr++);
 			else if (name == "texture_specular")
 				number = std::to_string(specularNr++);
-
-			pShader.SetInt(("u_material." + name + number).c_str(), i);
-			glBindTexture(GL_TEXTURE_2D, GetTextures()->at(i).GetId());
+				
+			unsigned int texID = GetTextures()->at(i)->GetId();
+			#ifdef _DEBUG
+			 cout << "Texture ID " << texID << " loaded into shader." << endl;
+			#endif
+			pShader.SetInt(("u_material." + name + number).c_str(), texID);
 		}
-		glActiveTexture(GL_TEXTURE0);
 	}
 
 	void Mesh::Draw()
@@ -235,9 +227,9 @@ namespace Engine
 		m_indices = make_unique<vector<unsigned int>>(*pIndices);
 	}
 
-	void Mesh::SetTextures(vector<Texture>* pTextures)
+	void Mesh::SetTextures(vector<Texture*>* pTextures)
 	{
-		m_textures = make_unique<vector<Texture>>(*pTextures);
+		m_textures = make_unique<vector<Texture*>>(*pTextures);
 	}
 	#pragma endregion
 }

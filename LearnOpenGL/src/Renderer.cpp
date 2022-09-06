@@ -99,7 +99,7 @@ namespace Engine
 
 	void Renderer::CreateModelScene()
 	{
-
+		CreateModelLights();
 		unsigned int ID;
 		#if RENDERMODE == BACKPACK
 		 AddNewShader(ID, "assets/shaders/backpack");
@@ -116,7 +116,7 @@ namespace Engine
 		#endif
 
 		LoadShaderUniforms(shaderRef);
-		CreateModelLights();
+		
 	}
 
 	void Renderer::RenderModelScene(double pTime)
@@ -130,22 +130,23 @@ namespace Engine
 		#ifdef _DEBUG
 		 cout << "Loading Boxes" << endl;
 		#endif
+
+		unsigned int ID;
+		AddNewShader(ID, "assets/shaders/cube");
 	
-		m_shaders.get()->push_back(make_unique<Shader>("assets/shaders/cube"));
-	
-		vector<Texture> textures = vector<Texture>();
+		vector<Texture*> textures = vector<Texture*>();
 		#ifdef _DEBUG
 		 cout << "\xC0";
 		#endif
-		textures.push_back(Texture("assets/textures/container2.png", TexType::diffuse));
+		textures.push_back(new Texture("assets/textures/container2.png", TexType::diffuse));
 		#ifdef _DEBUG
 		 cout << "\xC0";
 		#endif
-		textures.push_back(Texture("assets/textures/container2_specular.png", TexType::specular));
+		textures.push_back(new Texture("assets/textures/container2_specular.png", TexType::specular));
 	
 		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices(), textures));
-		GetMeshAt(0U)->LoadTextures(*GetShaderAt(0U));
-		LoadShaderUniforms(GetShaderAt(0U));
+		GetMeshAt(0U)->LoadTexturesToShader(*GetShaderAt(ID));
+		LoadShaderUniforms(GetShaderAt(ID));
 	
 		CreateMeshLights();
 	}
@@ -201,7 +202,7 @@ namespace Engine
 		Shader* shaderRef = AddNewShader(m_lightPointID, "assets/shaders/light");
 		unsigned int meshID = m_meshes.get()->size();
 		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		GetMeshAt(meshID)->LoadTextures(*shaderRef);
+		GetMeshAt(meshID)->LoadTexturesToShader(*shaderRef);
 		shaderRef->SetVec3("u_colour", m_lightPoint->GetColour());
 		shaderRef->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
 
@@ -209,7 +210,7 @@ namespace Engine
 		shaderRef = AddNewShader(m_lightSpotID, "assets/shaders/light");
 		meshID = m_meshes.get()->size();
 		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		GetMeshAt(meshID)->LoadTextures(*shaderRef);
+		GetMeshAt(meshID)->LoadTexturesToShader(*shaderRef);
 		shaderRef->SetVec3("u_colour", m_lightSpot->GetColour());
 		shaderRef->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
 	}

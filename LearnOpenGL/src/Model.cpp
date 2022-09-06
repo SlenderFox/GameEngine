@@ -12,12 +12,19 @@ namespace Engine
 	{
 		// Mesh creation
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
-		m_loadedTextures = vector<Texture>();
+		m_loadedTextures = vector<Texture*>();
 		LoadModel(pPath);
 	}
 
 	void Model::Destroy(bool pValidate)
 	{
+		// Destroy all textures before meshes
+		for (unsigned int i = 0; i < m_loadedTextures.size(); ++i)
+		{
+			if (m_loadedTextures[i] != nullptr)
+				delete m_loadedTextures[i];
+		}
+
 		// Destroy all meshes
 		for (unsigned int i = 0; i < m_meshes->size(); ++i)
 		{
@@ -25,7 +32,7 @@ namespace Engine
 				GetMeshAt(i)->Destroy(pValidate);
 		}
 
-		// Tell the unique pointers they are no longer needed
+		// Tell the unique pointer it is no longer needed
 		m_meshes.release();
 	}
 
@@ -88,7 +95,7 @@ namespace Engine
 	{
 		vector<Vertex> vertices;
 		vector<unsigned int> indices;
-		vector<Texture> textures;
+		vector<Texture*> textures;
 		// Process vertex positions, normals, and texture coordinates
 		for (unsigned int i = 0; i < pMesh->mNumVertices; ++i)
 		{
@@ -132,18 +139,18 @@ namespace Engine
 		if (pMesh->mMaterialIndex >= 0)
 		{
 			aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
-			vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TexType::diffuse);
+			vector<Texture*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TexType::diffuse);
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-			vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TexType::specular);
+			vector<Texture*> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TexType::specular);
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 
 		return make_unique<Mesh>(vertices, indices, textures);
 	}
 
-	vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType)
+	vector<Texture*> Model::LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType)
 	{
-		vector<Texture> texturesOut;
+		vector<Texture*> texturesOut;
 		for (unsigned int i = 0; i < pMat->GetTextureCount(pType); ++i)
 		{
 			aiString file;
@@ -152,7 +159,7 @@ namespace Engine
 			// Compares to all currently loaded textures
 			for (unsigned int j = 0; j < m_loadedTextures.size(); ++j)
 			{
-				if (std::strcmp(m_loadedTextures[j].GetFile().data(), file.C_Str()) == 0)
+				if (std::strcmp(m_loadedTextures[j]->GetFile().data(), file.C_Str()) == 0)
 				{
 					// Reuse an existing texture
 					texturesOut.push_back(m_loadedTextures[j]);
@@ -166,13 +173,7 @@ namespace Engine
 				#ifdef _DEBUG
 				 cout << "\xC0";
 				#endif
-				Texture tex = Texture(m_directory, string(file.C_Str()), pTexType);
-
-				//string path = m_directory + '/' + string(file.C_Str());
-				//tex.m_id = Texture::LoadTextureFromFile(path.c_str());
-				//tex.m_type = pTexType;
-				//tex.m_file = file.C_Str();
-
+				Texture* tex = new Texture(m_directory, string(file.C_Str()), pTexType);
 				texturesOut.push_back(tex);
 				m_loadedTextures.push_back(tex);
 			}

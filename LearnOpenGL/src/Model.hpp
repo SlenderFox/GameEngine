@@ -15,7 +15,7 @@ namespace Engine
 	{
 	private:
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
-		vector<Texture> m_loadedTextures;
+		vector<Texture*> m_loadedTextures;
 		string m_directory;
 
 		// Don't delete these, they are borrowed
@@ -26,7 +26,7 @@ namespace Engine
 		void LoadModel(string pPath);
 		void ProcessNode(aiNode* pNode, const aiScene* pScene);
 		unique_ptr<Mesh> ProcessMesh(aiMesh* pMesh, const aiScene* pScene);
-		vector<Texture> LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType);
+		vector<Texture*> LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType);
 
 	public:
 		Model(char* pPath, Camera* pCamera = nullptr ,Shader* pShader = nullptr)

@@ -33,8 +33,8 @@ namespace Engine
 		string m_file;
 
 	public:
-		Texture(string pPath, TexType pType);
-		Texture(string pDirectory, string pPath, TexType pType);
+		Texture(string pPath, TexType pType = TexType::diffuse);
+		Texture(string pDirectory, string pPath, TexType pType = TexType::diffuse);
 		void Destroy();
 
 		unsigned int GetId() const { return m_id; }
