@@ -135,7 +135,7 @@ namespace Engine
 		#endif
 
 		unsigned int ID;
-		AddNewShader(ID, "assets/shaders/cube");
+		AddNewShader(ID, "assets/shaders/default");
 	
 		vector<Texture*> textures = vector<Texture*>();
 		#ifdef _DEBUG
