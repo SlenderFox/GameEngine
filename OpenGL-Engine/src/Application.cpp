@@ -7,6 +7,10 @@
 #include <Windows.h>	// Needed for Sleep()
 #include <chrono>
 
+using glm::radians;
+using glm::normalize;
+using glm::cross;
+
 // Called when the user resizes the window
 void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight)
 {
@@ -242,15 +246,16 @@ namespace Engine
 
 		// The forward direction of the camera
 		vec3 forward = vec3();
-		forward.x = (float)cos(glm::radians(m_yaw)) * (float)cos(glm::radians(m_pitch));
-		forward.y = (float)sin(glm::radians(m_pitch));
-		forward.z = (float)sin(glm::radians(m_yaw)) * (float)cos(glm::radians(m_pitch));
-		forward = glm::normalize(forward);
-		vec3 right = glm::normalize(glm::cross(vec3(0, 1, 0), forward));
-		vec3 up = glm::cross(forward, right);
+		forward.x = (float)cos(radians(m_yaw)) * (float)cos(radians(m_pitch));
+		forward.y = (float)sin(radians(m_pitch));
+		forward.z = (float)sin(radians(m_yaw)) * (float)cos(radians(m_pitch));
+		forward = normalize(forward);
+		//vec3 right = normalize(cross(vec3(0, 1, 0), forward));
+		//vec3 up = cross(forward, right);
 
-		m_rendererInst->m_cameraRef->SetRight(right);
-		m_rendererInst->m_cameraRef->SetUp(up);
+		//m_rendererInst->m_cameraRef->SetRight(right);
+		//m_rendererInst->m_cameraRef->SetUp(up);
+		// Automatically calulates other axes
 		m_rendererInst->m_cameraRef->SetForward(forward);
 	}
 

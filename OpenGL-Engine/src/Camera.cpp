@@ -130,22 +130,39 @@ namespace Engine
 		m_view = inverse(m_transform);
 	}
 
-	void Camera::SetRight(vec3 pValue)
+	void Camera::SetAxes(vec3 pRight, vec3 pUp, vec3 pForward)
 	{
-		m_transform[0] = vec4(pValue, 0);
+		m_transform[0] = normalize(vec4(pRight, 0));
+		m_transform[1] = normalize(vec4(pUp, 0));
+		m_transform[2] = normalize(vec4(pForward, 0));
 		m_view = inverse(m_transform);
 	}
 
-	void Camera::SetUp(vec3 pValue)
+	void Camera::SetRight(vec3 pRight)
 	{
-		m_transform[1] = vec4(pValue, 0);
-		m_view = inverse(m_transform);
+		//m_transform[0] = vec4(pRight, 0);
+		//m_view = inverse(m_transform);
+		vec3 forward = cross(pRight, vec3(0, 1, 0));
+		vec3 up = cross(pRight, forward);
+		SetAxes(pRight, up, forward);
 	}
 
-	void Camera::SetForward(vec3 pValue)
+	void Camera::SetUp(vec3 pUp)
 	{
-		m_transform[2] = vec4(pValue, 0);
-		m_view = inverse(m_transform);
+		//m_transform[1] = vec4(pUp, 0);
+		//m_view = inverse(m_transform);
+		vec3 right = cross(pUp, vec3(0, 0, 1));
+		vec3 forward = cross(pUp, right);
+		SetAxes(right, pUp, forward);
+	}
+
+	void Camera::SetForward(vec3 pForward)
+	{
+		//m_transform[2] = vec4(pForward, 0);
+		//m_view = inverse(m_transform);
+		vec3 right = cross(vec3(0, 1, 0), pForward);
+		vec3 up = cross(pForward, right);
+		SetAxes(right, up, pForward);
 	}
 	
 	void Camera::SetAspectRatio(float pAspectRatio)

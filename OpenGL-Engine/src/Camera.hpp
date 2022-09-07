@@ -39,9 +39,10 @@ namespace Engine
 		void SetPosition(vec3 pValue) override;
 		void Translate(vec3 pValue);
 
-		void SetRight(vec3 pValue);
-		void SetUp(vec3 pValue);
-		void SetForward(vec3 pValue);
+		void SetAxes(vec3 pRight, vec3 pUp, vec3 pForward);
+		void SetRight(vec3 pRight);
+		void SetUp(vec3 pUp);
+		void SetForward(vec3 pForward);
 
 		void SetAspectRatio(float pAspectRatio);
 		void SetFovH(float pFovH);

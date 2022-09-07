@@ -22,9 +22,12 @@ namespace Engine
 		m_cameraRef->SetPosition({ 0.0f, 0.0f, 6.0f });
 
 		// Initialise lights
-		m_lightDirectional = new Light(LightType::Directional, vec3(0, -1, 0), vec3(0.8f));
-		m_lightPoint = new Light(LightType::Point, vec4(-4, 2, -2, 1), vec3(1.0f));
-		m_lightSpot = new Light(LightType::Spot, vec4(4.5f, 3, 4.5f, 1), vec3(-0.9f, -0.6f, -1), vec3(1.0f), 10.0f, 0.23f);
+		m_lightDirectional = new Light(LightType::Directional, vec3(0.8f));
+		m_lightDirectional->SetDirection(vec3(0, -1, 0));
+		m_lightPoint = new Light(LightType::Point, vec3(1.0f));
+		m_lightPoint->SetCamPosition(vec4(-4, 2, -2, 1));
+		m_lightSpot = new Light(LightType::Spot, vec3(1.0f));
+		m_lightSpot->SetCamPosition(vec4(4.5f, 3, 4.5f, 1))->SetDirection(vec3(-0.9f, -0.6f, -1))->SetAngle(10.0f)->SetBlur(0.23f);
 
 		// Initialise arrays
 		m_models = make_unique<vector<unique_ptr<Model>>>();
