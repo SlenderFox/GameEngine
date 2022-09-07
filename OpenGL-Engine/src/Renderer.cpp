@@ -109,17 +109,13 @@ namespace Engine
 		CreateModelLights();
 
 		unsigned int ID;
+		AddNewShader(ID, "assets/shaders/default");
+		Shader* shaderRef = GetShaderAt(ID);
+		shaderRef->SetMat4("u_model", mat4(1.0f));
+	 	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
 		#if RENDERMODE == BACKPACK
-		 AddNewShader(ID, "assets/shaders/backpack");
-		 Shader* shaderRef = GetShaderAt(ID);
-		 shaderRef->SetMat4("u_model", mat4(1.0f));
-	 	 shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
 		 AddNewModel(m_modelID, "assets/models/backpack/backpack.obj", shaderRef);
 		#else
-		 AddNewShader(ID, "assets/shaders/cube");
-		 Shader* shaderRef = GetShaderAt(ID);
-		 shaderRef->SetMat4("u_model", mat4(1.0f));
-	 	 shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
 		 AddNewModel(m_modelID, "assets/models/cube/cube.obj", shaderRef);
 		#endif
 
