@@ -3,6 +3,12 @@
 
 class Project : public Engine::Application
 {
+private:
+	Engine::Renderer* renderer;
+
+	void CreateScene();
+	void CreateLights();
+
 public:
 	Project();
 	~Project();
@@ -11,5 +17,5 @@ public:
 	void Shutdown() override;
 	void Update(double pDeltaTime) override;
 	void FixedUpdate(double pFixedDeltaTime) override;
-	//void Draw() override;
+	void LateUpdate(double pDeltaTime) override;
 };

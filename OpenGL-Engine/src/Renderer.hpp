@@ -16,6 +16,32 @@ namespace Engine
 			return sm_instance;
 		}
 
+		//void CreateModelScene();
+		//void RenderModelScene(double pTime);
+		//void CreateBoxScene();
+		//void RenderBoxScene(double pTime);
+		//void CreateModelLights();
+		//void CreateMeshLights();
+
+		Model* AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef = nullptr);
+		Shader* AddNewShader(unsigned int &id, string pLocation);
+		Light* AddNewLight(unsigned int &id, LightType pType, vec3 pColour = vec3(1));
+		
+		void LoadLightsIntoShader(Shader* pShader);
+
+		void ModifyAllSpotlightAngles(float pValue);
+		void ModifyAllSpotlightBlurs(float pValue);
+
+		#pragma region Getters
+		unsigned int ModelCount() const;
+		unsigned int ShaderCount() const;
+		unsigned int LightCount() const;
+		Model* GetModelAt(unsigned int pPos);
+		Shader* GetShaderAt(unsigned int pPos);
+		Light* GetLightAt(unsigned int pPos);
+		Mesh* GetMeshAt(unsigned int pPos);
+		#pragma endregion
+
 	// Member
 	private:
 		Camera* m_cameraRef = nullptr;	// A reference to a camera
@@ -23,14 +49,6 @@ namespace Engine
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
 		unique_ptr<vector<unique_ptr<Light>>> m_lights;
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
-
-		//Light* m_lightDirectional = nullptr;
-		//Light* m_lightPoint = nullptr;
-		//Light* m_lightSpot = nullptr;
-
-		unsigned int m_modelID = 0;	// Initialised for legacy
-		unsigned int m_lightPointID;
-		unsigned int m_lightSpotID;
 
 		const vec3 m_cubePositions[10] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
@@ -58,26 +76,5 @@ namespace Engine
 		void Init(float pAspect);
 		void Destroy(bool pValidate);
 		void Draw(double pTime);
-
-		void CreateModelScene();
-		void RenderModelScene(double pTime);
-		void CreateBoxScene();
-		void RenderBoxScene(double pTime);
-		
-		void CreateModelLights();
-		void CreateMeshLights();
-		void LoadShaderUniforms(Shader* pShader);
-
-		void ModifySpotlightAngle(float pValue);
-		void ModifySpotlightBlur(float pValue);
-
-		Model* AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef = nullptr);
-		Shader* AddNewShader(unsigned int &id, string pLocation);
-		Light* AddNewLight(unsigned int &id, LightType pType, vec3 pColour = vec3(1));
-
-		Model* GetModelAt(unsigned int pPos);
-		Shader* GetShaderAt(unsigned int pPos);
-		Light* GetLightAt(unsigned int pPos);
-		Mesh* GetMeshAt(unsigned int pPos);
 	};
 }

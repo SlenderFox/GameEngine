@@ -2,11 +2,6 @@
 #include "Renderer.hpp"
 #include "glad/glad.h" // Include glad to get all the required OpenGL headers
 #include "glm/gtc/matrix_transform.hpp"
-
-#define LEGACY 0
-#define CUBE 1
-#define BACKPACK 2
-#define RENDERMODE BACKPACK
 #pragma endregion
 
 namespace Engine
@@ -26,12 +21,6 @@ namespace Engine
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
 		m_lights = make_unique<vector<unique_ptr<Light>>>();
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
-
-		#if RENDERMODE == LEGACY
-		 CreateBoxScene();
-		#else
-		 CreateModelScene();
-		#endif
 	}
 
 	void Renderer::Destroy(bool pValidate)
@@ -93,13 +82,40 @@ namespace Engine
 		// Clears to background colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		#if RENDERMODE == LEGACY
-		 RenderBoxScene(pTime);
-		#else
-		 RenderModelScene(pTime);
-		#endif
-	}
+		if (m_models.get()->size() > 0)
+		{
+			for (unsigned int i = 0; i < m_models.get()->size(); ++i)
+				GetModelAt(i)->Draw();
+		}
 
+		if (m_meshes.get()->size() > 0)
+		{
+			for (unsigned int i = 0; i < m_meshes.get()->size(); ++i)
+			{
+				glBindVertexArray(*GetMeshAt(i)->GetVAO());
+				GetShaderAt(i)->Use();	// Needed for when drawing directly from mesh
+				GetShaderAt(i)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
+				GetShaderAt(i)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
+				if (i > 0)
+					GetMeshAt(i)->Draw();
+				else
+				{
+					for (unsigned int j = 0; j < 10; j++)
+					{
+						mat4 model = mat4(1.0f);
+						model = glm::translate(model, m_cubePositions[j]);
+						float angle = (float)pTime * 5.0f * ((j + 1) / (j * 0.2f + 1));
+						model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
+						GetShaderAt(0U)->SetMat4("u_model", (mat4)model);
+						mat3 transposeInverseOfModel = mat3(glm::transpose(glm::inverse(model)));
+						GetShaderAt(0U)->SetMat3("u_transposeInverseOfModel", (mat3)transposeInverseOfModel);
+						GetMeshAt(i)->Draw();
+					}
+				}
+			}
+		}
+	}
+	/*
 	void Renderer::CreateModelScene()
 	{
 		CreateModelLights();
@@ -115,7 +131,7 @@ namespace Engine
 		 AddNewModel(m_modelID, "assets/models/cube/cube.obj", shaderRef);
 		#endif
 
-		LoadShaderUniforms(shaderRef);
+		LoadLightsIntoShader(shaderRef);
 	}
 
 	void Renderer::RenderModelScene(double pTime)
@@ -145,7 +161,7 @@ namespace Engine
 	
 		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices(), textures));
 		GetMeshAt(0U)->LoadTexturesToShader(*GetShaderAt(ID));
-		LoadShaderUniforms(GetShaderAt(ID));
+		LoadLightsIntoShader(GetShaderAt(ID));
 	
 		CreateMeshLights();
 	}
@@ -199,21 +215,6 @@ namespace Engine
 				AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
 			}
 		}
-
-		//// ----- Point light cube -----
-		//unsigned int discard;
-		//Shader* shaderRef = AddNewShader(m_lightPointID, "assets/shaders/light");
-		//shaderRef->SetVec3("u_colour", m_lightPoint->GetColour());
-		//shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
-	 	//shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
-		//AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
-		//
-		//// ----- Spot light cube -----
-		//shaderRef = AddNewShader(m_lightSpotID, "assets/shaders/light");
-		//shaderRef->SetVec3("u_colour", m_lightSpot->GetColour());
-		//shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
-	 	//shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
-		//AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
 	}
 
 	void Renderer::CreateMeshLights()
@@ -238,24 +239,9 @@ namespace Engine
 				shaderRef->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(GetLightAt(i)->GetPosition())));
 			}
 		}
-		//// ----- Point light cube -----
-		//Shader* shaderRef = AddNewShader(m_lightPointID, "assets/shaders/light");
-		//unsigned int meshID = m_meshes.get()->size();
-		//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		//GetMeshAt(meshID)->LoadTexturesToShader(*shaderRef);
-		//shaderRef->SetVec3("u_colour", m_lightPoint->GetColour());
-		//shaderRef->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
-		//
-		//// ----- Spot light cube -----
-		//shaderRef = AddNewShader(m_lightSpotID, "assets/shaders/light");
-		//meshID = m_meshes.get()->size();
-		//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		//GetMeshAt(meshID)->LoadTexturesToShader(*shaderRef);
-		//shaderRef->SetVec3("u_colour", m_lightSpot->GetColour());
-		//shaderRef->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
 	}
-
-	void Renderer::LoadShaderUniforms(Shader* pShader)
+	*/
+	void Renderer::LoadLightsIntoShader(Shader* pShader)
 	{
 		pShader->SetFloat("u_material.shininess", 32.0f);
 		unsigned int numDirLights = 0;
@@ -295,7 +281,7 @@ namespace Engine
 		}
 	}
 
-	void Renderer::ModifySpotlightAngle(float pValue)
+	void Renderer::ModifyAllSpotlightAngles(float pValue)
 	{
 		for (unsigned int i = 0; i < m_lights.get()->size(); ++i)
 		{
@@ -306,13 +292,14 @@ namespace Engine
 				if (newValue <= 90.0f && newValue >= 0.0f)
 				{
 					currentlLight->SetAngle(newValue);
-					GetShaderAt(m_modelID)->SetFloat("u_spotLights[0].cutoff", currentlLight->GetAngle());
+					for (unsigned int i = 0; i < m_models.get()->size(); ++i)
+						GetModelAt(i)->m_shaderRef->SetFloat("u_spotLights[0].cutoff", currentlLight->GetAngle());
 				}
 			}
 		}
 	}
 
-	void Renderer::ModifySpotlightBlur(float pValue)
+	void Renderer::ModifyAllSpotlightBlurs(float pValue)
 	{
 		for (unsigned int i = 0; i < m_lights.get()->size(); ++i)
 		{
@@ -323,7 +310,8 @@ namespace Engine
 				if (newValue <= 1.0f && newValue > 0.0f)
 				{
 					currentlLight->SetBlur(newValue);
-					GetShaderAt(m_modelID)->SetFloat("u_spotLights[0].blur", currentlLight->GetBlur());
+					for (unsigned int i = 0; i < m_models.get()->size(); ++i)
+						GetModelAt(i)->m_shaderRef->SetFloat("u_spotLights[0].blur", currentlLight->GetBlur());
 				}
 			}
 		}
@@ -348,6 +336,22 @@ namespace Engine
 		id = m_lights.get()->size();
 		m_lights.get()->push_back(make_unique<Light>(pType, pColour));
 		return GetLightAt(id);
+	}
+
+	#pragma region Getters
+	unsigned int Renderer::ModelCount() const
+	{
+		return m_models.get()->size();
+	}
+
+	unsigned int Renderer::ShaderCount() const
+	{
+		return m_shaders.get()->size();
+	}
+
+	unsigned int Renderer::LightCount() const
+	{
+		return m_lights.get()->size();
 	}
 
 	Model* Renderer::GetModelAt(unsigned int pPos)
@@ -412,4 +416,5 @@ namespace Engine
 		}
 		return (*m_meshes.get())[pPos].get();
 	}
+	#pragma endregion
 }

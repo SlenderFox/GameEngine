@@ -23,6 +23,7 @@ namespace Engine
 	protected:
 		mat4 m_transform = mat4(1);
 
+	public:
 		#pragma region Constructors
 		Transform();
 		Transform(mat4 pValue);
@@ -32,8 +33,6 @@ namespace Engine
 		Transform& operator=(const Transform& pOther);
 		Transform& operator=(Transform&& pOther) noexcept;
 		#pragma endregion
-
-	public:
 		#pragma region Setters
 		virtual void SetTransform(mat4 pValue);
 		virtual void SetPosition(vec3 pValue);

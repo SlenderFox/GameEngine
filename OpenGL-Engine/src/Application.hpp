@@ -17,9 +17,9 @@ namespace Engine
 
 	// Member
 	private:
-		GLFWwindow* m_window = nullptr;						// A reference to the window
 		Renderer* m_rendererInst = nullptr;					// A reference to the renderer instance
 		Input* m_inputInst = nullptr;						// A reference to the input instance
+		GLFWwindow* m_window = nullptr;						// A reference to the window
 
 		bool m_gladLoaded = false;							// Whether glad has loaded or not
 		unsigned int m_winWidth = 0U, m_winHeight = 0U;		// The width and height of the window
@@ -49,8 +49,6 @@ namespace Engine
 	public:
 		const double m_fixedDeltaTime = 0.01666666666666666;
 
-		virtual ~Application();
-
 		void Run(unsigned int pWidth, unsigned int pHeight, string pTitle, bool pFullscreen);
 		void SetDimensions(unsigned int pWidth, unsigned int pHeight);
 		void MouseCallback(double pPosX, double pPosY);
@@ -58,12 +56,12 @@ namespace Engine
 
 	protected:
 		Application();
+		virtual ~Application();
 
 		virtual bool Startup() = 0;
 		virtual void Shutdown() = 0;
 		virtual void Update(double pDeltaTime) = 0;
 		virtual void FixedUpdate(double pFixedDeltaTime) = 0;
-		//virtual void LateUpdate(double pDeltaTime) = 0;
-		//virtual void Draw() = 0;
+		virtual void LateUpdate(double pDeltaTime) = 0;
 	};
 }

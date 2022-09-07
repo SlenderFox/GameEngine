@@ -282,20 +282,20 @@ namespace Engine
 		// Spotlight cone
 		if (glfwGetKey(m_window, GLFW_KEY_T) == GLFW_PRESS)
 		{
-			m_rendererInst->ModifySpotlightAngle(0.05f);
+			m_rendererInst->ModifyAllSpotlightAngles(0.05f);
 		}
 		if (glfwGetKey(m_window, GLFW_KEY_G) == GLFW_PRESS)
 		{
-			m_rendererInst->ModifySpotlightAngle(-0.05f);
+			m_rendererInst->ModifyAllSpotlightAngles(-0.05f);
 		}
 		// Spotlight blur
 		if (glfwGetKey(m_window, GLFW_KEY_Y) == GLFW_PRESS)
 		{
-			m_rendererInst->ModifySpotlightBlur(-0.005f);
+			m_rendererInst->ModifyAllSpotlightBlurs(-0.005f);
 		}
 		if (glfwGetKey(m_window, GLFW_KEY_H) == GLFW_PRESS)
 		{
-			m_rendererInst->ModifySpotlightBlur(0.005f);
+			m_rendererInst->ModifyAllSpotlightBlurs(0.005f);
 		}
 
 		float moveSpeed = 8;
