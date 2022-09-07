@@ -1,5 +1,9 @@
-# LearnOpenGL
-Following https://learnopengl.com/
+# OpenGL-Engine
+Built by loosely following https://learnopengl.com/
 
-Maybe one day it will be a nice fleshed out engine but today is not that day.
-Yes I know some of the decisions are questionable, I'm trying stuff out to see what doesn't work
+### Libraries used:
+- OpenGL core 3.3 via glad ([Github](https://github.com/Dav1dde/glad))
+- GLFW ([Website](https://www.glfw.org/download.html))
+- GLM ([Website](https://glm.g-truc.net/0.9.8/index.html))
+- stb_image.h ([Github](https://github.com/nothings/stb/blob/master/stb_image.h))
+- Assimp ([Github](https://github.com/assimp/assimp/blob/master/Build.md))

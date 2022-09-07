@@ -1,5 +1,4 @@
 /*Following: https://learnopengl.com/
-* Currently at: https://learnopengl.com/Model-Loading/Model
 * Enable/disable console through
 * [Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)]
 * Resolutions:
