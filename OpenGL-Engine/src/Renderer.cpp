@@ -21,17 +21,10 @@ namespace Engine
 		m_cameraRef->SetClearColour(0.1f, 0.1f, 0.1f);
 		m_cameraRef->SetPosition({ 0.0f, 0.0f, 6.0f });
 
-		// Initialise lights
-		m_lightDirectional = new Light(LightType::Directional, vec3(0.8f));
-		m_lightDirectional->SetDirection(vec3(0, -1, 0));
-		m_lightPoint = new Light(LightType::Point, vec3(1.0f));
-		m_lightPoint->SetCamPosition(vec4(-4, 2, -2, 1));
-		m_lightSpot = new Light(LightType::Spot, vec3(1.0f));
-		m_lightSpot->SetCamPosition(vec4(4.5f, 3, 4.5f, 1))->SetDirection(vec3(-0.9f, -0.6f, -1))->SetAngle(10.0f)->SetBlur(0.23f);
-
 		// Initialise arrays
 		m_models = make_unique<vector<unique_ptr<Model>>>();
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
+		m_lights = make_unique<vector<unique_ptr<Light>>>();
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 
 		#if RENDERMODE == LEGACY
@@ -186,87 +179,153 @@ namespace Engine
 
 	void Renderer::CreateModelLights()
 	{
-		// ----- Point light cube -----
-		unsigned int discard;
-		Shader* shaderRef = AddNewShader(m_lightPointID, "assets/shaders/light");
-		shaderRef->SetVec3("u_colour", m_lightPoint->GetColour());
-		shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
-	 	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
-		AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
+		unsigned int ID;
+		AddNewLight(ID, LightType::Directional, vec3(0.8f));
+		GetLightAt(ID)->SetDirection(vec3(0, -1, 0));
+		AddNewLight(ID, LightType::Point);
+		GetLightAt(ID)->SetCamPosition(vec4(-4, 2, -2, 1));
+		AddNewLight(ID, LightType::Spot);
+		GetLightAt(ID)->SetCamPosition(vec4(4.5f, 3, 4.5f, 1))->SetDirection(vec3(-0.9f, -0.6f, -1))->SetAngle(10.0f)->SetBlur(0.23f);
 
-		// ----- Spot light cube -----
-		shaderRef = AddNewShader(m_lightSpotID, "assets/shaders/light");
-		shaderRef->SetVec3("u_colour", m_lightSpot->GetColour());
-		shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
-	 	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
-		AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
+		for (unsigned int i = 0; i < m_lights.get()->size(); ++i)
+		{
+			if (GetLightAt(i)->GetType() == LightType::Point || GetLightAt(i)->GetType() == LightType::Spot)
+			{
+				unsigned int discard;
+				Shader* shaderRef = AddNewShader(m_lightPointID, "assets/shaders/light");
+				shaderRef->SetVec3("u_colour", GetLightAt(i)->GetColour());
+				shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(GetLightAt(i)->GetPosition())));
+	 			shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
+				AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
+			}
+		}
+
+		//// ----- Point light cube -----
+		//unsigned int discard;
+		//Shader* shaderRef = AddNewShader(m_lightPointID, "assets/shaders/light");
+		//shaderRef->SetVec3("u_colour", m_lightPoint->GetColour());
+		//shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
+	 	//shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
+		//AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
+		//
+		//// ----- Spot light cube -----
+		//shaderRef = AddNewShader(m_lightSpotID, "assets/shaders/light");
+		//shaderRef->SetVec3("u_colour", m_lightSpot->GetColour());
+		//shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
+	 	//shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
+		//AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
 	}
 
 	void Renderer::CreateMeshLights()
 	{
-		// ----- Point light cube -----
-		Shader* shaderRef = AddNewShader(m_lightPointID, "assets/shaders/light");
-		unsigned int meshID = m_meshes.get()->size();
-		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		GetMeshAt(meshID)->LoadTexturesToShader(*shaderRef);
-		shaderRef->SetVec3("u_colour", m_lightPoint->GetColour());
-		shaderRef->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
+		unsigned int ID;
+		AddNewLight(ID, LightType::Directional, vec3(0.8f));
+		GetLightAt(ID)->SetDirection(vec3(0, -1, 0));
+		AddNewLight(ID, LightType::Point);
+		GetLightAt(ID)->SetCamPosition(vec4(-4, 2, -2, 1));
+		AddNewLight(ID, LightType::Spot);
+		GetLightAt(ID)->SetCamPosition(vec4(4.5f, 3, 4.5f, 1))->SetDirection(vec3(-0.9f, -0.6f, -1))->SetAngle(10.0f)->SetBlur(0.23f);
 
-		// ----- Spot light cube -----
-		shaderRef = AddNewShader(m_lightSpotID, "assets/shaders/light");
-		meshID = m_meshes.get()->size();
-		m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
-		GetMeshAt(meshID)->LoadTexturesToShader(*shaderRef);
-		shaderRef->SetVec3("u_colour", m_lightSpot->GetColour());
-		shaderRef->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
+		for (unsigned int i = 0; i < m_lights.get()->size(); ++i)
+		{
+			if (GetLightAt(i)->GetType() == LightType::Point || GetLightAt(i)->GetType() == LightType::Spot)
+			{
+				Shader* shaderRef = AddNewShader(m_lightPointID, "assets/shaders/light");
+				unsigned int meshID = m_meshes.get()->size();
+				m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
+				GetMeshAt(meshID)->LoadTexturesToShader(*shaderRef);
+	 			shaderRef->SetVec3("u_colour", GetLightAt(i)->GetColour());
+				shaderRef->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(GetLightAt(i)->GetPosition())));
+			}
+		}
+		//// ----- Point light cube -----
+		//Shader* shaderRef = AddNewShader(m_lightPointID, "assets/shaders/light");
+		//unsigned int meshID = m_meshes.get()->size();
+		//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
+		//GetMeshAt(meshID)->LoadTexturesToShader(*shaderRef);
+		//shaderRef->SetVec3("u_colour", m_lightPoint->GetColour());
+		//shaderRef->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightPoint->GetPosition())));
+		//
+		//// ----- Spot light cube -----
+		//shaderRef = AddNewShader(m_lightSpotID, "assets/shaders/light");
+		//meshID = m_meshes.get()->size();
+		//m_meshes.get()->push_back(make_unique<Mesh>(Mesh::GenerateVertices(), Mesh::GenerateIndices()));
+		//GetMeshAt(meshID)->LoadTexturesToShader(*shaderRef);
+		//shaderRef->SetVec3("u_colour", m_lightSpot->GetColour());
+		//shaderRef->SetMat4("u_model", (mat4)glm::translate(mat4(1.0f), vec3(m_lightSpot->GetPosition())));
 	}
 
 	void Renderer::LoadShaderUniforms(Shader* pShader)
 	{
 		pShader->SetFloat("u_material.shininess", 32.0f);
-		// Directional
-		pShader->SetVec3("u_directional.colour.ambient", m_lightDirectional->GetColour() * 0.15f);
-		pShader->SetVec3("u_directional.colour.diffuse", m_lightDirectional->GetColour());
-		pShader->SetVec3("u_directional.colour.specular", m_lightDirectional->GetColour());
-		pShader->SetVec4("u_directional.direction", m_lightDirectional->GetDirection());
+		unsigned int numDirLights = 0;
+		unsigned int numPointLights = 0;
+		unsigned int numSpotLights = 0;
 
-		// Point
-		//pShader->SetVec3("u_pointLights[0].colour.ambient", m_lightPoint->GetColour() * 0.15f);
-		pShader->SetVec3("u_pointLights[0].colour.diffuse", m_lightPoint->GetColour());
-		pShader->SetVec3("u_pointLights[0].colour.specular", m_lightPoint->GetColour());
-		pShader->SetVec4("u_pointLights[0].position", m_lightPoint->GetPosition());
-		pShader->SetFloat("u_pointLights[0].linear", 0.045f);
-		pShader->SetFloat("u_pointLights[0].quadratic", 0.0075f);
-
-		// Spot
-		//pShader->SetVec3("u_spotLights[0].colour.ambient", m_lightSpot->GetColour() * 0.15f);
-		pShader->SetVec3("u_spotLights[0].colour.diffuse", m_lightSpot->GetColour());
-		pShader->SetVec3("u_spotLights[0].colour.specular", m_lightSpot->GetColour());
-		pShader->SetVec4("u_spotLights[0].position", m_lightSpot->GetPosition());
-		pShader->SetVec4("u_spotLights[0].direction", m_lightSpot->GetDirection());
-		pShader->SetFloat("u_spotLights[0].linear", 0.045f);
-		pShader->SetFloat("u_spotLights[0].quadratic", 0.0075f);
-		pShader->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
-		pShader->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
+		for (unsigned int i = 0; i < m_lights.get()->size(); ++i)
+		{
+			Light* currentLight = GetLightAt(i);
+			switch (currentLight->GetType())
+			{
+			case LightType::Directional:
+				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.ambient", currentLight->GetColour() * 0.15f);
+				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.diffuse", currentLight->GetColour());
+				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.specular", currentLight->GetColour());
+				pShader->SetVec4("u_dirLights[" + std::to_string(numDirLights) + "].direction", currentLight->GetDirection());
+				++numDirLights; break;
+			case LightType::Point:
+				pShader->SetVec3("u_pointLights[" + std::to_string(numPointLights) + "].colour.diffuse", currentLight->GetColour());
+				pShader->SetVec3("u_pointLights[" + std::to_string(numPointLights) + "].colour.specular", currentLight->GetColour());
+				pShader->SetVec4("u_pointLights[" + std::to_string(numPointLights) + "].position", currentLight->GetPosition());
+				pShader->SetFloat("u_pointLights[" + std::to_string(numPointLights) + "].linear", currentLight->GetLinear());
+				pShader->SetFloat("u_pointLights[" + std::to_string(numPointLights) + "].quadratic", currentLight->GetQuadratic());
+				++numPointLights; break;
+			case LightType::Spot:
+				pShader->SetVec3("u_spotLights[" + std::to_string(numSpotLights) + "].colour.diffuse", currentLight->GetColour());
+				pShader->SetVec3("u_spotLights[" + std::to_string(numSpotLights) + "].colour.specular", currentLight->GetColour());
+				pShader->SetVec4("u_spotLights[" + std::to_string(numSpotLights) + "].position", currentLight->GetPosition());
+				pShader->SetVec4("u_spotLights[" + std::to_string(numSpotLights) + "].direction", currentLight->GetDirection());
+				pShader->SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].linear", currentLight->GetLinear());
+				pShader->SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].quadratic", currentLight->GetQuadratic());
+				pShader->SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].cutoff", currentLight->GetAngle());
+				pShader->SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].blur", currentLight->GetBlur());
+				++numSpotLights; break;
+			default: return;
+			}
+		}
 	}
 
 	void Renderer::ModifySpotlightAngle(float pValue)
 	{
-		float newValue = m_lightSpot->GetAngleRaw() + pValue;
-		if (newValue <= 90.0f && newValue >= 0.0f)
+		for (unsigned int i = 0; i < m_lights.get()->size(); ++i)
 		{
-			m_lightSpot->SetAngle(newValue);
-			GetShaderAt(m_modelID)->SetFloat("u_spotLights[0].cutoff", m_lightSpot->GetAngle());
+			if (GetLightAt(i)->GetType() == LightType::Spot)
+			{
+				Light* currentlLight = GetLightAt(i);
+				float newValue = currentlLight->GetAngleRaw() + pValue;
+				if (newValue <= 90.0f && newValue >= 0.0f)
+				{
+					currentlLight->SetAngle(newValue);
+					GetShaderAt(m_modelID)->SetFloat("u_spotLights[0].cutoff", currentlLight->GetAngle());
+				}
+			}
 		}
 	}
 
 	void Renderer::ModifySpotlightBlur(float pValue)
 	{
-		float newValue = m_lightSpot->GetBlurRaw() + pValue;
-		if (newValue <= 1.0f && newValue > 0.0f)
+		for (unsigned int i = 0; i < m_lights.get()->size(); ++i)
 		{
-			m_lightSpot->SetBlur(newValue);
-			GetShaderAt(m_modelID)->SetFloat("u_spotLights[0].blur", m_lightSpot->GetBlur());
+			if (GetLightAt(i)->GetType() == LightType::Spot)
+			{
+				Light* currentlLight = GetLightAt(i);
+				float newValue = currentlLight->GetBlurRaw() + pValue;
+				if (newValue <= 1.0f && newValue > 0.0f)
+				{
+					currentlLight->SetBlur(newValue);
+					GetShaderAt(m_modelID)->SetFloat("u_spotLights[0].blur", currentlLight->GetBlur());
+				}
+			}
 		}
 	}
 
@@ -282,6 +341,13 @@ namespace Engine
 		id = m_shaders.get()->size();
 		m_shaders.get()->push_back(make_unique<Shader>(pLocation));
 		return GetShaderAt(id);
+	}
+
+	Light* Renderer::AddNewLight(unsigned int &id, LightType pType, vec3 pColour)
+	{
+		id = m_lights.get()->size();
+		m_lights.get()->push_back(make_unique<Light>(pType, pColour));
+		return GetLightAt(id);
 	}
 
 	Model* Renderer::GetModelAt(unsigned int pPos)
@@ -314,6 +380,22 @@ namespace Engine
 		}
 
 		return (*m_shaders.get())[pPos].get();
+	}
+
+	Light* Renderer::GetLightAt(unsigned int pPos)
+	{
+		if (m_lights.get() == nullptr)
+			return nullptr;
+
+		if (pPos > m_lights.get()->size() - 1)
+		{
+			#ifdef _DEBUG
+			 cout << "Attempting to access light outside array size\n";
+			#endif
+			return nullptr;
+		}
+
+		return (*m_lights.get())[pPos].get();
 	}
 
 	Mesh* Renderer::GetMeshAt(unsigned int pPos)

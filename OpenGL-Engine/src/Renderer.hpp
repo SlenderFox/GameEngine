@@ -21,11 +21,12 @@ namespace Engine
 		Camera* m_cameraRef = nullptr;	// A reference to a camera
 		unique_ptr<vector<unique_ptr<Model>>> m_models;
 		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
+		unique_ptr<vector<unique_ptr<Light>>> m_lights;
 		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
 
-		Light* m_lightDirectional = nullptr;
-		Light* m_lightPoint = nullptr;
-		Light* m_lightSpot = nullptr;
+		//Light* m_lightDirectional = nullptr;
+		//Light* m_lightPoint = nullptr;
+		//Light* m_lightSpot = nullptr;
 
 		unsigned int m_modelID = 0;	// Initialised for legacy
 		unsigned int m_lightPointID;
@@ -72,9 +73,11 @@ namespace Engine
 
 		Model* AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef = nullptr);
 		Shader* AddNewShader(unsigned int &id, string pLocation);
+		Light* AddNewLight(unsigned int &id, LightType pType, vec3 pColour = vec3(1));
 
 		Model* GetModelAt(unsigned int pPos);
 		Shader* GetShaderAt(unsigned int pPos);
+		Light* GetLightAt(unsigned int pPos);
 		Mesh* GetMeshAt(unsigned int pPos);
 	};
 }

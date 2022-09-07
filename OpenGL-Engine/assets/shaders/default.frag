@@ -1,8 +1,9 @@
 #version 330 core
 #define normalise normalize
 
-const int NR_POINT_LIGHTS = 10;
-const int NR_SPOT_LIGHTS = 10;
+const int NR_DIR_LIGHTS = 3;
+const int NR_POINT_LIGHTS = 30;
+const int NR_SPOT_LIGHTS = 30;
 
 // I/O
 out vec4 FragCol;
@@ -47,15 +48,15 @@ struct LightSpot {
 uniform vec3 u_viewPos;
 uniform Material u_material;
 
-uniform LightDirectional u_directional;
+uniform LightDirectional[NR_DIR_LIGHTS] u_dirLights;
 uniform LightPoint[NR_POINT_LIGHTS] u_pointLights;
 uniform LightSpot[NR_SPOT_LIGHTS] u_spotLights;
 
 vec3 m_normal;
 vec3 m_viewDir;
 
-float near = 0.1;
-float far = 500.0;
+const float near = 0.1;
+const float far = 500.0;
 
 float LineariseDepth(float pDepth)
 {
@@ -87,7 +88,7 @@ float CalculateAttentuation(float pDist, float pLinear, float pQuadratic)
 
 vec3 CalculateDirectionalLighting(LightDirectional pLight)
 {
-	vec3 lightDir = normalise(u_directional.direction.xyz);
+	vec3 lightDir = normalise(pLight.direction.xyz);
 	return PhongShading(pLight.colour, lightDir, 1);
 }
 
@@ -136,8 +137,9 @@ void main()
 	m_normal = normalise(Normal);
 	m_viewDir = normalise(u_viewPos - FragPos);
 
-	// Only one directional light allowed
-	vec3 result = CalculateDirectionalLighting(u_directional);
+	vec3 result;
+	for (int i = 0; i < NR_DIR_LIGHTS; ++i)
+		result += CalculateDirectionalLighting(u_dirLights[i]);
 
 	for (int i = 0; i < NR_POINT_LIGHTS; ++i)
 		result += CalculatePointLight(u_pointLights[i]);

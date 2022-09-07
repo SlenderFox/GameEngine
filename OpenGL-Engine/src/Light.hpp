@@ -14,7 +14,7 @@ namespace Engine
 	{
 	private:
 		LightType m_type;
-		vec3 m_lightColour = vec3(1);
+		vec3 m_lightColour;
 		float m_linear = 0.045f;		// For point and spot lights
 		float m_quadratic = 0.0075f;	// For point and spot lights
 		float m_angle = 10.0f;			// Only for spotlights
@@ -22,17 +22,9 @@ namespace Engine
 
 	public:
 		#pragma region Constructors
-		Light(LightType pType);										// Generic
-		Light(LightType pType, vec3 pColour);						// Generic
-		Light(LightType pType, mat4 pTransform);					// Generic
-		Light(LightType pType, mat4 pTransform, vec3 pColour);		// Generic
-		//Light(LightType pType, vec3 pDirection);					// Directional
-		//Light(LightType pType, vec3 pDirection, vec3 pColour);		// Directional
-		//Light(LightType pType, vec4 pPosition);						// Point
-		//Light(LightType pType, vec4 pPosition, vec3 pColour);		// Point
-		//Light(LightType pType, mat4 pTransform, float pAngle, float pBlur);									// Spot
-		//Light(LightType pType, mat4 pTransform, vec3 pColour, float pAngle, float pBlur);					// Spot
-		//Light(LightType pType, vec4 pPosition, vec3 pDirection, vec3 pColour, float pAngle, float pBlur);	// Spot
+		Light(LightType pType, vec3 pColour = vec3(1));
+		Light(LightType pType, mat4 pTransform = mat4(1));
+		Light(LightType pType, mat4 pTransform = mat4(1), vec3 pColour = vec3(1));
 		~Light() {}
 		#pragma endregion
 		#pragma region Setters
