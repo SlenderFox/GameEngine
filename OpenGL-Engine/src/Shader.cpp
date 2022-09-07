@@ -12,8 +12,6 @@ namespace Engine
 {
 	Shader::Shader()
 	{
-		//LoadVertexShader();
-		//LoadFragmentShader();
 		LoadShader(ShaderType::VERTEX);
 		LoadShader(ShaderType::FRAGMENT);
 		CreateShaderProgram();
@@ -38,9 +36,6 @@ namespace Engine
 	void Shader::LoadPaths(string pShaderPath)
 	{
 		m_shaderPath = pShaderPath;
-
-		//LoadVertexShader();
-		//LoadFragmentShadepShaderPathr();
 		LoadShader(ShaderType::VERTEX);
 		LoadShader(ShaderType::FRAGMENT);
 		CreateShaderProgram();
