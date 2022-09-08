@@ -255,12 +255,6 @@ namespace Engine
 		forward.y = (float)sin(radians(m_pitch));
 		forward.z = (float)sin(radians(m_yaw)) * (float)cos(radians(m_pitch));
 		forward = normalize(forward);
-		//vec3 right = normalize(cross(vec3(0, 1, 0), forward));
-		//vec3 up = cross(forward, right);
-
-		//m_rendererInst->m_cameraRef->SetRight(right);
-		//m_rendererInst->m_cameraRef->SetUp(up);
-		// Automatically calulates other axes
 		m_rendererInst->m_cameraRef->SetForward(forward);
 	}
 

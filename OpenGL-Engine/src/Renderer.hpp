@@ -30,7 +30,6 @@ namespace Engine
 		Model* GetModelAt(unsigned int pPos);
 		Shader* GetShaderAt(unsigned int pPos);
 		Light* GetLightAt(unsigned int pPos);
-		Mesh* GetMeshAt(unsigned int pPos);
 		#pragma endregion
 
 	// Member
@@ -39,7 +38,6 @@ namespace Engine
 		std::unique_ptr<std::vector<std::unique_ptr<Model>>> m_models;
 		std::unique_ptr<std::vector<std::unique_ptr<Shader>>> m_shaders;
 		std::unique_ptr<std::vector<std::unique_ptr<Light>>> m_lights;
-		std::unique_ptr<std::vector<std::unique_ptr<Mesh>>> m_meshes;
 
 		const glm::vec3 m_cubePositions[10] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),

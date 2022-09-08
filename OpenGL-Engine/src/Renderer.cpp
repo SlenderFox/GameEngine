@@ -34,7 +34,6 @@ namespace Engine
 		m_models = make_unique<vector<unique_ptr<Model>>>();
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
 		m_lights = make_unique<vector<unique_ptr<Light>>>();
-		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 	}
 
 	void Renderer::Destroy(bool pValidate)
@@ -72,18 +71,6 @@ namespace Engine
 				m_shaders.release();
 			}
 			
-			if (m_meshes)
-			{
-				// When model works this will be antiquated, works the same as shaders
-				for (unsigned int i = 0; i < (*m_meshes.get()).size(); ++i)
-				{
-					if (GetMeshAt(i) != nullptr)
-						GetMeshAt(i)->Destroy(pValidate);
-				}
-				// Smart pointer needs to be manually released or it throws an error :|
-				m_meshes.release();
-			}
-			
 			// Unload all textures from memory once finished
 			Texture::UnloadAll(pValidate);
 		}
@@ -100,33 +87,6 @@ namespace Engine
 		{
 			for (unsigned int i = 0; i < m_models.get()->size(); ++i)
 				GetModelAt(i)->Draw();
-		}
-
-		if (m_meshes.get()->size() > 0)
-		{
-			for (unsigned int i = 0; i < m_meshes.get()->size(); ++i)
-			{
-				glBindVertexArray(*GetMeshAt(i)->GetVAO());
-				GetShaderAt(i)->Use();	// Needed for when drawing directly from mesh
-				GetShaderAt(i)->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
-				GetShaderAt(i)->SetVec3("u_viewPos", m_cameraRef->GetPosition());
-				if (i > 0)
-					GetMeshAt(i)->Draw();
-				else
-				{
-					for (unsigned int j = 0; j < 10; j++)
-					{
-						mat4 model = mat4(1.0f);
-						model = glm::translate(model, m_cubePositions[j]);
-						float angle = (float)pTime * 5.0f * ((j + 1) / (j * 0.2f + 1));
-						model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
-						GetShaderAt(0U)->SetMat4("u_model", (mat4)model);
-						mat3 transposeInverseOfModel = mat3(glm::transpose(glm::inverse(model)));
-						GetShaderAt(0U)->SetMat3("u_transposeInverseOfModel", (mat3)transposeInverseOfModel);
-						GetMeshAt(i)->Draw();
-					}
-				}
-			}
 		}
 	}
 
@@ -289,21 +249,6 @@ namespace Engine
 		}
 
 		return (*m_lights.get())[pPos].get();
-	}
-
-	Mesh* Renderer::GetMeshAt(unsigned int pPos)
-	{
-		if (m_meshes.get() == nullptr)
-			return nullptr;
-
-		if (pPos > m_meshes.get()->size() - 1)
-		{
-			#ifdef _DEBUG
-			 cout << "Attempting to access mesh outside array size\n";
-			#endif
-			return nullptr;
-		}
-		return (*m_meshes.get())[pPos].get();
 	}
 	#pragma endregion
 }

@@ -63,7 +63,6 @@ namespace Engine
 
 	void Transform::SetRight(vec3 pRight)
 	{
-		//m_transform[0] = vec4(normalize(pRight), 0);
 		vec3 forward = cross(pRight, vec3(0, 1, 0));
 		vec3 up = cross(pRight, forward);
 		SetAxes(pRight, up, forward);
@@ -71,7 +70,6 @@ namespace Engine
 
 	void Transform::SetUp(vec3 pUp)
 	{
-		//m_transform[1] = vec4(normalize(pUp), 0);
 		vec3 right = cross(pUp, vec3(0, 0, 1));
 		vec3 forward = cross(pUp, right);
 		SetAxes(right, pUp, forward);
@@ -79,7 +77,6 @@ namespace Engine
 
 	void Transform::SetForward(vec3 pForward)
 	{
-		//m_transform[2] = vec4(normalize(pForward), 0);
 		vec3 right = cross(vec3(0, 1, 0), pForward);
 		vec3 up = cross(pForward, right);
 		SetAxes(right, up, pForward);

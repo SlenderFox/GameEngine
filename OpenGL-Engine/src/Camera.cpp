@@ -143,8 +143,6 @@ namespace Engine
 
 	void Camera::SetRight(vec3 pRight)
 	{
-		//m_transform[0] = vec4(pRight, 0);
-		//m_view = inverse(m_transform);
 		vec3 forward = cross(pRight, vec3(0, 1, 0));
 		vec3 up = cross(pRight, forward);
 		SetAxes(pRight, up, forward);
@@ -152,8 +150,6 @@ namespace Engine
 
 	void Camera::SetUp(vec3 pUp)
 	{
-		//m_transform[1] = vec4(pUp, 0);
-		//m_view = inverse(m_transform);
 		vec3 right = cross(pUp, vec3(0, 0, 1));
 		vec3 forward = cross(pUp, right);
 		SetAxes(right, pUp, forward);
@@ -161,8 +157,6 @@ namespace Engine
 
 	void Camera::SetForward(vec3 pForward)
 	{
-		//m_transform[2] = vec4(pForward, 0);
-		//m_view = inverse(m_transform);
 		vec3 right = cross(vec3(0, 1, 0), pForward);
 		vec3 up = cross(pForward, right);
 		SetAxes(right, up, pForward);
