@@ -57,7 +57,7 @@ namespace Engine
 		}
 		pShader->Use();
 		pShader->SetMat4("u_camera", pCamera->GetWorldToCameraMatrix());
-	 	pShader->SetVec3("u_viewPos", pCamera->GetPosition());
+	 	pShader->SetVec3("u_viewPos", (vec3)pCamera->GetPosition());
 		for (unsigned int i = 0; i < m_meshes->size(); ++i)
 		{
 			GetMeshAt(i)->Draw();

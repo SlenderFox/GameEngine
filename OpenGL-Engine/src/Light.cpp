@@ -1,6 +1,7 @@
 #pragma region
 #include "Light.hpp"
 #include <math.h>
+
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
@@ -18,13 +19,13 @@ namespace Engine
 
 	Light::Light(LightType pType, mat4 pTransform) : m_type(pType), m_lightColour(vec3(1))
 	{
-		SetTransform(pTransform);
+		Transform::SetTransform(pTransform);
 		m_angle = cos(radians(20.0f));
 	}
 
 	Light::Light(LightType pType, mat4 pTransform, vec3 pColour) : m_type(pType), m_lightColour(pColour)
 	{
-		SetTransform(pTransform);
+		Transform::SetTransform(pTransform);
 		m_angle = cos(radians(20.0f));
 	}
 	#pragma endregion
@@ -37,13 +38,13 @@ namespace Engine
 
 	Light* Light::SetCamPosition(vec3 pPosition)
 	{
-		SetPosition(pPosition);
+		Transform::SetPosition(pPosition);
 		return this;
 	}
 
 	Light* Light::SetDirection(vec3 pDirection)
 	{
-		SetForward(pDirection);
+		Transform::SetForward(pDirection);
 		return this;
 	}
 
@@ -80,7 +81,7 @@ namespace Engine
 	#pragma region Getters
 	vec4 Light::GetDirection() const
 	{
-		return vec4(GetForward(), 0);
+		return Transform::GetForward();
 	}
 	
 	float Light::GetAngle()

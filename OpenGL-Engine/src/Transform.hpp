@@ -1,12 +1,11 @@
-#pragma region
 #pragma once
 #include "glm/glm.hpp"
-#pragma endregion
 
 namespace Engine
 {
 	class Transform
 	{
+	// TODO: Make m_transform private and the rest protected
 	protected:
 		glm::mat4 m_transform = glm::mat4(1);
 
@@ -30,11 +29,11 @@ namespace Engine
 		virtual void SetForward(glm::vec3 pForward);
 		#pragma endregion
 		#pragma region Getters
-		virtual glm::mat4 GetTransform() const;
+		glm::mat4 GetTransform() const { return m_transform; }
 		virtual glm::vec4 GetPosition() const;
-		virtual glm::vec3 GetRight() const;
-		virtual glm::vec3 GetUp() const;
-		virtual glm::vec3 GetForward() const;
+		virtual glm::vec4 GetRight() const;
+		virtual glm::vec4 GetUp() const;
+		virtual glm::vec4 GetForward() const;
 		#pragma endregion
 	};
 }

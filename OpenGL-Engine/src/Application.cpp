@@ -308,22 +308,22 @@ namespace Engine
 		vec3 translation = vec3();
 		// Forwards
 		if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS)
-			translation += moveSpeed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetForward();
+			translation += moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_cameraRef->GetForward();
 		// Backwards
 		if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS)
-			translation -= moveSpeed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetForward();
+			translation -= moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_cameraRef->GetForward();
 		// Left
 		if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS)
-			translation += moveSpeed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetRight();
+			translation += moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_cameraRef->GetRight();
 		// Right
 		if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS)
-			translation -= moveSpeed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetRight();
+			translation -= moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_cameraRef->GetRight();
 		// Up
 		if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)
-			translation += moveSpeed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetUp();
+			translation += moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_cameraRef->GetUp();
 		// Down
 		if (glfwGetKey(m_window, GLFW_KEY_C) == GLFW_PRESS)
-			translation -= moveSpeed * (float)m_deltaTime * m_rendererInst->m_cameraRef->GetUp();
+			translation -= moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_cameraRef->GetUp();
 
 		m_rendererInst->m_cameraRef->Translate(translation);
 	}

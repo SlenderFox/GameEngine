@@ -38,6 +38,7 @@ namespace Engine
 		Light* SetBlur(float pValue);	// In degrees
 		#pragma endregion
 		#pragma region Getters
+		glm::vec4 GetPosition() { return Transform::GetPosition(); }
 		LightType GetType() const { return m_type; }
 		glm::vec4 GetDirection() const;
 		glm::vec3 GetColour() const { return m_lightColour; }

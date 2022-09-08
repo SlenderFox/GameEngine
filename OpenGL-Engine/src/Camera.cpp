@@ -63,7 +63,7 @@ namespace Engine
 	void Camera::LookAt(vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
 	{
 		m_view = glm::lookAt(pFrom, pTo, pUp);
-		m_transform = inverse(m_view);
+		SetView(m_view);
 	}
 
 	void Camera::ModifyFovH(float pValue)
@@ -101,14 +101,14 @@ namespace Engine
 	#pragma region Setters
 	void Camera::SetTransform(mat4 pValue)
 	{
-		m_transform = pValue;
-		m_view = inverse(m_transform);
+		Transform::SetTransform(pValue);
+		m_view = inverse(GetTransform());
 	}
 
 	void Camera::SetView(mat4 pValue)
 	{
 		m_view = pValue;
-		m_transform = inverse(m_view);
+		Transform::SetTransform(inverse(m_view));
 	}
 
 	void Camera::SetProjection(mat4 pValue)
@@ -123,22 +123,20 @@ namespace Engine
 
 	void Camera::SetPosition(vec3 pValue)
 	{
-		m_transform[3] = vec4(pValue, m_transform[3][3]);
-		m_view = inverse(m_transform);
+		Transform::SetPosition(pValue);
+		m_view = inverse(GetTransform());
 	}
 
 	void Camera::Translate(vec3 pValue)
 	{
-		m_transform[3] = vec4((vec3)m_transform[3] + pValue, m_transform[3][3]);
-		m_view = inverse(m_transform);
+		Transform::Translate(pValue);
+		m_view = inverse(GetTransform());
 	}
 
 	void Camera::SetAxes(vec3 pRight, vec3 pUp, vec3 pForward)
 	{
-		m_transform[0] = normalize(vec4(pRight, 0));
-		m_transform[1] = normalize(vec4(pUp, 0));
-		m_transform[2] = normalize(vec4(pForward, 0));
-		m_view = inverse(m_transform);
+		Transform::SetAxes(pRight, pUp, pForward);
+		m_view = inverse(GetTransform());
 	}
 
 	void Camera::SetRight(vec3 pRight)
@@ -223,23 +221,6 @@ namespace Engine
 		return m_projection;
 	}
 
-	vec3 Camera::GetRight() const
-	{
-		// The camera is horizontally reversed
-		return -(vec3)m_transform[0];
-	}
-
-	vec3 Camera::GetUp() const
-	{
-		return (vec3)m_transform[1];
-	}
-
-	vec3 Camera::GetForward() const
-	{
-		// The camera is horizontally reversed
-		return -(vec3)m_transform[2];
-	}
-	
 	mat4 Camera::GetWorldToCameraMatrix()
 	{
 		return m_projection * m_view;

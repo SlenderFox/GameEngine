@@ -47,7 +47,7 @@ namespace Engine
 
 	void Entity::Translate(vec3 pValue)
 	{
-		m_transform[3] = vec4((vec3)m_transform[3] + pValue, m_transform[3][3]);
+		Transform::Translate(pValue);
 		Shader* ref = m_model->GetShaderRef();
 		ref->SetMat4("u_model", GetTransform());
 		ref->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));

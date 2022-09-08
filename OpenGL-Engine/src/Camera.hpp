@@ -55,13 +55,13 @@ namespace Engine
 		void SetClearColour(float pRed, float pGreen, float pBlue, float pAlpha);
 		#pragma endregion
 		#pragma region Getters
+		glm::vec4 GetPosition() const { return Transform::GetPosition(); }
+		glm::vec4 GetRight() const { return Transform::GetRight(); }
+		glm::vec4 GetUp() const { return Transform::GetUp(); }
+		glm::vec4 GetForward() const { return Transform::GetForward(); }
+
 		glm::mat4 GetView() const;
 		glm::mat4 GetProjection() const;
-
-		glm::vec3 GetRight() const;
-		glm::vec3 GetUp() const;
-		glm::vec3 GetForward() const;
-
 		glm::mat4 GetWorldToCameraMatrix();
 		#pragma endregion
 	};

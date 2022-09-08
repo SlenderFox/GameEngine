@@ -83,37 +83,27 @@ namespace Engine
 	}
 	#pragma endregion
 	#pragma region Getters
-	mat4 Transform::GetTransform() const
-	{
-		return m_transform;
-	}
-
 	vec4 Transform::GetPosition() const
 	{
 		return m_transform[3];
 	}
 
-	vec3 Transform::GetRight() const
+	vec4 Transform::GetRight() const
 	{
 		// The transform is horizontally reversed
-		return -(vec3)m_transform[0];
-		//return vec4(-(vec3)m_transform[0], 0);
-		//return vec4(-m_transform[0][0], -m_transform[0][1], -m_transform[0][2], 0);
+		return vec4(-(vec3)m_transform[0], 0);
 	}
 
-	vec3 Transform::GetUp() const
+	vec4 Transform::GetUp() const
 	{
-		return (vec3)m_transform[1];
-		//return vec4((vec3)m_transform[1], 0);
-		//return vec4(m_transform[1][0], m_transform[2][1], m_transform[3][2], 0);
+		//return (vec3)m_transform[1];
+		return vec4((vec3)m_transform[1], 0);
 	}
 
-	vec3 Transform::GetForward() const
+	vec4 Transform::GetForward() const
 	{
 		// The transform is horizontally reversed
-		return -(vec3)m_transform[2];
-		//return vec4(-(vec3)m_transform[2], 0);
-		//return vec4(-m_transform[2][0], -m_transform[2][1], -m_transform[2][2], 0);
+		return vec4(-(vec3)m_transform[2], 0);
 	}
 	#pragma endregion
 }
