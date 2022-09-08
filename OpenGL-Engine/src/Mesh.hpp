@@ -1,20 +1,17 @@
 #pragma region
 #pragma once
+#include "Shader.hpp"
 #include <vector>
 #include <memory>
-#include "Shader.hpp"
 
-using std::vector;
-using std::unique_ptr;
-using std::make_unique;
 #pragma endregion
 
 namespace Engine
 {
 	struct Vertex {
-		vec3 position;
-		vec3 normal;
-		vec2 texCoords;
+		glm::vec3 position;
+		glm::vec3 normal;
+		glm::vec2 texCoords;
 	};
 
 	class Mesh
@@ -25,14 +22,14 @@ namespace Engine
 		static unsigned int* s_indicesArr;
 
 	public:
-		static vector<Vertex> GenerateVertices();
-		static vector<unsigned int> GenerateIndices();
+		static std::vector<Vertex> GenerateVertices();
+		static std::vector<unsigned int> GenerateIndices();
 
 	// Members
 	private:
-		unique_ptr<vector<Vertex>> m_vertices = nullptr;
-		unique_ptr<vector<unsigned int>> m_indices = nullptr;
-        unique_ptr<vector<Texture*>> m_textures = nullptr;
+		std::unique_ptr<std::vector<Vertex>> m_vertices = nullptr;
+		std::unique_ptr<std::vector<unsigned int>> m_indices = nullptr;
+        std::unique_ptr<std::vector<Texture*>> m_textures = nullptr;
 
 		unsigned int* m_idVAO = new unsigned int(0U);	// The id for the vertex attribute object
 		unsigned int* m_idVBO = new unsigned int(0U);	// The id for the vertex buffer object
@@ -42,8 +39,8 @@ namespace Engine
 
 	public:
 		Mesh();
-		Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices);
-		Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices, vector<Texture*> pTextures);
+		Mesh(std::vector<Vertex> pVertices, std::vector<unsigned int> pIndices);
+		Mesh(std::vector<Vertex> pVertices, std::vector<unsigned int> pIndices, std::vector<Texture*> pTextures);
 
 		void Destroy(bool pValidate);
 

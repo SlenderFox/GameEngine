@@ -1,9 +1,17 @@
 #pragma region
 #include "Shader.hpp"
-#include <glad/glad.h> // Include glad to get all the required OpenGL headers
+#include "glad/glad.h"
 #include <glm/gtc/type_ptr.hpp>
+#include <fstream>
 #include <sstream>
 
+#ifdef _DEBUG
+ #include <iostream>
+ using std::cout;
+ using std::endl;
+#endif
+
+using std::string;
 using std::stringstream;
 using std::ifstream;
 #pragma endregion
@@ -314,13 +322,13 @@ FragCol=vec4(result,1);return;}";
 		glUniform3f(glGetUniformLocation(m_idProgram, pName.c_str()), pX, pY, pZ);
 	}
 
-	void Shader::SetVec3(const string& pName, vec3 pValue) const
+	void Shader::SetVec3(const string& pName, glm::vec3 pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniform3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetVec3(const string& pName, vec3& pValue) const
+	void Shader::SetVec3(const string& pName, glm::vec3& pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniform3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);

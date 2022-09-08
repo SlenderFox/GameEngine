@@ -1,7 +1,5 @@
-#pragma region
 #pragma once
 #include "Entity.hpp"
-#pragma endregion
 
 namespace Engine
 {
@@ -16,9 +14,9 @@ namespace Engine
 			return s_instance;
 		}
 
-		Model* AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef = nullptr);
-		Shader* AddNewShader(unsigned int &id, string pLocation);
-		Light* AddNewLight(unsigned int &id, LightType pType, vec3 pColour = vec3(1));
+		Model* AddNewModel(unsigned int &id, std::string pLocation, Shader* pShaderRef = nullptr);
+		Shader* AddNewShader(unsigned int &id, std::string pLocation);
+		Light* AddNewLight(unsigned int &id, LightType pType, glm::vec3 pColour = glm::vec3(1));
 		
 		void LoadLightsIntoShader(Shader* pShader);
 
@@ -38,12 +36,12 @@ namespace Engine
 	// Member
 	private:
 		Camera* m_cameraRef = nullptr;	// A reference to a camera
-		unique_ptr<vector<unique_ptr<Model>>> m_models;
-		unique_ptr<vector<unique_ptr<Shader>>> m_shaders;
-		unique_ptr<vector<unique_ptr<Light>>> m_lights;
-		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes;
+		std::unique_ptr<std::vector<std::unique_ptr<Model>>> m_models;
+		std::unique_ptr<std::vector<std::unique_ptr<Shader>>> m_shaders;
+		std::unique_ptr<std::vector<std::unique_ptr<Light>>> m_lights;
+		std::unique_ptr<std::vector<std::unique_ptr<Mesh>>> m_meshes;
 
-		const vec3 m_cubePositions[10] = {
+		const glm::vec3 m_cubePositions[10] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
 			glm::vec3(2.0f,  5.0f, -15.0f),
 			glm::vec3(-1.5f, -2.2f, -2.5f),

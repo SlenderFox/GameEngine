@@ -1,5 +1,15 @@
+#pragma region
 #include "Project.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+
+using glm::vec3;
+using glm::vec4;
+using glm::mat3;
+using glm::mat4;
+using glm::translate;
+using glm::transpose;
+using glm::inverse;
+#pragma endregion
 
 Project::Project()
 {
@@ -39,7 +49,7 @@ void Project::CreateScene()
 	// Finally inform the shader
 	rendererRef->LoadLightsIntoShader(shaderRef);
 	shaderRef->SetMat4("u_model", mat4(1.0f));
-	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
+	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(mat4(1.0f))));
 	
 	// Repeat
 	shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/default");
@@ -48,7 +58,7 @@ void Project::CreateScene()
 	Engine::Transform trans = Engine::Transform();
 	trans.Translate(vec3(0, -2.65f, -1.1f));
 	shaderRef->SetMat4("u_model", trans.GetTransform());
-	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(trans.GetTransform())));
+	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(trans.GetTransform())));
 }
 
 void Project::CreateLights()
@@ -71,8 +81,8 @@ void Project::CreateLights()
 			unsigned int discard;
 			Engine::Shader* shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/light");
 			shaderRef->SetVec3("u_colour", rendererRef->GetLightAt(i)->GetColour());
-			shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(rendererRef->GetLightAt(i)->GetPosition())));
-			shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
+			shaderRef->SetMat4("u_model", translate(mat4(1.0f), vec3(rendererRef->GetLightAt(i)->GetPosition())));
+			shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(mat4(1.0f))));
 			rendererRef->AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
 		}
 	}

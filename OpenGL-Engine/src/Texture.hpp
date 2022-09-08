@@ -1,8 +1,6 @@
 #pragma region 
 #pragma once
 #include <string>
-
-using std::string;
 #pragma endregion
 
 namespace Engine
@@ -30,14 +28,14 @@ namespace Engine
 	private:
 		unsigned int m_id = 0;
 		TexType m_type = TexType::diffuse;
-		string m_file;
+		std::string m_file;
 
 	public:
-		Texture(string pPath, TexType pType = TexType::diffuse);
+		Texture(std::string pPath, TexType pType = TexType::diffuse);
 		void Destroy();
 
 		unsigned int GetId() const { return m_id; }
 		TexType GetType() const { return m_type; }
-		string GetFile() const { return m_file; }
+		std::string GetFile() const { return m_file; }
 	};
 }

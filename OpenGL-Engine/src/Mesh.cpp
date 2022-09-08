@@ -1,6 +1,13 @@
+#pragma region
 #include "Mesh.hpp"
 #include "glad/glad.h" // Include glad to get all the required OpenGL headers
 #include <assert.h>
+
+using std::string;
+using std::vector;
+using std::unique_ptr;
+using std::make_unique;
+#pragma endregion
 
 namespace Engine
 {

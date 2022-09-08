@@ -2,6 +2,20 @@
 #include "Renderer.hpp"
 #include "glad/glad.h" // Include glad to get all the required OpenGL headers
 #include "glm/gtc/matrix_transform.hpp"
+
+#ifdef _DEBUG
+ #include <iostream>
+ using std::cout;
+ using std::endl;
+#endif
+
+using glm::vec3;
+using glm::mat3;
+using glm::mat4;
+using std::string;
+using std::vector;
+using std::make_unique;
+using std::unique_ptr;
 #pragma endregion
 
 namespace Engine

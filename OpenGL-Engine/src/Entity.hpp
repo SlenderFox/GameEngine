@@ -1,8 +1,6 @@
 #pragma once
 #include "Model.hpp"
 
-using std::vector;
-
 namespace Engine
 {
 	class Entity : public Transform
@@ -13,13 +11,13 @@ namespace Engine
 	// Member
 	private:
 		Entity* m_parent = nullptr;
-		unique_ptr<vector<Entity*>> m_children = nullptr;
+		std::unique_ptr<std::vector<Entity*>> m_children = nullptr;
 
 	public:
 		Entity();
 		Entity(Entity* pParent);
 
 		Entity* GetParent() const;
-		vector<Entity*>* GetChildren() const;
+		std::vector<Entity*>* GetChildren() const;
 	};
 }

@@ -4,6 +4,19 @@
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "glm/gtc/matrix_transform.hpp"
+
+#ifdef _DEBUG
+ #include <iostream>
+ using std::cout;
+ using std::endl;
+#endif
+
+using glm::vec2;
+using glm::vec3;
+using std::string;
+using std::vector;
+using std::unique_ptr;
+using std::make_unique;
 #pragma endregion
 
 namespace Engine

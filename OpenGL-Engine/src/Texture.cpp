@@ -1,16 +1,16 @@
 #pragma region
 #include "Texture.hpp"
-#include "glad/glad.h" // Include glad to get all the required OpenGL headers
+#include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
 #ifdef _DEBUG
- // Texture does not inherit from Transform.hpp
  #include <iostream>
  using std::cout;
  using std::endl;
 #endif
 
+using std::string;
 #pragma endregion
 
 namespace Engine

@@ -16,22 +16,22 @@ namespace Engine
 		friend class Renderer;
 	private:
 	// Static
-		static vector<Texture*> s_loadedTextures;
+		static std::vector<Texture*> s_loadedTextures;
 
 	// Member
-		unique_ptr<vector<unique_ptr<Mesh>>> m_meshes = nullptr;
-		vector<Texture*> m_textures;
-		string m_directory;
+		std::unique_ptr<std::vector<std::unique_ptr<Mesh>>> m_meshes = nullptr;
+		std::vector<Texture*> m_textures;
+		std::string m_directory;
 
 		// Don't delete these, they are borrowed
 		Camera* m_cameraRef;
 		Shader* m_shaderRef;
 
 		void Init(char* pPath);
-		void LoadModel(string pPath);
+		void LoadModel(std::string pPath);
 		void ProcessNode(aiNode* pNode, const aiScene* pScene);
-		unique_ptr<Mesh> ProcessMesh(aiMesh* pMesh, const aiScene* pScene);
-		vector<Texture*> LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType);
+		std::unique_ptr<Mesh> ProcessMesh(aiMesh* pMesh, const aiScene* pScene);
+		std::vector<Texture*> LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType);
 		void LoadTexturesToShader();
 
 	public:

@@ -1,5 +1,8 @@
 #include "Entity.hpp"
 
+using std::vector;
+using std::make_unique;
+
 namespace Engine
 {
 	Entity* Engine::s_root = new Entity();

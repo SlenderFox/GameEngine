@@ -1,8 +1,11 @@
 #pragma region
 #include "Camera.hpp"
-#include <glad/glad.h> // Include glad to get all the required OpenGL headers
+#include "glad/glad.h"
 #include <glm/gtc/matrix_transform.hpp>
 
+using glm::vec3;
+using glm::vec4;
+using glm::mat4;
 using glm::radians;
 using glm::atan;
 using glm::tan;

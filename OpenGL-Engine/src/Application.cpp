@@ -1,15 +1,22 @@
 #pragma region
 #include "Application.hpp"
-#include <GLFW/glfw3.h>
-#include "glad/glad.h" // Include glad to get all the required OpenGL headers
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "glad.h"
+#include "GLFW/glfw3.h"
+#include "glm/gtc/matrix_transform.hpp"
 #include <Windows.h>	// Needed for Sleep()
 #include <chrono>
 
+#ifdef _DEBUG
+ #include <iostream>
+ using std::cout;
+ using std::endl;
+#endif
+
+using glm::vec3;
+using std::string;
 using glm::radians;
 using glm::normalize;
-using glm::cross;
+#pragma endregion
 
 // Called when the user resizes the window
 void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight)
@@ -27,7 +34,6 @@ void scroll_callback(GLFWwindow* window, double pOffsetX, double pOffsetY)
 {
 	Engine::Application::GetApplication()->ScrollCallback(pOffsetX, pOffsetY);
 }
-#pragma endregion
 
 namespace Engine
 {
@@ -144,7 +150,6 @@ namespace Engine
 		//glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
 		//glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
 		//glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
-		
 
 		// glfw window creation
 		m_window = glfwCreateWindow(m_winWidth, m_winHeight, (m_title = pTitle).c_str(),

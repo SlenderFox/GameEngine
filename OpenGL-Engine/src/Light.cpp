@@ -1,6 +1,9 @@
 #pragma region
 #include "Light.hpp"
 #include <math.h>
+using glm::vec3;
+using glm::vec4;
+using glm::mat4;
 using glm::cos;
 using glm::radians;
 #pragma endregion

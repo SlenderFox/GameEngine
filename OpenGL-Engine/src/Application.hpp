@@ -32,7 +32,7 @@ namespace Engine
 		double m_mouseLastX = 400.0, m_mouseLastY = 300.0;	// Mouse position in the last frame
 		double m_yaw = 90.0, m_pitch = 0.0;					// The rotation of the camera
 
-		string m_title = "Title error";						// The tile of the window
+		std::string m_title = "Title error";						// The tile of the window
 
 		#pragma region Constructors
 		// Delete copy/move so extra instances can't be created/moved.
@@ -42,14 +42,14 @@ namespace Engine
 		Application& operator=(Application&&) = delete;
 		#pragma endregion
 
-		bool Init(string pTitle, bool pFullscreen);
+		bool Init(std::string pTitle, bool pFullscreen);
 		void UpdateCamera();
 		void ProcessInput();
 
 	public:
 		const double m_fixedDeltaTime = 0.01666666666666666;
 
-		void Run(unsigned int pWidth, unsigned int pHeight, string pTitle, bool pFullscreen);
+		void Run(unsigned int pWidth, unsigned int pHeight, std::string pTitle, bool pFullscreen);
 		void SetDimensions(unsigned int pWidth, unsigned int pHeight);
 		void MouseCallback(double pPosX, double pPosY);
 		void ScrollCallback(double pOffsetX, double pOffsetY);
