@@ -65,7 +65,7 @@ float LineariseDepth(float pDepth)
 }
 
 vec3 PhongShading(Colour pColour, vec3 pLightDir, float pIntensity)
-{	
+{
 	//Textures
 	vec3 diffuseTex = texture(u_material.texture_diffuse0, TexCoords).rgb;
 	vec3 specularTex = texture(u_material.texture_specular0, TexCoords).rgb;
