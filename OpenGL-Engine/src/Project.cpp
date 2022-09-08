@@ -77,9 +77,9 @@ void Project::CreateLights()
 	unsigned int ID;
 	rendererRef->AddNewLight(ID, Engine::LightType::Directional, vec3(0.8f));
 	rendererRef->GetLightAt(ID)->SetDirection(vec3(0, -1, 0));
-	rendererRef->AddNewLight(ID, Engine::LightType::Point);
+	rendererRef->AddNewLight(ID, Engine::LightType::Point, vec3(0.1f, 0.1686f, 0.9f));
 	rendererRef->GetLightAt(ID)->SetCamPosition(vec4(-4, 2, -2, 1));
-	rendererRef->AddNewLight(ID, Engine::LightType::Spot);
+	rendererRef->AddNewLight(ID, Engine::LightType::Spot, vec3(1.0f, 0.93f, 0.9f));
 	rendererRef->GetLightAt(ID)->SetCamPosition(vec4(4.5f, 3, 4.5f, 1))->SetDirection(vec3(-0.9f, -0.6f, -1))->SetAngle(10.0f)->SetBlur(0.23f);
 
 	// Gives them physical form
