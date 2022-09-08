@@ -7,9 +7,13 @@ namespace Engine
 {
 	class Entity : public Transform
 	{
+	// Static
+		Entity* s_root;
+
+	// Member
 	private:
 		Entity* m_parent = nullptr;
-		vector<Entity*>* m_children = nullptr;
+		unique_ptr<vector<Entity*>> m_children = nullptr;
 
 	public:
 		Entity();

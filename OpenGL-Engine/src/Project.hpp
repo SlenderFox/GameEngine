@@ -4,7 +4,9 @@
 class Project : public Engine::Application
 {
 private:
-	Engine::Renderer* renderer;
+	Engine::Renderer* rendererRef;
+
+	Engine::Entity ent;
 
 	void CreateScene();
 	void CreateLights();

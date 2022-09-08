@@ -1,11 +1,31 @@
 #include "Project.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+Project::Project()
+{
+	ent = Engine::Entity();
+}
+
 bool Project::Startup()
 {
-	renderer = Engine::Renderer::GetInstance();
+	rendererRef = Engine::Renderer::GetInstance();
 	CreateScene();
 	return true;
+}
+
+void Project::Update(double pDeltaTime)
+{
+	//for (unsigned int j = 0; j < 10; j++)
+	//{
+	//	mat4 model = mat4(1.0f);
+	//	model = glm::translate(model, m_cubePositions[j]);
+	//	float angle = (float)pTime * 5.0f * ((j + 1) / (j * 0.2f + 1));
+	//	model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
+	//	GetShaderAt(0U)->SetMat4("u_model", (mat4)model);
+	//	mat3 transposeInverseOfModel = mat3(glm::transpose(glm::inverse(model)));
+	//	GetShaderAt(0U)->SetMat3("u_transposeInverseOfModel", (mat3)transposeInverseOfModel);
+	//	GetMeshAt(i)->Draw();
+	//}
 }
 
 void Project::CreateScene()
@@ -13,18 +33,18 @@ void Project::CreateScene()
 	CreateLights();
 	// First creates the shader
 	unsigned int ID;
-	Engine::Shader* shaderRef = renderer->AddNewShader(ID, "assets/shaders/default");
+	Engine::Shader* shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/default");
 	// Then loads the model
-	renderer->AddNewModel(ID, "assets/models/backpack/backpack.obj", shaderRef);
+	rendererRef->AddNewModel(ID, "assets/models/backpack/backpack.obj", shaderRef);
 	// Finally inform the shader
-	renderer->LoadLightsIntoShader(shaderRef);
+	rendererRef->LoadLightsIntoShader(shaderRef);
 	shaderRef->SetMat4("u_model", mat4(1.0f));
 	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
 	
 	// Repeat
-	shaderRef = renderer->AddNewShader(ID, "assets/shaders/default");
-	renderer->AddNewModel(ID, "assets/models/cube/cube.obj", shaderRef);
-	renderer->LoadLightsIntoShader(shaderRef);
+	shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/default");
+	rendererRef->AddNewModel(ID, "assets/models/cube/cube.obj", shaderRef);
+	rendererRef->LoadLightsIntoShader(shaderRef);
 	Engine::Transform trans = Engine::Transform();
 	trans.Translate(vec3(0, -2.65f, -1.1f));
 	shaderRef->SetMat4("u_model", trans.GetTransform());
@@ -35,25 +55,25 @@ void Project::CreateLights()
 {
 	// Creates lights
 	unsigned int ID;
-	renderer->AddNewLight(ID, Engine::LightType::Directional, vec3(0.8f));
-	renderer->GetLightAt(ID)->SetDirection(vec3(0, -1, 0));
-	renderer->AddNewLight(ID, Engine::LightType::Point);
-	renderer->GetLightAt(ID)->SetCamPosition(vec4(-4, 2, -2, 1));
-	renderer->AddNewLight(ID, Engine::LightType::Spot);
-	renderer->GetLightAt(ID)->SetCamPosition(vec4(4.5f, 3, 4.5f, 1))->SetDirection(vec3(-0.9f, -0.6f, -1))->SetAngle(10.0f)->SetBlur(0.23f);
+	rendererRef->AddNewLight(ID, Engine::LightType::Directional, vec3(0.8f));
+	rendererRef->GetLightAt(ID)->SetDirection(vec3(0, -1, 0));
+	rendererRef->AddNewLight(ID, Engine::LightType::Point);
+	rendererRef->GetLightAt(ID)->SetCamPosition(vec4(-4, 2, -2, 1));
+	rendererRef->AddNewLight(ID, Engine::LightType::Spot);
+	rendererRef->GetLightAt(ID)->SetCamPosition(vec4(4.5f, 3, 4.5f, 1))->SetDirection(vec3(-0.9f, -0.6f, -1))->SetAngle(10.0f)->SetBlur(0.23f);
 
 	// Gives them physical form
-	for (unsigned int i = 0; i < renderer->LightCount(); ++i)
+	for (unsigned int i = 0; i < rendererRef->LightCount(); ++i)
 	{
-		if (renderer->GetLightAt(i)->GetType() == Engine::LightType::Point
-		 || renderer->GetLightAt(i)->GetType() == Engine::LightType::Spot)
+		if (rendererRef->GetLightAt(i)->GetType() == Engine::LightType::Point
+		 || rendererRef->GetLightAt(i)->GetType() == Engine::LightType::Spot)
 		{
 			unsigned int discard;
-			Engine::Shader* shaderRef = renderer->AddNewShader(ID, "assets/shaders/light");
-			shaderRef->SetVec3("u_colour", renderer->GetLightAt(i)->GetColour());
-			shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(renderer->GetLightAt(i)->GetPosition())));
+			Engine::Shader* shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/light");
+			shaderRef->SetVec3("u_colour", rendererRef->GetLightAt(i)->GetColour());
+			shaderRef->SetMat4("u_model", glm::translate(mat4(1.0f), vec3(rendererRef->GetLightAt(i)->GetPosition())));
 			shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)glm::transpose(glm::inverse(mat4(1.0f))));
-			renderer->AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
+			rendererRef->AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
 		}
 	}
 }

@@ -31,16 +31,16 @@ void scroll_callback(GLFWwindow* window, double pOffsetX, double pOffsetY)
 
 namespace Engine
 {
-	Application* Application::sm_appRef = nullptr;
+	Application* Application::s_application = nullptr;
 
 	Application::Application()
 	{
 		// Prevents potential memory leak
-		if (sm_appRef != nullptr)
-			delete sm_appRef;
+		if (s_application != nullptr)
+			delete s_application;
 
 		// Applies the static reference
-		sm_appRef = this;
+		s_application = this;
 
 		// Need to be instantiated in here to avoid errors if glfw or glad fail
 		m_rendererInst = Renderer::GetInstance();

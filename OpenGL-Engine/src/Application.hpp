@@ -10,10 +10,10 @@ namespace Engine
 	{
 	// Static
 	private:
-		static Application* sm_appRef;		// Static reference to the application
+		static Application* s_application;		// Static reference to the application
 
 	public:
-		static Application* GetApplication() { return sm_appRef; }
+		static Application* GetApplication() { return s_application; }
 
 	// Member
 	private:

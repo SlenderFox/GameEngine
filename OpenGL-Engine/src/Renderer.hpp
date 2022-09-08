@@ -12,16 +12,9 @@ namespace Engine
 	public:
 		static Renderer* GetInstance()
 		{
-			static Renderer* sm_instance = new Renderer();
-			return sm_instance;
+			static Renderer* s_instance = new Renderer();
+			return s_instance;
 		}
-
-		//void CreateModelScene();
-		//void RenderModelScene(double pTime);
-		//void CreateBoxScene();
-		//void RenderBoxScene(double pTime);
-		//void CreateModelLights();
-		//void CreateMeshLights();
 
 		Model* AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef = nullptr);
 		Shader* AddNewShader(unsigned int &id, string pLocation);

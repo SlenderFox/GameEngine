@@ -12,8 +12,8 @@ namespace Engine
 	public:
 		static Input* GetInstance()
 		{
-			static Input* sm_instance = new Input();
-			return sm_instance;
+			static Input* s_instance = new Input();
+			return s_instance;
 		}
 
 		//void ProcessInput(GLFWwindow* pWindow);
