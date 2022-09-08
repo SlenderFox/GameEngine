@@ -181,7 +181,7 @@ namespace Engine
 	void Mesh::Draw()
 	{
 		glBindVertexArray(*m_idVAO);
-		glDrawElements(GL_TRIANGLES, m_indices.get()->size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, (GLsizei)m_indices.get()->size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
 

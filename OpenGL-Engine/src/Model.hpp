@@ -48,6 +48,8 @@ namespace Engine
 		void SetCameraRef(Camera* pCamera) { m_cameraRef = pCamera; }
 		void SetShaderRef(Shader* pShader) { m_shaderRef = pShader; }
 
+		Shader* GetShaderRef() const { return m_shaderRef; }
+
 		Mesh* GetMeshAt(unsigned int pPos);
 	};
 }

@@ -8,7 +8,7 @@ namespace Engine
 	class Transform
 	{
 	protected:
-		glm::mat4 m_transform = mat4(1);
+		glm::mat4 m_transform = glm::mat4(1);
 
 	public:
 		#pragma region Constructors

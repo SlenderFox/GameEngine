@@ -6,7 +6,7 @@ class Project : public Engine::Application
 private:
 	Engine::Renderer* rendererRef;
 
-	Engine::Entity ent;
+	Engine::Entity object;
 
 	void CreateScene();
 	void CreateLights();

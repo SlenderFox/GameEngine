@@ -13,8 +13,10 @@ using glm::inverse;
 
 Project::Project()
 {
-	ent = Engine::Entity();
+	object = Engine::Entity();
 }
+
+Project::~Project() {}
 
 bool Project::Startup()
 {
@@ -22,6 +24,8 @@ bool Project::Startup()
 	CreateScene();
 	return true;
 }
+
+void Project::Shutdown() {}
 
 void Project::Update(double pDeltaTime)
 {
@@ -37,6 +41,10 @@ void Project::Update(double pDeltaTime)
 	//	GetMeshAt(i)->Draw();
 	//}
 }
+
+void Project::FixedUpdate(double pFixedDeltaTime) {}
+
+void Project::LateUpdate(double pDeltaTime) {}
 
 void Project::CreateScene()
 {
@@ -59,6 +67,8 @@ void Project::CreateScene()
 	trans.Translate(vec3(0, -2.65f, -1.1f));
 	shaderRef->SetMat4("u_model", trans.GetTransform());
 	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(trans.GetTransform())));
+	//object.LoadModel("assets/models/cube/cube.obj", "assets/shaders/default");
+	//object.Translate(vec3(0, -2.65f, -1.1f));
 }
 
 void Project::CreateLights()

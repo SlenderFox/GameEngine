@@ -1,6 +1,6 @@
 #pragma region
 #include "Application.hpp"
-#include "glad.h"
+#include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <Windows.h>	// Needed for Sleep()

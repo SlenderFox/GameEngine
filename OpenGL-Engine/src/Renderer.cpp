@@ -168,21 +168,21 @@ namespace Engine
 
 	Model* Renderer::AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef)
 	{
-		id = m_models.get()->size();
+		id = (unsigned int)m_models.get()->size();
 		m_models.get()->push_back(make_unique<Model>((char*)pLocation.c_str(), pShaderRef, m_cameraRef));
 		return GetModelAt(id);
 	}
 
 	Shader* Renderer::AddNewShader(unsigned int &id, string pLocation)
 	{
-		id = m_shaders.get()->size();
+		id = (unsigned int)m_shaders.get()->size();
 		m_shaders.get()->push_back(make_unique<Shader>(pLocation));
 		return GetShaderAt(id);
 	}
 
 	Light* Renderer::AddNewLight(unsigned int &id, LightType pType, vec3 pColour)
 	{
-		id = m_lights.get()->size();
+		id = (unsigned int)m_lights.get()->size();
 		m_lights.get()->push_back(make_unique<Light>(pType, pColour));
 		return GetLightAt(id);
 	}
@@ -190,17 +190,17 @@ namespace Engine
 	#pragma region Getters
 	unsigned int Renderer::ModelCount() const
 	{
-		return m_models.get()->size();
+		return (unsigned int)m_models.get()->size();
 	}
 
 	unsigned int Renderer::ShaderCount() const
 	{
-		return m_shaders.get()->size();
+		return (unsigned int)m_shaders.get()->size();
 	}
 
 	unsigned int Renderer::LightCount() const
 	{
-		return m_lights.get()->size();
+		return (unsigned int)m_lights.get()->size();
 	}
 
 	Model* Renderer::GetModelAt(unsigned int pPos)
