@@ -38,18 +38,17 @@ namespace Engine
 	Model* Entity::LoadModel(std::string pModelPath, std::string pShaderPath)
 	{
 		unsigned int ID;
-		Engine::Shader* shaderRef = Renderer::GetInstance()->AddNewShader(ID, "assets/shaders/default");
-		Renderer::GetInstance()->LoadLightsIntoShader(shaderRef);
-		shaderRef->SetMat4("u_model", GetTransform());
-		shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
-		return Renderer::GetInstance()->AddNewModel(ID, "assets/models/backpack/backpack.obj", shaderRef);
+		m_shader = Renderer::GetInstance()->AddNewShader(ID, pShaderPath);
+		Renderer::GetInstance()->LoadLightsIntoShader(m_shader);
+		m_shader->SetMat4("u_model", GetTransform());
+		m_shader->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
+		return Renderer::GetInstance()->AddNewModel(ID, pModelPath, m_shader);
 	}
 
 	void Entity::Translate(vec3 pValue)
 	{
 		Transform::Translate(pValue);
-		Shader* ref = m_model->GetShaderRef();
-		ref->SetMat4("u_model", GetTransform());
-		ref->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
+		m_shader->SetMat4("u_model", GetTransform());
+		m_shader->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
 	}
 }

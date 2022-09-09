@@ -15,6 +15,7 @@ namespace Engine
 		std::unique_ptr<std::vector<Entity*>> m_children = nullptr;
 
 		Model* m_model = nullptr;
+		Shader* m_shader = nullptr;	// TODO: Remove this
 
 	public:
 		Entity();
@@ -25,6 +26,5 @@ namespace Engine
 		
 		Entity* GetParent() const { return m_parent; }
 		std::vector<Entity*>* GetChildren() const { return m_children.get(); }
-		Model* GetAttachedModel();
 	};
 }

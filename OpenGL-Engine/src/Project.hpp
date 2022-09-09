@@ -6,7 +6,10 @@ class Project : public Engine::Application
 private:
 	Engine::Renderer* rendererRef;
 
-	Engine::Entity object;
+	Engine::Entity* object_lightPoint;
+	Engine::Entity* object_lightSpot;
+	Engine::Entity* object_backpack;
+	Engine::Entity* object_cube;
 
 	void CreateScene();
 	void CreateLights();

@@ -13,7 +13,10 @@ using glm::inverse;
 
 Project::Project()
 {
-	object = Engine::Entity();
+	object_lightPoint = new Engine::Entity();
+	object_lightSpot = new Engine::Entity();
+	object_cube = new Engine::Entity();
+	object_backpack = new Engine::Entity();
 }
 
 Project::~Project() {}
@@ -49,26 +52,27 @@ void Project::LateUpdate(double pDeltaTime) {}
 void Project::CreateScene()
 {
 	CreateLights();
-	// First creates the shader
-	unsigned int ID;
-	Engine::Shader* shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/default");
-	// Then loads the model
-	rendererRef->AddNewModel(ID, "assets/models/backpack/backpack.obj", shaderRef);
-	// Finally inform the shader
-	rendererRef->LoadLightsIntoShader(shaderRef);
-	shaderRef->SetMat4("u_model", mat4(1.0f));
-	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(mat4(1.0f))));
+	//// First creates the shader
+	//unsigned int ID;
+	//Engine::Shader* shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/default");
+	//// Then loads the model
+	//rendererRef->AddNewModel(ID, "assets/models/backpack/backpack.obj", shaderRef);
+	//// Finally inform the shader
+	//rendererRef->LoadLightsIntoShader(shaderRef);
+	//shaderRef->SetMat4("u_model", mat4(1.0f));
+	//shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(mat4(1.0f))));
+	object_backpack->LoadModel("assets/models/backpack/backpack.obj", "assets/shaders/default");
 	
 	// Repeat
-	shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/default");
-	rendererRef->AddNewModel(ID, "assets/models/cube/cube.obj", shaderRef);
-	rendererRef->LoadLightsIntoShader(shaderRef);
-	Engine::Transform trans = Engine::Transform();
-	trans.Translate(vec3(0, -2.65f, -1.1f));
-	shaderRef->SetMat4("u_model", trans.GetTransform());
-	shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(trans.GetTransform())));
-	//object.LoadModel("assets/models/cube/cube.obj", "assets/shaders/default");
-	//object.Translate(vec3(0, -2.65f, -1.1f));
+	//shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/default");
+	//rendererRef->AddNewModel(ID, "assets/models/cube/cube.obj", shaderRef);
+	//rendererRef->LoadLightsIntoShader(shaderRef);
+	//Engine::Transform trans = Engine::Transform();
+	//trans.Translate(vec3(0, -2.65f, -1.1f));
+	//shaderRef->SetMat4("u_model", trans.GetTransform());
+	//shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(trans.GetTransform())));
+	object_cube->LoadModel("assets/models/cube/cube.obj", "assets/shaders/default");
+	object_cube->Translate(vec3(0, -2.65f, -1.1f));
 }
 
 void Project::CreateLights()

@@ -1,7 +1,5 @@
-#pragma region
 #pragma once
 #include "Transform.hpp"
-#pragma endregion
 
 namespace Engine
 {

@@ -96,7 +96,6 @@ namespace Engine
 
 	vec4 Transform::GetUp() const
 	{
-		//return (vec3)m_transform[1];
 		return vec4((vec3)m_transform[1], 0);
 	}
 
