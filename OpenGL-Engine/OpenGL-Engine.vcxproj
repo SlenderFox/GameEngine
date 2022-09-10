@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Colour.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\Input.cpp" />
@@ -37,6 +38,7 @@
   <ItemGroup>
     <ClInclude Include="src\Application.hpp" />
     <ClInclude Include="src\Camera.hpp" />
+    <ClInclude Include="src\Colour.hpp" />
     <ClInclude Include="src\Entity.hpp" />
     <ClInclude Include="src\Input.hpp" />
     <ClInclude Include="src\Light.hpp" />

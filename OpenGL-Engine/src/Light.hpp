@@ -1,5 +1,5 @@
 #pragma once
-#include "Camera.hpp"
+#include "Colour.hpp"
 
 namespace Engine
 {
@@ -14,7 +14,7 @@ namespace Engine
 	{
 	private:
 		LightType m_type;
-		glm::vec3 m_lightColour;
+		Colour m_lightColour;
 		float m_linear = 0.045f;		// For point and spot lights
 		float m_quadratic = 0.0075f;	// For point and spot lights
 		float m_angle = 10.0f;			// Only for spotlights
@@ -22,16 +22,15 @@ namespace Engine
 
 	public:
 		#pragma region Constructors
-		Light(LightType pType, glm::vec3 pColour = glm::vec3(1));
-		Light(LightType pType, glm::mat4 pTransform = glm::mat4(1));
-		Light(LightType pType, glm::mat4 pTransform = glm::mat4(1), glm::vec3 pColour = glm::vec3(1));
+		Light(LightType pType, Colour pColour = Colour::White());
+		Light(LightType pType, glm::mat4 pTransform = glm::mat4(1), Colour pColour = Colour::White());
 		~Light() {}
 		#pragma endregion
 		#pragma region Setters
 		Light* SetType(LightType pType);
 		Light* SetCamPosition(glm::vec3 pPosition);
 		Light* SetDirection(glm::vec3 pDirection);
-		Light* SetColour(glm::vec3 pColour);
+		Light* SetColour(Colour pColour);
 		Light* SetLinear(float pValue);
 		Light* SetQuadratic(float pValue);
 		Light* SetAngle(float pValue);	// In degrees
@@ -41,7 +40,7 @@ namespace Engine
 		glm::vec4 GetPosition() { return Transform::GetPosition(); }
 		LightType GetType() const { return m_type; }
 		glm::vec4 GetDirection() const;
-		glm::vec3 GetColour() const { return m_lightColour; }
+		Colour GetColour() const { return m_lightColour; }
 		float GetLinear() const { return m_linear; }
 		float GetQuadratic() const { return m_quadratic; }
 		float GetAngle();

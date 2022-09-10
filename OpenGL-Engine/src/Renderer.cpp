@@ -103,7 +103,7 @@ namespace Engine
 			switch (currentLight->GetType())
 			{
 			case LightType::Directional:
-				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.ambient", currentLight->GetColour() * 0.15f);
+				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.ambient", (vec3)currentLight->GetColour() * 0.15f);
 				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.diffuse", currentLight->GetColour());
 				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.specular", currentLight->GetColour());
 				pShader->SetVec4("u_dirLights[" + std::to_string(numDirLights) + "].direction", currentLight->GetDirection());
@@ -180,7 +180,7 @@ namespace Engine
 		return GetShaderAt(id);
 	}
 
-	Light* Renderer::AddNewLight(unsigned int &id, LightType pType, vec3 pColour)
+	Light* Renderer::AddNewLight(unsigned int &id, LightType pType, Colour pColour)
 	{
 		id = (unsigned int)m_lights.get()->size();
 		m_lights.get()->push_back(make_unique<Light>(pType, pColour));

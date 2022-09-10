@@ -12,18 +12,12 @@ using glm::radians;
 namespace Engine
 {
 	#pragma region Constructors
-	Light::Light(LightType pType, vec3 pColour) : m_type(pType), m_lightColour(pColour)
+	Light::Light(LightType pType, Colour pColour) : m_type(pType), m_lightColour(pColour)
 	{
 		m_angle = cos(radians(20.0f));
 	}
 
-	Light::Light(LightType pType, mat4 pTransform) : m_type(pType), m_lightColour(vec3(1))
-	{
-		Transform::SetTransform(pTransform);
-		m_angle = cos(radians(20.0f));
-	}
-
-	Light::Light(LightType pType, mat4 pTransform, vec3 pColour) : m_type(pType), m_lightColour(pColour)
+	Light::Light(LightType pType, mat4 pTransform, Colour pColour) : m_type(pType), m_lightColour(pColour)
 	{
 		Transform::SetTransform(pTransform);
 		m_angle = cos(radians(20.0f));
@@ -48,7 +42,7 @@ namespace Engine
 		return this;
 	}
 
-	Light* Light::SetColour(vec3 pColour)
+	Light* Light::SetColour(Colour pColour)
 	{
 		m_lightColour = pColour;
 		return this;

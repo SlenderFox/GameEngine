@@ -16,7 +16,7 @@ namespace Engine
 
 		Model* AddNewModel(unsigned int &id, std::string pLocation, Shader* pShaderRef = nullptr);
 		Shader* AddNewShader(unsigned int &id, std::string pLocation);
-		Light* AddNewLight(unsigned int &id, LightType pType, glm::vec3 pColour = glm::vec3(1));
+		Light* AddNewLight(unsigned int &id, LightType pType, Colour pColour = Colour::White());
 		
 		void LoadLightsIntoShader(Shader* pShader);
 
