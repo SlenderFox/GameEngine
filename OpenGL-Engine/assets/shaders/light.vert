@@ -5,9 +5,10 @@ layout (location = 2) in vec2 aTexCoord;
 
 uniform mat4 u_camera;
 uniform mat4 u_model;
+uniform vec3 u_scale = vec3(1);
 
 void main()
 {
    // Makes the light a smaller cube
-   gl_Position = u_camera * u_model * (vec4(aPos, 1.0) * vec4(0.3, 0.3, 0.3, 1));
+   gl_Position = u_camera * u_model * (vec4(aPos, 1.0) * vec4(u_scale, 1));
 }
