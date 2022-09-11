@@ -1,18 +1,30 @@
 #pragma region
+/**
+ * @file Colour.cpp
+ * @author SlenderFox
+ * @date 2022-09-11
+ * @copyright Copyright (c) 2022
+ * Bibliography:
+ * https://en.wikipedia.org/wiki/HSL_and_HSV#HSV_to_RGB
+ * https://www.rapidtables.com/web/color/RGB_Color.html
+ * https://cs.stackexchange.com/questions/64549/convert-hsv-to-rgb-colors
+ * https://www.codespeedy.com/hsv-to-rgb-in-cpp/
+ */
+
 #include "Colour.hpp"
 
+using std::fmodf;
 using glm::vec3;
 using glm::clamp;
 using glm::max;
 using glm::min;
 using glm::abs;
-// https://en.wikipedia.org/wiki/HSL_and_HSV#HSV_to_RGB
-// https://www.rapidtables.com/web/color/RGB_Color.html
 #pragma endregion
 
 namespace Engine
 {
-	// Static
+	// ---Static---
+
 	hsv Colour::RGBtoHSV(glm::vec3 pRGB)
 	{
 		// Sanitise inputs
@@ -49,13 +61,6 @@ namespace Engine
 		return RGBtoHSV((vec3)pRGB / 255.0f);
 	}
 
-	vec3 Colour::HSVtoRGB(glm::vec3 pHSV)
-	{
-		uint16_t hue = (uint16_t)max(pHSV.r, 0.0f);
-		// No need to sanitise inputs
-		return HSVtoRGB(hsv(hue, pHSV.g, pHSV.b));
-	}
-
 	vec3 Colour::HSVtoRGB(hsv pHSV)
 	{
 		// Sanitise inputs
@@ -66,9 +71,10 @@ namespace Engine
 		vec3 result;
 		float chroma = value * saturation;
 		float min = value - chroma;
-		int intHue = hue / 60;
-		float x = chroma * (1 - abs(intHue % 2 - 1));
+		float hueMod = fmodf((float)hue / 60, 2.0f);
+		float x = chroma * (1 - abs(hueMod - 1));
 		// Find a point along the three bottom faces of the RGB cube (??)
+		short intHue = hue / 60;
 		switch (intHue)
 		{
 			case 0:
@@ -98,6 +104,13 @@ namespace Engine
 		return result;
 	}
 
+	vec3 Colour::HSVtoRGB(glm::vec3 pHSV)
+	{
+		uint16_t hue = (uint16_t)max(pHSV.r, 0.0f);
+		// No need to sanitise inputs
+		return HSVtoRGB(hsv(hue, pHSV.g, pHSV.b));
+	}
+
 	Colour Colour::CreateWithRGB(vec3 pRGB)
 	{
 		Colour result;
@@ -113,21 +126,21 @@ namespace Engine
 		return result;
 	}
 
+	Colour Colour::CreateWithHSV(hsv pHSV)
+	{
+		Colour result;
+		// No need to sanitise inputs
+		result.m_RGB = HSVtoRGB(pHSV);
+		return result;
+	}
+	
 	Colour Colour::CreateWithHSV(vec3 pHSV)
 	{
 		uint16_t hue = (uint16_t)max(pHSV.r, 0.0f);
 		// Lazily pass to other function
-		return CreateWithHSV(hue, pHSV.g, pHSV.b);
+		return CreateWithHSV(hsv(hue, pHSV.g, pHSV.b));
 	}
 
-	Colour Colour::CreateWithHSV(uint16_t pHue, float pSaturation, float pValue)
-	{
-		Colour result;
-		// No need to sanitise inputs
-		result.m_RGB = HSVtoRGB(hsv(pHue, pSaturation, pValue));
-		return result;
-	}
-	
 	#pragma region Presets
 	Colour Colour::Black()		{ return Colour(vec3(0)); }
 	Colour Colour::White()		{ return Colour(vec3(1)); }
@@ -148,8 +161,7 @@ namespace Engine
 	Colour Colour::Purple()		{ return Colour(vec3(0.5f,	0,		0.5f)); }
 	#pragma endregion
 
-	// Member
-	Colour::Colour(vec3 pColour) : m_RGB(pColour) {}
+	// ---Member---
 
 	rgb255 Colour::RGB255()
 	{

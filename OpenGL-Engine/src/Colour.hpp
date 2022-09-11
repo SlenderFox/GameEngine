@@ -1,5 +1,14 @@
+#pragma region
+/**
+ * @file Colour.hpp
+ * @author SlenderFox
+ * @date 2022-09-11
+ * @copyright Copyright (c) 2022
+ */
+
 #pragma once
 #include "Camera.hpp"
+#pragma endregion
 
 namespace Engine
 {
@@ -55,15 +64,39 @@ namespace Engine
 	{
 	// Static
 	public:
+		/// @brief (Preferred overload) Converts colour data from RGB to HSV
+		/// @param pRGB 0-1 Red, 0-1 Green, 0-1 Blue
+		/// @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		static hsv RGBtoHSV(glm::vec3 pRGB);
+		/// @brief (Alternate overload) Converts colour data from RGB to HSV
+		/// @param pRGB 0-255 Red, 0-255 Green, 0-255 Blue
+		/// @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		static hsv RGBtoHSV(rgb255 pRGB);
-		static glm::vec3 HSVtoRGB(glm::vec3 pHSV);
+		/// @brief (Preferred overload) Converts colour data from HSV to RGB
+		/// @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
+		/// @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		static glm::vec3 HSVtoRGB(hsv pHSV);
+		/// @brief (Alternate overload) Converts colour data from HSV to RGB
+		/// @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
+		/// @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
+		static glm::vec3 HSVtoRGB(glm::vec3 pHSV);
 
+		/// @brief (Preferred overload) Create a Colour object from RGB
+		/// @param pRGB 0-1 Red, 0-1 Green, 0-1 Blue
+		/// @return [Colour] A Colour object
 		static Colour CreateWithRGB(glm::vec3 pRGB);
+		/// @brief (Alternate overload) Create a Colour object from RGB
+		/// @param pRGB 0-255 Red, 0-255 Green, 0-255 Blue
+		/// @return [Colour] A Colour object
 		static Colour CreateWithRGB(rgb255 pRGB);
+		/// @brief (Preferred overload) Create a Colour object from HSV
+		/// @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
+		/// @return [Colour] A Colour object
+		static Colour CreateWithHSV(hsv pHSV);
+		/// @brief (Alternate overload) Create a Colour object from HSV
+		/// @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
+		/// @return [Colour] A Colour object
 		static Colour CreateWithHSV(glm::vec3 pHSV);
-		static Colour CreateWithHSV(uint16_t pHue, float pSaturation, float pValue);
 
 		#pragma region Presets
 		static Colour Black();
@@ -91,15 +124,23 @@ namespace Engine
 
 		// Object must be created using a static function
 		Colour() = default;
-		Colour(glm::vec3 pColour);
+		Colour(glm::vec3 pColour) : m_RGB(pColour) {}
 
 	public:
 		~Colour() = default;
 		operator glm::vec3() const { return m_RGB; }
-
+		
+		/// @brief Get the colour as RGB stored in a vec3
+		/// @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		glm::vec3 RGBvec3() const { return m_RGB; }
+		/// @brief Get the colour as RGB stored in a custom structure
+		/// @return [rgb255] 0-255 Red, 0-255 Green, 0-255 Blue
 		rgb255 RGB255();
+		/// @brief Get the colour as HSV stored in a vec3
+		/// @return [glm::vec3] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		glm::vec3 HSVvec3();
+		/// @brief Get the colour as HSV stored in a custom structure
+		/// @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		hsv HSV();
 	};
 }
