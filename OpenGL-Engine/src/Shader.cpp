@@ -274,103 +274,55 @@ FragCol=vec4(result,1);return;}";
 	}
 
 	#pragma region Setters
-	void Shader::SetBool(const string& pName, bool pValue) const
+	void Shader::SetBool(const string& pName, const bool& pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), (int)pValue);
 	}
 
-	void Shader::SetInt(const string& pName, int pValue) const
+	void Shader::SetInt(const string& pName, const int& pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetUint(const string& pName, unsigned int pValue) const
+	void Shader::SetUint(const string& pName, const unsigned int& pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniform1ui(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetFloat(const string& pName, float pValue) const
+	void Shader::SetFloat(const string& pName, const float& pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniform1f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetVec2(const string& pName, float pX, float pY) const
-	{
-		glUseProgram(m_idProgram);
-		glUniform2f(glGetUniformLocation(m_idProgram, pName.c_str()), pX, pY);
-	}
-
-	void Shader::SetVec2(const string& pName, glm::vec2 pValue) const
+	void Shader::SetVec2(const string& pName, const glm::vec2& pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniform2fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetVec2(const string& pName, glm::vec2& pValue) const
-	{
-		glUseProgram(m_idProgram);
-		glUniform2fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
-	}
-
-	void Shader::SetVec3(const string& pName, float pX, float pY, float pZ) const
-	{
-		glUseProgram(m_idProgram);
-		glUniform3f(glGetUniformLocation(m_idProgram, pName.c_str()), pX, pY, pZ);
-	}
-
-	void Shader::SetVec3(const string& pName, glm::vec3 pValue) const
+	void Shader::SetVec3(const string& pName, const glm::vec3& pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniform3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetVec3(const string& pName, glm::vec3& pValue) const
-	{
-		glUseProgram(m_idProgram);
-		glUniform3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
-	}
-
-	void Shader::SetVec4(const string& pName, float pX, float pY, float pZ, float pW) const
-	{
-		glUseProgram(m_idProgram);
-		glUniform4f(glGetUniformLocation(m_idProgram, pName.c_str()), pX, pY, pZ, pW);
-	}
-
-	void Shader::SetVec4(const string& pName, glm::vec4 pValue) const
+	void Shader::SetVec4(const string& pName, const glm::vec4& pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniform4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetVec4(const string& pName, glm::vec4& pValue) const
-	{
-		glUseProgram(m_idProgram);
-		glUniform4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
-	}
-
-	void Shader::SetMat3(const string& pName, glm::mat3 pValue) const
-	{
-		glUseProgram(m_idProgram);
-		glUniformMatrix3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, glm::value_ptr(pValue));
-	}
-
-	void Shader::SetMat3(const string& pName, glm::mat3& pValue) const
+	void Shader::SetMat3(const string& pName, const glm::mat3& pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniformMatrix3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, &pValue[0][0]);
 	}
 
-	void Shader::SetMat4(const string& pName, glm::mat4 pValue) const
-	{
-		glUseProgram(m_idProgram);
-		glUniformMatrix4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, glm::value_ptr(pValue));
-	}
-
-	void Shader::SetMat4(const string& pName, glm::mat4& pValue) const
+	void Shader::SetMat4(const string& pName, const glm::mat4& pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniformMatrix4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, &pValue[0][0]);

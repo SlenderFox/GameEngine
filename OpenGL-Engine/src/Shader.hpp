@@ -36,23 +36,15 @@ namespace Engine
 
 		#pragma region Setters
 		// Utility uniform functions
-		void SetBool(const std::string& pName, bool pValue) const;
-		void SetInt(const std::string& pName, int pValue) const;
-		void SetUint(const std::string& pName, unsigned int pValue) const;
-		void SetFloat(const std::string& pName, float pValue) const;
-		void SetVec2(const std::string& pName, float pX, float pY) const;
-		void SetVec2(const std::string& pName, glm::vec2 pValue) const;
-		void SetVec2(const std::string& pName, glm::vec2& pValue) const;
-		void SetVec3(const std::string& pName, float pX, float pY, float pZ) const;
-		void SetVec3(const std::string& pName, glm::vec3 pValue) const;
-		void SetVec3(const std::string& pName, glm::vec3& pValue) const;
-		void SetVec4(const std::string& pName, float pX, float pY, float pZ, float pW) const;
-		void SetVec4(const std::string& pName, glm::vec4 pValue) const;
-		void SetVec4(const std::string& pName, glm::vec4& pValue) const;
-		void SetMat3(const std::string& pName, glm::mat3 pValue) const;
-		void SetMat3(const std::string& pName, glm::mat3& pValue) const;
-		void SetMat4(const std::string& pName, glm::mat4 pValue) const;
-		void SetMat4(const std::string& pName, glm::mat4& pValue) const;
+		void SetBool	(const std::string& pName, const bool&			pValue) const;
+		void SetInt		(const std::string& pName, const int&			pValue) const;
+		void SetUint	(const std::string& pName, const unsigned int&	pValue) const;
+		void SetFloat	(const std::string& pName, const float&			pValue) const;
+		void SetVec2	(const std::string& pName, const glm::vec2&		pValue) const;
+		void SetVec3	(const std::string& pName, const glm::vec3&		pValue) const;
+		void SetVec4	(const std::string& pName, const glm::vec4&		pValue) const;
+		void SetMat3	(const std::string& pName, const glm::mat3&		pValue) const;
+		void SetMat4	(const std::string& pName, const glm::mat4&		pValue) const;
 		#pragma endregion
 	};
 }
