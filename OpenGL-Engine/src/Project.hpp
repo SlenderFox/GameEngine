@@ -1,7 +1,7 @@
 #pragma once
 #include "Application.hpp"
 
-class Project : public Engine::Application
+class Project: public Engine::Application
 {
 private:
 	Engine::Renderer* rendererRef;

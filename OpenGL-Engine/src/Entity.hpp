@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class Entity : public Transform
+	class Entity: public Transform
 	{
 	// Static
 	private:

@@ -5,7 +5,7 @@
 
 namespace Engine
 {
-	enum class TexType : uint8_t
+	enum class TexType: uint8_t
 	{
 		diffuse,
 		specular

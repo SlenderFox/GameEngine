@@ -36,7 +36,7 @@ namespace Engine
 
 	public:
 		Model(char* pPath, Shader* pShader, Camera* pCamera = nullptr)
-		 : m_shaderRef(pShader), m_cameraRef(pCamera) { Init(pPath); }
+		: m_shaderRef(pShader), m_cameraRef(pCamera) { Init(pPath); }
 
 		void Destroy(bool pValidate);
 

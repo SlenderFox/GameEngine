@@ -3,14 +3,14 @@
 
 namespace Engine
 {
-	enum class LightType : uint8_t
+	enum class LightType: uint8_t
 	{
 		Directional,
 		Point,
 		Spot
 	};
 
-	class Light : public Transform
+	class Light: public Transform
 	{
 	private:
 		LightType m_type;

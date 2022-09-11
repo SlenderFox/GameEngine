@@ -6,7 +6,7 @@
 
 namespace Engine
 {
-	enum class ShaderType : uint8_t
+	enum class ShaderType: uint8_t
 	{
 		PROGRAM,
 		VERTEX,

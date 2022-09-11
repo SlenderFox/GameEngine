@@ -25,12 +25,12 @@ namespace Engine
 
 	Entity* Entity::s_root = nullptr;
 
-	Entity::Entity() : m_parent(s_root)
+	Entity::Entity(): m_parent(s_root)
 	{
 		m_children = make_unique<vector<Entity*>>();
 	}
 
-	Entity::Entity(Entity* pParent) : m_parent(pParent)
+	Entity::Entity(Entity* pParent): m_parent(pParent)
 	{
 		m_children = make_unique<vector<Entity*>>();
 	}

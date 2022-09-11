@@ -11,9 +11,9 @@ using glm::cross;
 namespace Engine
 {
 	#pragma region Constructors
-	Transform::Transform() : m_transform(mat4(1)) {}
+	Transform::Transform(): m_transform(mat4(1)) {}
 
-	Transform::Transform(mat4 pValue) : m_transform(pValue) {}
+	Transform::Transform(mat4 pValue): m_transform(pValue) {}
 
 	Transform::Transform(const Transform& pOther)
 	{

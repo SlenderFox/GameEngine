@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class Camera : public Transform
+	class Camera: public Transform
 	{
 	private:
 		float m_fovH = 0, m_fovV = 0;	// The field of view of the camera in degrees, horizontal & vertical

@@ -18,10 +18,9 @@ namespace Engine
 		uint8_t g;
 		uint8_t b;
 
-		rgb255() : r(0), g(0), b(0) {}
+		rgb255(): r(0), g(0), b(0) {}
 
-		rgb255(uint8_t pR, uint8_t pG, uint8_t pB)
-		 : r(pR), g(pG), b(pB) {}
+		rgb255(uint8_t pR, uint8_t pG, uint8_t pB): r(pR), g(pG), b(pB) {}
 
 		rgb255(glm::vec3 pValue)
 		{
@@ -42,10 +41,10 @@ namespace Engine
 		float saturation;
 		float value;
 
-		hsv() : hue(0), saturation(0), value(0) {}
+		hsv(): hue(0), saturation(0), value(0) {}
 
 		hsv(uint16_t pHue, float pSaturation, float pValue)
-		 : hue(pHue), saturation(pSaturation), value(pValue) {}
+		: hue(pHue), saturation(pSaturation), value(pValue) {}
 
 		hsv(glm::vec3 pValue)
 		{
@@ -124,7 +123,7 @@ namespace Engine
 
 		// Object must be created using a static function
 		Colour() = default;
-		Colour(glm::vec3 pColour) : m_RGB(pColour) {}
+		Colour(glm::vec3 pColour): m_RGB(pColour) {}
 
 	public:
 		~Colour() = default;

@@ -107,7 +107,7 @@ namespace Engine
 	}
 
 	// Member
-	Texture::Texture(string pPath, TexType pType) : m_file(pPath), m_type(pType)
+	Texture::Texture(string pPath, TexType pType): m_file(pPath), m_type(pType)
 	{
 		m_id = LoadTextureFromFile(pPath.c_str());
 	}
