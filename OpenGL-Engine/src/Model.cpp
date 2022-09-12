@@ -81,7 +81,7 @@ namespace Engine
 		}
 		m_directory = pPath.substr(0, pPath.find_last_of('/'));
 		ProcessNode(scene->mRootNode, scene);
-		LoadTexturesToShader();
+		if (m_loadTextures) LoadTexturesToShader();
 
 		#ifdef _DEBUG
 		 cout << "Done!" << endl;
@@ -146,14 +146,17 @@ namespace Engine
 				indices.push_back(face.mIndices[j]);
 		}
 
-		// Process material
-		if (pMesh->mMaterialIndex >= 0)
+		if (m_loadTextures)
 		{
-			aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
-			vector<Texture*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TexType::diffuse);
-			m_textures.insert(m_textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-			vector<Texture*> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TexType::specular);
-			m_textures.insert(m_textures.end(), specularMaps.begin(), specularMaps.end());
+			// Process material
+			if (pMesh->mMaterialIndex >= 0)
+			{
+				aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
+				vector<Texture*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TexType::diffuse);
+				m_textures.insert(m_textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+				vector<Texture*> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TexType::specular);
+				m_textures.insert(m_textures.end(), specularMaps.begin(), specularMaps.end());
+			}
 		}
 
 		return make_unique<Mesh>(vertices, indices);

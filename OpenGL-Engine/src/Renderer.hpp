@@ -14,7 +14,7 @@ namespace Engine
 			return s_instance;
 		}
 
-		Model* AddNewModel(unsigned int &id, std::string pLocation, Shader* pShaderRef = nullptr);
+		Model* AddNewModel(unsigned int &id, std::string pLocation, Shader* pShaderRef = nullptr, bool pLoadTextures = true);
 		Shader* AddNewShader(unsigned int &id, std::string pLocation);
 		Light* AddNewLight(unsigned int &id, LightType pType, Colour pColour = Colour::White());
 		

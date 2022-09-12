@@ -21,7 +21,7 @@ namespace Engine
 		Entity();
 		Entity(Entity* pParent);
 
-		Model* LoadModel(std::string pModelPath, std::string pShaderPath);
+		Model* LoadModel(std::string pModelPath, std::string pShaderPath, bool pLoadTextures = true);
 		void Translate(glm::vec3 pValue) override;
 		
 		Entity* GetParent() const { return m_parent; }

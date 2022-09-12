@@ -61,47 +61,52 @@ namespace Engine
 
 		#pragma region Fallback code
 		 const char* vertexFallback = "#version 330 core\n\
-layout (location=0) in vec3 aPos;\
-layout (location=1) in vec3 aNormal;\
-layout (location=2) in vec2 aTexCoords;\
+layout(location=0)in vec3 aPos;\
+layout(location=1)in vec3 aNormal;\
+layout(location=2)in vec2 aTexCoords;\
 out vec3 FragPos;\
 out vec3 Normal;\
 out vec2 TexCoords;\
+uniform vec3 u_scale=vec3(1.0);\
 uniform mat4 u_camera;\
 uniform mat4 u_model;\
 uniform mat3 u_transposeInverseOfModel;\
 void main(){\
-gl_Position=u_camera*u_model*vec4(aPos,1.0);\
-FragPos=vec3(u_model*vec4(aPos,1.0));\
+vec4 vertModel=u_model*vec4(aPos*u_scale,1.0);\
+TexCoords=aTexCoords;\
 Normal=u_transposeInverseOfModel*aNormal;\
-TexCoords=aTexCoords;}";
+FragPos=vec3(vertModel);\
+gl_Position=u_camera*vertModel;}";
+		 // THIS DOESN'T WORK WHY???
 		 const char* fragmentFallback = "#version 330 core\n\
 #define normalise normalize\n\
 const int NR_DIR_LIGHTS=3;\
 const int NR_POINT_LIGHTS=30;\
 const int NR_SPOT_LIGHTS=30;\
+const float near=0.1;\
+const float far=500.0;\
 out vec4 FragCol;\
 in vec3 FragPos;\
 in vec3 Normal;\
 in vec2 TexCoords;\
 struct Material{float shininess;sampler2D texture_diffuse0;sampler2D texture_specular0;};\
-struct Colour{vec3 ambient;vec3 diffuse;vec3 specular;};\
-struct LightDirectional{Colour colour;vec4 direction;};\
-struct LightPoint{Colour colour;vec4 position;float linear;float quadratic;};\
-struct LightSpot{Colour colour;vec4 position;vec4 direction;float linear;float quadratic;float cutoff;float blur;};\
+struct LightColour{vec3 ambient;vec3 diffuse;vec3 specular;};\
+struct LightDirectional{LightColour colour;vec4 direction;};\
+struct LightPoint{LightColour colour;vec4 position;float linear;float quadratic;};\
+struct LightSpot{LightColour colour;vec4 position;vec4 direction;float linear;float quadratic;float cutoff;float blur;};\
+uniform bool u_justColour=false;\
 uniform vec3 u_viewPos;\
+uniform vec3 u_colour=vec3(1.0);\
 uniform Material u_material;\
 uniform LightDirectional[NR_DIR_LIGHTS] u_dirLights;\
 uniform LightPoint[NR_POINT_LIGHTS] u_pointLights;\
 uniform LightSpot[NR_SPOT_LIGHTS] u_spotLights;\
 vec3 m_normal;\
 vec3 m_viewDir;\
-const float near=0.1;\
-const float far=500.0;\
 float LineariseDepth(float pDepth){\
 float z=pDepth*2.0-1.0;\
 return (2.0*near*far)/(far+near-z*(far-near));}\
-vec3 PhongShading(Colour pColour,vec3 pLightDir,float pIntensity){\
+vec3 PhongShading(LightColour pColour,vec3 pLightDir,float pIntensity){\
 vec3 diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;\
 vec3 specularTex=texture(u_material.texture_specular0,TexCoords).rgb;\
 float diff=max(dot(m_normal,pLightDir),0.0);\
@@ -117,14 +122,14 @@ vec3 CalculateDirectionalLighting(LightDirectional pLight){\
 vec3 lightDir=normalise(pLight.direction.xyz);\
 return PhongShading(pLight.colour,lightDir,1);}\
 vec3 CalculatePointLight(LightPoint pLight){\
-if (length(pLight.linear)==0)return vec3(0);\
+if(length(pLight.linear)==0)return vec3(0);\
 vec3 lightDiff=pLight.position.xyz-FragPos;\
 vec3 lightDir=normalise(lightDiff);\
 float lightDist=length(lightDiff);\
 float attenuation=CalculateAttentuation(lightDist,pLight.linear,pLight.quadratic);\
 return PhongShading(pLight.colour,lightDir,1)*attenuation;}\
 vec3 CalculateSpotLight(LightSpot pLight){\
-if (length(pLight.linear)==0)return vec3(0);\
+if(length(pLight.linear)==0)return vec3(0);\
 vec3 lightDiff=pLight.position.xyz-FragPos;\
 vec3 lightDir=normalise(lightDiff);\
 float lightDist=length(lightDiff);\
@@ -138,10 +143,12 @@ void main(){\
 m_normal=normalise(Normal);\
 m_viewDir=normalise(u_viewPos-FragPos);\
 vec3 result;\
-for (int i=0;i<NR_DIR_LIGHTS;++i)result+=CalculateDirectionalLighting(u_dirLights[i]);\
-for (int i=0;i<NR_POINT_LIGHTS;++i)result+=CalculatePointLight(u_pointLights[i]);\
-for (int i=0;i<NR_SPOT_LIGHTS;++i)result+=CalculateSpotLight(u_spotLights[i]);\
-FragCol=vec4(result,1);return;}";
+for(int i=0;i<NR_DIR_LIGHTS;++i)result+=CalculateDirectionalLighting(u_dirLights[i]);\
+for(int i=0;i<NR_POINT_LIGHTS;++i)result+=CalculatePointLight(u_pointLights[i]);\
+for(int i=0;i<NR_SPOT_LIGHTS;++i)result+=CalculateSpotLight(u_spotLights[i]);\
+if(u_justColour) FragCol=vec4(u_colour,1);\
+else FragCol=vec4(result*u_colour,1);\
+return;}";
 		#pragma endregion
 
 		// Must be defined out here

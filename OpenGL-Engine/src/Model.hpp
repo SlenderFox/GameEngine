@@ -15,10 +15,10 @@ namespace Engine
 	{
 		friend class Renderer;
 	private:
-	// Static
 		static std::vector<Texture*> s_loadedTextures;
 
-	// Member
+		bool m_loadTextures;
+
 		std::unique_ptr<std::vector<std::unique_ptr<Mesh>>> m_meshes = nullptr;
 		std::vector<Texture*> m_textures;
 		std::string m_directory;
@@ -35,8 +35,9 @@ namespace Engine
 		void LoadTexturesToShader();
 
 	public:
-		Model(char* pPath, Shader* pShader, Camera* pCamera = nullptr)
-		: m_shaderRef(pShader), m_cameraRef(pCamera) { Init(pPath); }
+		Model(char* pPath, Shader* pShader, Camera* pCamera = nullptr, bool pLoadTextures = true)
+		: m_shaderRef(pShader), m_cameraRef(pCamera), m_loadTextures(pLoadTextures)
+		{ Init(pPath); }
 
 		void Destroy(bool pValidate);
 

@@ -94,12 +94,13 @@ void Project::CreateLights()
 		 || current->GetType() == Engine::LightType::Spot)
 		{
 			unsigned int discard;
-			Engine::Shader* shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/light");
+			Engine::Shader* shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/default");
+			shaderRef->SetBool("u_justColour", true);
 			shaderRef->SetVec3("u_scale", vec3(0.2f, 0.2f, (current->GetType() == Engine::LightType::Spot) ? 0.4f : 0.2f));
 			shaderRef->SetVec3("u_colour", current->GetColour());
 			shaderRef->SetMat4("u_model", current->GetTransform());
 			shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(current->GetTransform())));
-			rendererRef->AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef);
+			rendererRef->AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef, false);
 		}
 	}
 }

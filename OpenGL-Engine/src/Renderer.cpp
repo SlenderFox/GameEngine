@@ -166,10 +166,10 @@ namespace Engine
 		}
 	}
 
-	Model* Renderer::AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef)
+	Model* Renderer::AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef, bool pLoadTextures)
 	{
 		id = (unsigned int)m_models.get()->size();
-		m_models.get()->push_back(make_unique<Model>((char*)pLocation.c_str(), pShaderRef, m_cameraRef));
+		m_models.get()->push_back(make_unique<Model>((char*)pLocation.c_str(), pShaderRef, m_cameraRef, pLoadTextures));
 		return GetModelAt(id);
 	}
 

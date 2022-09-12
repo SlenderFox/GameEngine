@@ -18,7 +18,7 @@ namespace Engine
 	{
 	public:
 		static Renderer* GetInstance();
-		Model* AddNewModel(unsigned int &id, std::string pLocation, Shader* pShaderRef = nullptr);
+		Model* AddNewModel(unsigned int &id, std::string pLocation, Shader* pShaderRef = nullptr, bool pLoadTextures = true);
 		Shader* AddNewShader(unsigned int &id, std::string pLocation);
 		void LoadLightsIntoShader(Shader* pShader);
 	};
@@ -35,14 +35,14 @@ namespace Engine
 		m_children = make_unique<vector<Entity*>>();
 	}
 
-	Model* Entity::LoadModel(std::string pModelPath, std::string pShaderPath)
+	Model* Entity::LoadModel(std::string pModelPath, std::string pShaderPath, bool pLoadTextures)
 	{
 		unsigned int ID;
 		m_shader = Renderer::GetInstance()->AddNewShader(ID, pShaderPath);
 		Renderer::GetInstance()->LoadLightsIntoShader(m_shader);
 		m_shader->SetMat4("u_model", GetTransform());
 		m_shader->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
-		return Renderer::GetInstance()->AddNewModel(ID, pModelPath, m_shader);
+		return Renderer::GetInstance()->AddNewModel(ID, pModelPath, m_shader, pLoadTextures);
 	}
 
 	void Entity::Translate(vec3 pValue)
