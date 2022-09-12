@@ -8,14 +8,12 @@ namespace Engine
 {
 	class Application
 	{
-	// Static
 	private:
 		static Application* s_application;		// Static reference to the application
 
 	public:
 		static Application* GetApplication() { return s_application; }
 
-	// Member
 	private:
 		Renderer* m_rendererInst = nullptr;					// A reference to the renderer instance
 		Input* m_inputInst = nullptr;						// A reference to the input instance

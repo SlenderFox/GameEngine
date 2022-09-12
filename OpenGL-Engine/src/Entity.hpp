@@ -5,11 +5,9 @@ namespace Engine
 {
 	class Entity: public Transform
 	{
-	// Static
 	private:
 		static Entity* s_root;
 
-	// Member
 	private:
 		Entity* m_parent = nullptr;
 		std::unique_ptr<std::vector<Entity*>> m_children = nullptr;

@@ -26,9 +26,9 @@ namespace Engine
 		glEnable(GL_DEPTH_TEST);
 
 		// Initialise camera
-		m_cameraRef = new Camera(pAspect, 75.0f);
-		m_cameraRef->SetClearColour(0.1f, 0.1f, 0.1f);
-		m_cameraRef->SetPosition({ 0.0f, 0.0f, 6.0f });
+		m_camera = new Camera(pAspect, 75.0f);
+		m_camera->SetClearColour(0.1f, 0.1f, 0.1f);
+		m_camera->SetPosition({ 0.0f, 0.0f, 6.0f });
 
 		// Initialise arrays
 		m_models = make_unique<vector<unique_ptr<Model>>>();
@@ -75,7 +75,7 @@ namespace Engine
 			Texture::UnloadAll(pValidate);
 		}
 
-		delete m_cameraRef;
+		delete m_camera;
 	}
 
 	void Renderer::Draw(double pTime)
@@ -169,7 +169,7 @@ namespace Engine
 	Model* Renderer::AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef, bool pLoadTextures)
 	{
 		id = (unsigned int)m_models.get()->size();
-		m_models.get()->push_back(make_unique<Model>((char*)pLocation.c_str(), pShaderRef, m_cameraRef, pLoadTextures));
+		m_models.get()->push_back(make_unique<Model>((char*)pLocation.c_str(), pShaderRef, m_camera, pLoadTextures));
 		return GetModelAt(id);
 	}
 

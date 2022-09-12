@@ -21,10 +21,8 @@ using std::make_unique;
 
 namespace Engine
 {
-	// Static
 	vector<Texture*> Model::s_loadedTextures = vector<Texture*>();
 
-	// Member
 	void Model::Init(char* pPath)
 	{
 		// Mesh creation

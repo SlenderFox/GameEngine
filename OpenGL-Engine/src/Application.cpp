@@ -43,7 +43,11 @@ namespace Engine
 	{
 		// Prevents potential memory leak
 		if (s_application != nullptr)
+		{
+			s_application->Shutdown();
+			glfwTerminate();
 			delete s_application;
+		}
 
 		// Applies the static reference
 		s_application = this;
@@ -124,7 +128,6 @@ namespace Engine
 
 		Shutdown();
 		glfwTerminate();
-
 		return;
 	}
 
@@ -223,14 +226,14 @@ namespace Engine
 		m_winWidth = pWidth;
 		m_winHeight = pHeight;
 
-		if (m_rendererInst->m_cameraRef != nullptr && pWidth > 0 && pHeight > 0)
+		if (m_rendererInst->m_camera != nullptr && pWidth > 0 && pHeight > 0)
 			UpdateCamera();
 	}
 
 	void Application::UpdateCamera()
 	{
-		m_rendererInst->m_cameraRef->SetAspectRatio((float)m_winWidth / (float)m_winHeight);
-		m_rendererInst->m_cameraRef->UpdateFovV();
+		m_rendererInst->m_camera->SetAspectRatio((float)m_winWidth / (float)m_winHeight);
+		m_rendererInst->m_camera->UpdateFovV();
 	}
 
 	void Application::MouseCallback(double pPosX, double pPosY)
@@ -255,12 +258,12 @@ namespace Engine
 		forward.y = (float)sin(radians(m_pitch));
 		forward.z = (float)sin(radians(m_yaw)) * (float)cos(radians(m_pitch));
 		forward = normalize(forward);
-		m_rendererInst->m_cameraRef->SetForward(forward);
+		m_rendererInst->m_camera->SetForward(forward);
 	}
 
 	void Application::ScrollCallback(double pOffsetX, double pOffsetY)
 	{
-		m_rendererInst->m_cameraRef->ModifyFovH((float)pOffsetY * -3.0f);
+		m_rendererInst->m_camera->ModifyFovH((float)pOffsetY * -3.0f);
 	}
 
 	void Application::ProcessInput()
@@ -308,23 +311,23 @@ namespace Engine
 		vec3 translation = vec3();
 		// Forwards
 		if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS)
-			translation += moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_cameraRef->GetForward();
+			translation += moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_camera->GetForward();
 		// Backwards
 		if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS)
-			translation -= moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_cameraRef->GetForward();
+			translation -= moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_camera->GetForward();
 		// Left
 		if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS)
-			translation += moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_cameraRef->GetRight();
+			translation += moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_camera->GetRight();
 		// Right
 		if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS)
-			translation -= moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_cameraRef->GetRight();
+			translation -= moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_camera->GetRight();
 		// Up
 		if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)
-			translation += moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_cameraRef->GetUp();
+			translation += moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_camera->GetUp();
 		// Down
 		if (glfwGetKey(m_window, GLFW_KEY_C) == GLFW_PRESS)
-			translation -= moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_cameraRef->GetUp();
+			translation -= moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_camera->GetUp();
 
-		m_rendererInst->m_cameraRef->Translate(translation);
+		m_rendererInst->m_camera->Translate(translation);
 	}
 }

@@ -61,7 +61,6 @@ namespace Engine
 
 	class Colour
 	{
-	// Static
 	public:
 		/// @brief (Preferred overload) Converts colour data from RGB to HSV
 		/// @param pRGB 0-1 Red, 0-1 Green, 0-1 Blue
@@ -117,7 +116,6 @@ namespace Engine
 		static Colour Purple();
 		#pragma endregion
 
-	// Member
 	private:
 		glm::vec3 m_RGB = glm::vec3(0);	// Colour data stored as 0-1 for easy conversion
 

@@ -16,7 +16,6 @@ namespace Engine
 
 	class Mesh
 	{
-	// Static
 	private:
 		static float* s_cubeVerticesArr;
 		static unsigned int* s_indicesArr;
@@ -25,7 +24,6 @@ namespace Engine
 		static std::vector<Vertex> GenerateVertices();
 		static std::vector<unsigned int> GenerateIndices();
 
-	// Members
 	private:
 		std::unique_ptr<std::vector<Vertex>> m_vertices = nullptr;
 		std::unique_ptr<std::vector<unsigned int>> m_indices = nullptr;

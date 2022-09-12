@@ -14,7 +14,6 @@ namespace Engine
 	class Texture
 	{
 		//friend class Model;
-	// Static
 	private:
 		static unsigned int s_textureIds[32];	// List of all texture ids
 		static unsigned int s_textureCount;		// How many textures have been loaded
@@ -24,7 +23,6 @@ namespace Engine
 		static void UnloadAll(bool pValidate);
 		static unsigned int GetNumTex() { return s_textureCount; }
 
-	// Member
 	private:
 		unsigned int m_id = 0;
 		TexType m_type = TexType::diffuse;
