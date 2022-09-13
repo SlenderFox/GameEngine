@@ -20,6 +20,8 @@ using std::unique_ptr;
 
 namespace Engine
 {
+	const float Renderer::s_ambience = 0.15f;
+
 	void Renderer::SetClearColour(Colour pColour)
 	{
 		vec3 col = pColour.RGBvec3();
@@ -31,7 +33,7 @@ namespace Engine
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);
 
-		SetClearColour(Colour::CreateWithRGB(vec3(0.1f)));
+		//SetClearColour(Colour::CreateWithRGB(vec3(0.1f)));
 
 		// Initialise camera
 		m_camera = new Camera(pAspect, 75.0f);
@@ -110,7 +112,7 @@ namespace Engine
 			switch (currentLight->GetType())
 			{
 			case LightType::Directional:
-				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.ambient", (vec3)currentLight->GetColour() * 0.15f);
+				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.ambient", (vec3)currentLight->GetColour() * s_ambience);
 				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.diffuse", currentLight->GetColour());
 				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.specular", currentLight->GetColour());
 				pShader->SetVec4("u_dirLights[" + std::to_string(numDirLights) + "].direction", currentLight->GetDirection());

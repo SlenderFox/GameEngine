@@ -35,6 +35,7 @@ Project::~Project() {}
 bool Project::Startup()
 {
 	m_rendererRef = Engine::Renderer::GetInstance();
+	CreateLights();
 	CreateScene();
 	return true;
 }
@@ -56,7 +57,6 @@ void Project::LateUpdate() {}
 
 void Project::CreateScene()
 {
-	CreateLights();
 	//// First creates the shader
 	//unsigned int ID;
 	//Engine::Shader* shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/default");
@@ -96,6 +96,7 @@ void Project::CreateLights()
 	unsigned int ID;
 	m_rendererRef->AddNewLight(ID, Engine::LightType::Directional, Engine::Colour::Silver());
 	m_rendererRef->GetLightAt(ID)->SetDirection(vec3(0, -1, 0));
+	Engine::Renderer::SetClearColour(m_rendererRef->GetLightAt(ID)->GetColour() * Engine::Renderer::s_ambience);
 	m_rendererRef->AddNewLight(ID, Engine::LightType::Point, Engine::Colour::CreateWithHSV(Engine::hsv(220, 0.6f, 1.0f)));
 	m_rendererRef->GetLightAt(ID)->SetCamPosition(vec4(-4, 2, -2, 1));
 	m_rendererRef->AddNewLight(ID, Engine::LightType::Spot, Engine::Colour::CreateWithHSV(Engine::hsv(97, 0.17f, 1.0f)));

@@ -7,6 +7,8 @@ namespace Engine
 	{
 		friend class Application;	// Allowing application access and control
 	public:
+		static const float s_ambience;
+
 		static Renderer* GetInstance()
 		{
 			static Renderer* s_instance = new Renderer();
