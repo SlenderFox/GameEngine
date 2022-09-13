@@ -45,9 +45,25 @@ namespace Engine
 		return Renderer::GetInstance()->AddNewModel(ID, pModelPath, m_shader, pLoadTextures);
 	}
 
+	void Entity::SetTransform(mat4 pValue)
+	{
+		Transform::SetTransform(pValue);
+		UpdateModel();
+	}
+
 	void Entity::Translate(vec3 pValue)
 	{
 		Transform::Translate(pValue);
+		UpdateModel();
+	}
+
+	void Entity::Scale(vec3 pValue)
+	{
+		m_shader->SetVec3("u_scale", pValue);
+	}
+
+	void Entity::UpdateModel() const
+	{
 		m_shader->SetMat4("u_model", GetTransform());
 		m_shader->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
 	}

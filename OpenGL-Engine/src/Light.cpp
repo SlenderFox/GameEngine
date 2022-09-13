@@ -7,6 +7,7 @@ using glm::vec4;
 using glm::mat4;
 using glm::cos;
 using glm::radians;
+using glm::normalize;
 #pragma endregion
 
 namespace Engine
@@ -38,7 +39,7 @@ namespace Engine
 
 	Light* Light::SetDirection(vec3 pDirection)
 	{
-		Transform::SetForward(pDirection);
+		Transform::SetForward(normalize(pDirection));
 		return this;
 	}
 
