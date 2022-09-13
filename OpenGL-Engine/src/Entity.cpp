@@ -27,7 +27,7 @@ namespace Engine
 
 	Model* Entity::LoadModel(std::string pModelPath, std::string pShaderPath, bool pLoadTextures)
 	{
-		unsigned int ID;
+		uint8_t ID;
 		m_shader = Renderer::GetInstance()->AddNewShader(ID, pShaderPath);
 		Renderer::GetInstance()->LoadLightsIntoShader(m_shader);
 		m_shader->SetMat4("u_model", GetTransform());

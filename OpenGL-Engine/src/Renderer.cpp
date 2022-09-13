@@ -175,44 +175,59 @@ namespace Engine
 		}
 	}
 
-	Model* Renderer::AddNewModel(unsigned int &id, string pLocation, Shader* pShaderRef, bool pLoadTextures)
+	Model* Renderer::AddNewModel(uint8_t &id, string pLocation, Shader* pShaderRef, bool pLoadTextures)
 	{
-		id = (unsigned int)m_models.get()->size();
+		// Caps at 255
+		size_t currentAmount = m_models.get()->size();
+		if (currentAmount > 255)
+			return nullptr;
+
+		id = (uint8_t)currentAmount;
 		m_models.get()->push_back(make_unique<Model>((char*)pLocation.c_str(), pShaderRef, m_camera, pLoadTextures));
 		return GetModelAt(id);
 	}
 
-	Shader* Renderer::AddNewShader(unsigned int &id, string pLocation)
+	Shader* Renderer::AddNewShader(uint8_t &id, string pLocation)
 	{
-		id = (unsigned int)m_shaders.get()->size();
+		// Caps at 255
+		size_t currentAmount = m_shaders.get()->size();
+		if (currentAmount > 255)
+			return nullptr;
+
+		id = (uint8_t)currentAmount;
 		m_shaders.get()->push_back(make_unique<Shader>(pLocation));
 		return GetShaderAt(id);
 	}
 
-	Light* Renderer::AddNewLight(unsigned int &id, LightType pType, Colour pColour)
+	Light* Renderer::AddNewLight(uint8_t &id, LightType pType, Colour pColour)
 	{
-		id = (unsigned int)m_lights.get()->size();
+		// Caps at 255
+		size_t currentAmount = m_lights.get()->size();
+		if (currentAmount > 255)
+			return nullptr;
+
+		id = (uint8_t)currentAmount;
 		m_lights.get()->push_back(make_unique<Light>(pType, pColour));
 		return GetLightAt(id);
 	}
 
 	#pragma region Getters
-	unsigned int Renderer::ModelCount() const
+	uint8_t Renderer::ModelCount() const
 	{
-		return (unsigned int)m_models.get()->size();
+		return (uint8_t)m_models.get()->size();
 	}
 
-	unsigned int Renderer::ShaderCount() const
+	uint8_t Renderer::ShaderCount() const
 	{
-		return (unsigned int)m_shaders.get()->size();
+		return (uint8_t)m_shaders.get()->size();
 	}
 
-	unsigned int Renderer::LightCount() const
+	uint8_t Renderer::LightCount() const
 	{
-		return (unsigned int)m_lights.get()->size();
+		return (uint8_t)m_lights.get()->size();
 	}
 
-	Model* Renderer::GetModelAt(unsigned int pPos)
+	Model* Renderer::GetModelAt(uint8_t pPos)
 	{
 		if (m_models.get() == nullptr)
 			return nullptr;
@@ -228,7 +243,7 @@ namespace Engine
 		return (*m_models.get())[pPos].get();
 	}
 
-	Shader* Renderer::GetShaderAt(unsigned int pPos)
+	Shader* Renderer::GetShaderAt(uint8_t pPos)
 	{
 		if (m_shaders.get() == nullptr)
 			return nullptr;
@@ -244,7 +259,7 @@ namespace Engine
 		return (*m_shaders.get())[pPos].get();
 	}
 
-	Light* Renderer::GetLightAt(unsigned int pPos)
+	Light* Renderer::GetLightAt(uint8_t pPos)
 	{
 		if (m_lights.get() == nullptr)
 			return nullptr;

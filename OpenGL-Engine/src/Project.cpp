@@ -75,7 +75,7 @@ void Project::CreateScene()
 void Project::CreateLights()
 {
 	// Creates lights
-	unsigned int ID;
+	uint8_t ID;
 	m_rendererRef->AddNewLight(ID, Engine::LightType::Directional, Engine::Colour::Silver());
 	m_rendererRef->GetLightAt(ID)->SetDirection(vec3(0, -1, 0));
 	Engine::Renderer::SetClearColour(m_rendererRef->GetLightAt(ID)->GetColour() * Engine::Renderer::s_ambience);
@@ -85,13 +85,13 @@ void Project::CreateLights()
 	m_rendererRef->GetLightAt(ID)->SetCamPosition(vec4(2.0f, 2.5f, 6.0f, 1))->SetDirection(vec3(-0.3f, -0.4f, -1))->SetAngle(13.0f)->SetBlur(0.23f);
 
 	// Gives them physical form
-	for (unsigned int i = 0; i < m_rendererRef->LightCount(); ++i)
+	for (uint8_t i = 0; i < m_rendererRef->LightCount(); ++i)
 	{
 		Engine::Light* current = m_rendererRef->GetLightAt(i);
 		if (current->GetType() == Engine::LightType::Point
 		 || current->GetType() == Engine::LightType::Spot)
 		{
-			unsigned int discard;
+			uint8_t discard;
 			Engine::Shader* shaderRef = m_rendererRef->AddNewShader(ID, "assets/shaders/default");
 			shaderRef->SetBool("u_justColour", true);
 			// Makes the spotlight a rectangular prism to show direction

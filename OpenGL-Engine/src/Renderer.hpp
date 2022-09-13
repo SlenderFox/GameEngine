@@ -38,9 +38,9 @@ namespace Engine
 		void Draw();
 
 	public:
-		Model* AddNewModel(unsigned int &id, std::string pLocation, Shader* pShaderRef = nullptr, bool pLoadTextures = true);
-		Shader* AddNewShader(unsigned int &id, std::string pLocation);
-		Light* AddNewLight(unsigned int &id, LightType pType, Colour pColour = Colour::White());
+		Model* AddNewModel(uint8_t &id, std::string pLocation, Shader* pShaderRef = nullptr, bool pLoadTextures = true);
+		Shader* AddNewShader(uint8_t &id, std::string pLocation);
+		Light* AddNewLight(uint8_t &id, LightType pType, Colour pColour = Colour::White());
 		
 		void LoadLightsIntoShader(Shader* pShader);
 
@@ -48,12 +48,12 @@ namespace Engine
 		void ModifyAllSpotlightBlurs(float pValue);
 
 		#pragma region Getters
-		unsigned int ModelCount() const;
-		unsigned int ShaderCount() const;
-		unsigned int LightCount() const;
-		Model* GetModelAt(unsigned int pPos);
-		Shader* GetShaderAt(unsigned int pPos);
-		Light* GetLightAt(unsigned int pPos);
+		uint8_t ModelCount() const;
+		uint8_t ShaderCount() const;
+		uint8_t LightCount() const;
+		Model* GetModelAt(uint8_t pPos);
+		Shader* GetShaderAt(uint8_t pPos);
+		Light* GetLightAt(uint8_t pPos);
 		#pragma endregion
 	};
 }
