@@ -175,8 +175,8 @@ namespace Engine
 		#ifdef _DEBUG
 		 // Moves the window to the lower right of the window
 		 glfwSetWindowPos(m_window, 2, (int)((monHeight - m_winHeight) * 0.5f));
-		 // Moves the console window
-		 MoveWindow(GetConsoleWindow(), m_winWidth - 3, 0, 900, 600, TRUE);
+		 // Moves the console and resizes
+		 MoveWindow(GetConsoleWindow(), m_winWidth - 3, 0, 900, 1040, TRUE);
 		#else
 		 // Moves the window to the center of the workarea
 		 glfwSetWindowPos(m_window, (int)((monWidth - m_winWidth) * 0.5f), (int)((monHeight - m_winHeight) * 0.5f));

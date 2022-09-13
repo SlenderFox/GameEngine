@@ -65,7 +65,7 @@ namespace Engine
 	void Model::LoadModel(string pPath)
 	{
 		#ifdef _DEBUG
-		 cout << "Loading model \"" << pPath << "\"" << endl;
+		 cout << "Loading model \"" << pPath << "\"" << (m_loadTextures ? "" : " (untextured)") << endl;
 		#endif
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(pPath, aiProcess_Triangulate | aiProcess_FlipUVs);
