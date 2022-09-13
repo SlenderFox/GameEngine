@@ -109,7 +109,6 @@ namespace Engine
 	{
 		m_vertices = make_unique<vector<Vertex>>(GenerateVertices());
 		m_indices = make_unique<vector<uint32_t>>(GenerateIndices());
-		m_textures = make_unique<vector<Texture*>>(); // Legacy
 		
 		SetupMesh();
 	}
@@ -118,17 +117,6 @@ namespace Engine
 	{
 		m_vertices = make_unique<vector<Vertex>>(pVertices);
 		m_indices = make_unique<vector<uint32_t>>(pIndices);
-		m_textures = make_unique<vector<Texture*>>(); // Legacy
-
-		SetupMesh();
-	}
-
-	Mesh::Mesh(vector<Vertex> pVertices, vector<uint32_t> pIndices, vector<Texture*> pTextures)
-	{
-		m_vertices = make_unique<vector<Vertex>>(pVertices);
-		m_indices = make_unique<vector<uint32_t>>(pIndices);
-		m_textures = make_unique<vector<Texture*>>(pTextures);
-
 		SetupMesh();
 	}
 
@@ -145,39 +133,11 @@ namespace Engine
 		m_vertices.release();
 		m_indices.get()->clear();
 		m_indices.release();
-		m_textures.get()->clear();
-		m_textures.release();
 		delete m_idVAO;
 		delete m_idVBO;
 		delete m_idEBO;
 	}
 	
-	void Mesh::LoadTexturesToShader(Shader& pShader)
-	{
-		uint8_t diffuseNr = 0;
-		uint8_t specularNr = 0;
-		for (size_t i = 0; i < m_textures.get()->size(); ++i)
-		{
-			// Retrieve texture number (the N in diffuse_textureN)
-			string name;
-			string number;
-			switch (m_textures.get()->at(i)->GetType())
-			{
-				case TexType::diffuse:
-					name = "texture_diffuse";
-					number = std::to_string(diffuseNr++);
-					break;
-				case TexType::specular:
-					name = "texture_specular";
-					number = std::to_string(specularNr++);
-					break;
-			}
-				
-			uint16_t texID = (uint16_t)m_textures.get()->at(i)->GetId();
-			pShader.SetInt(("u_material." + name + number).c_str(), texID);
-		}
-	}
-
 	void Mesh::Draw()
 	{
 		glBindVertexArray(*m_idVAO);

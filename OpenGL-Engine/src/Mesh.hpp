@@ -27,7 +27,6 @@ namespace Engine
 	private:
 		std::unique_ptr<std::vector<Vertex>> m_vertices = nullptr;
 		std::unique_ptr<std::vector<unsigned int>> m_indices = nullptr;
-        std::unique_ptr<std::vector<Texture*>> m_textures = nullptr;
 
 		uint32_t* m_idVAO = new uint32_t(0U);	// The id for the vertex attribute object
 		uint32_t* m_idVBO = new uint32_t(0U);	// The id for the vertex buffer object
@@ -38,12 +37,8 @@ namespace Engine
 	public:
 		Mesh();
 		Mesh(std::vector<Vertex> pVertices, std::vector<uint32_t> pIndices);
-		Mesh(std::vector<Vertex> pVertices, std::vector<uint32_t> pIndices, std::vector<Texture*> pTextures);
 
 		void Destroy(bool pValidate);
-
-		// Legacy
-		void LoadTexturesToShader(Shader& pShader);
 		void Draw();
 
 		#pragma region Getters
