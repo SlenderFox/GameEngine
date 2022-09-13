@@ -125,8 +125,7 @@ namespace Engine
 
 	public:
 		~Colour() = default;
-		operator glm::vec3() const { return m_RGB; }
-		
+
 		/// @brief Get the colour as RGB stored in a vec3
 		/// @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		glm::vec3 RGBvec3() const { return m_RGB; }
@@ -139,5 +138,33 @@ namespace Engine
 		/// @brief Get the colour as HSV stored in a custom structure
 		/// @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		hsv HSV();
+
+		#pragma region Operators
+		operator glm::vec3() const { return m_RGB; }
+		Colour operator +(const float& pOther) const;
+		Colour operator -(const float& pOther) const;
+		Colour operator *(const float& pOther) const;
+		Colour operator /(const float& pOther) const;
+		Colour operator +(const Colour& pOther) const;
+		Colour operator -(const Colour& pOther) const;
+		Colour operator *(const Colour& pOther) const;
+		Colour operator /(const Colour& pOther) const;
+		Colour operator +(const glm::vec3& pOther) const;
+		Colour operator -(const glm::vec3& pOther) const;
+		Colour operator *(const glm::vec3& pOther) const;
+		Colour operator /(const glm::vec3& pOther) const;
+		Colour& operator +=(const float& pOther);
+		Colour& operator -=(const float& pOther);
+		Colour& operator *=(const float& pOther);
+		Colour& operator /=(const float& pOther);
+		Colour& operator +=(const Colour& pOther);
+		Colour& operator -=(const Colour& pOther);
+		Colour& operator *=(const Colour& pOther);
+		Colour& operator /=(const Colour& pOther);
+		Colour& operator +=(const glm::vec3& pOther);
+		Colour& operator -=(const glm::vec3& pOther);
+		Colour& operator *=(const glm::vec3& pOther);
+		Colour& operator /=(const glm::vec3& pOther);
+		#pragma endregion
 	};
 }

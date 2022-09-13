@@ -172,4 +172,31 @@ namespace Engine
 	{
 		return RGBtoHSV(m_RGB);
 	}
+	
+	#pragma region Operators
+	Colour Colour::operator +(const float& pOther) const { return Colour::CreateWithRGB(m_RGB + pOther); }
+	Colour Colour::operator -(const float& pOther) const { return Colour::CreateWithRGB(m_RGB - pOther); }
+	Colour Colour::operator *(const float& pOther) const { return Colour::CreateWithRGB(m_RGB * pOther); }
+	Colour Colour::operator /(const float& pOther) const { return Colour::CreateWithRGB(m_RGB / pOther); }
+	Colour Colour::operator +(const Colour& pOther) const { return Colour::CreateWithRGB(m_RGB + pOther.m_RGB); }
+	Colour Colour::operator -(const Colour& pOther) const { return Colour::CreateWithRGB(m_RGB - pOther.m_RGB); }
+	Colour Colour::operator *(const Colour& pOther) const { return Colour::CreateWithRGB(m_RGB * pOther.m_RGB); }
+	Colour Colour::operator /(const Colour& pOther) const { return Colour::CreateWithRGB(m_RGB / pOther.m_RGB); }
+	Colour Colour::operator +(const glm::vec3& pOther) const { return Colour::CreateWithRGB(m_RGB + pOther); }
+	Colour Colour::operator -(const glm::vec3& pOther) const { return Colour::CreateWithRGB(m_RGB - pOther); }
+	Colour Colour::operator *(const glm::vec3& pOther) const { return Colour::CreateWithRGB(m_RGB * pOther); }
+	Colour Colour::operator /(const glm::vec3& pOther) const { return Colour::CreateWithRGB(m_RGB / pOther); }
+	Colour& Colour::operator +=(const float& pOther) { m_RGB += pOther; return *this; }
+	Colour& Colour::operator -=(const float& pOther) { m_RGB -= pOther; return *this; }
+	Colour& Colour::operator *=(const float& pOther) { m_RGB *= pOther; return *this; }
+	Colour& Colour::operator /=(const float& pOther) { m_RGB /= pOther; return *this; }
+	Colour& Colour::operator +=(const Colour& pOther) { m_RGB += pOther.m_RGB; return *this; }
+	Colour& Colour::operator -=(const Colour& pOther) { m_RGB -= pOther.m_RGB; return *this; }
+	Colour& Colour::operator *=(const Colour& pOther) { m_RGB *= pOther.m_RGB; return *this; }
+	Colour& Colour::operator /=(const Colour& pOther) { m_RGB /= pOther.m_RGB; return *this; }
+	Colour& Colour::operator +=(const glm::vec3& pOther) { m_RGB += pOther; return *this; }
+	Colour& Colour::operator -=(const glm::vec3& pOther) { m_RGB -= pOther; return *this; }
+	Colour& Colour::operator *=(const glm::vec3& pOther) { m_RGB *= pOther; return *this; }
+	Colour& Colour::operator /=(const glm::vec3& pOther) { m_RGB /= pOther; return *this; }
+	#pragma endregion
 }
