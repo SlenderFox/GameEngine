@@ -51,6 +51,6 @@ namespace Engine
 
 		Shader* GetShaderRef() const { return m_shaderRef; }
 
-		Mesh* GetMeshAt(unsigned int pPos);
+		Mesh* GetMeshAt(uint16_t pPos);
 	};
 }

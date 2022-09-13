@@ -200,7 +200,7 @@ return;}";
 		}
 	}
 
-	bool Shader::CompileShader(unsigned int* pId, ShaderType pType, const char* pCode)
+	bool Shader::CompileShader(uint32_t* pId, ShaderType pType, const char* pCode)
 	{
 		// Creates a shader object and assigns to an id
 		if (pType == ShaderType::PROGRAM)
@@ -243,10 +243,10 @@ return;}";
 		m_shaderLoaded = true;
 	}
 		
-	bool Shader::ShaderErrorChecking(unsigned int* pShaderID, ShaderType pType)
+	bool Shader::ShaderErrorChecking(uint32_t* pShaderID, ShaderType pType)
 	{
 		// Variables used in error checking and handling
-		int success;
+		int32_t success;
 		char infoLog[512];
 
 		if (pType == ShaderType::PROGRAM)
@@ -284,16 +284,16 @@ return;}";
 	void Shader::SetBool(const string& pName, const bool& pValue) const
 	{
 		glUseProgram(m_idProgram);
-		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), (int)pValue);
+		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), (int32_t)pValue);
 	}
 
-	void Shader::SetInt(const string& pName, const int& pValue) const
+	void Shader::SetInt(const string& pName, const int32_t& pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetUint(const string& pName, const unsigned int& pValue) const
+	void Shader::SetUint(const string& pName, const uint32_t& pValue) const
 	{
 		glUseProgram(m_idProgram);
 		glUniform1ui(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);

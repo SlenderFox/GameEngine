@@ -17,13 +17,13 @@ namespace Engine
 	{
 	private:
 		bool m_shaderLoaded = false;
-		unsigned int m_idProgram, m_idVertex, m_idFragment;
+		uint32_t m_idProgram, m_idVertex, m_idFragment;
 		std::string m_shaderPath;	// The file path of the shaders
 
 		void LoadShader(ShaderType pType);
-		bool CompileShader(unsigned int* pId, ShaderType pType, const char* pCode);
+		bool CompileShader(uint32_t* pId, ShaderType pType, const char* pCode);
 		void CreateShaderProgram();
-		bool ShaderErrorChecking(unsigned int* pShaderID, ShaderType pType);
+		bool ShaderErrorChecking(uint32_t* pShaderID, ShaderType pType);
 		
 	public:
 		Shader();
@@ -37,8 +37,8 @@ namespace Engine
 		#pragma region Setters
 		// Utility uniform functions
 		void SetBool	(const std::string& pName, const bool&			pValue) const;
-		void SetInt		(const std::string& pName, const int&			pValue) const;
-		void SetUint	(const std::string& pName, const unsigned int&	pValue) const;
+		void SetInt		(const std::string& pName, const int32_t&		pValue) const;
+		void SetUint	(const std::string& pName, const uint32_t&		pValue) const;
 		void SetFloat	(const std::string& pName, const float&			pValue) const;
 		void SetVec2	(const std::string& pName, const glm::vec2&		pValue) const;
 		void SetVec3	(const std::string& pName, const glm::vec3&		pValue) const;

@@ -40,11 +40,11 @@ namespace Engine
 		if (delta == 0)
 			result.hue = 0;
 		else if (Cmax == red)
-			result.hue = (int)(60.0f * (((green - blue) / delta) + 360.0f)) % 360;
+			result.hue = (uint16_t)(60.0f * (((green - blue) / delta) + 360.0f)) % 360;
 		else if (Cmax == green)
-			result.hue = (int)(60.0f * (((blue - red) / delta) + 120.0f)) % 360;
+			result.hue = (uint16_t)(60.0f * (((blue - red) / delta) + 120.0f)) % 360;
 		else if (Cmax == blue)
-			result.hue = (int)(60.0f * (((red - green) / delta) + 240.0f)) % 360;
+			result.hue = (uint16_t)(60.0f * (((red - green) / delta) + 240.0f)) % 360;
 		// Saturation
 		if (Cmax == 0)
 			result.saturation = 0;

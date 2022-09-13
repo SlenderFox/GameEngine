@@ -11,7 +11,7 @@
 
 #include "Project.hpp"
 
-int main()
+int32_t main()
 {
 	Project* app = new Project();
 	#ifdef _DEBUG

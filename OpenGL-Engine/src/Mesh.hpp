@@ -18,27 +18,27 @@ namespace Engine
 	{
 	private:
 		static float* s_cubeVerticesArr;
-		static unsigned int* s_indicesArr;
+		static uint32_t* s_indicesArr;
 
 	public:
 		static std::vector<Vertex> GenerateVertices();
-		static std::vector<unsigned int> GenerateIndices();
+		static std::vector<uint32_t> GenerateIndices();
 
 	private:
 		std::unique_ptr<std::vector<Vertex>> m_vertices = nullptr;
 		std::unique_ptr<std::vector<unsigned int>> m_indices = nullptr;
         std::unique_ptr<std::vector<Texture*>> m_textures = nullptr;
 
-		unsigned int* m_idVAO = new unsigned int(0U);	// The id for the vertex attribute object
-		unsigned int* m_idVBO = new unsigned int(0U);	// The id for the vertex buffer object
-		unsigned int* m_idEBO = new unsigned int(0U);	// The id for the element buffer object
+		uint32_t* m_idVAO = new uint32_t(0U);	// The id for the vertex attribute object
+		uint32_t* m_idVBO = new uint32_t(0U);	// The id for the vertex buffer object
+		uint32_t* m_idEBO = new uint32_t(0U);	// The id for the element buffer object
 
 		void SetupMesh();
 
 	public:
 		Mesh();
-		Mesh(std::vector<Vertex> pVertices, std::vector<unsigned int> pIndices);
-		Mesh(std::vector<Vertex> pVertices, std::vector<unsigned int> pIndices, std::vector<Texture*> pTextures);
+		Mesh(std::vector<Vertex> pVertices, std::vector<uint32_t> pIndices);
+		Mesh(std::vector<Vertex> pVertices, std::vector<uint32_t> pIndices, std::vector<Texture*> pTextures);
 
 		void Destroy(bool pValidate);
 
@@ -47,9 +47,9 @@ namespace Engine
 		void Draw();
 
 		#pragma region Getters
-		unsigned int* GetVAO() const { return m_idVAO; }
-		unsigned int* GetVBO() const { return m_idVBO; }
-		unsigned int* GetEBO() const { return m_idEBO; }
+		uint32_t* GetVAO() const { return m_idVAO; }
+		uint32_t* GetVBO() const { return m_idVBO; }
+		uint32_t* GetEBO() const { return m_idEBO; }
 		#pragma endregion
 	};
 }

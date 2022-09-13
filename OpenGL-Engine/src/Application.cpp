@@ -65,7 +65,7 @@ namespace Engine
 		// Don't need to delete m_window as it is handled by glfwTerminate()
 	}
 
-	void Application::Run(unsigned int pWidth, unsigned int pHeight, string pTitle, bool pFullscreen)
+	void Application::Run(uint16_t pWidth, uint16_t pHeight, string pTitle, bool pFullscreen)
 	{
 		SetDimensions(pWidth, pHeight);
 
@@ -92,7 +92,7 @@ namespace Engine
 				if (m_frameTimer >= secondsPerUpdate)
 				{
 					m_frameTimer -= secondsPerUpdate;
-					m_fps = (unsigned int)((float)m_framesPerSecond / secondsPerUpdate);
+					m_fps = (uint16_t)((double)m_framesPerSecond / secondsPerUpdate);
 					m_framesPerSecond = 0U;
 					glfwSetWindowTitle(m_window, (m_title + " | FPS: " + std::to_string(m_fps)).c_str());
 				}
@@ -225,7 +225,7 @@ namespace Engine
 		return true;
 	}
 
-	void Application::SetDimensions(unsigned int pWidth, unsigned int pHeight)
+	void Application::SetDimensions(uint16_t pWidth, uint16_t pHeight)
 	{
 		m_winWidth = pWidth;
 		m_winHeight = pHeight;

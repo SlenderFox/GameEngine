@@ -34,7 +34,7 @@ namespace Engine
 	void Model::Destroy(bool pValidate)
 	{
 		// Destroy all meshes
-		for (unsigned int i = 0; i < m_meshes->size(); ++i)
+		for (uint16_t i = 0; i < m_meshes->size(); ++i)
 		{
 			if (GetMeshAt(i) != nullptr)
 				GetMeshAt(i)->Destroy(pValidate);
@@ -56,7 +56,7 @@ namespace Engine
 		pShader->Use();
 		pShader->SetMat4("u_camera", pCamera->GetWorldToCameraMatrix());
 	 	pShader->SetVec3("u_viewPos", (vec3)pCamera->GetPosition());
-		for (unsigned int i = 0; i < m_meshes->size(); ++i)
+		for (uint16_t i = 0; i < m_meshes->size(); ++i)
 		{
 			GetMeshAt(i)->Draw();
 		}
@@ -89,13 +89,13 @@ namespace Engine
 	void Model::ProcessNode(aiNode* pNode, const aiScene* pScene)
 	{
 		// Process all the node's meshes (if any)
-		for (unsigned int i = 0; i < pNode->mNumMeshes; ++i)
+		for (uint32_t i = 0; i < pNode->mNumMeshes; ++i)
 		{
 			aiMesh* mesh = pScene->mMeshes[pNode->mMeshes[i]];
 			m_meshes.get()->push_back(ProcessMesh(mesh, pScene));
 		}
 		// Then do the same for each of it's children
-		for (unsigned int i = 0; i < pNode->mNumChildren; ++i)
+		for (uint32_t i = 0; i < pNode->mNumChildren; ++i)
 		{
 			ProcessNode(pNode->mChildren[i], pScene);
 		}
@@ -104,9 +104,9 @@ namespace Engine
 	unique_ptr<Mesh> Model::ProcessMesh(aiMesh* pMesh, const aiScene* pScene)
 	{
 		vector<Vertex> vertices;
-		vector<unsigned int> indices;
+		vector<uint32_t> indices;
 		// Process vertex positions, normals, and texture coordinates
-		for (unsigned int i = 0; i < pMesh->mNumVertices; ++i)
+		for (uint32_t i = 0; i < pMesh->mNumVertices; ++i)
 		{
 			Vertex vertex;
 			vec3 vector;
@@ -137,17 +137,17 @@ namespace Engine
 			vertices.push_back(vertex);
 		}
 		// Process indices
-		for (unsigned int i = 0; i < pMesh->mNumFaces; ++i)
+		for (uint32_t i = 0; i < pMesh->mNumFaces; ++i)
 		{
 			aiFace face = pMesh->mFaces[i];
-			for (unsigned int j = 0; j < face.mNumIndices; ++j)
+			for (uint32_t j = 0; j < face.mNumIndices; ++j)
 				indices.push_back(face.mIndices[j]);
 		}
 
 		if (m_loadTextures)
 		{
 			// Process material
-			if (pMesh->mMaterialIndex >= 0)
+			if (pMesh->mMaterialIndex >= 0U)
 			{
 				aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
 				vector<Texture*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TexType::diffuse);
@@ -164,19 +164,19 @@ namespace Engine
 	{
 		// Textures from this specific node being output
 		vector<Texture*> texturesOut;
-		for (unsigned int i = 0; i < pMat->GetTextureCount(pType); ++i)
+		for (uint32_t i = 0; i < pMat->GetTextureCount(pType); ++i)
 		{
 			aiString file;
 			pMat->GetTexture(pType, i, &file);
 			bool loadTexture = true;
 			// Compares to all currently loaded textures
-			for (unsigned int j = 0; j < s_loadedTextures.size(); ++j)
+			for (size_t j = 0; j < s_loadedTextures.size(); ++j)
 			{
 				// If texture is already in the loaded textures vector
 				if (std::strcmp(s_loadedTextures[j]->GetFile().data(), (m_directory + '/' + file.C_Str()).data()) == 0)
 				{
 					bool reuseTexture = true;
-					for (unsigned int k = 0; k < m_textures.size(); ++k)
+					for (size_t k = 0; k < m_textures.size(); ++k)
 					{
 						// If the texture has already been loaded into this model, don't bother reloading it
 						if (std::strcmp(m_textures[k]->GetFile().data(), (m_directory + '/' + file.C_Str()).data()) == 0)
@@ -214,9 +214,9 @@ namespace Engine
 
 	void Model::LoadTexturesToShader()
 	{
-		unsigned int diffuseNr = 0;
-		unsigned int specularNr = 0;
-		for (unsigned int i = 0; i < m_textures.size(); ++i)
+		uint8_t diffuseNr = 0;
+		uint8_t specularNr = 0;
+		for (size_t i = 0; i < m_textures.size(); ++i)
 		{
 			// Retrieve texture number (the N in diffuse_textureN)
 			string name;
@@ -236,11 +236,11 @@ namespace Engine
 			#ifdef _DEBUG
 			 cout << " \xC5Loading texID " << m_textures[i]->GetId() << endl;
 			#endif
-			m_shaderRef->SetInt(("u_material." + name + number).c_str(), m_textures[i]->GetId());
+			m_shaderRef->SetInt(("u_material." + name + number).c_str(), (int32_t)m_textures[i]->GetId());
 		}
 	}
 
-	Mesh* Model::GetMeshAt(unsigned int pPos)
+	Mesh* Model::GetMeshAt(uint16_t pPos)
 	{
 		if (m_meshes.get() == nullptr)
 			return nullptr;

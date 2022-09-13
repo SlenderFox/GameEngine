@@ -15,8 +15,8 @@ using std::string;
 
 namespace Engine
 {
-	unsigned int Texture::s_textureIds[32];
-	unsigned int Texture::s_textureCount = 0;
+	uint32_t Texture::s_textureIds[32];
+	uint16_t Texture::s_textureCount = 0;
 
 	void Texture::UnloadAll(bool pValidate)
 	{
@@ -26,7 +26,7 @@ namespace Engine
 		}
 	}
 
-	uint8_t Texture::LoadTextureFromFile(const char* pPath)
+	int32_t Texture::LoadTextureFromFile(const char* pPath)
 	{
 		#ifdef _DEBUG
 		 cout << "Loading texture " << s_textureCount << ": \"" << pPath << "\"";
@@ -37,7 +37,7 @@ namespace Engine
 			#ifdef _DEBUG
 			 cout << "\nFailed to load texture: Exceeded max texture count (max = 32)" << endl;
 			#endif
-			return UINT8_MAX;
+			return -1;
 		}
 
 		// Makes sure the images are oriented correctly when loaded
@@ -70,7 +70,7 @@ namespace Engine
 				#ifdef _DEBUG
 				 cout << "\nFailed to load texture: Too many components" << endl;
 				#endif
-				return UINT8_MAX;
+				return -1;
 			}
 
 			/*Applies the image to the texture object and creates the mipmaps
@@ -100,7 +100,7 @@ namespace Engine
 		 else
 		 {
 		 	cout << "\nFailed to load texture: No file found" << endl;
-			return UINT8_MAX;
+			return -1;
 		 }
 		#endif
 	}

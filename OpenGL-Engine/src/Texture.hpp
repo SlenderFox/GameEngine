@@ -15,16 +15,16 @@ namespace Engine
 	{
 		//friend class Model;
 	private:
-		static unsigned int s_textureIds[32];	// List of all texture ids
-		static unsigned int s_textureCount;		// How many textures have been loaded
+		static uint32_t s_textureIds[32];	// List of all texture ids
+		static uint16_t s_textureCount;		// How many textures have been loaded
 
 	public:
-		static uint8_t LoadTextureFromFile(const char* pPath);
+		static int32_t LoadTextureFromFile(const char* pPath);
 		static void UnloadAll(bool pValidate);
-		static unsigned int GetNumTex() { return s_textureCount; }
+		static uint16_t GetNumTex() { return s_textureCount; }
 
 	private:
-		unsigned int m_id = 0;
+		uint16_t m_id = 0;
 		TexType m_type = TexType::diffuse;
 		std::string m_file;
 
@@ -32,7 +32,7 @@ namespace Engine
 		Texture(std::string pPath, TexType pType = TexType::diffuse);
 		void Destroy();
 
-		unsigned int GetId() const { return m_id; }
+		uint16_t GetId() const { return m_id; }
 		TexType GetType() const { return m_type; }
 		std::string GetFile() const { return m_file; }
 	};

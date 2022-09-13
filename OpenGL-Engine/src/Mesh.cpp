@@ -57,7 +57,7 @@ namespace Engine
 	    -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,    0.0f, 1.0f
 	};
 
-	unsigned int* Mesh::s_indicesArr = new unsigned int[36] {
+	uint32_t* Mesh::s_indicesArr = new uint32_t[36] {
 		0U, 1U, 2U, 3U, 4U, 5U,			// Face 1
 		6U, 7U, 8U,	9U, 10U, 11U,		// Face 2
 		12U, 13U, 14U, 15U, 16U, 17U,	// Face 3
@@ -71,10 +71,10 @@ namespace Engine
 		vector<Vertex> verts = vector<Vertex>();
 
 		// Makes cube with pos, normal, and texcoord
-		for (int i = 0; i < 36; ++i)
+		for (uint8_t i = 0; i < 36; ++i)
 		{
 			Vertex vert;
-			for (int j = 0; j < 8; ++j)
+			for (uint8_t j = 0; j < 8; ++j)
 			{
 				switch (j)
 				{
@@ -94,11 +94,11 @@ namespace Engine
 		return verts;
 	}
 
-	vector<unsigned int> Mesh::GenerateIndices()
+	vector<uint32_t> Mesh::GenerateIndices()
 	{
-		vector<unsigned int> inds = vector<unsigned int>();
+		vector<uint32_t> inds = vector<uint32_t>();
 
-		for (int i = 0; i < 36; ++i)
+		for (uint8_t i = 0; i < 36; ++i)
 			inds.push_back(s_indicesArr[i]);
 		inds.shrink_to_fit();
 		return inds;
@@ -108,25 +108,25 @@ namespace Engine
 	Mesh::Mesh()
 	{
 		m_vertices = make_unique<vector<Vertex>>(GenerateVertices());
-		m_indices = make_unique<vector<unsigned int>>(GenerateIndices());
+		m_indices = make_unique<vector<uint32_t>>(GenerateIndices());
 		m_textures = make_unique<vector<Texture*>>(); // Legacy
 		
 		SetupMesh();
 	}
 
-	Mesh::Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices)
+	Mesh::Mesh(vector<Vertex> pVertices, vector<uint32_t> pIndices)
 	{
 		m_vertices = make_unique<vector<Vertex>>(pVertices);
-		m_indices = make_unique<vector<unsigned int>>(pIndices);
+		m_indices = make_unique<vector<uint32_t>>(pIndices);
 		m_textures = make_unique<vector<Texture*>>(); // Legacy
 
 		SetupMesh();
 	}
 
-	Mesh::Mesh(vector<Vertex> pVertices, vector<unsigned int> pIndices, vector<Texture*> pTextures)
+	Mesh::Mesh(vector<Vertex> pVertices, vector<uint32_t> pIndices, vector<Texture*> pTextures)
 	{
 		m_vertices = make_unique<vector<Vertex>>(pVertices);
-		m_indices = make_unique<vector<unsigned int>>(pIndices);
+		m_indices = make_unique<vector<uint32_t>>(pIndices);
 		m_textures = make_unique<vector<Texture*>>(pTextures);
 
 		SetupMesh();
@@ -154,9 +154,9 @@ namespace Engine
 	
 	void Mesh::LoadTexturesToShader(Shader& pShader)
 	{
-		unsigned int diffuseNr = 0;
-		unsigned int specularNr = 0;
-		for (unsigned int i = 0; i < m_textures.get()->size(); ++i)
+		uint8_t diffuseNr = 0;
+		uint8_t specularNr = 0;
+		for (size_t i = 0; i < m_textures.get()->size(); ++i)
 		{
 			// Retrieve texture number (the N in diffuse_textureN)
 			string name;
@@ -173,7 +173,7 @@ namespace Engine
 					break;
 			}
 				
-			unsigned int texID = m_textures.get()->at(i)->GetId();
+			uint16_t texID = (uint16_t)m_textures.get()->at(i)->GetId();
 			pShader.SetInt(("u_material." + name + number).c_str(), texID);
 		}
 	}
@@ -199,7 +199,7 @@ namespace Engine
 		// GL_ARRAY_BUFFER effectively works like a pointer, using the id provided to point to the buffer
 		glBindBuffer(GL_ARRAY_BUFFER,* m_idVBO);
 		// Loads the vertices to the VBO
-		glBufferData(GL_ARRAY_BUFFER, m_vertices.get()->size() * sizeof(Vertex), &(*m_vertices.get())[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, (GLsizei)m_vertices.get()->size() * sizeof(Vertex), &(*m_vertices.get())[0], GL_STATIC_DRAW);
 
 		/*GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
 		* GL_STATIC_DRAW: the data is set only once and used many times.
@@ -208,7 +208,7 @@ namespace Engine
 
 		// This buffer stores the indices that reference the elements of the VBO
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,* m_idEBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.get()->size() * sizeof(unsigned int), &(*m_indices.get())[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizei)m_indices.get()->size() * sizeof(uint32_t), &(*m_indices.get())[0], GL_STATIC_DRAW);
 
 		/*Tells the shader how to use the vertex data provided
 		* p1: Which vertex attribute we want to configure in the vertex shader (location = 0)
