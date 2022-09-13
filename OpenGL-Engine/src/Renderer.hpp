@@ -24,7 +24,7 @@ namespace Engine
 
 		void Init(float pAspect);
 		void Destroy(bool pValidate);
-		void Draw(double pTime);
+		void Draw();
 
 	public:
 		static Renderer* GetInstance()

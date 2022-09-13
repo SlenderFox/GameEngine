@@ -101,14 +101,16 @@ namespace Engine
 				glfwPollEvents();
 				ProcessInput();
 
+				Update();
+
 				// Calls fixed update 60 times per second
 				if (m_fixedTimer >= m_fixedDeltaTime)
 				{
 					m_fixedTimer -= m_fixedDeltaTime;
-					FixedUpdate(m_fixedDeltaTime);
+					FixedUpdate();
 				}
 
-				//Update(m_deltaTime);
+				LateUpdate();
 
 				// Skip drawing if minimised, restricts fps to 15
 				if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) == GLFW_TRUE)
@@ -119,7 +121,7 @@ namespace Engine
 					continue;
 				}
 
-				m_rendererInst->Draw(m_currentTime);
+				m_rendererInst->Draw();
 
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(m_window);

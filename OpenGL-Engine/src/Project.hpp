@@ -33,7 +33,7 @@ public:
 
 	bool Startup() override;
 	void Shutdown() override;
-	void Update(double pDeltaTime) override;
-	void FixedUpdate(double pFixedDeltaTime) override;
-	void LateUpdate(double pDeltaTime) override;
+	void Update() override;
+	void FixedUpdate() override;
+	void LateUpdate() override;
 };

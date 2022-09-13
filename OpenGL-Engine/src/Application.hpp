@@ -52,14 +52,18 @@ namespace Engine
 		void MouseCallback(double pPosX, double pPosY);
 		void ScrollCallback(double pOffsetX, double pOffsetY);
 
+		double GetTime() const { return m_currentTime; }
+		double GetDeltaTime() const { return m_deltaTime; }
+		double GetFixedDeltaTime() const { return m_fixedDeltaTime; }
+
 	protected:
 		Application();
 		virtual ~Application();
 
 		virtual bool Startup() = 0;
 		virtual void Shutdown() = 0;
-		virtual void Update(double pDeltaTime) = 0;
-		virtual void FixedUpdate(double pFixedDeltaTime) = 0;
-		virtual void LateUpdate(double pDeltaTime) = 0;
+		virtual void Update() = 0;
+		virtual void FixedUpdate() = 0;
+		virtual void LateUpdate() = 0;
 	};
 }

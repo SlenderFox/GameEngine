@@ -78,7 +78,7 @@ namespace Engine
 		delete m_camera;
 	}
 
-	void Renderer::Draw(double pTime)
+	void Renderer::Draw()
 	{
 		// Clears to background colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

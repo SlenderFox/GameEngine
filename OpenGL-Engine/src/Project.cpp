@@ -30,7 +30,7 @@ bool Project::Startup()
 
 void Project::Shutdown() {}
 
-void Project::Update(double pDeltaTime)
+void Project::Update()
 {
 	//for (unsigned int j = 0; j < 10; j++)
 	//{
@@ -45,9 +45,9 @@ void Project::Update(double pDeltaTime)
 	//}
 }
 
-void Project::FixedUpdate(double pFixedDeltaTime) {}
+void Project::FixedUpdate() {}
 
-void Project::LateUpdate(double pDeltaTime) {}
+void Project::LateUpdate() {}
 
 void Project::CreateScene()
 {
