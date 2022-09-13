@@ -25,7 +25,6 @@ Project::Project()
 	object_lightPoint = new Engine::Entity();
 	object_lightSpot = new Engine::Entity();
 	object_backpack = new Engine::Entity();
-	//object_cube = new Engine::Entity();
 
 	m_cubes = vector<Engine::Entity*>();
 }
@@ -44,6 +43,7 @@ void Project::Shutdown() {}
 
 void Project::Update()
 {
+	// Rotates the cubes
 	for (unsigned int i = 0; i < s_numCubes; i++)
 	{
 		float angle = (float)GetDeltaTime() * 5.0f * ((i + 1) / (i * 0.2f + 1));
@@ -57,30 +57,12 @@ void Project::LateUpdate() {}
 
 void Project::CreateScene()
 {
-	//// First creates the shader
-	//unsigned int ID;
-	//Engine::Shader* shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/default");
-	//// Then loads the model
-	//rendererRef->AddNewModel(ID, "assets/models/backpack/backpack.obj", shaderRef);
-	//// Finally inform the shader
-	//rendererRef->LoadLightsIntoShader(shaderRef);
-	//shaderRef->SetMat4("u_model", mat4(1.0f));
-	//shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(mat4(1.0f))));
+	// Create a backpack in the centre
 	object_backpack->LoadModel("assets/models/backpack/backpack.obj", "assets/shaders/default");
-	object_backpack->Translate(vec3(0.0f, 0.0f, 0.5f));
-	object_backpack->Scale(vec3(0.5f));
+	object_backpack->Translate(vec3(0.0f, 0.0f, 0.9f));
+	object_backpack->Scale(vec3(0.6f));
 	
-	// Repeat
-	//shaderRef = rendererRef->AddNewShader(ID, "assets/shaders/default");
-	//rendererRef->AddNewModel(ID, "assets/models/cube/cube.obj", shaderRef);
-	//rendererRef->LoadLightsIntoShader(shaderRef);
-	//Engine::Transform trans = Engine::Transform();
-	//trans.Translate(vec3(0, -2.65f, -1.1f));
-	//shaderRef->SetMat4("u_model", trans.GetTransform());
-	//shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(trans.GetTransform())));
-	//object_cube->LoadModel("assets/models/cube/cube.obj", "assets/shaders/default");
-	//object_cube->Translate(vec3(0, -2.65f, -1.1f));
-
+	// Place 9 cubes behind
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
 		m_cubes.push_back(new Engine::Entity());
@@ -112,6 +94,7 @@ void Project::CreateLights()
 			unsigned int discard;
 			Engine::Shader* shaderRef = m_rendererRef->AddNewShader(ID, "assets/shaders/default");
 			shaderRef->SetBool("u_justColour", true);
+			// Makes the spotlight a rectangular prism to show direction
 			shaderRef->SetVec3("u_scale", vec3(0.2f, 0.2f, (current->GetType() == Engine::LightType::Spot) ? 0.4f : 0.2f));
 			shaderRef->SetVec3("u_colour", current->GetColour());
 			shaderRef->SetMat4("u_model", current->GetTransform());

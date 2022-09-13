@@ -22,7 +22,6 @@ private:
 	Engine::Entity* object_lightPoint;
 	Engine::Entity* object_lightSpot;
 	Engine::Entity* object_backpack;
-	//Engine::Entity* object_cube;
 
 	std::vector<Engine::Entity*> m_cubes;
 

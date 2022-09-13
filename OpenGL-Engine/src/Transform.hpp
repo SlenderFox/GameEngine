@@ -5,11 +5,10 @@ namespace Engine
 {
 	class Transform
 	{
-	// TODO: Make m_transform private and the rest protected
-	protected:
+	private:
 		glm::mat4 m_transform = glm::mat4(1);
 
-	public:
+	protected:
 		#pragma region Constructors
 		Transform();
 		Transform(glm::mat4 pValue);
@@ -29,11 +28,13 @@ namespace Engine
 		virtual void SetForward(glm::vec3 pForward);
 		#pragma endregion
 		#pragma region Getters
-		glm::mat4 GetTransform() const { return m_transform; }
 		virtual glm::vec4 GetPosition() const;
 		virtual glm::vec4 GetRight() const;
 		virtual glm::vec4 GetUp() const;
 		virtual glm::vec4 GetForward() const;
 		#pragma endregion
+
+	public:
+		glm::mat4 GetTransform() const { return m_transform; }
 	};
 }
