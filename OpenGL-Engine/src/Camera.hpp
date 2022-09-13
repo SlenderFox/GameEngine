@@ -45,12 +45,6 @@ namespace Engine
 		void SetAspectRatio(float pAspectRatio);
 		void SetFovH(float pFovH);
 		void SetFovV(float pFovV);
-		
-		void SetClearColour(glm::vec4 pValue);
-		void SetClearColour(glm::vec3 pValue);
-		void SetClearColour(glm::vec3 pValue, float pAlpha);
-		void SetClearColour(float pRed, float pGreen, float pBlue);
-		void SetClearColour(float pRed, float pGreen, float pBlue, float pAlpha);
 		#pragma endregion
 		#pragma region Getters
 		glm::vec4 GetPosition() const { return Transform::GetPosition(); }

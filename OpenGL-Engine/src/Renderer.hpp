@@ -6,6 +6,15 @@ namespace Engine
 	class Renderer
 	{
 		friend class Application;	// Allowing application access and control
+	public:
+		static Renderer* GetInstance()
+		{
+			static Renderer* s_instance = new Renderer();
+			return s_instance;
+		}
+
+		static void SetClearColour(Colour pColour);
+
 	private:
 		Camera* m_camera = nullptr;
 		std::unique_ptr<std::vector<std::unique_ptr<Model>>> m_models;
@@ -27,12 +36,6 @@ namespace Engine
 		void Draw();
 
 	public:
-		static Renderer* GetInstance()
-		{
-			static Renderer* s_instance = new Renderer();
-			return s_instance;
-		}
-
 		Model* AddNewModel(unsigned int &id, std::string pLocation, Shader* pShaderRef = nullptr, bool pLoadTextures = true);
 		Shader* AddNewShader(unsigned int &id, std::string pLocation);
 		Light* AddNewLight(unsigned int &id, LightType pType, Colour pColour = Colour::White());

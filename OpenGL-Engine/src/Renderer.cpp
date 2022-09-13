@@ -20,14 +20,21 @@ using std::unique_ptr;
 
 namespace Engine
 {
+	void Renderer::SetClearColour(Colour pColour)
+	{
+		vec3 col = pColour.RGBvec3();
+		glClearColor(col.r, col.g, col.b, 1.0f);
+	}
+
 	void Renderer::Init(float pAspect)
 	{
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);
 
+		SetClearColour(Colour::CreateWithRGB(vec3(0.1f)));
+
 		// Initialise camera
 		m_camera = new Camera(pAspect, 75.0f);
-		m_camera->SetClearColour(0.1f, 0.1f, 0.1f);
 		m_camera->SetPosition({ 0.0f, 0.0f, 6.0f });
 
 		// Initialise arrays

@@ -1,6 +1,5 @@
 #pragma region
 #include "Camera.hpp"
-#include "glad/glad.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 using glm::vec3;
@@ -183,31 +182,6 @@ namespace Engine
 		else if (m_fovV < 1.0f)
 			m_fovV = 1.0f;
 		UpdateFovH();
-	}
-
-	void Camera::SetClearColour(vec4 pValue)
-	{
-		glClearColor(pValue.x, pValue.y, pValue.z, pValue.a);
-	}
-
-	void Camera::SetClearColour(vec3 pValue)
-	{
-		glClearColor(pValue.x, pValue.y, pValue.z, 1.0f);
-	}
-
-	void Camera::SetClearColour(vec3 pValue, float pAlpha)
-	{
-		glClearColor(pValue.x, pValue.y, pValue.z, pAlpha);
-	}
-
-	void Camera::SetClearColour(float pRed, float pGreen, float pBlue)
-	{
-		glClearColor(pRed, pGreen, pBlue, 1.0f);
-	}
-
-	void Camera::SetClearColour(float pRed, float pGreen, float pBlue, float pAlpha)
-	{
-		glClearColor(pRed, pGreen, pBlue, pAlpha);
 	}
 	#pragma endregion
 	#pragma region Getters
