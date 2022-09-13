@@ -4,9 +4,9 @@
 #include "GLFW/glfw3.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <Windows.h>	// Needed for Sleep()
-#include <chrono>
 
 #ifdef _DEBUG
+ #include <chrono>
  #include <iostream>
  using std::cout;
  using std::endl;
@@ -135,7 +135,9 @@ namespace Engine
 
 	bool Application::Init(string pTitle, bool pFullscreen)
 	{
-		auto startTime = std::chrono::high_resolution_clock::now();
+		#ifdef _DEBUG
+		 auto startTime = std::chrono::high_resolution_clock::now();
+		#endif
 
 		// glfw: initialise and configure
 		if (glfwInit() == GLFW_FALSE)
@@ -213,10 +215,10 @@ namespace Engine
 		if (!Startup())
 			return false;
 
-		// Calculates the time I took to start up
-		auto endTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<double> elapsedTime = endTime - startTime;
+		// Calculates the time it took to start up
 		#ifdef _DEBUG
+		 auto endTime = std::chrono::high_resolution_clock::now();
+		 std::chrono::duration<double> elapsedTime = endTime - startTime;
 		 cout << "Started in " << elapsedTime.count() << " seconds\n";
 		#endif
 
