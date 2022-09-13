@@ -13,9 +13,26 @@ using glm::inverse;
 
 namespace Engine
 {
-	Entity* Entity::s_root = nullptr;
+	// Static
 
-	Entity::Entity(): m_parent(s_root)
+	Entity* Entity::LoadModel(Model* pModelOut, std::string pModelPath,
+	 Shader* pShaderOut, std::string pShaderPath, bool pLoadTextures)
+	{
+		Entity* result = new Entity();
+		uint8_t ID;
+		result->m_shader = Renderer::GetInstance()->AddNewShader(ID, pShaderPath);
+		Renderer::GetInstance()->LoadLightsIntoShader(*result->m_shader);
+		result->m_shader->SetMat4("u_model", result->GetTransform());
+		result->m_shader->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(result->GetTransform())));
+		result->m_model = Renderer::GetInstance()->AddNewModel(ID, pModelPath, result->m_shader, pLoadTextures);
+		pShaderOut = result->m_shader;
+		pModelOut = result->m_model;
+		return result;
+	}
+
+	// Member
+
+	Entity::Entity(): m_parent(nullptr)
 	{
 		m_children = make_unique<vector<Entity*>>();
 	}
@@ -23,16 +40,6 @@ namespace Engine
 	Entity::Entity(Entity* pParent): m_parent(pParent)
 	{
 		m_children = make_unique<vector<Entity*>>();
-	}
-
-	Model* Entity::LoadModel(std::string pModelPath, std::string pShaderPath, bool pLoadTextures)
-	{
-		uint8_t ID;
-		m_shader = Renderer::GetInstance()->AddNewShader(ID, pShaderPath);
-		Renderer::GetInstance()->LoadLightsIntoShader(m_shader);
-		m_shader->SetMat4("u_model", GetTransform());
-		m_shader->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
-		return Renderer::GetInstance()->AddNewModel(ID, pModelPath, m_shader, pLoadTextures);
 	}
 
 	void Entity::SetTransform(mat4 pValue)

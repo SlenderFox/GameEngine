@@ -42,7 +42,7 @@ namespace Engine
 		Shader* AddNewShader(uint8_t &id, std::string pLocation);
 		Light* AddNewLight(uint8_t &id, LightType pType, Colour pColour = Colour::White());
 		
-		void LoadLightsIntoShader(Shader* pShader);
+		void LoadLightsIntoShader(const Shader& pShader);
 
 		void ModifyAllSpotlightAngles(float pValue);
 		void ModifyAllSpotlightBlurs(float pValue);

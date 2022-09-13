@@ -18,12 +18,12 @@ private:
 		glm::vec3(-1.3f,  1.0f,  -1.5f)
 	};
 
+	// Local reference to the renderer
 	Engine::Renderer* m_rendererRef;
-	Engine::Entity* object_lightPoint;
-	Engine::Entity* object_lightSpot;
-	Engine::Entity* object_backpack;
 
+	std::vector<Engine::Entity*> m_lights;
 	std::vector<Engine::Entity*> m_cubes;
+	Engine::Entity* object_backpack;
 
 	void CreateScene();
 	void CreateLights();

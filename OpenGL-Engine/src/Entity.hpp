@@ -5,8 +5,10 @@ namespace Engine
 {
 	class Entity: public Transform
 	{
-	private:
-		static Entity* s_root;
+	public:
+		static Entity* LoadModel(Model* pModelOut, std::string pModelPath,
+					   Shader* pShaderOut, std::string pShaderPath,
+					   bool pLoadTextures = true);
 
 	private:
 		Entity* m_parent = nullptr;
@@ -20,8 +22,6 @@ namespace Engine
 	public:
 		Entity();
 		Entity(Entity* pParent);
-
-		Model* LoadModel(std::string pModelPath, std::string pShaderPath, bool pLoadTextures = true);
 
 		void SetTransform(glm::mat4 pValue) override;
 		void Translate(glm::vec3 pValue) override;

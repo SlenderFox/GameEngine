@@ -22,14 +22,26 @@ using glm::radians;
 
 Project::Project()
 {
-	object_lightPoint = new Engine::Entity();
-	object_lightSpot = new Engine::Entity();
-	object_backpack = new Engine::Entity();
-
+	m_lights = vector<Engine::Entity*>();
 	m_cubes = vector<Engine::Entity*>();
+
+	object_backpack = new Engine::Entity();
 }
 
-Project::~Project() {}
+Project::~Project()
+{
+	for (uint8_t i = 0; i < m_lights.size(); ++i)
+	{
+		if (m_lights[i] != nullptr)
+			delete m_lights[i];
+	}
+
+	for (uint8_t i = 0; i < m_cubes.size(); ++i)
+	{
+		if (m_cubes[i] != nullptr)
+			delete m_cubes[i];
+	}
+}
 
 bool Project::Startup()
 {
@@ -57,32 +69,39 @@ void Project::LateUpdate() {}
 
 void Project::CreateScene()
 {
-	// Create a backpack in the centre
-	object_backpack->LoadModel("assets/models/backpack/backpack.obj", "assets/shaders/default");
-	object_backpack->Translate(vec3(0.0f, 0.0f, 0.9f));
-	object_backpack->Scale(vec3(0.6f));
-	
+	Engine::Model* model = nullptr;
+	Engine::Shader* shader = nullptr;
 	// Place 9 cubes behind
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
-		m_cubes.push_back(new Engine::Entity());
-		m_cubes[i]->LoadModel("assets/models/cube/cube.obj", "assets/shaders/default");
-		m_cubes[i]->Translate(m_cubePositions[i]);
-		m_cubes[i]->Scale(vec3(0.6f));
+		Engine::Entity* cube = Engine::Entity::LoadModel(model, "assets/models/cube/cube.obj", shader, "assets/shaders/default");
+		cube->Translate(m_cubePositions[i]);
+		cube->Scale(vec3(0.6f));
+		m_cubes.push_back(cube);
 	}
+
+	// Create a backpack in the centre
+	Engine::Entity* backpack = Engine::Entity::LoadModel(model, "assets/models/backpack/backpack.obj", shader, "assets/shaders/default");
+	backpack->Translate(vec3(0.0f, 0.0f, 0.9f));
+	backpack->Scale(vec3(0.6f));
+	object_backpack = backpack;
 }
 
 void Project::CreateLights()
 {
 	// Creates lights
 	uint8_t ID;
-	m_rendererRef->AddNewLight(ID, Engine::LightType::Directional, Engine::Colour::Silver());
-	m_rendererRef->GetLightAt(ID)->SetDirection(vec3(0, -1, 0));
+	Engine::Light* light;
+	// Directional
+	light = m_rendererRef->AddNewLight(ID, Engine::LightType::Directional, Engine::Colour::Silver());
+	light->SetDirection(vec3(0, -1, 0));
 	Engine::Renderer::SetClearColour(m_rendererRef->GetLightAt(ID)->GetColour() * Engine::Renderer::s_ambience);
-	m_rendererRef->AddNewLight(ID, Engine::LightType::Point, Engine::Colour::CreateWithHSV(Engine::hsv(220, 0.6f, 1.0f)));
-	m_rendererRef->GetLightAt(ID)->SetCamPosition(vec4(-4, 2, -2, 1));
-	m_rendererRef->AddNewLight(ID, Engine::LightType::Spot, Engine::Colour::CreateWithHSV(Engine::hsv(97, 0.17f, 1.0f)));
-	m_rendererRef->GetLightAt(ID)->SetCamPosition(vec4(2.0f, 2.5f, 6.0f, 1))->SetDirection(vec3(-0.3f, -0.4f, -1))->SetAngle(13.0f)->SetBlur(0.23f);
+	// Point
+	light = m_rendererRef->AddNewLight(ID, Engine::LightType::Point, Engine::Colour::CreateWithHSV(Engine::hsv(220, 0.6f, 1.0f)));
+	light->SetCamPosition(vec4(-4, 2, -2, 1));
+	// Spot
+	light = m_rendererRef->AddNewLight(ID, Engine::LightType::Spot, Engine::Colour::CreateWithHSV(Engine::hsv(97, 0.17f, 1.0f)));
+	light->SetCamPosition(vec4(2.0f, 2.5f, 6.0f, 1))->SetDirection(vec3(-0.3f, -0.4f, -1))->SetAngle(13.0f)->SetBlur(0.23f);
 
 	// Gives them physical form
 	for (uint8_t i = 0; i < m_rendererRef->LightCount(); ++i)

@@ -99,9 +99,9 @@ namespace Engine
 		}
 	}
 
-	void Renderer::LoadLightsIntoShader(Shader* pShader)
+	void Renderer::LoadLightsIntoShader(const Shader& pShader)
 	{
-		pShader->SetFloat("u_material.shininess", 32.0f);
+		pShader.SetFloat("u_material.shininess", 32.0f);
 		uint8_t numDirLights = 0;
 		uint8_t numPointLights = 0;
 		uint8_t numSpotLights = 0;
@@ -112,27 +112,27 @@ namespace Engine
 			switch (currentLight->GetType())
 			{
 			case LightType::Directional:
-				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.ambient", (vec3)currentLight->GetColour() * s_ambience);
-				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.diffuse", currentLight->GetColour());
-				pShader->SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.specular", currentLight->GetColour());
-				pShader->SetVec4("u_dirLights[" + std::to_string(numDirLights) + "].direction", currentLight->GetDirection());
+				pShader.SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.ambient", (vec3)currentLight->GetColour() * s_ambience);
+				pShader.SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.diffuse", currentLight->GetColour());
+				pShader.SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.specular", currentLight->GetColour());
+				pShader.SetVec4("u_dirLights[" + std::to_string(numDirLights) + "].direction", currentLight->GetDirection());
 				++numDirLights; break;
 			case LightType::Point:
-				pShader->SetVec3("u_pointLights[" + std::to_string(numPointLights) + "].colour.diffuse", currentLight->GetColour());
-				pShader->SetVec3("u_pointLights[" + std::to_string(numPointLights) + "].colour.specular", currentLight->GetColour());
-				pShader->SetVec4("u_pointLights[" + std::to_string(numPointLights) + "].position", currentLight->GetPosition());
-				pShader->SetFloat("u_pointLights[" + std::to_string(numPointLights) + "].linear", currentLight->GetLinear());
-				pShader->SetFloat("u_pointLights[" + std::to_string(numPointLights) + "].quadratic", currentLight->GetQuadratic());
+				pShader.SetVec3("u_pointLights[" + std::to_string(numPointLights) + "].colour.diffuse", currentLight->GetColour());
+				pShader.SetVec3("u_pointLights[" + std::to_string(numPointLights) + "].colour.specular", currentLight->GetColour());
+				pShader.SetVec4("u_pointLights[" + std::to_string(numPointLights) + "].position", currentLight->GetPosition());
+				pShader.SetFloat("u_pointLights[" + std::to_string(numPointLights) + "].linear", currentLight->GetLinear());
+				pShader.SetFloat("u_pointLights[" + std::to_string(numPointLights) + "].quadratic", currentLight->GetQuadratic());
 				++numPointLights; break;
 			case LightType::Spot:
-				pShader->SetVec3("u_spotLights[" + std::to_string(numSpotLights) + "].colour.diffuse", currentLight->GetColour());
-				pShader->SetVec3("u_spotLights[" + std::to_string(numSpotLights) + "].colour.specular", currentLight->GetColour());
-				pShader->SetVec4("u_spotLights[" + std::to_string(numSpotLights) + "].position", currentLight->GetPosition());
-				pShader->SetVec4("u_spotLights[" + std::to_string(numSpotLights) + "].direction", currentLight->GetDirection());
-				pShader->SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].linear", currentLight->GetLinear());
-				pShader->SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].quadratic", currentLight->GetQuadratic());
-				pShader->SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].cutoff", currentLight->GetAngle());
-				pShader->SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].blur", currentLight->GetBlur());
+				pShader.SetVec3("u_spotLights[" + std::to_string(numSpotLights) + "].colour.diffuse", currentLight->GetColour());
+				pShader.SetVec3("u_spotLights[" + std::to_string(numSpotLights) + "].colour.specular", currentLight->GetColour());
+				pShader.SetVec4("u_spotLights[" + std::to_string(numSpotLights) + "].position", currentLight->GetPosition());
+				pShader.SetVec4("u_spotLights[" + std::to_string(numSpotLights) + "].direction", currentLight->GetDirection());
+				pShader.SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].linear", currentLight->GetLinear());
+				pShader.SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].quadratic", currentLight->GetQuadratic());
+				pShader.SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].cutoff", currentLight->GetAngle());
+				pShader.SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].blur", currentLight->GetBlur());
 				++numSpotLights; break;
 			default: return;
 			}
