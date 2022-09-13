@@ -1,8 +1,6 @@
-#pragma region
 #pragma once
-#include "Renderer.hpp"
+#include "Entity.hpp"
 #include "Input.hpp"
-#pragma endregion
 
 namespace Engine
 {

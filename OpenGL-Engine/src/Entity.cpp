@@ -13,16 +13,6 @@ using glm::inverse;
 
 namespace Engine
 {
-	// Forward declaration
-	class Renderer
-	{
-	public:
-		static Renderer* GetInstance();
-		Model* AddNewModel(unsigned int &id, std::string pLocation, Shader* pShaderRef = nullptr, bool pLoadTextures = true);
-		Shader* AddNewShader(unsigned int &id, std::string pLocation);
-		void LoadLightsIntoShader(Shader* pShader);
-	};
-
 	Entity* Entity::s_root = nullptr;
 
 	Entity::Entity(): m_parent(s_root)
