@@ -112,13 +112,14 @@ void Project::CreateLights()
 	// Gives them physical form
 	for (uint8_t i = 0; i < m_rendererRef->LightCount(); ++i)
 	{
+		Engine::Root* root = Engine::Root::GetRoot();
+		Engine::Model* model = nullptr;
+		Engine::Shader* shader = nullptr;
 		Engine::Light* current = m_rendererRef->GetLightAt(i);
+
 		if (current->GetType() == Engine::LightType::Point
 		 || current->GetType() == Engine::LightType::Spot)
 		{
-			Engine::Root* root = Engine::Root::GetRoot();
-			Engine::Model* model = nullptr;
-			Engine::Shader* shader = nullptr;
 			Engine::Entity* ent = Engine::Entity::LoadModel(model, "assets/models/cube/cube.obj", shader, "assets/shaders/default", false);
 			ent->SetParent(root);
 			ent->SetTransform(current->GetTransform());
@@ -126,16 +127,6 @@ void Project::CreateLights()
 			ent->JustColour(current->GetColour());
 			ent->SingleColour(true);
 			m_lights.push_back(ent);
-
-			//uint8_t discard;
-			//Engine::Shader* shaderRef = m_rendererRef->AddNewShader(ID, "assets/shaders/default");
-			//shaderRef->SetBool("u_justColour", true);
-			//// Makes the spotlight a rectangular prism to show direction
-			//shaderRef->SetVec3("u_scale", vec3(0.2f, 0.2f, (current->GetType() == Engine::LightType::Spot) ? 0.4f : 0.2f));
-			//shaderRef->SetVec3("u_colour", current->GetColour());
-			//shaderRef->SetMat4("u_model", current->GetTransform());
-			//shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(current->GetTransform())));
-			//m_rendererRef->AddNewModel(discard, "assets/models/cube/cube.obj", shaderRef, false);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Engine
 
 	private:
 		Entity* m_parent = nullptr;
-		std::unique_ptr<std::vector<Entity*>> m_children = nullptr;
+		std::vector<Entity*> m_children;
 
 		Model* m_model = nullptr;
 		Shader* m_shader = nullptr;	// TODO: Remove this
@@ -22,6 +22,10 @@ namespace Engine
 	public:
 		Entity();
 		Entity(Entity* pParent);
+		~Entity();
+
+		void AddChild(Entity* pChild);
+		void RemoveChild(Entity* pChild);
 
 		#pragma region Setters
 		void SetParent(Entity* pParent);
@@ -32,8 +36,8 @@ namespace Engine
 		void JustColour(Colour pCol);
 		#pragma endregion
 
-		Entity* GetParent() const { return m_parent; }
-		virtual std::vector<Entity*>* GetChildren() const { return m_children.get(); }
+		Entity& GetParent() const { return *m_parent; }
+		virtual std::vector<Entity*> GetChildren() const { return m_children; }
 	};
 
 	/// @brief Root is a special, static entity that only had children
@@ -49,7 +53,7 @@ namespace Engine
 		~Root() {}
 		
 	private:
-		std::unique_ptr<std::vector<Entity*>> m_children = std::make_unique<std::vector<Entity*>>();
+		std::vector<Entity*> m_children = std::vector<Entity*>();
 
 		#pragma region Constructors
 		Root() = default;
@@ -61,6 +65,6 @@ namespace Engine
 		#pragma endregion
 
 	public:
-		std::vector<Entity*>* GetChildren() const override { return m_children.get(); }
+		std::vector<Entity*> GetChildren() const override { return m_children; }
 	};
 }

@@ -32,14 +32,38 @@ namespace Engine
 
 	// Member
 
-	Entity::Entity(): m_parent(nullptr)
+	Entity::Entity()
 	{
-		m_children = make_unique<vector<Entity*>>();
+		m_children = vector<Entity*>();
+		SetParent(nullptr);
 	}
 
-	Entity::Entity(Entity* pParent): m_parent(pParent)
+	Entity::Entity(Entity* pParent)
 	{
-		m_children = make_unique<vector<Entity*>>();
+		m_children = vector<Entity*>();
+		SetParent(pParent);
+	}
+
+	Entity::~Entity()
+	{
+
+	}
+
+	void Entity::AddChild(Entity* pChild)
+	{
+		m_children.push_back(pChild);
+	}
+
+	void Entity::RemoveChild(Entity* pChild)
+	{
+		for (vector<Entity*>::iterator it = m_children.begin(); it != m_children.end(); ++it)
+		{
+			if (*it == pChild)
+			{
+				m_children.erase(it);
+				break;
+			}
+		}
 	}
 
 	void Entity::UpdateModel() const
@@ -51,7 +75,20 @@ namespace Engine
 	#pragma region Setters
 	void Entity::SetParent(Entity* pParent)
 	{
+		// This may change to not changing anything
+		if (pParent == nullptr)
+		{
+			m_parent == nullptr;
+			return;
+		}
+
+		// Remove from previous parents children
+		if (m_parent != nullptr)
+			m_parent->RemoveChild(this);
+		
+		// Assign new parent and join it's children
 		m_parent = pParent;
+		m_parent->AddChild(this);
 	}
 
 	void Entity::SetTransform(mat4 pValue)
