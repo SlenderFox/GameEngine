@@ -42,6 +42,18 @@ namespace Engine
 		m_children = make_unique<vector<Entity*>>();
 	}
 
+	void Entity::UpdateModel() const
+	{
+		m_shader->SetMat4("u_model", GetTransform());
+		m_shader->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
+	}
+
+	#pragma region Setters
+	void Entity::SetParent(Entity* pParent)
+	{
+		m_parent = pParent;
+	}
+
 	void Entity::SetTransform(mat4 pValue)
 	{
 		Transform::SetTransform(pValue);
@@ -54,14 +66,19 @@ namespace Engine
 		UpdateModel();
 	}
 
-	void Entity::Scale(vec3 pValue)
+	void Entity::SingleColour(bool pState)
+	{
+		m_shader->SetBool("u_justColour", pState);
+	}
+
+	void Entity::SetScale(vec3 pValue)
 	{
 		m_shader->SetVec3("u_scale", pValue);
 	}
 
-	void Entity::UpdateModel() const
+	void Entity::JustColour(Colour pCol)
 	{
-		m_shader->SetMat4("u_model", GetTransform());
-		m_shader->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
+		m_shader->SetVec3("u_colour", pCol.RGBvec3());
 	}
+	#pragma endregion
 }
