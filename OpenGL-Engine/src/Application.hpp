@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity.hpp"
+#include "Renderer.hpp"
 #include "Input.hpp"
 
 namespace Engine

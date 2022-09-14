@@ -10,7 +10,6 @@
  * https://cs.stackexchange.com/questions/64549/convert-hsv-to-rgb-colors
  * https://www.codespeedy.com/hsv-to-rgb-in-cpp/
  */
-
 #include "Colour.hpp"
 
 using std::fmodf;

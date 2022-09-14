@@ -1,5 +1,5 @@
 #pragma once
-#include "Renderer.hpp"
+#include "Colour.hpp"
 
 namespace Engine
 {
@@ -40,7 +40,7 @@ namespace Engine
 		virtual std::vector<Entity*> GetChildren() const { return m_children; }
 	};
 
-	/// @brief Root is a special, static entity that only had children
+	/// @brief Root is a special, static entity that only has children
 	class Root: public Entity
 	{
 	public:

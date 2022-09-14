@@ -13,6 +13,16 @@ using glm::inverse;
 
 namespace Engine
 {
+	// Forward declaration
+	class Renderer
+	{
+	public:
+		static Renderer* GetInstance();
+		Model* AddNewModel(uint8_t &id, std::string pLocation, Shader* pShaderRef = nullptr, bool pLoadTextures = true);
+		Shader* AddNewShader(uint8_t &id, std::string pLocation);
+		void LoadLightsIntoShader(const Shader& pShader);
+	};
+
 	// Static
 
 	Entity* Entity::LoadModel(Model* pModelOut, std::string pModelPath,
@@ -44,10 +54,7 @@ namespace Engine
 		SetParent(pParent);
 	}
 
-	Entity::~Entity()
-	{
-
-	}
+	Entity::~Entity() {}
 
 	void Entity::AddChild(Entity* pChild)
 	{
@@ -78,7 +85,7 @@ namespace Engine
 		// This may change to not changing anything
 		if (pParent == nullptr)
 		{
-			m_parent == nullptr;
+			m_parent = nullptr;
 			return;
 		}
 

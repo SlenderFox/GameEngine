@@ -1,10 +1,7 @@
-#pragma region
 #pragma once
 #include "Shader.hpp"
 #include <vector>
 #include <memory>
-
-#pragma endregion
 
 namespace Engine
 {

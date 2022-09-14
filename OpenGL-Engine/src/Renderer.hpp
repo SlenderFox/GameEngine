@@ -1,5 +1,5 @@
 #pragma once
-#include "Model.hpp"
+#include "Light.hpp"
 
 namespace Engine
 {

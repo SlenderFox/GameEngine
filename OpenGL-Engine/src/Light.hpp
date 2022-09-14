@@ -1,5 +1,5 @@
 #pragma once
-#include "Colour.hpp"
+#include "Entity.hpp"
 
 namespace Engine
 {
@@ -10,7 +10,7 @@ namespace Engine
 		Spot
 	};
 
-	class Light: public Transform
+	class Light: public Entity
 	{
 	private:
 		LightType m_type;

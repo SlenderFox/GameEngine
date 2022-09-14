@@ -1,8 +1,6 @@
-#pragma region
 #pragma once
-#include "Light.hpp"
+#include "Camera.hpp"
 #include "Texture.hpp"
-#pragma endregion
 
 namespace Engine
 {
