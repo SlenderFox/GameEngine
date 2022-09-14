@@ -62,6 +62,7 @@ namespace Engine
 		m_rendererInst->Destroy(m_gladLoaded);
 		delete m_rendererInst;
 		delete m_inputInst;
+		delete Root::GetRoot();
 		// Don't need to delete m_window as it is handled by glfwTerminate()
 	}
 

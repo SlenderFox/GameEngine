@@ -33,6 +33,34 @@ namespace Engine
 		#pragma endregion
 
 		Entity* GetParent() const { return m_parent; }
-		std::vector<Entity*>* GetChildren() const { return m_children.get(); }
+		virtual std::vector<Entity*>* GetChildren() const { return m_children.get(); }
+	};
+
+	/// @brief Root is a special, static entity that only had children
+	class Root: public Entity
+	{
+	public:
+		static Root* GetRoot()
+		{
+			static Root* s_root = new Root();
+			return s_root;
+		}
+
+		~Root() {}
+		
+	private:
+		std::unique_ptr<std::vector<Entity*>> m_children = std::make_unique<std::vector<Entity*>>();
+
+		#pragma region Constructors
+		Root() = default;
+		// Delete copy/move so extra instances can't be created/moved.
+		Root(const Root&) = delete;
+		Root& operator=(const Root&) = delete;
+		Root(Root&&) = delete;
+		Root& operator=(Root&&) = delete;
+		#pragma endregion
+
+	public:
+		std::vector<Entity*>* GetChildren() const override { return m_children.get(); }
 	};
 }
