@@ -28,13 +28,14 @@ namespace Engine
 	Entity* Entity::LoadModel(Model* pModelOut, std::string pModelPath,
 	 Shader* pShaderOut, std::string pShaderPath, bool pLoadTextures)
 	{
+		Renderer* renderer = Renderer::GetInstance();
 		Entity* result = new Entity();
 		uint8_t ID;
-		result->m_shader = Renderer::GetInstance()->AddNewShader(ID, pShaderPath);
-		Renderer::GetInstance()->LoadLightsIntoShader(*result->m_shader);
+		result->m_shader = renderer->AddNewShader(ID, pShaderPath);
+		renderer->LoadLightsIntoShader(*result->m_shader);
 		result->m_shader->SetMat4("u_model", result->GetTransform());
 		result->m_shader->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(result->GetTransform())));
-		result->m_model = Renderer::GetInstance()->AddNewModel(ID, pModelPath, result->m_shader, pLoadTextures);
+		result->m_model = renderer->AddNewModel(ID, pModelPath, result->m_shader, pLoadTextures);
 		pShaderOut = result->m_shader;
 		pModelOut = result->m_model;
 		return result;
