@@ -65,7 +65,7 @@ namespace Engine
 	void Model::LoadModel(string pPath)
 	{
 		#ifdef _DEBUG
-		 cout << "Loading model \"" << pPath << "\"" << (m_loadTextures ? "" : " (untextured)") << endl;
+		 cout << "Loading model \"" << pPath << "\"" << (m_loadTextures ? "" : "\n \xC3Ignoring textures") << endl;
 		#endif
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(pPath, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -80,7 +80,6 @@ namespace Engine
 		m_directory = pPath.substr(0, pPath.find_last_of('/'));
 		ProcessNode(scene->mRootNode, scene);
 		if (m_loadTextures) LoadTexturesToShader();
-
 		#ifdef _DEBUG
 		 cout << "Done!" << endl;
 		#endif
@@ -189,7 +188,7 @@ namespace Engine
 					if (reuseTexture)
 					{
 						#ifdef _DEBUG
-						 cout << " \xC3Reusing " << s_loadedTextures[j]->GetFile().data() << endl;
+						 cout << " \xC3Reusing texture " << s_loadedTextures[j]->GetId() << ": " << s_loadedTextures[j]->GetFile().data() << endl;
 						#endif
 						texturesOut.push_back(s_loadedTextures[j]);
 					}
@@ -233,10 +232,11 @@ namespace Engine
 					break;
 			}
 
+			string location = "u_material." + name + number;
+			m_shaderRef->SetInt(location.c_str(), (int32_t)m_textures[i]->GetId());
 			#ifdef _DEBUG
-			 cout << " \xC5Loading texID " << m_textures[i]->GetId() << endl;
+			 cout << " \xC5Setting " << location << " to " << m_textures[i]->GetId() << endl;
 			#endif
-			m_shaderRef->SetInt(("u_material." + name + number).c_str(), (int32_t)m_textures[i]->GetId());
 		}
 	}
 
