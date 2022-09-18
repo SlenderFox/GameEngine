@@ -22,7 +22,7 @@ using glm::radians;
 
 Project::Project()
 {
-	m_lights = vector<Engine::Entity*>();
+	m_lightRefs = vector<Engine::Light*>();
 	m_cubes = vector<Engine::Entity*>();
 
 	object_backpack = new Engine::Entity();
@@ -30,12 +30,6 @@ Project::Project()
 
 Project::~Project()
 {
-	for (uint8_t i = 0; i < m_lights.size(); ++i)
-	{
-		if (m_lights[i] != nullptr)
-			delete m_lights[i];
-	}
-
 	for (uint8_t i = 0; i < m_cubes.size(); ++i)
 	{
 		if (m_cubes[i] != nullptr)
@@ -78,7 +72,7 @@ void Project::CreateScene()
 	// Place 9 cubes behind
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
-		Engine::Entity* cube = Engine::Entity::LoadModel(model, "assets/models/cube/cube.obj", shader, "assets/shaders/default");
+		Engine::Entity* cube = Engine::Entity::CreateWithModel("assets/models/cube/cube.obj", "assets/shaders/default", model, shader);
 		cube->SetParent(root);
 		cube->Translate(m_cubePositions[i]);
 		cube->SetScale(vec3(0.6f));
@@ -86,7 +80,7 @@ void Project::CreateScene()
 	}
 
 	// Create a backpack in the centre
-	Engine::Entity* backpack = Engine::Entity::LoadModel(model, "assets/models/backpack/backpack.obj", shader, "assets/shaders/default");
+	Engine::Entity* backpack = Engine::Entity::CreateWithModel("assets/models/backpack/backpack.obj", "assets/shaders/default", model, shader);
 	backpack->SetParent(root);
 	backpack->Translate(vec3(0.0f, 0.0f, 0.9f));
 	backpack->SetScale(vec3(0.6f));
@@ -120,13 +114,21 @@ void Project::CreateLights()
 		if (current->GetType() == Engine::LightType::Point
 		 || current->GetType() == Engine::LightType::Spot)
 		{
-			Engine::Entity* ent = Engine::Entity::LoadModel(model, "assets/models/cube/cube.obj", shader, "assets/shaders/default", false);
-			ent->SetParent(root);
-			ent->SetTransform(current->GetTransform());
-			ent->SetScale(vec3(0.2f, 0.2f, (current->GetType() == Engine::LightType::Spot) ? 0.4f : 0.2f));
-			ent->JustColour(current->GetColour());
-			ent->SingleColour(true);
-			m_lights.push_back(ent);
+			//Engine::Entity* ent = Engine::Entity::LoadModel("assets/models/cube/cube.obj", "assets/shaders/default", model, shader, false);
+			//ent->SetParent(root);
+			//ent->SetTransform(current->GetTransform());
+			//ent->SetScale(vec3(0.2f, 0.2f, (current->GetType() == Engine::LightType::Spot) ? 0.4f : 0.2f));
+			//ent->SetColourInShader(current->GetColour());
+			//ent->RenderOnlyColour(true);
+			//m_lights.push_back(ent);
+
+			current->LoadModel("assets/models/cube/cube.obj", "assets/shaders/default", model, shader, false);
+			current->SetParent(root);
+			current->SetTransform(current->GetTransform());
+			current->SetScale(vec3(0.2f, 0.2f, (current->GetType() == Engine::LightType::Spot) ? 0.4f : 0.2f));
+			current->SetColourInShader(current->GetColour());
+			current->RenderOnlyColour(true);
+			m_lightRefs.push_back(current);
 		}
 	}
 }

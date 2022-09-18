@@ -21,7 +21,7 @@ private:
 	// Local reference to the renderer
 	Engine::Renderer* m_rendererRef;
 
-	std::vector<Engine::Entity*> m_lights;
+	std::vector<Engine::Light*> m_lightRefs;
 	std::vector<Engine::Entity*> m_cubes;
 	Engine::Entity* object_backpack;
 

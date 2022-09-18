@@ -6,38 +6,39 @@ namespace Engine
 	class Entity: public Transform
 	{
 	public:
-		static Entity* LoadModel(Model* pModelOut, std::string pModelPath,
-					   Shader* pShaderOut, std::string pShaderPath,
-					   bool pLoadTextures = true);
+		static Entity* CreateWithModel(std::string pModelPath, std::string pShaderPath,
+		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures = true);
 
-	private:
-		Entity* m_parent = nullptr;
-		std::vector<Entity*> m_children;
+	protected:
+		Entity* m_parentRef = nullptr;
+		std::vector<Entity*> m_childrenRef;
 
-		Model* m_model = nullptr;
-		Shader* m_shader = nullptr;	// TODO: Remove this
+		Model* m_modelRef = nullptr;
+		Shader* m_shaderRef = nullptr;	// TODO: Remove this, already stored in model
 
 		void UpdateModel() const;
 
 	public:
 		Entity();
 		Entity(Entity* pParent);
-		~Entity();
+		~Entity() {}
 
 		void AddChild(Entity* pChild);
 		void RemoveChild(Entity* pChild);
 
 		#pragma region Setters
+		void LoadModel(std::string pModelPath, std::string pShaderPath,
+		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures = true);
 		void SetParent(Entity* pParent);
 		void SetTransform(glm::mat4 pValue) override;
 		void Translate(glm::vec3 pValue) override;
-		void SingleColour(bool pState);
+		void RenderOnlyColour(bool pState);
 		void SetScale(glm::vec3 pValue);
-		void JustColour(Colour pCol);
+		void SetColourInShader(Colour pCol);
 		#pragma endregion
 
-		Entity& GetParent() const { return *m_parent; }
-		virtual std::vector<Entity*> GetChildren() const { return m_children; }
+		Entity& GetParent() const { return *m_parentRef; }
+		virtual std::vector<Entity*> GetChildren() const { return m_childrenRef; }
 	};
 
 	/// @brief Root is a special, static entity that only has children
@@ -53,7 +54,7 @@ namespace Engine
 		~Root() {}
 		
 	private:
-		std::vector<Entity*> m_children = std::vector<Entity*>();
+		std::vector<Entity*> m_childrenRef = std::vector<Entity*>();
 
 		#pragma region Constructors
 		Root() = default;
@@ -65,6 +66,6 @@ namespace Engine
 		#pragma endregion
 
 	public:
-		std::vector<Entity*> GetChildren() const override { return m_children; }
+		std::vector<Entity*> GetChildren() const override { return m_childrenRef; }
 	};
 }
