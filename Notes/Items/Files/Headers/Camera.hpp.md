@@ -1,0 +1,2 @@
+Inherits from:
+- [[Transform.hpp]]

@@ -1,0 +1,2 @@
+Inherits from:
+- [[glm.hpp]]

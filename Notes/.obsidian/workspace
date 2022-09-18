@@ -1,0 +1,144 @@
+{
+  "main": {
+    "id": "aef63cab9a56d820",
+    "type": "split",
+    "children": [
+      {
+        "id": "190804f80bc2bab4",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Notes.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f6b2eee51c9a1bd0",
+    "type": "split",
+    "children": [
+      {
+        "id": "1e66b22bbe6140de",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "86ab85b2d375c078",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "8d41f96c5961d09f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "f20a84efdc879641",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 213.5
+  },
+  "right": {
+    "id": "b309fad42f58f718",
+    "type": "split",
+    "children": [
+      {
+        "id": "0f47f13dd7e4aadf",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2c497f11aa8a42de",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Notes.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "5b931ededbdcf33a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Notes.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "48773b6ae35075c1",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "3e1a2f919b9f4e65",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Notes.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "190804f80bc2bab4",
+  "lastOpenFiles": [
+    "Notes.md",
+    "Items/Files/Headers/Transform.hpp.md",
+    "Items/Files/Headers/Camera.hpp.md",
+    "Items/Files/Headers/Shader.hpp.md",
+    "Items/Files/Headers/Mesh.hpp.md",
+    "Items/Files/Headers/Model.hpp.md",
+    "Items/Files/Headers/Colour.hpp.md",
+    "Items/Files/cpp/Colour.cpp.md",
+    "Items/Files/cpp/Transform.cpp.md",
+    "Items/Files/cpp/Texture.cpp.md"
+  ]
+}
