@@ -79,6 +79,18 @@ namespace Engine
 	}
 
 	#pragma region Setters
+	void Entity::SetTransform(mat4 pValue) noexcept
+	{
+		Transform::SetTransform(pValue);
+		UpdateModel();
+	}
+
+	void Entity::Translate(vec3 pValue) noexcept
+	{
+		Transform::Translate(pValue);
+		UpdateModel();
+	}
+
 	void Entity::LoadModel(std::string pModelPath, std::string pShaderPath,
 		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures)
 	{
@@ -111,29 +123,17 @@ namespace Engine
 		m_parentRef->AddChild(this);
 	}
 
-	void Entity::SetTransform(mat4 pValue)
-	{
-		Transform::SetTransform(pValue);
-		UpdateModel();
-	}
-
-	void Entity::Translate(vec3 pValue)
-	{
-		Transform::Translate(pValue);
-		UpdateModel();
-	}
-
-	void Entity::RenderOnlyColour(bool pState)
+	void Entity::RenderOnlyColour(bool pState) noexcept
 	{
 		m_shaderRef->SetBool("u_justColour", pState);
 	}
 
-	void Entity::SetScale(vec3 pValue)
+	void Entity::SetScale(vec3 pValue) noexcept
 	{
 		m_shaderRef->SetVec3("u_scale", pValue);
 	}
 
-	void Entity::SetColourInShader(Colour pCol)
+	void Entity::SetColourInShader(Colour pCol) noexcept
 	{
 		m_shaderRef->SetVec3("u_colour", pCol.RGBvec3());
 	}

@@ -9,14 +9,16 @@ namespace Engine
 		static Entity* CreateWithModel(std::string pModelPath, std::string pShaderPath,
 		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures = true);
 
-	protected:
+	private:
 		Entity* m_parentRef = nullptr;
-		std::vector<Entity*> m_childrenRef;
 
 		Model* m_modelRef = nullptr;
 		Shader* m_shaderRef = nullptr;	// TODO: Remove this, already stored in model
 
 		void UpdateModel() const;
+
+	protected:
+		std::vector<Entity*> m_childrenRef;
 
 	public:
 		Entity();
@@ -27,18 +29,19 @@ namespace Engine
 		void RemoveChild(Entity* pChild);
 
 		#pragma region Setters
+		void SetTransform(glm::mat4 pValue) noexcept override;
+		void Translate(glm::vec3 pValue) noexcept override;
+
 		void LoadModel(std::string pModelPath, std::string pShaderPath,
 		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures = true);
 		void SetParent(Entity* pParent);
-		void SetTransform(glm::mat4 pValue) override;
-		void Translate(glm::vec3 pValue) override;
-		void RenderOnlyColour(bool pState);
-		void SetScale(glm::vec3 pValue);
-		void SetColourInShader(Colour pCol);
+		void RenderOnlyColour(bool pState) noexcept;
+		void SetScale(glm::vec3 pValue) noexcept;
+		void SetColourInShader(Colour pCol) noexcept;
 		#pragma endregion
 
-		Entity& GetParent() const { return *m_parentRef; }
-		virtual std::vector<Entity*> GetChildren() const { return m_childrenRef; }
+		Entity& GetParent() const noexcept { return *m_parentRef; }
+		std::vector<Entity*> GetChildren() const noexcept { return m_childrenRef; }
 	};
 
 	/// @brief Root is a special, static entity that only has children
@@ -51,21 +54,14 @@ namespace Engine
 			return s_root;
 		}
 
-		~Root() {}
-		
-	private:
-		std::vector<Entity*> m_childrenRef = std::vector<Entity*>();
-
 		#pragma region Constructors
 		Root() = default;
+		~Root() {}
 		// Delete copy/move so extra instances can't be created/moved.
 		Root(const Root&) = delete;
 		Root& operator=(const Root&) = delete;
 		Root(Root&&) = delete;
 		Root& operator=(Root&&) = delete;
 		#pragma endregion
-
-	public:
-		std::vector<Entity*> GetChildren() const override { return m_childrenRef; }
 	};
 }

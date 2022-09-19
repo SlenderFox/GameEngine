@@ -23,38 +23,29 @@ namespace Engine
 
 		void LookAt(glm::vec3 pFrom, glm::vec3 pTo, glm::vec3 pUp);
 
-		void ModifyFovH(float pValue);
-		void ModifyFovV(float pValue);
-		void UpdateFovH();
-		void UpdateFovV();
+		void ModifyFovH(float pValue) noexcept;
+		void ModifyFovV(float pValue) noexcept;
+		void UpdateFovH() noexcept;
+		void UpdateFovV() noexcept;
 
 		#pragma region Setters
-		void SetTransform(glm::mat4 pValue) override;
-		void SetView(glm::mat4 pValue);
-		void SetProjection(glm::mat4 pValue);
-		void SetProjection(float pFovV);
+		void SetTransform(glm::mat4 pValue) noexcept override;
+		void SetView(glm::mat4 pValue) noexcept;
+		void SetProjection(glm::mat4 pValue) noexcept;
+		void SetProjection(float pFovV) noexcept;
 
-		void SetPosition(glm::vec3 pValue) override;
-		void Translate(glm::vec3 pValue);
+		void SetPosition(glm::vec3 pValue) noexcept override;
+		void Translate(glm::vec3 pValue) noexcept override;
+		void SetAxes(glm::vec3 pRight, glm::vec3 pUp, glm::vec3 pForward) noexcept override;
 
-		void SetAxes(glm::vec3 pRight, glm::vec3 pUp, glm::vec3 pForward);
-		void SetRight(glm::vec3 pRight);
-		void SetUp(glm::vec3 pUp);
-		void SetForward(glm::vec3 pForward);
-
-		void SetAspectRatio(float pAspectRatio);
-		void SetFovH(float pFovH);
-		void SetFovV(float pFovV);
+		void SetAspectRatio(float pAspectRatio) noexcept;
+		void SetFovH(float pFovH) noexcept;
+		void SetFovV(float pFovV) noexcept;
 		#pragma endregion
 		#pragma region Getters
-		glm::vec4 GetPosition() const { return Transform::GetPosition(); }
-		glm::vec4 GetRight() const { return Transform::GetRight(); }
-		glm::vec4 GetUp() const { return Transform::GetUp(); }
-		glm::vec4 GetForward() const { return Transform::GetForward(); }
-
-		glm::mat4 GetView() const;
-		glm::mat4 GetProjection() const;
-		glm::mat4 GetWorldToCameraMatrix();
+		glm::mat4 GetView() const noexcept;
+		glm::mat4 GetProjection() const noexcept;
+		glm::mat4 GetWorldToCameraMatrix() noexcept;
 		#pragma endregion
 	};
 }

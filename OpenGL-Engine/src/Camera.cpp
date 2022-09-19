@@ -65,7 +65,7 @@ namespace Engine
 		SetView(m_view);
 	}
 
-	void Camera::ModifyFovH(float pValue)
+	void Camera::ModifyFovH(float pValue) noexcept
 	{
 		m_fovH += pValue;
 		if (m_fovH > 120.0f)
@@ -75,7 +75,7 @@ namespace Engine
 		UpdateFovV();
 	}
 
-	void Camera::ModifyFovV(float pValue)
+	void Camera::ModifyFovV(float pValue) noexcept
 	{
 		m_fovV += pValue;
 		if (m_fovV > 120.0f)
@@ -85,86 +85,65 @@ namespace Engine
 		UpdateFovH();
 	}
 
-	void Camera::UpdateFovH()
+	void Camera::UpdateFovH() noexcept
 	{
 		m_fovH = degrees(2 * atan(tan(radians(m_fovV) * 0.5f) * m_aspectRatio));
 		SetProjection(m_fovV);
 	}
 
-	void Camera::UpdateFovV()
+	void Camera::UpdateFovV() noexcept
 	{
 		m_fovV = degrees(2 * atan(tan(radians(m_fovH) * 0.5f) * (1 / m_aspectRatio)));
 		SetProjection(m_fovV);
 	}
 
 	#pragma region Setters
-	void Camera::SetTransform(mat4 pValue)
+	void Camera::SetTransform(mat4 pValue) noexcept
 	{
 		Transform::SetTransform(pValue);
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::SetView(mat4 pValue)
+	void Camera::SetView(mat4 pValue) noexcept
 	{
 		m_view = pValue;
 		Transform::SetTransform(inverse(m_view));
 	}
 
-	void Camera::SetProjection(mat4 pValue)
+	void Camera::SetProjection(mat4 pValue) noexcept
 	{
 		m_projection = pValue;
 	}
 
-	void Camera::SetProjection(float pFovV)
+	void Camera::SetProjection(float pFovV) noexcept
 	{
 		m_projection = perspective(radians(pFovV), m_aspectRatio, 0.1f, 500.0f);
 	}
 
-	void Camera::SetPosition(vec3 pValue)
+	void Camera::SetPosition(vec3 pValue) noexcept
 	{
 		Transform::SetPosition(pValue);
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::Translate(vec3 pValue)
+	void Camera::Translate(vec3 pValue) noexcept
 	{
 		Transform::Translate(pValue);
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::SetAxes(vec3 pRight, vec3 pUp, vec3 pForward)
+	void Camera::SetAxes(vec3 pRight, vec3 pUp, vec3 pForward) noexcept
 	{
 		Transform::SetAxes(pRight, pUp, pForward);
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::SetRight(vec3 pRight)
-	{
-		vec3 forward = cross(pRight, vec3(0, 1, 0));
-		vec3 up = cross(pRight, forward);
-		SetAxes(pRight, up, forward);
-	}
-
-	void Camera::SetUp(vec3 pUp)
-	{
-		vec3 right = cross(pUp, vec3(0, 0, 1));
-		vec3 forward = cross(pUp, right);
-		SetAxes(right, pUp, forward);
-	}
-
-	void Camera::SetForward(vec3 pForward)
-	{
-		vec3 right = cross(vec3(0, 1, 0), pForward);
-		vec3 up = cross(pForward, right);
-		SetAxes(right, up, pForward);
-	}
-	
-	void Camera::SetAspectRatio(float pAspectRatio)
+	void Camera::SetAspectRatio(float pAspectRatio) noexcept
 	{
 		m_aspectRatio = pAspectRatio;
 	}
 
-	void Camera::SetFovH(float pFovH)
+	void Camera::SetFovH(float pFovH) noexcept
 	{
 		m_fovH = pFovH;
 		if (m_fovH > 120.0f)
@@ -174,7 +153,7 @@ namespace Engine
 		UpdateFovV();
 	}
 
-	void Camera::SetFovV(float pFovV)
+	void Camera::SetFovV(float pFovV) noexcept
 	{
 		m_fovV = pFovV;
 		if (m_fovV > 120.0f)
@@ -185,17 +164,17 @@ namespace Engine
 	}
 	#pragma endregion
 	#pragma region Getters
-	mat4 Camera::GetView() const
+	mat4 Camera::GetView() const noexcept
 	{
 		return m_view;
 	}
 
-	mat4 Camera::GetProjection() const
+	mat4 Camera::GetProjection() const noexcept
 	{
 		return m_projection;
 	}
 
-	mat4 Camera::GetWorldToCameraMatrix()
+	mat4 Camera::GetWorldToCameraMatrix() noexcept
 	{
 		return m_projection * m_view;
 	}
