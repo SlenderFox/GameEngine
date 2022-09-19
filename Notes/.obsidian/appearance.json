@@ -1,1 +1,8 @@
-{}
+{
+  "cssTheme": "",
+  "translucency": false,
+  "interfaceFontFamily": "",
+  "textFontFamily": "JetBrains Mono",
+  "monospaceFontFamily": "JetBrains Mono",
+  "theme": "obsidian"
+}

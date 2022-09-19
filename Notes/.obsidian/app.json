@@ -1,1 +1,7 @@
-{}
+{
+  "showLineNumber": true,
+  "spellcheckLanguages": [
+    "en-AU"
+  ],
+  "spellcheck": true
+}
