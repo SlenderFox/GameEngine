@@ -32,11 +32,11 @@ Project::~Project()
 {
 	for (uint8_t i = 0; i < m_cubes.size(); ++i)
 	{
-		if (m_cubes[i] != nullptr)
+		if (m_cubes[i])
 			delete m_cubes[i];
 	}
 
-	if (object_backpack != nullptr)
+	if (object_backpack)
 		delete object_backpack;
 }
 

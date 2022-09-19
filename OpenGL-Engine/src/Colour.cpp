@@ -76,27 +76,27 @@ namespace Engine
 		short intHue = hue / 60;
 		switch (intHue)
 		{
-			case 0:
-				result = {chroma, x, 0};
-				break;
-			case 1:
-				result = {x, chroma, 0};
-				break;
-			case 2:
-				result = {0, chroma, x};
-				break;
-			case 3:
-				result = {0, x, chroma};
-				break;
-			case 4:
-				result = {x, 0, chroma};
-				break;
-			case 5:
-				result = {chroma, 0, x};
-				break;
-			default:
-				result = {0, 0, 0};
-				break;
+		case 0:
+			result = {chroma, x, 0};
+			break;
+		case 1:
+			result = {x, chroma, 0};
+			break;
+		case 2:
+			result = {0, chroma, x};
+			break;
+		case 3:
+			result = {0, x, chroma};
+			break;
+		case 4:
+			result = {x, 0, chroma};
+			break;
+		case 5:
+			result = {chroma, 0, x};
+			break;
+		default:
+			result = {0, 0, 0};
+			break;
 		}
 		result += min;
 		// Dont

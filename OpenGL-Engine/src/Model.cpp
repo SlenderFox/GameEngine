@@ -36,7 +36,7 @@ namespace Engine
 		// Destroy all meshes
 		for (uint16_t i = 0; i < m_meshes->size(); ++i)
 		{
-			if (GetMeshAt(i) != nullptr)
+			if (GetMeshAt(i))
 				GetMeshAt(i)->Destroy(pValidate);
 		}
 
@@ -46,7 +46,7 @@ namespace Engine
 
 	void Model::Draw(Shader* pShader, Camera* pCamera)
 	{
-		if (pShader == nullptr || pCamera == nullptr)
+		if (!pShader || !pCamera)
 		{
 			#ifdef _DEBUG
 			 cout << "Drawing failed, either shader or camera are null" << endl;
@@ -222,14 +222,14 @@ namespace Engine
 			string number;
 			switch (m_textures[i]->GetType())
 			{
-				case TexType::diffuse:
-					name = "texture_diffuse";
-					number = std::to_string(diffuseNr++);
-					break;
-				case TexType::specular:
-					name = "texture_specular";
-					number = std::to_string(specularNr++);
-					break;
+			case TexType::diffuse:
+				name = "texture_diffuse";
+				number = std::to_string(diffuseNr++);
+				break;
+			case TexType::specular:
+				name = "texture_specular";
+				number = std::to_string(specularNr++);
+				break;
 			}
 
 			string location = "u_material." + name + number;
@@ -242,7 +242,7 @@ namespace Engine
 
 	Mesh* Model::GetMeshAt(uint16_t pPos)
 	{
-		if (m_meshes.get() == nullptr)
+		if (!m_meshes.get())
 			return nullptr;
 
 		if (pPos > m_meshes.get()->size() - 1)

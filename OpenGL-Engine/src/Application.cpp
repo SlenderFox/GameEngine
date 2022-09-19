@@ -42,7 +42,7 @@ namespace Engine
 	Application::Application()
 	{
 		// Prevents potential memory leak
-		if (s_application != nullptr)
+		if (s_application)
 		{
 			s_application->Shutdown();
 			glfwTerminate();
@@ -162,7 +162,7 @@ namespace Engine
 		// glfw window creation
 		m_window = glfwCreateWindow(m_winWidth, m_winHeight, (m_title = pTitle).c_str(),
 			(pFullscreen ? glfwGetPrimaryMonitor() : nullptr), nullptr);
-		if (m_window == nullptr)
+		if (!m_window)
 		{
 			#ifdef _DEBUG
 			 cout << "Failed to create GLFW window" << endl;
@@ -231,7 +231,7 @@ namespace Engine
 		m_winWidth = pWidth;
 		m_winHeight = pHeight;
 
-		if (m_rendererInst->m_camera != nullptr && pWidth > 0 && pHeight > 0)
+		if (m_rendererInst->m_camera && pWidth > 0 && pHeight > 0)
 			UpdateCamera();
 	}
 

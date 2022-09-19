@@ -34,4 +34,4 @@ Todo:
 	- [ ] Make it clear and concise
 - [ ] Mark functions as noexcept
 - [ ] Overload entity copy constructor to load model better
-- [ ] Format switches and make nullptr checking nicer
+- [x] Format switches and make nullptr checking nicer

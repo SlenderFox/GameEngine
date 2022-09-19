@@ -54,7 +54,7 @@ namespace Engine
 				// Loop though all shaders and call destroy on them, then release the "smart" pointer
 				for (uint8_t i = 0; i < (*m_models.get()).size(); ++i)
 				{
-					if (GetModelAt(i) != nullptr)
+					if (GetModelAt(i))
 						GetModelAt(i)->Destroy(pValidate);
 				}
 				// Smart pointer needs to be manually released or it throws an error :|
@@ -63,7 +63,7 @@ namespace Engine
 				// Destroy all textures
 				for (size_t i = 0; i < Model::s_loadedTextures.size(); ++i)
 				{
-					if (Model::s_loadedTextures[i] != nullptr)
+					if (Model::s_loadedTextures[i])
 						delete Model::s_loadedTextures[i];
 				}
 
@@ -76,7 +76,7 @@ namespace Engine
 				// Loop though all shaders and call destroy on them, then release the "smart" pointer
 				for (uint8_t i = 0; i < (*m_shaders.get()).size(); ++i)
 				{
-					if (GetShaderAt(i) != nullptr)
+					if (GetShaderAt(i))
 						GetShaderAt(i)->Destroy(pValidate);
 				}
 				// Smart pointer needs to be manually released or it throws an error :|
@@ -229,7 +229,7 @@ namespace Engine
 
 	Model* Renderer::GetModelAt(uint8_t pPos)
 	{
-		if (m_models.get() == nullptr)
+		if (!m_models.get())
 			return nullptr;
 
 		if (pPos > m_models.get()->size() - 1)
@@ -245,7 +245,7 @@ namespace Engine
 
 	Shader* Renderer::GetShaderAt(uint8_t pPos)
 	{
-		if (m_shaders.get() == nullptr)
+		if (!m_shaders.get())
 			return nullptr;
 
 		if (pPos > m_shaders.get()->size() - 1)
@@ -261,7 +261,7 @@ namespace Engine
 
 	Light* Renderer::GetLightAt(uint8_t pPos)
 	{
-		if (m_lights.get() == nullptr)
+		if (!m_lights.get())
 			return nullptr;
 
 		if (pPos > m_lights.get()->size() - 1)

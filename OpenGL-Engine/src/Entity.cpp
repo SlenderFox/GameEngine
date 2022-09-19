@@ -96,14 +96,14 @@ namespace Engine
 	void Entity::SetParent(Entity* pParent)
 	{
 		// This may change to not changing anything
-		if (pParent == nullptr)
+		if (!pParent)
 		{
 			m_parentRef = nullptr;
 			return;
 		}
 
 		// Remove from previous parents children
-		if (m_parentRef != nullptr)
+		if (m_parentRef)
 			m_parentRef->RemoveChild(this);
 		
 		// Assign new parent and join it's children
