@@ -27,7 +27,7 @@ Todo:
 - [x] Test colour conversions
 	- [x] Comment Colour.hpp
 - [x] Remove depreciated code from Mesh
-- [ ] Convert lights into a derivation of Entity
+- [x] Convert lights into a derivation of Entity
 - [ ] Make debug logging more concise and clear
 - [ ] Mark functions as noexcept
 - [ ] Overload entity copy constructor to load model better

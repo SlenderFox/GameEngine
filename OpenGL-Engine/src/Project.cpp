@@ -103,25 +103,18 @@ void Project::CreateLights()
 	light = m_rendererRef->AddNewLight(ID, Engine::LightType::Spot, Engine::Colour::CreateWithHSV(Engine::hsv(97, 0.17f, 1.0f)));
 	light->SetCamPosition(vec4(2.0f, 2.5f, 6.0f, 1))->SetDirection(vec3(-0.3f, -0.4f, -1))->SetAngle(13.0f)->SetBlur(0.23f);
 
+	Engine::Root* root = Engine::Root::GetRoot();
+	Engine::Model* model = nullptr;
+	Engine::Shader* shader = nullptr;
+
 	// Gives them physical form
 	for (uint8_t i = 0; i < m_rendererRef->LightCount(); ++i)
 	{
-		Engine::Root* root = Engine::Root::GetRoot();
-		Engine::Model* model = nullptr;
-		Engine::Shader* shader = nullptr;
 		Engine::Light* current = m_rendererRef->GetLightAt(i);
 
 		if (current->GetType() == Engine::LightType::Point
 		 || current->GetType() == Engine::LightType::Spot)
 		{
-			//Engine::Entity* ent = Engine::Entity::LoadModel("assets/models/cube/cube.obj", "assets/shaders/default", model, shader, false);
-			//ent->SetParent(root);
-			//ent->SetTransform(current->GetTransform());
-			//ent->SetScale(vec3(0.2f, 0.2f, (current->GetType() == Engine::LightType::Spot) ? 0.4f : 0.2f));
-			//ent->SetColourInShader(current->GetColour());
-			//ent->RenderOnlyColour(true);
-			//m_lights.push_back(ent);
-
 			current->LoadModel("assets/models/cube/cube.obj", "assets/shaders/default", model, shader, false);
 			current->SetParent(root);
 			current->SetTransform(current->GetTransform());
