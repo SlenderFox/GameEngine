@@ -45,7 +45,7 @@ namespace Engine
 		#pragma region Getters
 		glm::mat4 GetView() const noexcept;
 		glm::mat4 GetProjection() const noexcept;
-		glm::mat4 GetWorldToCameraMatrix() noexcept;
+		glm::mat4 GetWorldToCameraMatrix() const noexcept;
 		#pragma endregion
 	};
 }

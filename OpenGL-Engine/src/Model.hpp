@@ -41,10 +41,7 @@ namespace Engine
 
 		void Destroy(bool pValidate);
 
-		void Draw() { Draw(m_shaderRef, m_cameraRef); }
-		void Draw(Shader* pShader) { Draw(pShader, m_cameraRef); }
-		void Draw(Camera* pCamera) { Draw(m_shaderRef, pCamera); }
-		void Draw(Shader* pShader, Camera* pCamera);
+		void Draw(const Camera* const& pCamera = nullptr);
 
 		void SetCameraRef(Camera* pCamera) { m_cameraRef = pCamera; }
 		void SetShaderRef(Shader* pShader) { m_shaderRef = pShader; }

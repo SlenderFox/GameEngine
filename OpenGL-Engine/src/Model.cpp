@@ -4,6 +4,7 @@
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "assert.h"
 
 #ifdef _DEBUG
  #include <iostream>
@@ -44,18 +45,20 @@ namespace Engine
 		m_meshes.release();
 	}
 
-	void Model::Draw(Shader* pShader, Camera* pCamera)
+	void Model::Draw(const Camera* const& pCamera)
 	{
-		if (!pShader || !pCamera)
+		m_shaderRef->Use();
+		if (pCamera)
 		{
-			#ifdef _DEBUG
-			 cout << "Drawing failed, either shader or camera are null" << endl;
-			#endif
-			return;
+			m_shaderRef->SetMat4("u_camera", pCamera->GetWorldToCameraMatrix());
+			m_shaderRef->SetVec3("u_viewPos", (vec3)pCamera->GetPosition());
 		}
-		pShader->Use();
-		pShader->SetMat4("u_camera", pCamera->GetWorldToCameraMatrix());
-	 	pShader->SetVec3("u_viewPos", (vec3)pCamera->GetPosition());
+		else
+		{
+			assert(m_cameraRef);
+			m_shaderRef->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
+			m_shaderRef->SetVec3("u_viewPos", (vec3)m_cameraRef->GetPosition());
+		}
 		for (uint16_t i = 0; i < m_meshes->size(); ++i)
 		{
 			GetMeshAt(i)->Draw();

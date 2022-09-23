@@ -174,7 +174,7 @@ namespace Engine
 		return m_projection;
 	}
 
-	mat4 Camera::GetWorldToCameraMatrix() noexcept
+	mat4 Camera::GetWorldToCameraMatrix() const noexcept
 	{
 		return m_projection * m_view;
 	}
