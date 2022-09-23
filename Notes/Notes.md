@@ -29,9 +29,8 @@ Todo:
 - [x] Remove depreciated code from Mesh
 - [x] Convert lights into a derivation of Entity
 - [ ] Upgrade debug logging
-	- [ ] Add shader creation logging
+	- [x] Add shader creation logging
 	- [ ] Light creation maybe
-	- [ ] Make it clear and concise
 - [ ] Mark functions as noexcept
 - [ ] Overload entity copy constructor to load model better
 - [x] Format switches and make nullptr checking nicer

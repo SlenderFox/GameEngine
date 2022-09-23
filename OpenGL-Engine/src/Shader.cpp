@@ -18,30 +18,23 @@ using std::ifstream;
 
 namespace Engine
 {
-	Shader::Shader()
-	{
-		LoadShader(ShaderType::VERTEX);
-		LoadShader(ShaderType::FRAGMENT);
-		CreateShaderProgram();
-	}
-
 	Shader::Shader(string pShaderPath)
 	{
-		LoadPaths(pShaderPath);
+		Load(pShaderPath);
 	}
 
-	void Shader::Destroy(bool pValidate)
+	void Shader::Destroy(bool pValidate) noexcept
 	{
 		if (pValidate && m_shaderLoaded)
 			glDeleteProgram(m_idProgram);
 	}
 
-	void Shader::Use() const
+	void Shader::Use() const noexcept
 	{
 		glUseProgram(m_idProgram);
 	}
 
-	void Shader::LoadPaths(string pShaderPath)
+	void Shader::Load(string pShaderPath)
 	{
 		m_shaderPath = pShaderPath;
 		LoadShader(ShaderType::VERTEX);
@@ -51,12 +44,23 @@ namespace Engine
 
 	void Shader::LoadShader(ShaderType pType)
 	{
+		m_usingFallback = false;
+		string path = m_shaderPath + GetType(pType, string(".vert"), string(".frag"));
+		#ifdef _DEBUG
+		 cout << "Compiling shader \"" << path << "\"...";
+		#endif
+
 		if (pType == ShaderType::PROGRAM)
 		{
 			#ifdef _DEBUG
-			 printf("ERROR::SHADER::ATTEMPTING_TO_LOAD_PROGRAM");
+			 cout << "\nERROR::SHADER::ATTEMPTING_TO_LOAD_PROGRAM" << endl;
 			#endif
-			exit(0);
+			return;
+		}
+
+		if (std::strcmp(m_shaderPath.c_str(), "") == 0)
+		{
+			m_usingFallback = true;
 		}
 
 		#pragma region Fallback code
@@ -77,7 +81,6 @@ TexCoords=aTexCoords;\
 Normal=u_transposeInverseOfModel*aNormal;\
 FragPos=vec3(vertModel);\
 gl_Position=u_camera*vertModel;}";
-		 // THIS DOESN'T WORK WHY???
 		 const char* fragmentFallback = "#version 330 core\n\
 #define normalise normalize\n\
 const int NR_DIR_LIGHTS=3;\
@@ -151,76 +154,94 @@ else FragCol=vec4(result*u_colour,1);\
 return;}";
 		#pragma endregion
 
-		// Must be defined out here
-		const char* code;
-		ifstream inStream;
+		const char* shaderCode;
+		// Must be defined outside the try catch
 		string codeString;
 
-		// Ensure ifstream objects can throw exceptions
-		inStream.exceptions(ifstream::failbit | ifstream::badbit);
-
-		// 1. retrieve the vertex/fragment source code from filePath
+		// Try to retrieve the vertex/fragment source code from filePath
 		try
 		{
-			/* For both vertex and fragment we:
-			 * Open files
-			 * Read file's buffer contents into streams
-			 * Close file handlers
-			 * Convert stream into string
-			*/
+			ifstream fileStream;
 			stringstream codeStream;
-			inStream.open((pType == ShaderType::VERTEX ? m_shaderPath + string(".vert") : m_shaderPath + string(".frag")));
-			codeStream << inStream.rdbuf();
-			inStream.close();
+			// Ensure ifstream objects can throw exceptions
+			fileStream.exceptions(ifstream::failbit | ifstream::badbit);
+
+			fileStream.open(path);
+			codeStream << fileStream.rdbuf();
+			fileStream.close();
+
+			// Convert stream into string, has to be this dumb way
 			codeString = codeStream.str();
-			code = codeString.c_str();
+			shaderCode = codeString.c_str();
 		}
 		catch (ifstream::failure e)
 		{
 			#ifdef _DEBUG
-			 cout << "ERROR::SHADER::" << (pType == ShaderType::VERTEX ? "VERTEX" : "FRAGMENT") << "::FILE_NOT_SUCCESFULLY_READ::USING_FALLBACK" << endl;
+			 cout << "\nERROR::SHADER::" << GetType(pType, string("VERTEX"), string("FRAGMENT"))
+			  << "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE" << endl;
 			#endif
 
-			code = (pType == ShaderType::VERTEX ? vertexFallback : fragmentFallback);
+			m_usingFallback = true;
+			shaderCode = GetType(pType, vertexFallback, fragmentFallback);
 		}
 
-		// 2. compile shaders
-		if (!CompileShader((pType == ShaderType::VERTEX ? &m_idVertex : &m_idFragment), pType, code))
+		if (!m_usingFallback)
+		{
+			if (!CompileShader(GetType(pType, &m_idVertex, &m_idFragment), pType, shaderCode))
+				m_usingFallback = true;
+		}
+
+		// Separated to allow bool to potentially change
+		if (m_usingFallback)
 		{
 			#ifdef _DEBUG
-			 cout << "ERROR::SHADER::" << (pType == ShaderType::VERTEX ? "VERTEX" : "FRAGMENT") << "::USING_FALLBACK_CODE\n" << endl;
+			cout << "Compiling fallback code...";
 			#endif
-			if (!CompileShader((pType == ShaderType::VERTEX ? &m_idVertex : &m_idFragment), pType, vertexFallback))
+			if (!CompileShader(GetType(pType, &m_idVertex, &m_idFragment),
+			 pType, GetType(pType, vertexFallback, fragmentFallback)))
 			{
 				#ifdef _DEBUG
-			 	 cout << "ERROR::SHADER::" << (pType == ShaderType::VERTEX ? "VERTEX" : "FRAGMENT") << "::FALLBACK_CODE_FAILURE\n" << endl;
+				cout << "ERROR::SHADER::" << GetType(pType, string("VERTEX"), string("FRAGMENT"))
+				 << "::FALLBACK_CODE_FAILURE" << endl;
 				#endif
-				exit(0);
+				exit(2);
 			}
 		}
+
+		#ifdef _DEBUG
+		 cout << "Success!" << endl;
+		#endif
 	}
 
-	bool Shader::CompileShader(uint32_t* pId, ShaderType pType, const char* pCode)
+	bool Shader::CompileShader(uint32_t* const& pId, ShaderType pType, const char* pCode)
 	{
 		// Creates a shader object and assigns to an id
-		if (pType == ShaderType::PROGRAM)
+		switch (pType)
 		{
+		case ShaderType::PROGRAM:
 			#ifdef _DEBUG
-			 printf("ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM");
+			 printf("\nERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM");
 			#endif
-			exit(0);
-		}
-		else if (pType == ShaderType::VERTEX)
+			exit(2);
+		case ShaderType::VERTEX:
 			*pId = glCreateShader(GL_VERTEX_SHADER);
-		else if (pType == ShaderType::FRAGMENT)
+			break;
+		case ShaderType::FRAGMENT:
 			*pId = glCreateShader(GL_FRAGMENT_SHADER);
+			break;
+		default:
+			#ifdef _DEBUG
+			 printf("\nERROR::SHADER::UNKNOWN_SHADER_TYPE");
+			#endif
+			exit(2);
+		}
 
-		// Loads the vertex shader into the object
+		// Loads the shader code into the shader object
 		glShaderSource(*pId, 1, &pCode, NULL);
 		// Compiles the shader at run-time
 		glCompileShader(*pId);
-		// Performs error checking on the vertex shader
-		return ShaderErrorChecking(pId, pType);
+		// Performs error checking on the shader
+		return CheckForErrors(pId, pType);
 	}
 
 	void Shader::CreateShaderProgram()
@@ -232,20 +253,18 @@ return;}";
 		glAttachShader(m_idProgram, m_idFragment);
 		glLinkProgram(m_idProgram);
 		// Performs error checking on the shader program
-		ShaderErrorChecking(&m_idProgram, ShaderType::PROGRAM);
+		if (!CheckForErrors(&m_idProgram, ShaderType::PROGRAM)) exit(2);
 		// We no longer need the vertex and fragment shaders
 		glDeleteShader(m_idVertex);
 		glDeleteShader(m_idFragment);
-
 		// Sets the shader as the active one
 		glUseProgram(m_idProgram);
-
 		m_shaderLoaded = true;
 	}
 		
-	bool Shader::ShaderErrorChecking(uint32_t* pShaderID, ShaderType pType)
+	bool Shader::CheckForErrors(const uint32_t* const& pShaderID, ShaderType pType) noexcept
 	{
-		// Variables used in error checking and handling
+		// Boolean output as int32
 		int32_t success;
 		char infoLog[512];
 
@@ -258,7 +277,7 @@ return;}";
 				// In the case of a failure it loads the log and outputs
 				glGetProgramInfoLog(*pShaderID, 512, NULL, infoLog);
 				#ifdef _DEBUG
-				 cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << endl;
+				 cout << "\nERROR::SHADER::PROGRAM::LINKING_FAILED:\n" << infoLog;
 				#endif
 				return false;
 			}
@@ -272,7 +291,8 @@ return;}";
 				// In the case of a failure it loads the log and outputs
 				glGetShaderInfoLog(*pShaderID, 512, NULL, infoLog);
 				#ifdef _DEBUG
-				 cout << "ERROR::SHADER::" << (pType == ShaderType::VERTEX ? "VERTEX" : "FRAGMENT") << "::COMPILATION_FAILED\n" << infoLog << endl;
+				 cout << "\nERROR::SHADER::" << GetType(pType, string("VERTEX"), string("FRAGMENT"))
+				  << "::COMPILATION_FAILED:\n" << infoLog;
 				#endif
 				return false;
 			}
@@ -280,56 +300,63 @@ return;}";
 		return true;
 	}
 
+	template<typename T>
+	constexpr T Shader::GetType(ShaderType pType, T ifVertex, T ifFragment) const
+	{
+		if (pType == ShaderType::PROGRAM) exit(2);
+		return (pType == ShaderType::VERTEX ? ifVertex : ifFragment);
+	}
+
 	#pragma region Setters
-	void Shader::SetBool(const string& pName, const bool& pValue) const
+	void Shader::SetBool(const string& pName, const bool& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), (int32_t)pValue);
 	}
 
-	void Shader::SetInt(const string& pName, const int32_t& pValue) const
+	void Shader::SetInt(const string& pName, const int32_t& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetUint(const string& pName, const uint32_t& pValue) const
+	void Shader::SetUint(const string& pName, const uint32_t& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1ui(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetFloat(const string& pName, const float& pValue) const
+	void Shader::SetFloat(const string& pName, const float& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetVec2(const string& pName, const glm::vec2& pValue) const
+	void Shader::SetVec2(const string& pName, const glm::vec2& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform2fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetVec3(const string& pName, const glm::vec3& pValue) const
+	void Shader::SetVec3(const string& pName, const glm::vec3& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetVec4(const string& pName, const glm::vec4& pValue) const
+	void Shader::SetVec4(const string& pName, const glm::vec4& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetMat3(const string& pName, const glm::mat3& pValue) const
+	void Shader::SetMat3(const string& pName, const glm::mat3& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniformMatrix3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, &pValue[0][0]);
 	}
 
-	void Shader::SetMat4(const string& pName, const glm::mat4& pValue) const
+	void Shader::SetMat4(const string& pName, const glm::mat4& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniformMatrix4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, &pValue[0][0]);
