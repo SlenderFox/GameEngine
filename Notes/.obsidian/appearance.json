@@ -4,5 +4,6 @@
   "interfaceFontFamily": "",
   "textFontFamily": "JetBrains Mono",
   "monospaceFontFamily": "JetBrains Mono",
-  "theme": "obsidian"
+  "theme": "obsidian",
+  "baseFontSize": 13
 }
