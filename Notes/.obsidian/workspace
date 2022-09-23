@@ -131,14 +131,14 @@
   "active": "190804f80bc2bab4",
   "lastOpenFiles": [
     "Notes.md",
-    "Items/Files/Headers/Transform.hpp.md",
-    "Items/Files/Headers/Camera.hpp.md",
-    "Items/Files/Headers/Shader.hpp.md",
-    "Items/Files/Headers/Mesh.hpp.md",
-    "Items/Files/Headers/Model.hpp.md",
-    "Items/Files/Headers/Colour.hpp.md",
-    "Items/Files/cpp/Colour.cpp.md",
     "Items/Files/cpp/Transform.cpp.md",
-    "Items/Files/cpp/Texture.cpp.md"
+    "Items/Files/cpp/Texture.cpp.md",
+    "Items/Files/cpp/Shader.cpp.md",
+    "Items/Files/cpp/Renderer.cpp.md",
+    "Items/Files/cpp/Project.cpp.md",
+    "Items/Files/cpp/Model.cpp.md",
+    "Items/Files/cpp/Mesh.cpp.md",
+    "Items/Files/cpp/main.cpp.md",
+    "Items/Files/cpp/Light.cpp.md"
   ]
 }
