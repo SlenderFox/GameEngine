@@ -38,6 +38,12 @@ void scroll_callback(GLFWwindow* window, double pOffsetX, double pOffsetY)
 namespace Engine
 {
 	Application* Application::s_application = nullptr;
+	bool Application::s_gladLoaded = false;
+
+	const bool Application::GladLoaded() noexcept
+	{
+		return s_gladLoaded;
+	}
 
 	Application::Application()
 	{
@@ -59,7 +65,6 @@ namespace Engine
 
 	Application::~Application()
 	{
-		m_rendererInst->Destroy(m_gladLoaded);
 		delete m_rendererInst;
 		delete m_inputInst;
 		delete Root::GetRoot();
@@ -208,7 +213,7 @@ namespace Engine
 			#endif
 			return false;
 		}
-		m_gladLoaded = true;
+		s_gladLoaded = true;
 
 		// Initialises the renderer
 		m_rendererInst->Init((float)m_winWidth / (float)m_winHeight);

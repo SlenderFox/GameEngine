@@ -34,8 +34,8 @@ namespace Engine
 	public:
 		Mesh();
 		Mesh(std::vector<Vertex> pVertices, std::vector<uint32_t> pIndices);
+		~Mesh();
 
-		void Destroy(bool pValidate);
 		void Draw();
 
 		#pragma region Getters

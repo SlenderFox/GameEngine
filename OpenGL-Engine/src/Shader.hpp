@@ -28,8 +28,8 @@ namespace Engine
 		
 	public:
 		Shader(std::string pShaderPath = "");
+		~Shader();
 
-		void Destroy(bool pValidate) noexcept;
 		void Use() const noexcept;
 		bool IsLoaded() const noexcept { return m_shaderLoaded; }
 

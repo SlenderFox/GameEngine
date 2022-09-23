@@ -5,7 +5,7 @@ namespace Engine
 {
 	class Renderer
 	{
-		friend class Application;	// Allowing application access and control
+		friend class Application;
 	public:
 		static const float s_ambience;
 
@@ -25,7 +25,7 @@ namespace Engine
 
 		#pragma region Constructors
 		Renderer() = default;
-		~Renderer() {}
+		~Renderer();
 		// Delete copy/move so extra instances can't be created/moved.
 		Renderer(const Renderer&) = delete;
 		Renderer& operator=(const Renderer&) = delete;
@@ -34,7 +34,6 @@ namespace Engine
 		#pragma endregion
 
 		void Init(float pAspect);
-		void Destroy(bool pValidate);
 		void Draw();
 
 	public:

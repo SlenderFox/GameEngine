@@ -13,14 +13,13 @@ namespace Engine
 
 	class Texture
 	{
-		//friend class Model;
 	private:
 		static uint32_t s_textureIds[32];	// List of all texture ids
 		static uint16_t s_textureCount;		// How many textures have been loaded
 
 	public:
 		static int32_t LoadTextureFromFile(const char* pPath);
-		static void UnloadAll(bool pValidate);
+		static void UnloadAll();
 		static uint16_t GetNumTex() { return s_textureCount; }
 
 	private:

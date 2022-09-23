@@ -8,16 +8,17 @@ namespace Engine
 	{
 	private:
 		static Application* s_application;		// Static reference to the application
+		static bool s_gladLoaded;				// Whether glad has loaded or not
 
 	public:
-		static Application* GetApplication() { return s_application; }
+		constexpr static Application* const& GetApplication() noexcept { return s_application; }
+		static const bool GladLoaded() noexcept;
 
 	private:
 		Renderer* m_rendererInst = nullptr;					// A reference to the renderer instance
 		Input* m_inputInst = nullptr;						// A reference to the input instance
 		GLFWwindow* m_window = nullptr;						// A reference to the window
 
-		bool m_gladLoaded = false;							// Whether glad has loaded or not
 		uint16_t m_winWidth = 0U, m_winHeight = 0U;			// The width and height of the window
 		uint64_t m_frames = 0U;								// The total amount of frames rendered
 		uint16_t m_fps = 0U, m_framesPerSecond = 0U;		// The amount of frames rendered per second

@@ -15,7 +15,7 @@ namespace Engine
 	{
 		friend class Renderer;
 	private:
-		static std::vector<Texture*> s_loadedTextures;
+		static std::vector<Texture*> s_loadedTextures;	// Memory handled by renderer
 
 		bool m_loadTextures;
 
@@ -38,8 +38,7 @@ namespace Engine
 		Model(char* pPath, Shader* pShader, Camera* pCamera = nullptr, bool pLoadTextures = true)
 		: m_shaderRef(pShader), m_cameraRef(pCamera), m_loadTextures(pLoadTextures)
 		{ Init(pPath); }
-
-		void Destroy(bool pValidate);
+		~Model();
 
 		void Draw(const Camera* const& pCamera = nullptr);
 
@@ -47,7 +46,6 @@ namespace Engine
 		void SetShaderRef(Shader* pShader) { m_shaderRef = pShader; }
 
 		Shader* GetShaderRef() const { return m_shaderRef; }
-
 		Mesh* GetMeshAt(uint16_t pPos);
 	};
 }

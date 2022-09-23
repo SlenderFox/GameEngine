@@ -11,6 +11,9 @@ using std::make_unique;
 
 namespace Engine
 {
+	// Forward declaration
+	class Application { public: static const bool GladLoaded() noexcept; };
+
 	//Static
 	float* Mesh::s_cubeVerticesArr = new float[288] {
 		// Positions		   // Normals			  // Texture coords
@@ -120,9 +123,9 @@ namespace Engine
 		SetupMesh();
 	}
 
-	void Mesh::Destroy(bool pValidate)
+	Mesh::~Mesh()
 	{
-		if (pValidate)
+		if (Application::GladLoaded())
 		{
 			glDeleteVertexArrays(1, m_idVAO);
 			glDeleteBuffers(1, m_idVBO);

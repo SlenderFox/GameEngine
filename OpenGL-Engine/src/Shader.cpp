@@ -18,14 +18,17 @@ using std::ifstream;
 
 namespace Engine
 {
+	// Forward declaration
+	class Application { public: static const bool GladLoaded() noexcept; };
+
 	Shader::Shader(string pShaderPath)
 	{
 		Load(pShaderPath);
 	}
 
-	void Shader::Destroy(bool pValidate) noexcept
+	Shader::~Shader()
 	{
-		if (pValidate && m_shaderLoaded)
+		if (Application::GladLoaded() && m_shaderLoaded)
 			glDeleteProgram(m_idProgram);
 	}
 

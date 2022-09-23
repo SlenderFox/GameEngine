@@ -15,15 +15,18 @@ using std::string;
 
 namespace Engine
 {
+	// Forward declaration
+	class Application { public: static const bool GladLoaded() noexcept; };
+
+	// Static
+
 	uint32_t Texture::s_textureIds[32];
 	uint16_t Texture::s_textureCount = 0;
 
-	void Texture::UnloadAll(bool pValidate)
+	void Texture::UnloadAll()
 	{
-		if (pValidate)
-		{
+		if (Application::GladLoaded())
 			glDeleteTextures(s_textureCount, s_textureIds);
-		}
 	}
 
 	int32_t Texture::LoadTextureFromFile(const char* pPath)
@@ -104,6 +107,8 @@ namespace Engine
 		 }
 		#endif
 	}
+
+	// Member
 
 	Texture::Texture(string pPath, TexType pType): m_file(pPath), m_type(pType)
 	{

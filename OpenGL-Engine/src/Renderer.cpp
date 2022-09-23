@@ -20,12 +20,49 @@ using std::unique_ptr;
 
 namespace Engine
 {
+	// Forward declaration
+	class Application { public: static const bool GladLoaded() noexcept; };
+
+	// Static
+
 	const float Renderer::s_ambience = 0.15f;
 
 	void Renderer::SetClearColour(Colour pColour)
 	{
 		vec3 col = pColour.RGBvec3();
 		glClearColor(col.r, col.g, col.b, 1.0f);
+	}
+
+	// Member
+
+	Renderer::~Renderer()
+	{
+		if (Application::GladLoaded())
+		{
+			if (m_models)
+			{
+				m_models.get()->clear();
+				// Smart pointer needs to be manually released or it throws an error :|
+				m_models.release();
+
+				// Destroy all textures
+				for (size_t i = 0; i < Model::s_loadedTextures.size(); ++i)
+				{
+					if (Model::s_loadedTextures[i])
+						delete Model::s_loadedTextures[i];
+				}
+				// Unload all textures from memory once finished
+				Texture::UnloadAll();
+			}
+			
+			if (m_shaders)
+			{
+				m_shaders.get()->clear();
+				m_shaders.release();
+			}
+		}
+
+		delete m_camera;
 	}
 
 	void Renderer::Init(float pAspect)
@@ -43,48 +80,6 @@ namespace Engine
 		m_models = make_unique<vector<unique_ptr<Model>>>();
 		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
 		m_lights = make_unique<vector<unique_ptr<Light>>>();
-	}
-
-	void Renderer::Destroy(bool pValidate)
-	{
-		if (pValidate)
-		{
-			if (m_models)
-			{
-				// Loop though all shaders and call destroy on them, then release the "smart" pointer
-				for (uint8_t i = 0; i < (*m_models.get()).size(); ++i)
-				{
-					if (GetModelAt(i))
-						GetModelAt(i)->Destroy(pValidate);
-				}
-				// Smart pointer needs to be manually released or it throws an error :|
-				m_models.release();
-
-				// Destroy all textures
-				for (size_t i = 0; i < Model::s_loadedTextures.size(); ++i)
-				{
-					if (Model::s_loadedTextures[i])
-						delete Model::s_loadedTextures[i];
-				}
-
-				// Unload all textures from memory once finished
-				Texture::UnloadAll(pValidate);
-			}
-			
-			if (m_shaders)
-			{
-				// Loop though all shaders and call destroy on them, then release the "smart" pointer
-				for (uint8_t i = 0; i < (*m_shaders.get()).size(); ++i)
-				{
-					if (GetShaderAt(i))
-						GetShaderAt(i)->Destroy(pValidate);
-				}
-				// Smart pointer needs to be manually released or it throws an error :|
-				m_shaders.release();
-			}
-		}
-
-		delete m_camera;
 	}
 
 	void Renderer::Draw()

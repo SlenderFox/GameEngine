@@ -22,7 +22,14 @@ using std::make_unique;
 
 namespace Engine
 {
+	// Forward declaration
+	class Application { public: static const bool GladLoaded() noexcept; };
+
+	// Static
+
 	vector<Texture*> Model::s_loadedTextures = vector<Texture*>();
+
+	// Member
 
 	void Model::Init(char* pPath)
 	{
@@ -32,16 +39,9 @@ namespace Engine
 		LoadModel(pPath);
 	}
 
-	void Model::Destroy(bool pValidate)
+	Model::~Model()
 	{
-		// Destroy all meshes
-		for (uint16_t i = 0; i < m_meshes->size(); ++i)
-		{
-			if (GetMeshAt(i))
-				GetMeshAt(i)->Destroy(pValidate);
-		}
-
-		// Tell the unique pointer it is no longer needed
+		m_meshes.get()->clear();
 		m_meshes.release();
 	}
 
