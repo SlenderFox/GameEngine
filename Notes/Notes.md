@@ -31,8 +31,9 @@ Todo:
 - [ ] Upgrade debug logging
 	- [x] Add shader creation logging
 	- [ ] Light creation maybe
+	- [x] Make it clear and concise
 - [ ] Mark functions as noexcept and constexpr
 - [ ] Overload entity copy constructor to load model better
 - [x] Format switches and make nullptr checking nicer
 - [x] Redo destruction to avoid passing parameters
-- [ ] Make shader owned by model
+- [x] Make shader owned by model

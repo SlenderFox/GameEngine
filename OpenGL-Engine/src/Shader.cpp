@@ -4,6 +4,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <fstream>
 #include <sstream>
+#include "defines.hpp"
 
 #ifdef _DEBUG
  #include <iostream>
@@ -50,13 +51,13 @@ namespace Engine
 		m_usingFallback = false;
 		string path = m_shaderPath + GetType(pType, string(".vert"), string(".frag"));
 		#ifdef _DEBUG
-		 cout << "Compiling shader \"" << path << "\"...";
+		 cout << smallProcess << "Compiling shader \"" << path << "\"...";
 		#endif
 
 		if (pType == ShaderType::PROGRAM)
 		{
 			#ifdef _DEBUG
-			 cout << "\nERROR::SHADER::ATTEMPTING_TO_LOAD_PROGRAM" << endl;
+			 cout << "\n " << bigNote << "ERROR::SHADER::ATTEMPTING_TO_LOAD_PROGRAM" << endl;
 			#endif
 			return;
 		}
@@ -180,7 +181,7 @@ return;}";
 		catch (ifstream::failure e)
 		{
 			#ifdef _DEBUG
-			 cout << "\nERROR::SHADER::" << GetType(pType, string("VERTEX"), string("FRAGMENT"))
+			 cout << "\n" << bigNote << "ERROR::SHADER::" << GetType(pType, string("VERTEX"), string("FRAGMENT"))
 			  << "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE" << endl;
 			#endif
 
@@ -198,13 +199,13 @@ return;}";
 		if (m_usingFallback)
 		{
 			#ifdef _DEBUG
-			cout << "Compiling fallback code...";
+			cout << smallProcess << "Compiling fallback code...";
 			#endif
 			if (!CompileShader(GetType(pType, &m_idVertex, &m_idFragment),
 			 pType, GetType(pType, vertexFallback, fragmentFallback)))
 			{
 				#ifdef _DEBUG
-				cout << "ERROR::SHADER::" << GetType(pType, string("VERTEX"), string("FRAGMENT"))
+				cout << bigNote << "ERROR::SHADER::" << GetType(pType, string("VERTEX"), string("FRAGMENT"))
 				 << "::FALLBACK_CODE_FAILURE" << endl;
 				#endif
 				exit(2);
@@ -223,7 +224,7 @@ return;}";
 		{
 		case ShaderType::PROGRAM:
 			#ifdef _DEBUG
-			 printf("\nERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM");
+			 cout << "\n" << bigNote << "ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM" << endl;
 			#endif
 			exit(2);
 		case ShaderType::VERTEX:
@@ -234,7 +235,7 @@ return;}";
 			break;
 		default:
 			#ifdef _DEBUG
-			 printf("\nERROR::SHADER::UNKNOWN_SHADER_TYPE");
+			 cout << "\n" << bigNote << "ERROR::SHADER::UNKNOWN_SHADER_TYPE" << endl;
 			#endif
 			exit(2);
 		}
@@ -280,7 +281,7 @@ return;}";
 				// In the case of a failure it loads the log and outputs
 				glGetProgramInfoLog(*pShaderID, 512, NULL, infoLog);
 				#ifdef _DEBUG
-				 cout << "\nERROR::SHADER::PROGRAM::LINKING_FAILED:\n" << infoLog;
+				 cout << "\n" << bigNote << "ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" << infoLog;
 				#endif
 				return false;
 			}
@@ -294,7 +295,7 @@ return;}";
 				// In the case of a failure it loads the log and outputs
 				glGetShaderInfoLog(*pShaderID, 512, NULL, infoLog);
 				#ifdef _DEBUG
-				 cout << "\nERROR::SHADER::" << GetType(pType, string("VERTEX"), string("FRAGMENT"))
+				 cout << "\n" << bigNote << "ERROR::SHADER::" << GetType(pType, string("VERTEX"), string("FRAGMENT"))
 				  << "::COMPILATION_FAILED:\n" << infoLog;
 				#endif
 				return false;

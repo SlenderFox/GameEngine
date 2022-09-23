@@ -35,6 +35,22 @@ namespace Engine
 
 	// Member
 
+	void Renderer::Init(float pAspect)
+	{
+		// Enables the use of the depth buffer
+		glEnable(GL_DEPTH_TEST);
+
+		//SetClearColour(Colour::CreateWithRGB(vec3(0.1f)));
+
+		// Initialise camera
+		m_camera = new Camera(pAspect, 75.0f);
+		m_camera->SetPosition({ 0.0f, 0.0f, 6.0f });
+
+		// Initialise arrays
+		m_models = make_unique<vector<unique_ptr<Model>>>();
+		m_lights = make_unique<vector<unique_ptr<Light>>>();
+	}
+
 	Renderer::~Renderer()
 	{
 		if (Application::GladLoaded())
@@ -54,32 +70,9 @@ namespace Engine
 				// Unload all textures from memory once finished
 				Texture::UnloadAll();
 			}
-			
-			if (m_shaders)
-			{
-				m_shaders.get()->clear();
-				m_shaders.release();
-			}
 		}
 
 		delete m_camera;
-	}
-
-	void Renderer::Init(float pAspect)
-	{
-		// Enables the use of the depth buffer
-		glEnable(GL_DEPTH_TEST);
-
-		//SetClearColour(Colour::CreateWithRGB(vec3(0.1f)));
-
-		// Initialise camera
-		m_camera = new Camera(pAspect, 75.0f);
-		m_camera->SetPosition({ 0.0f, 0.0f, 6.0f });
-
-		// Initialise arrays
-		m_models = make_unique<vector<unique_ptr<Model>>>();
-		m_shaders = make_unique<vector<unique_ptr<Shader>>>();
-		m_lights = make_unique<vector<unique_ptr<Light>>>();
 	}
 
 	void Renderer::Draw()
@@ -146,7 +139,7 @@ namespace Engine
 				{
 					currentlLight->SetAngle(newValue);
 					for (uint8_t i = 0; i < m_models.get()->size(); ++i)
-						GetModelAt(i)->m_shaderRef->SetFloat("u_spotLights[0].cutoff", currentlLight->GetAngle());
+						GetModelAt(i)->m_shader->SetFloat("u_spotLights[0].cutoff", currentlLight->GetAngle());
 				}
 			}
 		}
@@ -164,13 +157,13 @@ namespace Engine
 				{
 					currentlLight->SetBlur(newValue);
 					for (uint8_t i = 0; i < m_models.get()->size(); ++i)
-						GetModelAt(i)->m_shaderRef->SetFloat("u_spotLights[0].blur", currentlLight->GetBlur());
+						GetModelAt(i)->m_shader->SetFloat("u_spotLights[0].blur", currentlLight->GetBlur());
 				}
 			}
 		}
 	}
 
-	Model* Renderer::AddNewModel(uint8_t &id, string pLocation, Shader* pShaderRef, bool pLoadTextures)
+	Model* Renderer::AddNewModel(uint8_t &id, string pModelPath, std::string pShaderPath, bool pLoadTextures)
 	{
 		// Caps at 255
 		size_t currentAmount = m_models.get()->size();
@@ -178,20 +171,8 @@ namespace Engine
 			return nullptr;
 
 		id = (uint8_t)currentAmount;
-		m_models.get()->push_back(make_unique<Model>((char*)pLocation.c_str(), pShaderRef, m_camera, pLoadTextures));
+		m_models.get()->push_back(make_unique<Model>((char*)pModelPath.c_str(), (char*)pShaderPath.c_str(), m_camera, pLoadTextures));
 		return GetModelAt(id);
-	}
-
-	Shader* Renderer::AddNewShader(uint8_t &id, string pLocation)
-	{
-		// Caps at 255
-		size_t currentAmount = m_shaders.get()->size();
-		if (currentAmount > 255)
-			return nullptr;
-
-		id = (uint8_t)currentAmount;
-		m_shaders.get()->push_back(make_unique<Shader>(pLocation));
-		return GetShaderAt(id);
 	}
 
 	Light* Renderer::AddNewLight(uint8_t &id, LightType pType, Colour pColour)
@@ -210,11 +191,6 @@ namespace Engine
 	uint8_t Renderer::ModelCount() const
 	{
 		return (uint8_t)m_models.get()->size();
-	}
-
-	uint8_t Renderer::ShaderCount() const
-	{
-		return (uint8_t)m_shaders.get()->size();
 	}
 
 	uint8_t Renderer::LightCount() const
@@ -236,22 +212,6 @@ namespace Engine
 		}
 
 		return (*m_models.get())[pPos].get();
-	}
-
-	Shader* Renderer::GetShaderAt(uint8_t pPos)
-	{
-		if (!m_shaders.get())
-			return nullptr;
-
-		if (pPos > m_shaders.get()->size() - 1)
-		{
-			#ifdef _DEBUG
-			 cout << "Attempting to access shader outside array size\n";
-			#endif
-			return nullptr;
-		}
-
-		return (*m_shaders.get())[pPos].get();
 	}
 
 	Light* Renderer::GetLightAt(uint8_t pPos)

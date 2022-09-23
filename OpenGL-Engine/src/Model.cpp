@@ -5,6 +5,7 @@
 #include "assimp/postprocess.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "assert.h"
+#include "defines.hpp"
 
 #ifdef _DEBUG
  #include <iostream>
@@ -31,33 +32,46 @@ namespace Engine
 
 	// Member
 
-	void Model::Init(char* pPath)
+	Model::Model(char* pModelPath, char* pShaderPath, Camera* pCamera, bool pLoadTextures)
+	 : m_cameraRef(pCamera), m_loadTextures(pLoadTextures)
 	{
-		// Mesh creation
-		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
-		m_textures = vector<Texture*>();
-		LoadModel(pPath);
+		Init(pModelPath, pShaderPath);
 	}
 
 	Model::~Model()
 	{
+		delete m_shader;
 		m_meshes.get()->clear();
 		m_meshes.release();
 	}
 
+	void Model::Init(char* pModelPath, char* pShaderPath)
+	{
+		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
+		m_textures = vector<Texture*>();
+
+		LoadModel(pModelPath);
+		m_shader = new Shader(pShaderPath);
+		if (m_loadTextures) LoadTexturesToShader();
+
+		#ifdef _DEBUG
+		 cout << endSmallNote << "Done!" << endl;
+		#endif
+	}
+
 	void Model::Draw(const Camera* const& pCamera)
 	{
-		m_shaderRef->Use();
+		m_shader->Use();
 		if (pCamera)
 		{
-			m_shaderRef->SetMat4("u_camera", pCamera->GetWorldToCameraMatrix());
-			m_shaderRef->SetVec3("u_viewPos", (vec3)pCamera->GetPosition());
+			m_shader->SetMat4("u_camera", pCamera->GetWorldToCameraMatrix());
+			m_shader->SetVec3("u_viewPos", (vec3)pCamera->GetPosition());
 		}
 		else
 		{
 			assert(m_cameraRef);
-			m_shaderRef->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
-			m_shaderRef->SetVec3("u_viewPos", (vec3)m_cameraRef->GetPosition());
+			m_shader->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
+			m_shader->SetVec3("u_viewPos", (vec3)m_cameraRef->GetPosition());
 		}
 		for (uint16_t i = 0; i < m_meshes->size(); ++i)
 		{
@@ -68,8 +82,11 @@ namespace Engine
 	void Model::LoadModel(string pPath)
 	{
 		#ifdef _DEBUG
-		 cout << "Loading model \"" << pPath << "\"" << (m_loadTextures ? "" : "\n \xC3Ignoring textures") << endl;
+		 cout << initBigProcess << "Loading model \"" << pPath << "\"";
+		 if (!m_loadTextures) cout << "\n" << smallNote << "Ignoring textures";
+		 cout << endl;
 		#endif
+
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(pPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
@@ -82,10 +99,6 @@ namespace Engine
 		}
 		m_directory = pPath.substr(0, pPath.find_last_of('/'));
 		ProcessNode(scene->mRootNode, scene);
-		if (m_loadTextures) LoadTexturesToShader();
-		#ifdef _DEBUG
-		 cout << "Done!" << endl;
-		#endif
 	}
 	
 	void Model::ProcessNode(aiNode* pNode, const aiScene* pScene)
@@ -191,7 +204,8 @@ namespace Engine
 					if (reuseTexture)
 					{
 						#ifdef _DEBUG
-						 cout << " \xC3Reusing texture " << s_loadedTextures[j]->GetId() << ": " << s_loadedTextures[j]->GetFile().data() << endl;
+						 cout << smallNote << "Reusing texture " << s_loadedTextures[j]->GetId() << ": "
+						  << s_loadedTextures[j]->GetFile().data() << endl;
 						#endif
 						texturesOut.push_back(s_loadedTextures[j]);
 					}
@@ -203,9 +217,6 @@ namespace Engine
 			// If texture has not been loaded before, load it for the first time
 			if (loadTexture)
 			{
-				#ifdef _DEBUG
-				 cout << " \xD8";
-				#endif
 				Texture* tex = new Texture(string(m_directory + '/' + file.C_Str()), pTexType);
 				texturesOut.push_back(tex);
 				s_loadedTextures.push_back(tex);
@@ -236,9 +247,9 @@ namespace Engine
 			}
 
 			string location = "u_material." + name + number;
-			m_shaderRef->SetInt(location.c_str(), (int32_t)m_textures[i]->GetId());
+			m_shader->SetInt(location.c_str(), (int32_t)m_textures[i]->GetId());
 			#ifdef _DEBUG
-			 cout << " \xC5Setting " << location << " to " << m_textures[i]->GetId() << endl;
+			 cout << smallNote << "Setting " << location << " to " << m_textures[i]->GetId() << endl;
 			#endif
 		}
 	}

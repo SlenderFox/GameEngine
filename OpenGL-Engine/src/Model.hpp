@@ -23,11 +23,10 @@ namespace Engine
 		std::vector<Texture*> m_textures;
 		std::string m_directory;
 
-		// Don't delete these, they are borrowed
+		Shader* m_shader;
 		Camera* m_cameraRef;
-		Shader* m_shaderRef;
 
-		void Init(char* pPath);
+		void Init(char* pModelPath, char* pShaderPath);
 		void LoadModel(std::string pPath);
 		void ProcessNode(aiNode* pNode, const aiScene* pScene);
 		std::unique_ptr<Mesh> ProcessMesh(aiMesh* pMesh, const aiScene* pScene);
@@ -35,17 +34,15 @@ namespace Engine
 		void LoadTexturesToShader();
 
 	public:
-		Model(char* pPath, Shader* pShader, Camera* pCamera = nullptr, bool pLoadTextures = true)
-		: m_shaderRef(pShader), m_cameraRef(pCamera), m_loadTextures(pLoadTextures)
-		{ Init(pPath); }
+		Model(char* pModelPath, char* pShaderPath, Camera* pCamera = nullptr, bool pLoadTextures = true);
 		~Model();
 
 		void Draw(const Camera* const& pCamera = nullptr);
 
 		void SetCameraRef(Camera* pCamera) { m_cameraRef = pCamera; }
-		void SetShaderRef(Shader* pShader) { m_shaderRef = pShader; }
+		void SetShaderRef(Shader* pShader) { m_shader = pShader; }
 
-		Shader* GetShaderRef() const { return m_shaderRef; }
+		Shader* const& GetShaderRef() const { return m_shader; }
 		Mesh* GetMeshAt(uint16_t pPos);
 	};
 }

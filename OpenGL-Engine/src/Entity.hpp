@@ -11,9 +11,7 @@ namespace Engine
 
 	private:
 		Entity* m_parentRef = nullptr;
-
 		Model* m_modelRef = nullptr;
-		Shader* m_shaderRef = nullptr;	// TODO: Remove this, already stored in model
 
 		void UpdateModel() const;
 

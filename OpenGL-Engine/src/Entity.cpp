@@ -18,8 +18,7 @@ namespace Engine
 	{
 	public:
 		static Renderer* GetInstance();
-		Model* AddNewModel(uint8_t &id, std::string pLocation, Shader* pShaderRef = nullptr, bool pLoadTextures = true);
-		Shader* AddNewShader(uint8_t &id, std::string pLocation);
+		Model* AddNewModel(uint8_t &id, std::string pModelPath, std::string pShaderPath, bool pLoadTextures = true);
 		void LoadLightsIntoShader(const Shader& pShader);
 	};
 
@@ -31,13 +30,12 @@ namespace Engine
 		Renderer* renderer = Renderer::GetInstance();
 		Entity* result = new Entity();
 		uint8_t ID;
-		result->m_shaderRef = renderer->AddNewShader(ID, pShaderPath);
-		renderer->LoadLightsIntoShader(*result->m_shaderRef);
-		result->m_shaderRef->SetMat4("u_model", result->GetTransform());
-		result->m_shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(result->GetTransform())));
-		result->m_modelRef = renderer->AddNewModel(ID, pModelPath, result->m_shaderRef, pLoadTextures);
+		result->m_modelRef = renderer->AddNewModel(ID, pModelPath, pShaderPath, pLoadTextures);
+		renderer->LoadLightsIntoShader(*result->m_modelRef->GetShaderRef());
+		result->m_modelRef->GetShaderRef()->SetMat4("u_model", result->GetTransform());
+		result->m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(result->GetTransform())));
 		pModelOut = result->m_modelRef;
-		pShaderOut = result->m_shaderRef;
+		pShaderOut = result->m_modelRef->GetShaderRef();
 		return result;
 	}
 
@@ -74,8 +72,8 @@ namespace Engine
 
 	void Entity::UpdateModel() const
 	{
-		m_shaderRef->SetMat4("u_model", GetTransform());
-		m_shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
+		m_modelRef->GetShaderRef()->SetMat4("u_model", GetTransform());
+		m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
 	}
 
 	#pragma region Setters
@@ -96,13 +94,12 @@ namespace Engine
 	{
 		Renderer* renderer = Renderer::GetInstance();
 		uint8_t ID;
-		m_shaderRef = renderer->AddNewShader(ID, pShaderPath);
-		renderer->LoadLightsIntoShader(*m_shaderRef);
-		m_shaderRef->SetMat4("u_model", GetTransform());
-		m_shaderRef->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
-		m_modelRef = renderer->AddNewModel(ID, pModelPath, m_shaderRef, pLoadTextures);
+		m_modelRef = renderer->AddNewModel(ID, pModelPath, pShaderPath, pLoadTextures);
+		renderer->LoadLightsIntoShader(*m_modelRef->GetShaderRef());
+		m_modelRef->GetShaderRef()->SetMat4("u_model", GetTransform());
+		m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
 		pModelOut = m_modelRef;
-		pShaderOut = m_shaderRef;
+		pShaderOut = m_modelRef->GetShaderRef();
 	}
 
 	void Entity::SetParent(Entity* pParent)
@@ -125,17 +122,17 @@ namespace Engine
 
 	void Entity::RenderOnlyColour(bool pState) noexcept
 	{
-		m_shaderRef->SetBool("u_justColour", pState);
+		m_modelRef->GetShaderRef()->SetBool("u_justColour", pState);
 	}
 
 	void Entity::SetScale(vec3 pValue) noexcept
 	{
-		m_shaderRef->SetVec3("u_scale", pValue);
+		m_modelRef->GetShaderRef()->SetVec3("u_scale", pValue);
 	}
 
 	void Entity::SetColourInShader(Colour pCol) noexcept
 	{
-		m_shaderRef->SetVec3("u_colour", pCol.RGBvec3());
+		m_modelRef->GetShaderRef()->SetVec3("u_colour", pCol.RGBvec3());
 	}
 	#pragma endregion
 }
