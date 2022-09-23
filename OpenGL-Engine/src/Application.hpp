@@ -18,9 +18,9 @@ namespace Engine
 		GLFWwindow* m_window = nullptr;						// A reference to the window
 
 		bool m_gladLoaded = false;							// Whether glad has loaded or not
-		uint16_t m_winWidth = 0U, m_winHeight = 0U;		// The width and height of the window
-		uint64_t m_frames = 0U;							// The total amount of frames rendered
-		uint16_t m_fps = 0U, m_framesPerSecond = 0U;	// The amount of frames rendered per second
+		uint16_t m_winWidth = 0U, m_winHeight = 0U;			// The width and height of the window
+		uint64_t m_frames = 0U;								// The total amount of frames rendered
+		uint16_t m_fps = 0U, m_framesPerSecond = 0U;		// The amount of frames rendered per second
 		double m_currentTime = 0.0,
 		 m_prevTime = 0.0, m_deltaTime = 0.0;				// The time between rendered frames
 		double m_fixedTimer = 0.0f, m_frameTimer = 0.0f;	// Timers used for calling fixed update and displaying fps
@@ -28,7 +28,7 @@ namespace Engine
 		double m_mouseLastX = 400.0, m_mouseLastY = 300.0;	// Mouse position in the last frame
 		double m_yaw = 90.0, m_pitch = 0.0;					// The rotation of the camera
 
-		std::string m_title = "Title error";						// The tile of the window
+		std::string m_title = "Title error";				// The tile of the window
 
 		#pragma region Constructors
 		// Delete copy/move so extra instances can't be created/moved.
