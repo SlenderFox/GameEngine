@@ -30,10 +30,10 @@ Todo:
 - [x] Convert lights into a derivation of Entity
 - [x] Upgrade debug logging
 	- [x] Add shader creation logging
-	- [ ] ~~Light creation maybe~~
 	- [x] Make it clear and concise
-- [ ] Mark functions as noexcept and constexpr
+- [x] Mark functions as noexcept and constexpr
 - [ ] Overload entity copy constructor to load model better
 - [x] Format switches and make nullptr checking nicer
 - [x] Redo destruction to avoid passing parameters
 - [x] Make shader owned by model
+- [ ] Add imgui
