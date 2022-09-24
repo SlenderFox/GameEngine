@@ -110,11 +110,6 @@ namespace Engine
 		Transform::SetTransform(inverse(m_view));
 	}
 
-	void Camera::SetProjection(mat4 pValue) noexcept
-	{
-		m_projection = pValue;
-	}
-
 	void Camera::SetProjection(float pFovV) noexcept
 	{
 		m_projection = perspective(radians(pFovV), m_aspectRatio, 0.1f, 500.0f);
@@ -138,11 +133,6 @@ namespace Engine
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::SetAspectRatio(float pAspectRatio) noexcept
-	{
-		m_aspectRatio = pAspectRatio;
-	}
-
 	void Camera::SetFovH(float pFovH) noexcept
 	{
 		m_fovH = pFovH;
@@ -163,20 +153,9 @@ namespace Engine
 		UpdateFovH();
 	}
 	#pragma endregion
-	#pragma region Getters
-	mat4 Camera::GetView() const noexcept
-	{
-		return m_view;
-	}
-
-	mat4 Camera::GetProjection() const noexcept
-	{
-		return m_projection;
-	}
 
 	mat4 Camera::GetWorldToCameraMatrix() const noexcept
 	{
 		return m_projection * m_view;
 	}
-	#pragma endregion
 }

@@ -62,55 +62,55 @@ namespace Engine
 		/// @brief (Preferred overload) Converts colour data from RGB to HSV
 		/// @param pRGB 0-1 Red, 0-1 Green, 0-1 Blue
 		/// @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
-		static hsv RGBtoHSV(glm::vec3 pRGB);
+		static hsv RGBtoHSV(glm::vec3 pRGB) noexcept;
 		/// @brief (Alternate overload) Converts colour data from RGB to HSV
 		/// @param pRGB 0-255 Red, 0-255 Green, 0-255 Blue
 		/// @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
-		static hsv RGBtoHSV(rgb255 pRGB);
+		static hsv RGBtoHSV(rgb255 pRGB) noexcept;
 		/// @brief (Preferred overload) Converts colour data from HSV to RGB
 		/// @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		/// @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
-		static glm::vec3 HSVtoRGB(hsv pHSV);
+		static glm::vec3 HSVtoRGB(hsv pHSV) noexcept;
 		/// @brief (Alternate overload) Converts colour data from HSV to RGB
 		/// @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		/// @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
-		static glm::vec3 HSVtoRGB(glm::vec3 pHSV);
+		static glm::vec3 HSVtoRGB(glm::vec3 pHSV) noexcept;
 
 		/// @brief (Preferred overload) Create a Colour object from RGB
 		/// @param pRGB 0-1 Red, 0-1 Green, 0-1 Blue
 		/// @return [Colour] A Colour object
-		static Colour CreateWithRGB(glm::vec3 pRGB);
+		static Colour CreateWithRGB(glm::vec3 pRGB) noexcept;
 		/// @brief (Alternate overload) Create a Colour object from RGB
 		/// @param pRGB 0-255 Red, 0-255 Green, 0-255 Blue
 		/// @return [Colour] A Colour object
-		static Colour CreateWithRGB(rgb255 pRGB);
+		static Colour CreateWithRGB(rgb255 pRGB) noexcept;
 		/// @brief (Preferred overload) Create a Colour object from HSV
 		/// @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		/// @return [Colour] A Colour object
-		static Colour CreateWithHSV(hsv pHSV);
+		static Colour CreateWithHSV(hsv pHSV) noexcept;
 		/// @brief (Alternate overload) Create a Colour object from HSV
 		/// @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		/// @return [Colour] A Colour object
-		static Colour CreateWithHSV(glm::vec3 pHSV);
+		static Colour CreateWithHSV(glm::vec3 pHSV) noexcept;
 
 		#pragma region Presets
-		static Colour Black();
-		static Colour White();
-		static Colour Silver();
-		static Colour Grey();
-		static Colour DarkGrey();
-		static Colour Red();
-		static Colour Lime();
-		static Colour Blue();
-		static Colour Yellow();
-		static Colour Cyan();
-		static Colour Magenta();
-		static Colour Maroon();
-		static Colour Green();
-		static Colour Navy();
-		static Colour Olive();
-		static Colour Teal();
-		static Colour Purple();
+		static Colour Black() noexcept;
+		static Colour White() noexcept;
+		static Colour Silver() noexcept;
+		static Colour Grey() noexcept;
+		static Colour DarkGrey() noexcept;
+		static Colour Red() noexcept;
+		static Colour Lime() noexcept;
+		static Colour Blue() noexcept;
+		static Colour Yellow() noexcept;
+		static Colour Cyan() noexcept;
+		static Colour Magenta() noexcept;
+		static Colour Maroon() noexcept;
+		static Colour Green() noexcept;
+		static Colour Navy() noexcept;
+		static Colour Olive() noexcept;
+		static Colour Teal() noexcept;
+		static Colour Purple() noexcept;
 		#pragma endregion
 
 	private:
@@ -125,43 +125,43 @@ namespace Engine
 
 		/// @brief Get the colour as RGB stored in a vec3
 		/// @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
-		glm::vec3 RGBvec3() const { return m_RGB; }
+		constexpr glm::vec3 RGBvec3() const noexcept { return m_RGB; }
 		/// @brief Get the colour as RGB stored in a custom structure
 		/// @return [rgb255] 0-255 Red, 0-255 Green, 0-255 Blue
-		rgb255 RGB255();
+		rgb255 RGB255() const noexcept;
 		/// @brief Get the colour as HSV stored in a vec3
 		/// @return [glm::vec3] 0-360 Hue, 0-1 Saturation, 0-1 Value
-		glm::vec3 HSVvec3();
+		glm::vec3 HSVvec3() const noexcept;
 		/// @brief Get the colour as HSV stored in a custom structure
 		/// @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
-		hsv HSV();
+		hsv HSV() const noexcept;
 
 		#pragma region Operators
 		operator glm::vec3() const { return m_RGB; }
-		Colour operator +(const float& pOther) const;
-		Colour operator -(const float& pOther) const;
-		Colour operator *(const float& pOther) const;
-		Colour operator /(const float& pOther) const;
-		Colour operator +(const Colour& pOther) const;
-		Colour operator -(const Colour& pOther) const;
-		Colour operator *(const Colour& pOther) const;
-		Colour operator /(const Colour& pOther) const;
-		Colour operator +(const glm::vec3& pOther) const;
-		Colour operator -(const glm::vec3& pOther) const;
-		Colour operator *(const glm::vec3& pOther) const;
-		Colour operator /(const glm::vec3& pOther) const;
-		Colour& operator +=(const float& pOther);
-		Colour& operator -=(const float& pOther);
-		Colour& operator *=(const float& pOther);
-		Colour& operator /=(const float& pOther);
-		Colour& operator +=(const Colour& pOther);
-		Colour& operator -=(const Colour& pOther);
-		Colour& operator *=(const Colour& pOther);
-		Colour& operator /=(const Colour& pOther);
-		Colour& operator +=(const glm::vec3& pOther);
-		Colour& operator -=(const glm::vec3& pOther);
-		Colour& operator *=(const glm::vec3& pOther);
-		Colour& operator /=(const glm::vec3& pOther);
+		Colour operator +(const float& pOther) const noexcept;
+		Colour operator -(const float& pOther) const noexcept;
+		Colour operator *(const float& pOther) const noexcept;
+		Colour operator /(const float& pOther) const noexcept;
+		Colour operator +(const Colour& pOther) const noexcept;
+		Colour operator -(const Colour& pOther) const noexcept;
+		Colour operator *(const Colour& pOther) const noexcept;
+		Colour operator /(const Colour& pOther) const noexcept;
+		Colour operator +(const glm::vec3& pOther) const noexcept;
+		Colour operator -(const glm::vec3& pOther) const noexcept;
+		Colour operator *(const glm::vec3& pOther) const noexcept;
+		Colour operator /(const glm::vec3& pOther) const noexcept;
+		Colour& operator +=(const float& pOther) noexcept;
+		Colour& operator -=(const float& pOther) noexcept;
+		Colour& operator *=(const float& pOther) noexcept;
+		Colour& operator /=(const float& pOther) noexcept;
+		Colour& operator +=(const Colour& pOther) noexcept;
+		Colour& operator -=(const Colour& pOther) noexcept;
+		Colour& operator *=(const Colour& pOther) noexcept;
+		Colour& operator /=(const Colour& pOther) noexcept;
+		Colour& operator +=(const glm::vec3& pOther) noexcept;
+		Colour& operator -=(const glm::vec3& pOther) noexcept;
+		Colour& operator *=(const glm::vec3& pOther) noexcept;
+		Colour& operator /=(const glm::vec3& pOther) noexcept;
 		#pragma endregion
 	};
 }

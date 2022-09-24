@@ -18,9 +18,9 @@ namespace Engine
 		static uint16_t s_textureCount;		// How many textures have been loaded
 
 	public:
-		static int32_t LoadTextureFromFile(const char* pPath);
-		static void UnloadAll();
-		static uint16_t GetNumTex() { return s_textureCount; }
+		static void UnloadAll() noexcept;
+		static int32_t LoadTextureFromFile(const char* pPath) noexcept;
+		constexpr static uint16_t GetNumTex() noexcept { return s_textureCount; }
 
 	private:
 		uint16_t m_id = 0;
@@ -29,10 +29,10 @@ namespace Engine
 
 	public:
 		Texture(std::string pPath, TexType pType = TexType::diffuse);
-		void Destroy();
+		//void Destroy();
 
-		uint16_t GetId() const { return m_id; }
-		TexType GetType() const { return m_type; }
-		std::string GetFile() const { return m_file; }
+		constexpr uint16_t GetId() const noexcept { return m_id; }
+		constexpr TexType GetType() const noexcept { return m_type; }
+		constexpr std::string GetFile() const noexcept { return m_file; }
 	};
 }

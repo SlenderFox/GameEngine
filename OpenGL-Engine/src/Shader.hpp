@@ -35,15 +35,15 @@ namespace Engine
 
 		#pragma region Setters
 		// Utility uniform functions
-		void SetBool	(const std::string& pName, const bool&			pValue) const noexcept;
-		void SetInt		(const std::string& pName, const int32_t&		pValue) const noexcept;
-		void SetUint	(const std::string& pName, const uint32_t&		pValue) const noexcept;
-		void SetFloat	(const std::string& pName, const float&			pValue) const noexcept;
-		void SetVec2	(const std::string& pName, const glm::vec2&		pValue) const noexcept;
-		void SetVec3	(const std::string& pName, const glm::vec3&		pValue) const noexcept;
-		void SetVec4	(const std::string& pName, const glm::vec4&		pValue) const noexcept;
-		void SetMat3	(const std::string& pName, const glm::mat3&		pValue) const noexcept;
-		void SetMat4	(const std::string& pName, const glm::mat4&		pValue) const noexcept;
+		void SetBool	(const std::string& pName, const bool&		pValue) const noexcept;
+		void SetInt		(const std::string& pName, const int32_t&	pValue) const noexcept;
+		void SetUint	(const std::string& pName, const uint32_t&	pValue) const noexcept;
+		void SetFloat	(const std::string& pName, const float&		pValue) const noexcept;
+		void SetVec2	(const std::string& pName, const glm::vec2&	pValue) const noexcept;
+		void SetVec3	(const std::string& pName, const glm::vec3&	pValue) const noexcept;
+		void SetVec4	(const std::string& pName, const glm::vec4&	pValue) const noexcept;
+		void SetMat3	(const std::string& pName, const glm::mat3&	pValue) const noexcept;
+		void SetMat4	(const std::string& pName, const glm::mat4&	pValue) const noexcept;
 		#pragma endregion
 	};
 }

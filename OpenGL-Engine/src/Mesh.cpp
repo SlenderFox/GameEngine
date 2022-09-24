@@ -69,7 +69,7 @@ namespace Engine
 		30U, 31U, 32U, 33U, 34U, 35U	// Face 6
 	};
 	
-	vector<Vertex> Mesh::GenerateVertices()
+	vector<Vertex> Mesh::GenerateVertices() noexcept
 	{
 		vector<Vertex> verts = vector<Vertex>();
 
@@ -97,7 +97,7 @@ namespace Engine
 		return verts;
 	}
 
-	vector<uint32_t> Mesh::GenerateIndices()
+	vector<uint32_t> Mesh::GenerateIndices() noexcept
 	{
 		vector<uint32_t> inds = vector<uint32_t>();
 
@@ -141,14 +141,14 @@ namespace Engine
 		delete m_idEBO;
 	}
 	
-	void Mesh::Draw()
+	void Mesh::Draw() const noexcept
 	{
 		glBindVertexArray(*m_idVAO);
 		glDrawElements(GL_TRIANGLES, (GLsizei)m_indices.get()->size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
 
-	void Mesh::SetupMesh()
+	void Mesh::SetupMesh() const noexcept
 	{
 		// Creates and assigns to an id the Vertex Array Object, Vertex Buffer Object, and Element Buffer Object
 		// Arguments are number of objects to generate, and an array of uints to have the ids stored in

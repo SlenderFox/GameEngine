@@ -24,13 +24,13 @@ namespace Engine
 	uint32_t Texture::s_textureIds[32];
 	uint16_t Texture::s_textureCount = 0;
 
-	void Texture::UnloadAll()
+	void Texture::UnloadAll() noexcept
 	{
 		if (Application::GladLoaded())
 			glDeleteTextures(s_textureCount, s_textureIds);
 	}
 
-	int32_t Texture::LoadTextureFromFile(const char* pPath)
+	int32_t Texture::LoadTextureFromFile(const char* pPath) noexcept
 	{
 		#ifdef _DEBUG
 		 cout << bigProcess << "Loading texture " << s_textureCount << ": \"" << pPath << "\"";
@@ -100,13 +100,13 @@ namespace Engine
 			// Returns the id before incrementing for the next texture
 			return s_textureCount++;
 		}
-		#ifdef _DEBUG
-		 else
-		 {
-		 	cout << "\n" << bigNote <<"Failed to load texture: No file found" << endl;
+		else
+		{
+			#ifdef _DEBUG
+		 	 cout << "\n" << bigNote <<"Failed to load texture: No file found" << endl;
+			#endif
 			return -1;
-		 }
-		#endif
+		}
 	}
 
 	// Member
@@ -116,9 +116,9 @@ namespace Engine
 		m_id = LoadTextureFromFile(pPath.c_str());
 	}
 
-	void Texture::Destroy()
-	{
-		// This is currently bad as it leaves a gap in the loaded textures
-		glDeleteTextures(1, &s_textureIds[m_id]);
-	}
+	//void Texture::Destroy()
+	//{
+	//	// This is currently bad as it leaves a gap in the loaded textures
+	//	glDeleteTextures(1, &s_textureIds[m_id]);
+	//}
 }

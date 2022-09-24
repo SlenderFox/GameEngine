@@ -16,10 +16,10 @@ namespace Engine
 	private:
 		static float* s_cubeVerticesArr;
 		static uint32_t* s_indicesArr;
-
+		// ↑↓ Both of these are depreciated
 	public:
-		static std::vector<Vertex> GenerateVertices();
-		static std::vector<uint32_t> GenerateIndices();
+		static std::vector<Vertex> GenerateVertices() noexcept;
+		static std::vector<uint32_t> GenerateIndices() noexcept;
 
 	private:
 		std::unique_ptr<std::vector<Vertex>> m_vertices = nullptr;
@@ -29,19 +29,19 @@ namespace Engine
 		uint32_t* m_idVBO = new uint32_t(0U);	// The id for the vertex buffer object
 		uint32_t* m_idEBO = new uint32_t(0U);	// The id for the element buffer object
 
-		void SetupMesh();
+		void SetupMesh() const noexcept;
 
 	public:
 		Mesh();
 		Mesh(std::vector<Vertex> pVertices, std::vector<uint32_t> pIndices);
 		~Mesh();
 
-		void Draw();
+		void Draw() const noexcept;
 
 		#pragma region Getters
-		uint32_t* GetVAO() const { return m_idVAO; }
-		uint32_t* GetVBO() const { return m_idVBO; }
-		uint32_t* GetEBO() const { return m_idEBO; }
+		constexpr uint32_t* GetVAO() const noexcept { return m_idVAO; }
+		constexpr uint32_t* GetVBO() const noexcept { return m_idVBO; }
+		constexpr uint32_t* GetEBO() const noexcept { return m_idEBO; }
 		#pragma endregion
 	};
 }

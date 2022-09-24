@@ -25,7 +25,7 @@ namespace Engine
 	// Static
 
 	Entity* Entity::CreateWithModel(std::string pModelPath, std::string pShaderPath,
-	 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures)
+	 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures) noexcept
 	{
 		Renderer* renderer = Renderer::GetInstance();
 		Entity* result = new Entity();
@@ -53,12 +53,12 @@ namespace Engine
 		SetParent(pParent);
 	}
 
-	void Entity::AddChild(Entity* pChild)
+	void Entity::AddChild(Entity* pChild) noexcept
 	{
 		m_childrenRef.push_back(pChild);
 	}
 
-	void Entity::RemoveChild(Entity* pChild)
+	void Entity::RemoveChild(Entity* pChild) noexcept
 	{
 		for (vector<Entity*>::iterator it = m_childrenRef.begin(); it != m_childrenRef.end(); ++it)
 		{
@@ -70,7 +70,7 @@ namespace Engine
 		}
 	}
 
-	void Entity::UpdateModel() const
+	void Entity::UpdateModel() const noexcept
 	{
 		m_modelRef->GetShaderRef()->SetMat4("u_model", GetTransform());
 		m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
@@ -90,7 +90,7 @@ namespace Engine
 	}
 
 	void Entity::LoadModel(std::string pModelPath, std::string pShaderPath,
-		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures)
+		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures) noexcept
 	{
 		Renderer* renderer = Renderer::GetInstance();
 		uint8_t ID;
@@ -102,7 +102,7 @@ namespace Engine
 		pShaderOut = m_modelRef->GetShaderRef();
 	}
 
-	void Entity::SetParent(Entity* pParent)
+	void Entity::SetParent(Entity* pParent) noexcept
 	{
 		// This may change to not changing anything
 		if (!pParent)

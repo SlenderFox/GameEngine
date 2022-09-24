@@ -31,21 +31,23 @@ namespace Engine
 		#pragma region Setters
 		void SetTransform(glm::mat4 pValue) noexcept override;
 		void SetView(glm::mat4 pValue) noexcept;
-		void SetProjection(glm::mat4 pValue) noexcept;
 		void SetProjection(float pFovV) noexcept;
 
 		void SetPosition(glm::vec3 pValue) noexcept override;
 		void Translate(glm::vec3 pValue) noexcept override;
 		void SetAxes(glm::vec3 pRight, glm::vec3 pUp, glm::vec3 pForward) noexcept override;
 
-		void SetAspectRatio(float pAspectRatio) noexcept;
 		void SetFovH(float pFovH) noexcept;
 		void SetFovV(float pFovV) noexcept;
 		#pragma endregion
-		#pragma region Getters
-		glm::mat4 GetView() const noexcept;
-		glm::mat4 GetProjection() const noexcept;
+
 		glm::mat4 GetWorldToCameraMatrix() const noexcept;
+
+		#pragma region Constexpr
+		constexpr void SetProjection(glm::mat4 pValue) noexcept { m_projection = pValue; }
+		constexpr void SetAspectRatio(float pAspectRatio) noexcept { m_aspectRatio = pAspectRatio; }
+		constexpr glm::mat4 GetView() const noexcept { return m_view; }
+		constexpr glm::mat4 GetProjection() const noexcept { return m_projection; }
 		#pragma endregion
 	};
 }

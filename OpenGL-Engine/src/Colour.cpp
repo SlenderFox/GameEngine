@@ -24,7 +24,7 @@ namespace Engine
 {
 	// ---Static---
 
-	hsv Colour::RGBtoHSV(glm::vec3 pRGB)
+	hsv Colour::RGBtoHSV(glm::vec3 pRGB) noexcept
 	{
 		// Sanitise inputs
 		float red = clamp(pRGB.r, 0.0f, 1.0f);
@@ -55,12 +55,12 @@ namespace Engine
 		return result;
 	}
 
-	hsv Colour::RGBtoHSV(rgb255 pRGB)
+	hsv Colour::RGBtoHSV(rgb255 pRGB) noexcept
 	{
 		return RGBtoHSV((vec3)pRGB / 255.0f);
 	}
 
-	vec3 Colour::HSVtoRGB(hsv pHSV)
+	vec3 Colour::HSVtoRGB(hsv pHSV) noexcept
 	{
 		// Sanitise inputs
 		uint16_t hue = pHSV.hue % 360;
@@ -103,21 +103,21 @@ namespace Engine
 		return result;
 	}
 
-	vec3 Colour::HSVtoRGB(glm::vec3 pHSV)
+	vec3 Colour::HSVtoRGB(glm::vec3 pHSV) noexcept
 	{
 		uint16_t hue = (uint16_t)max(pHSV.r, 0.0f);
 		// No need to sanitise inputs
 		return HSVtoRGB(hsv(hue, pHSV.g, pHSV.b));
 	}
 
-	Colour Colour::CreateWithRGB(vec3 pRGB)
+	Colour Colour::CreateWithRGB(vec3 pRGB) noexcept
 	{
 		Colour result;
 		result.m_RGB = clamp(pRGB, 0.0f, 1.0f);
 		return result;
 	}
 
-	Colour Colour::CreateWithRGB(rgb255 pRGB)
+	Colour Colour::CreateWithRGB(rgb255 pRGB) noexcept
 	{
 		Colour result;
 		vec3 rgb = (vec3)pRGB / 255.0f;
@@ -125,7 +125,7 @@ namespace Engine
 		return result;
 	}
 
-	Colour Colour::CreateWithHSV(hsv pHSV)
+	Colour Colour::CreateWithHSV(hsv pHSV) noexcept
 	{
 		Colour result;
 		// No need to sanitise inputs
@@ -133,7 +133,7 @@ namespace Engine
 		return result;
 	}
 	
-	Colour Colour::CreateWithHSV(vec3 pHSV)
+	Colour Colour::CreateWithHSV(vec3 pHSV) noexcept
 	{
 		uint16_t hue = (uint16_t)max(pHSV.r, 0.0f);
 		// Lazily pass to other function
@@ -141,61 +141,66 @@ namespace Engine
 	}
 
 	#pragma region Presets
-	Colour Colour::Black()		{ return Colour(vec3(0)); }
-	Colour Colour::White()		{ return Colour(vec3(1)); }
-	Colour Colour::Silver()		{ return Colour(vec3(0.75f,	0.75f,	0.75f)); }
-	Colour Colour::Grey()		{ return Colour(vec3(0.5f,	0.5f,	0.5f)); }
-	Colour Colour::DarkGrey()	{ return Colour(vec3(0.25f,	0.25f,	0.25f)); }
-	Colour Colour::Red()		{ return Colour(vec3(1,		0,		0)); }
-	Colour Colour::Lime()		{ return Colour(vec3(0,		1,		0)); }
-	Colour Colour::Blue() 		{ return Colour(vec3(0,		0,		1)); }
-	Colour Colour::Yellow()		{ return Colour(vec3(1,		1,		0)); }
-	Colour Colour::Cyan()		{ return Colour(vec3(0,		1,		1)); }
-	Colour Colour::Magenta()	{ return Colour(vec3(1,		0,		1)); }
-	Colour Colour::Maroon()		{ return Colour(vec3(0.5f,	0,		0)); }
-	Colour Colour::Green()		{ return Colour(vec3(0,		0.5f,	0)); }
-	Colour Colour::Navy()		{ return Colour(vec3(0,		0,		0.5f)); }
-	Colour Colour::Olive()		{ return Colour(vec3(0.5f,	0.5f,	0)); }
-	Colour Colour::Teal()		{ return Colour(vec3(0,		0.5f,	0.5f)); }
-	Colour Colour::Purple()		{ return Colour(vec3(0.5f,	0,		0.5f)); }
+	Colour Colour::Black() noexcept		{ return Colour(vec3(0)); }
+	Colour Colour::White() noexcept		{ return Colour(vec3(1)); }
+	Colour Colour::Silver() noexcept	{ return Colour(vec3(0.75f,	0.75f,	0.75f)); }
+	Colour Colour::Grey() noexcept		{ return Colour(vec3(0.5f,	0.5f,	0.5f)); }
+	Colour Colour::DarkGrey() noexcept	{ return Colour(vec3(0.25f,	0.25f,	0.25f)); }
+	Colour Colour::Red() noexcept		{ return Colour(vec3(1,		0,		0)); }
+	Colour Colour::Lime() noexcept		{ return Colour(vec3(0,		1,		0)); }
+	Colour Colour::Blue() noexcept 		{ return Colour(vec3(0,		0,		1)); }
+	Colour Colour::Yellow() noexcept	{ return Colour(vec3(1,		1,		0)); }
+	Colour Colour::Cyan() noexcept		{ return Colour(vec3(0,		1,		1)); }
+	Colour Colour::Magenta() noexcept	{ return Colour(vec3(1,		0,		1)); }
+	Colour Colour::Maroon() noexcept	{ return Colour(vec3(0.5f,	0,		0)); }
+	Colour Colour::Green() noexcept		{ return Colour(vec3(0,		0.5f,	0)); }
+	Colour Colour::Navy() noexcept		{ return Colour(vec3(0,		0,		0.5f)); }
+	Colour Colour::Olive() noexcept		{ return Colour(vec3(0.5f,	0.5f,	0)); }
+	Colour Colour::Teal() noexcept		{ return Colour(vec3(0,		0.5f,	0.5f)); }
+	Colour Colour::Purple() noexcept	{ return Colour(vec3(0.5f,	0,		0.5f)); }
 	#pragma endregion
 
 	// ---Member---
 
-	rgb255 Colour::RGB255()
+	rgb255 Colour::RGB255() const noexcept
 	{
 		return m_RGB * 255.0f;
 	}
 
-	vec3 Colour::HSVvec3()
+	vec3 Colour::HSVvec3() const noexcept
+	{
+		return (vec3)RGBtoHSV(m_RGB);
+	}
+
+	hsv Colour::HSV() const noexcept
 	{
 		return RGBtoHSV(m_RGB);
 	}
 	
 	#pragma region Operators
-	Colour Colour::operator +(const float& pOther) const { return Colour::CreateWithRGB(m_RGB + pOther); }
-	Colour Colour::operator -(const float& pOther) const { return Colour::CreateWithRGB(m_RGB - pOther); }
-	Colour Colour::operator *(const float& pOther) const { return Colour::CreateWithRGB(m_RGB * pOther); }
-	Colour Colour::operator /(const float& pOther) const { return Colour::CreateWithRGB(m_RGB / pOther); }
-	Colour Colour::operator +(const Colour& pOther) const { return Colour::CreateWithRGB(m_RGB + pOther.m_RGB); }
-	Colour Colour::operator -(const Colour& pOther) const { return Colour::CreateWithRGB(m_RGB - pOther.m_RGB); }
-	Colour Colour::operator *(const Colour& pOther) const { return Colour::CreateWithRGB(m_RGB * pOther.m_RGB); }
-	Colour Colour::operator /(const Colour& pOther) const { return Colour::CreateWithRGB(m_RGB / pOther.m_RGB); }
-	Colour Colour::operator +(const glm::vec3& pOther) const { return Colour::CreateWithRGB(m_RGB + pOther); }
-	Colour Colour::operator -(const glm::vec3& pOther) const { return Colour::CreateWithRGB(m_RGB - pOther); }
-	Colour Colour::operator *(const glm::vec3& pOther) const { return Colour::CreateWithRGB(m_RGB * pOther); }
-	Colour Colour::operator /(const glm::vec3& pOther) const { return Colour::CreateWithRGB(m_RGB / pOther); }
-	Colour& Colour::operator +=(const float& pOther) { m_RGB += pOther; return *this; }
-	Colour& Colour::operator -=(const float& pOther) { m_RGB -= pOther; return *this; }
-	Colour& Colour::operator *=(const float& pOther) { m_RGB *= pOther; return *this; }
-	Colour& Colour::operator /=(const float& pOther) { m_RGB /= pOther; return *this; }
-	Colour& Colour::operator +=(const Colour& pOther) { m_RGB += pOther.m_RGB; return *this; }
-	Colour& Colour::operator -=(const Colour& pOther) { m_RGB -= pOther.m_RGB; return *this; }
-	Colour& Colour::operator *=(const Colour& pOther) { m_RGB *= pOther.m_RGB; return *this; }
-	Colour& Colour::operator /=(const Colour& pOther) { m_RGB /= pOther.m_RGB; return *this; }
-	Colour& Colour::operator +=(const glm::vec3& pOther) { m_RGB += pOther; return *this; }
-	Colour& Colour::operator -=(const glm::vec3& pOther) { m_RGB -= pOther; return *this; }
-	Colour& Colour::operator *=(const glm::vec3& pOther) { m_RGB *= pOther; return *this; }
-	Colour& Colour::operator /=(const glm::vec3& pOther) { m_RGB /= pOther; return *this; }
+	Colour Colour::operator +(const float& pOther) const noexcept { return Colour::CreateWithRGB(m_RGB + pOther); }
+	Colour Colour::operator -(const float& pOther) const noexcept { return Colour::CreateWithRGB(m_RGB - pOther); }
+	Colour Colour::operator *(const float& pOther) const noexcept { return Colour::CreateWithRGB(m_RGB * pOther); }
+	Colour Colour::operator /(const float& pOther) const noexcept { return Colour::CreateWithRGB(m_RGB / pOther); }
+	Colour Colour::operator +(const Colour& pOther) const noexcept { return Colour::CreateWithRGB(m_RGB + pOther.m_RGB); }
+	Colour Colour::operator -(const Colour& pOther) const noexcept { return Colour::CreateWithRGB(m_RGB - pOther.m_RGB); }
+	Colour Colour::operator *(const Colour& pOther) const noexcept { return Colour::CreateWithRGB(m_RGB * pOther.m_RGB); }
+	Colour Colour::operator /(const Colour& pOther) const noexcept { return Colour::CreateWithRGB(m_RGB / pOther.m_RGB); }
+	Colour Colour::operator +(const glm::vec3& pOther) const noexcept { return Colour::CreateWithRGB(m_RGB + pOther); }
+	Colour Colour::operator -(const glm::vec3& pOther) const noexcept { return Colour::CreateWithRGB(m_RGB - pOther); }
+	Colour Colour::operator *(const glm::vec3& pOther) const noexcept { return Colour::CreateWithRGB(m_RGB * pOther); }
+	Colour Colour::operator /(const glm::vec3& pOther) const noexcept { return Colour::CreateWithRGB(m_RGB / pOther); }
+	Colour& Colour::operator +=(const float& pOther) noexcept { m_RGB += pOther; return *this; }
+	Colour& Colour::operator -=(const float& pOther) noexcept { m_RGB -= pOther; return *this; }
+	Colour& Colour::operator *=(const float& pOther) noexcept { m_RGB *= pOther; return *this; }
+	Colour& Colour::operator /=(const float& pOther) noexcept { m_RGB /= pOther; return *this; }
+	Colour& Colour::operator +=(const Colour& pOther) noexcept { m_RGB += pOther.m_RGB; return *this; }
+	Colour& Colour::operator -=(const Colour& pOther) noexcept { m_RGB -= pOther.m_RGB; return *this; }
+	Colour& Colour::operator *=(const Colour& pOther) noexcept { m_RGB *= pOther.m_RGB; return *this; }
+	Colour& Colour::operator /=(const Colour& pOther) noexcept { m_RGB /= pOther.m_RGB; return *this; }
+	Colour& Colour::operator +=(const glm::vec3& pOther) noexcept { m_RGB += pOther; return *this; }
+	Colour& Colour::operator -=(const glm::vec3& pOther) noexcept { m_RGB -= pOther; return *this; }
+	Colour& Colour::operator *=(const glm::vec3& pOther) noexcept { m_RGB *= pOther; return *this; }
+	Colour& Colour::operator /=(const glm::vec3& pOther) noexcept { m_RGB /= pOther; return *this; }
 	#pragma endregion
 }

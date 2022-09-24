@@ -12,6 +12,7 @@ namespace Engine
 		#pragma region Constructors
 		Transform();
 		Transform(glm::mat4 pValue);
+		virtual ~Transform() {}
 
 		Transform(const Transform& pOther);
 		Transform& operator=(const Transform& pOther);
@@ -28,11 +29,11 @@ namespace Engine
 		virtual void SetForward(glm::vec3 pForward) noexcept;
 		#pragma endregion
 		#pragma region Getters
-		const glm::mat4& GetTransform() const noexcept { return m_transform; }
-		virtual glm::vec4 GetPosition() const noexcept;
-		virtual glm::vec4 GetRight() const noexcept;
-		virtual glm::vec4 GetUp() const noexcept;
-		virtual glm::vec4 GetForward() const noexcept;
+		constexpr const glm::mat4& GetTransform() const noexcept { return m_transform; }
+		constexpr virtual glm::vec4 GetPosition() const noexcept { return m_transform[3]; }
+		constexpr virtual glm::vec4 GetRight() const noexcept;
+		constexpr virtual glm::vec4 GetUp() const noexcept;
+		constexpr virtual glm::vec4 GetForward() const noexcept;
 		#pragma endregion
 
 	};

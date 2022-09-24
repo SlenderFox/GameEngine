@@ -40,20 +40,20 @@ namespace Engine
 		#pragma endregion
 
 		bool Init(std::string pTitle, bool pFullscreen);
-		void UpdateCamera();
-		void ProcessInput();
+		void UpdateCamera() noexcept;
+		void ProcessInput() noexcept;
 
 	public:
 		const double m_fixedDeltaTime = 0.01666666666666666;
 
 		void Run(uint16_t pWidth, uint16_t pHeight, std::string pTitle, bool pFullscreen);
-		void SetDimensions(uint16_t pWidth, uint16_t pHeight);
-		void MouseCallback(double pPosX, double pPosY);
-		void ScrollCallback(double pOffsetX, double pOffsetY);
+		void SetDimensions(uint16_t pWidth, uint16_t pHeight) noexcept;
+		void MouseCallback(double pPosX, double pPosY) noexcept;
+		void ScrollCallback(double pOffsetX, double pOffsetY) noexcept;
 
-		double GetTime() const { return m_currentTime; }
-		double GetDeltaTime() const { return m_deltaTime; }
-		double GetFixedDeltaTime() const { return m_fixedDeltaTime; }
+		constexpr double GetTime() const noexcept { return m_currentTime; }
+		constexpr double GetDeltaTime() const noexcept { return m_deltaTime; }
+		constexpr double GetFixedDeltaTime() const noexcept { return m_fixedDeltaTime; }
 
 	protected:
 		Application();

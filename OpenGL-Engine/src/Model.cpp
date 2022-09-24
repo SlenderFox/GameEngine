@@ -59,7 +59,7 @@ namespace Engine
 		#endif
 	}
 
-	void Model::Draw(const Camera* const& pCamera)
+	void Model::Draw(const Camera* const& pCamera) const noexcept
 	{
 		m_shader->Use();
 		if (pCamera)
@@ -101,7 +101,7 @@ namespace Engine
 		ProcessNode(scene->mRootNode, scene);
 	}
 	
-	void Model::ProcessNode(aiNode* pNode, const aiScene* pScene)
+	void Model::ProcessNode(aiNode* pNode, const aiScene* pScene) noexcept
 	{
 		// Process all the node's meshes (if any)
 		for (uint32_t i = 0; i < pNode->mNumMeshes; ++i)
@@ -116,7 +116,7 @@ namespace Engine
 		}
 	}
 
-	unique_ptr<Mesh> Model::ProcessMesh(aiMesh* pMesh, const aiScene* pScene)
+	unique_ptr<Mesh> Model::ProcessMesh(aiMesh* pMesh, const aiScene* pScene) noexcept
 	{
 		vector<Vertex> vertices;
 		vector<uint32_t> indices;
@@ -175,7 +175,7 @@ namespace Engine
 		return make_unique<Mesh>(vertices, indices);
 	}
 
-	vector<Texture*> Model::LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType)
+	vector<Texture*> Model::LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType) noexcept
 	{
 		// Textures from this specific node being output
 		vector<Texture*> texturesOut;
@@ -225,7 +225,7 @@ namespace Engine
 		return texturesOut;
 	}
 
-	void Model::LoadTexturesToShader()
+	void Model::LoadTexturesToShader() const noexcept
 	{
 		uint8_t diffuseNr = 0;
 		uint8_t specularNr = 0;
@@ -254,7 +254,7 @@ namespace Engine
 		}
 	}
 
-	Mesh* Model::GetMeshAt(uint16_t pPos)
+	Mesh* Model::GetMeshAt(uint16_t pPos) const  noexcept
 	{
 		if (!m_meshes.get())
 			return nullptr;

@@ -27,7 +27,7 @@ namespace Engine
 
 	const float Renderer::s_ambience = 0.15f;
 
-	void Renderer::SetClearColour(Colour pColour)
+	void Renderer::SetClearColour(Colour pColour) noexcept
 	{
 		vec3 col = pColour.RGBvec3();
 		glClearColor(col.r, col.g, col.b, 1.0f);
@@ -35,7 +35,7 @@ namespace Engine
 
 	// Member
 
-	void Renderer::Init(float pAspect)
+	void Renderer::Init(float pAspect) noexcept
 	{
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);
@@ -75,7 +75,7 @@ namespace Engine
 		delete m_camera;
 	}
 
-	void Renderer::Draw()
+	void Renderer::Draw() noexcept
 	{
 		// Clears to background colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -87,7 +87,7 @@ namespace Engine
 		}
 	}
 
-	void Renderer::LoadLightsIntoShader(const Shader& pShader)
+	void Renderer::LoadLightsIntoShader(const Shader& pShader) noexcept
 	{
 		pShader.SetFloat("u_material.shininess", 32.0f);
 		uint8_t numDirLights = 0;
@@ -127,7 +127,7 @@ namespace Engine
 		}
 	}
 
-	void Renderer::ModifyAllSpotlightAngles(float pValue)
+	void Renderer::ModifyAllSpotlightAngles(float pValue) noexcept
 	{
 		for (uint8_t i = 0; i < m_lights.get()->size(); ++i)
 		{
@@ -145,7 +145,7 @@ namespace Engine
 		}
 	}
 
-	void Renderer::ModifyAllSpotlightBlurs(float pValue)
+	void Renderer::ModifyAllSpotlightBlurs(float pValue) noexcept
 	{
 		for (uint8_t i = 0; i < m_lights.get()->size(); ++i)
 		{
@@ -163,7 +163,7 @@ namespace Engine
 		}
 	}
 
-	Model* Renderer::AddNewModel(uint8_t &id, string pModelPath, std::string pShaderPath, bool pLoadTextures)
+	Model* Renderer::AddNewModel(uint8_t &id, string pModelPath, std::string pShaderPath, bool pLoadTextures) noexcept
 	{
 		// Caps at 255
 		size_t currentAmount = m_models.get()->size();
@@ -175,7 +175,7 @@ namespace Engine
 		return GetModelAt(id);
 	}
 
-	Light* Renderer::AddNewLight(uint8_t &id, LightType pType, Colour pColour)
+	Light* Renderer::AddNewLight(uint8_t &id, LightType pType, Colour pColour) noexcept
 	{
 		// Caps at 255
 		size_t currentAmount = m_lights.get()->size();
@@ -188,17 +188,17 @@ namespace Engine
 	}
 
 	#pragma region Getters
-	uint8_t Renderer::ModelCount() const
+	uint8_t Renderer::ModelCount() const noexcept
 	{
 		return (uint8_t)m_models.get()->size();
 	}
 
-	uint8_t Renderer::LightCount() const
+	uint8_t Renderer::LightCount() const noexcept
 	{
 		return (uint8_t)m_lights.get()->size();
 	}
 
-	Model* Renderer::GetModelAt(uint8_t pPos)
+	Model* Renderer::GetModelAt(uint8_t pPos) noexcept
 	{
 		if (!m_models.get())
 			return nullptr;
@@ -214,7 +214,7 @@ namespace Engine
 		return (*m_models.get())[pPos].get();
 	}
 
-	Light* Renderer::GetLightAt(uint8_t pPos)
+	Light* Renderer::GetLightAt(uint8_t pPos) noexcept
 	{
 		if (!m_lights.get())
 			return nullptr;

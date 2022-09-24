@@ -2,17 +2,14 @@
 #include "Light.hpp"
 #include <math.h>
 
-using glm::vec3;
-using glm::vec4;
 using glm::mat4;
 using glm::cos;
+using glm::sin;
 using glm::radians;
-using glm::normalize;
 #pragma endregion
 
 namespace Engine
 {
-	#pragma region Constructors
 	Light::Light(LightType pType, Colour pColour): m_type(pType), m_lightColour(pColour)
 	{
 		m_angle = cos(radians(20.0f));
@@ -23,70 +20,14 @@ namespace Engine
 		Transform::SetTransform(pTransform);
 		m_angle = cos(radians(20.0f));
 	}
-	#pragma endregion
-	#pragma region Setters
-	Light* Light::SetType(LightType pType)
-	{
-		m_type = pType;
-		return this;
-	}
 
-	Light* Light::SetCamPosition(vec3 pPosition)
+	float Light::GetAngle() const noexcept
 	{
-		Transform::SetPosition(pPosition);
-		return this;
-	}
-
-	Light* Light::SetDirection(vec3 pDirection)
-	{
-		Transform::SetForward(normalize(pDirection));
-		return this;
-	}
-
-	Light* Light::SetColour(Colour pColour)
-	{
-		m_lightColour = pColour;
-		return this;
-	}
-
-	Light* Light::SetLinear(float pValue)
-	{
-		m_linear = pValue;
-		return this;
-	}
-
-	Light* Light::SetQuadratic(float pValue)
-	{
-		m_quadratic = pValue;
-		return this;
-	}
-
-	Light* Light::SetAngle(float pValue)
-	{
-		m_angle = pValue;
-		return this;
-	}
-
-	Light* Light::SetBlur(float pValue)
-	{
-		m_blur = pValue;
-		return this;
-	}
-	#pragma endregion
-	#pragma region Getters
-	vec4 Light::GetDirection() const
-	{
-		return Transform::GetForward();
+		return cos(radians(m_angle));
 	}
 	
-	float Light::GetAngle()
+	float Light::GetBlur() const noexcept
 	{
-		return std::cosf(glm::radians(m_angle));
+		return sin(radians(90 * m_blur));
 	}
-	
-	float Light::GetBlur()
-	{
-		return std::sinf(glm::radians(90 * m_blur));
-	}
-	#pragma endregion
 }

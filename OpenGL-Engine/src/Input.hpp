@@ -9,7 +9,7 @@ namespace Engine
 	{
 		friend class Application;	// Allowing application access and control
 	public:
-		static Input* GetInstance()
+		static Input* GetInstance() noexcept
 		{
 			static Input* s_instance = new Input();
 			return s_instance;

@@ -28,9 +28,9 @@ Todo:
 	- [x] Comment Colour.hpp
 - [x] Remove depreciated code from Mesh
 - [x] Convert lights into a derivation of Entity
-- [ ] Upgrade debug logging
+- [x] Upgrade debug logging
 	- [x] Add shader creation logging
-	- [ ] Light creation maybe
+	- [ ] ~~Light creation maybe~~
 	- [x] Make it clear and concise
 - [ ] Mark functions as noexcept and constexpr
 - [ ] Overload entity copy constructor to load model better

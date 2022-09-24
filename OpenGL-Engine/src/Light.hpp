@@ -27,26 +27,26 @@ namespace Engine
 		~Light() {}
 		#pragma endregion
 		#pragma region Setters
-		Light* SetType(LightType pType);
-		Light* SetCamPosition(glm::vec3 pPosition);
-		Light* SetDirection(glm::vec3 pDirection);
-		Light* SetColour(Colour pColour);
-		Light* SetLinear(float pValue);
-		Light* SetQuadratic(float pValue);
-		Light* SetAngle(float pValue);	// In degrees
-		Light* SetBlur(float pValue);	// In degrees
+		constexpr void SetType(LightType pType) noexcept { m_type = pType; }
+		constexpr void SetCamPosition(glm::vec3 pPosition) noexcept { Transform::SetPosition(pPosition); }
+		constexpr void SetDirection(glm::vec3 pDirection) noexcept { Transform::SetForward(glm::normalize(pDirection)); }
+		constexpr void SetColour(Colour pColour) noexcept { m_lightColour = pColour; }
+		constexpr void SetLinear(float pValue) noexcept { m_linear = pValue; }
+		constexpr void SetQuadratic(float pValue) noexcept { m_quadratic = pValue; }
+		constexpr void SetAngle(float pValue) noexcept { m_angle = pValue; }	// In degrees
+		constexpr void SetBlur(float pValue) noexcept { m_blur = pValue; }		// In degrees
 		#pragma endregion
 		#pragma region Getters
-		glm::vec4 GetPosition() { return Transform::GetPosition(); }
-		LightType GetType() const { return m_type; }
-		glm::vec4 GetDirection() const;
-		Colour GetColour() const { return m_lightColour; }
-		float GetLinear() const { return m_linear; }
-		float GetQuadratic() const { return m_quadratic; }
-		float GetAngle();
-		float GetAngleRaw() const { return m_angle; }
-		float GetBlur();
-		float GetBlurRaw() const { return m_blur; }
+		float GetAngle() const noexcept;
+		float GetBlur() const noexcept;
+		constexpr glm::vec4 GetPosition() const noexcept { return Transform::GetPosition(); }
+		constexpr glm::vec4 GetDirection() const noexcept { return Transform::GetForward(); }
+		constexpr LightType GetType() const noexcept { return m_type; }
+		constexpr Colour GetColour() const noexcept { return m_lightColour; }
+		constexpr float GetLinear() const noexcept { return m_linear; }
+		constexpr float GetQuadratic() const noexcept { return m_quadratic; }
+		constexpr float GetAngleRaw() const noexcept { return m_angle; }
+		constexpr float GetBlurRaw() const noexcept { return m_blur; }
 		#pragma endregion
 	};
 }

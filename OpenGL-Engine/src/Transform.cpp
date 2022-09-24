@@ -83,23 +83,18 @@ namespace Engine
 	}
 	#pragma endregion
 	#pragma region Getters
-	vec4 Transform::GetPosition() const noexcept
-	{
-		return m_transform[3];
-	}
-
-	vec4 Transform::GetRight() const noexcept
+	constexpr vec4 Transform::GetRight() const noexcept
 	{
 		// The transform is horizontally reversed
 		return vec4(-(vec3)m_transform[0], 0);
 	}
 
-	vec4 Transform::GetUp() const noexcept
+	constexpr vec4 Transform::GetUp() const noexcept
 	{
 		return vec4((vec3)m_transform[1], 0);
 	}
 
-	vec4 Transform::GetForward() const noexcept
+	constexpr vec4 Transform::GetForward() const noexcept
 	{
 		// The transform is horizontally reversed
 		return vec4(-(vec3)m_transform[2], 0);

@@ -19,18 +19,18 @@ using glm::normalize;
 #pragma endregion
 
 // Called when the user resizes the window
-void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight)
+void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight) noexcept
 {
 	Engine::Application::GetApplication()->SetDimensions(pWidth, pHeight);
 	glViewport(0, 0, pWidth, pHeight);
 }
 
-void mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY)
+void mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY) noexcept
 {
 	Engine::Application::GetApplication()->MouseCallback(pPosX, pPosY);
 }
 
-void scroll_callback(GLFWwindow* window, double pOffsetX, double pOffsetY)
+void scroll_callback(GLFWwindow* window, double pOffsetX, double pOffsetY) noexcept
 {
 	Engine::Application::GetApplication()->ScrollCallback(pOffsetX, pOffsetY);
 }
@@ -231,7 +231,7 @@ namespace Engine
 		return true;
 	}
 
-	void Application::SetDimensions(uint16_t pWidth, uint16_t pHeight)
+	void Application::SetDimensions(uint16_t pWidth, uint16_t pHeight) noexcept
 	{
 		m_winWidth = pWidth;
 		m_winHeight = pHeight;
@@ -240,13 +240,13 @@ namespace Engine
 			UpdateCamera();
 	}
 
-	void Application::UpdateCamera()
+	void Application::UpdateCamera() noexcept
 	{
 		m_rendererInst->m_camera->SetAspectRatio((float)m_winWidth / (float)m_winHeight);
 		m_rendererInst->m_camera->UpdateFovV();
 	}
 
-	void Application::MouseCallback(double pPosX, double pPosY)
+	void Application::MouseCallback(double pPosX, double pPosY) noexcept
 	{
 		double offsetX = pPosX - m_mouseLastX;
 		double offsetY = pPosY - m_mouseLastY;
@@ -271,12 +271,12 @@ namespace Engine
 		m_rendererInst->m_camera->SetForward(forward);
 	}
 
-	void Application::ScrollCallback(double pOffsetX, double pOffsetY)
+	void Application::ScrollCallback(double pOffsetX, double pOffsetY) noexcept
 	{
 		m_rendererInst->m_camera->ModifyFovH((float)pOffsetY * -3.0f);
 	}
 
-	void Application::ProcessInput()
+	void Application::ProcessInput() noexcept
 	{
 		// End application
 		if (glfwGetKey(m_window, GLFW_KEY_END) == GLFW_PRESS)
