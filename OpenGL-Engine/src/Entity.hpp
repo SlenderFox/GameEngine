@@ -5,6 +5,7 @@ namespace Engine
 {
 	class Entity: public Transform
 	{
+		friend struct EntityLoader;
 	public:
 		static Entity* CreateWithModel(std::string pModelPath, std::string pShaderPath,
 		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures = true) noexcept;
@@ -26,12 +27,13 @@ namespace Engine
 		void AddChild(Entity* pChild) noexcept;
 		void RemoveChild(Entity* pChild) noexcept;
 
+		void LoadModel(std::string pModelPath, std::string pShaderPath,
+		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures = true) noexcept;
+		 
 		#pragma region Setters
 		void SetTransform(glm::mat4 pValue) noexcept override;
 		void Translate(glm::vec3 pValue) noexcept override;
 
-		void LoadModel(std::string pModelPath, std::string pShaderPath,
-		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures = true) noexcept;
 		void SetParent(Entity* pParent) noexcept;
 		void RenderOnlyColour(bool pState) noexcept;
 		void SetScale(glm::vec3 pValue) noexcept;

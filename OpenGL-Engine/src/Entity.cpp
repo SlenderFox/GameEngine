@@ -1,6 +1,7 @@
 #pragma region
 #include "Entity.hpp"
 
+using std::string;
 using glm::vec3;
 using glm::vec4;
 using glm::mat3;
@@ -18,22 +19,32 @@ namespace Engine
 	{
 	public:
 		static Renderer* GetInstance();
-		Model* AddNewModel(uint8_t &id, std::string pModelPath, std::string pShaderPath, bool pLoadTextures = true);
+		Model* AddNewModel(uint8_t &id, string pModelPath, string pShaderPath, bool pLoadTextures = true);
 		void LoadLightsIntoShader(const Shader& pShader);
+	};
+
+	// Blame https://stackoverflow.com/a/40937193/15035125 for this
+	struct EntityLoader
+	{
+		static void BackgroundLoadModel(string pModelPath, string pShaderPath,
+		 Entity* const& pEntity, bool pLoadTextures = true) noexcept
+		{
+			Renderer* renderer = Renderer::GetInstance();
+			uint8_t ID;
+			pEntity->m_modelRef = renderer->AddNewModel(ID, pModelPath, pShaderPath, pLoadTextures);
+			renderer->LoadLightsIntoShader(*pEntity->m_modelRef->GetShaderRef());
+			pEntity->m_modelRef->GetShaderRef()->SetMat4("u_model", pEntity->GetTransform());
+			pEntity->m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(pEntity->GetTransform())));
+		}
 	};
 
 	// Static
 
-	Entity* Entity::CreateWithModel(std::string pModelPath, std::string pShaderPath,
+	Entity* Entity::CreateWithModel(string pModelPath, string pShaderPath,
 	 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures) noexcept
 	{
-		Renderer* renderer = Renderer::GetInstance();
 		Entity* result = new Entity();
-		uint8_t ID;
-		result->m_modelRef = renderer->AddNewModel(ID, pModelPath, pShaderPath, pLoadTextures);
-		renderer->LoadLightsIntoShader(*result->m_modelRef->GetShaderRef());
-		result->m_modelRef->GetShaderRef()->SetMat4("u_model", result->GetTransform());
-		result->m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(result->GetTransform())));
+		EntityLoader::BackgroundLoadModel(pModelPath, pShaderPath, result, pLoadTextures);
 		pModelOut = result->m_modelRef;
 		pShaderOut = result->m_modelRef->GetShaderRef();
 		return result;
@@ -76,6 +87,15 @@ namespace Engine
 		m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
 	}
 
+	void Entity::LoadModel(string pModelPath, string pShaderPath,
+		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures) noexcept
+	{
+		// Currently this does nothing about the previous model and shader but does not cause a memory leak
+		EntityLoader::BackgroundLoadModel(pModelPath, pShaderPath, this, pLoadTextures);
+		pModelOut = m_modelRef;
+		pShaderOut = m_modelRef->GetShaderRef();
+	}
+
 	#pragma region Setters
 	void Entity::SetTransform(mat4 pValue) noexcept
 	{
@@ -87,19 +107,6 @@ namespace Engine
 	{
 		Transform::Translate(pValue);
 		UpdateModel();
-	}
-
-	void Entity::LoadModel(std::string pModelPath, std::string pShaderPath,
-		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures) noexcept
-	{
-		Renderer* renderer = Renderer::GetInstance();
-		uint8_t ID;
-		m_modelRef = renderer->AddNewModel(ID, pModelPath, pShaderPath, pLoadTextures);
-		renderer->LoadLightsIntoShader(*m_modelRef->GetShaderRef());
-		m_modelRef->GetShaderRef()->SetMat4("u_model", GetTransform());
-		m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
-		pModelOut = m_modelRef;
-		pShaderOut = m_modelRef->GetShaderRef();
 	}
 
 	void Entity::SetParent(Entity* pParent) noexcept
