@@ -1,9 +1,5 @@
 #pragma region
 /**
- * @file Colour.cpp
- * @author SlenderFox
- * @date 2022-09-11
- * @copyright Copyright (c) 2022
  * Bibliography:
  * https://en.wikipedia.org/wiki/HSL_and_HSV#HSV_to_RGB
  * https://www.rapidtables.com/web/color/RGB_Color.html

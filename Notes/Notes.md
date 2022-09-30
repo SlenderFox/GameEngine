@@ -37,3 +37,10 @@ Todo:
 - [x] Redo destruction to avoid passing parameters
 - [x] Make shader owned by model
 - [ ] Add imgui
+- [ ] Actually use the input class
+	- [ ] Keyboard input
+		- [ ] Keyboard layouts
+	- [ ] Mouse input
+- [ ] Limit lights to the same as in the shader
+- [ ] Have each light type in it's own array
+- [ ] Use const references where possible

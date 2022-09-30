@@ -1,9 +1,3 @@
-/**
- * @file Colour.hpp
- * @author SlenderFox
- * @date 2022-09-11
- * @copyright Copyright (c) 2022
- */
 #pragma once
 #include "Model.hpp"
 
