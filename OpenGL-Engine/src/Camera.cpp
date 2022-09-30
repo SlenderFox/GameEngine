@@ -18,48 +18,48 @@ namespace Engine
 	#pragma region Constructors
 	Camera::Camera(float pAspectRatio)
 	{
-		SetTransform(mat4(1.0f));
 		SetAspectRatio(pAspectRatio);
+		SetTransform(mat4(1.0f));
 		SetFovH(75.0f);
 	}
 
 	Camera::Camera(float pAspectRatio, float pFovH)
 	{
+		SetAspectRatio(pAspectRatio);
 		SetTransform(mat4(1.0f));
-		SetAspectRatio(pAspectRatio);
 		SetFovH(pFovH);
 	}
 
-	Camera::Camera(float pAspectRatio, mat4 pTransform)
+	Camera::Camera(float pAspectRatio, const mat4& pTransform)
 	{
-		SetTransform(pTransform);
 		SetAspectRatio(pAspectRatio);
+		SetTransform(pTransform);
 		SetFovH(75.0f);
 	}
 
-	Camera::Camera(float pAspectRatio, float pFovH, mat4 pTransform)
+	Camera::Camera(float pAspectRatio, float pFovH, const mat4& pTransform)
 	{
-		SetTransform(pTransform);
 		SetAspectRatio(pAspectRatio);
+		SetTransform(pTransform);
 		SetFovH(pFovH);
 	}
 
-	Camera::Camera(float pAspectRatio, vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
+	Camera::Camera(float pAspectRatio, const vec3& pFrom, const vec3& pTo, const vec3& pUp)
 	{
-		LookAt(pFrom, pTo, pUp);
 		SetAspectRatio(pAspectRatio);
+		LookAt(pFrom, pTo, pUp);
 		SetFovH(75.0f);
 	}
 
-	Camera::Camera(float pAspectRatio, float pFovH, vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
+	Camera::Camera(float pAspectRatio, float pFovH, const vec3& pFrom, const vec3& pTo, const vec3& pUp)
 	{
-		LookAt(pFrom, pTo, pUp);
 		SetAspectRatio(pAspectRatio);
+		LookAt(pFrom, pTo, pUp);
 		SetFovH(pFovH);
 	}
 	#pragma endregion
 
-	void Camera::LookAt(vec3 pFrom, vec3 pTo, vec3 pUp = { 0, 1, 0 })
+	void Camera::LookAt(const vec3& pFrom, const vec3& pTo, const vec3& pUp)
 	{
 		m_view = glm::lookAt(pFrom, pTo, pUp);
 		SetView(m_view);
@@ -98,13 +98,13 @@ namespace Engine
 	}
 
 	#pragma region Setters
-	void Camera::SetTransform(mat4 pValue) noexcept
+	void Camera::SetTransform(const mat4& pValue) noexcept
 	{
 		Transform::SetTransform(pValue);
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::SetView(mat4 pValue) noexcept
+	void Camera::SetView(const mat4& pValue) noexcept
 	{
 		m_view = pValue;
 		Transform::SetTransform(inverse(m_view));
@@ -115,19 +115,19 @@ namespace Engine
 		m_projection = perspective(radians(pFovV), m_aspectRatio, 0.1f, 500.0f);
 	}
 
-	void Camera::SetPosition(vec3 pValue) noexcept
+	void Camera::SetPosition(const vec3& pValue) noexcept
 	{
 		Transform::SetPosition(pValue);
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::Translate(vec3 pValue) noexcept
+	void Camera::Translate(const vec3& pValue) noexcept
 	{
 		Transform::Translate(pValue);
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::SetAxes(vec3 pRight, vec3 pUp, vec3 pForward) noexcept
+	void Camera::SetAxes(const vec3& pRight, const vec3& pUp, const vec3& pForward) noexcept
 	{
 		Transform::SetAxes(pRight, pUp, pForward);
 		m_view = inverse(GetTransform());

@@ -43,4 +43,4 @@ Todo:
 	- [ ] Mouse input
 - [ ] Limit lights to the same as in the shader
 - [ ] Have each light type in it's own array
-- [ ] Use const references where possible
+- [x] Use const references where possible

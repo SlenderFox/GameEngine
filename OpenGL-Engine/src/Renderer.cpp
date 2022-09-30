@@ -27,7 +27,7 @@ namespace Engine
 
 	const float Renderer::s_ambience = 0.15f;
 
-	void Renderer::SetClearColour(Colour pColour) noexcept
+	void Renderer::SetClearColour(const Colour& pColour) noexcept
 	{
 		vec3 col = pColour.RGBvec3();
 		glClearColor(col.r, col.g, col.b, 1.0f);
@@ -163,7 +163,7 @@ namespace Engine
 		}
 	}
 
-	Model* Renderer::AddNewModel(uint8_t &id, string pModelPath, std::string pShaderPath, bool pLoadTextures) noexcept
+	Model* Renderer::AddNewModel(uint8_t &id, string pModelPath, string pShaderPath, bool pLoadTextures) noexcept
 	{
 		// Caps at 255
 		size_t currentAmount = m_models.get()->size();
@@ -171,11 +171,12 @@ namespace Engine
 			return nullptr;
 
 		id = (uint8_t)currentAmount;
-		m_models.get()->push_back(make_unique<Model>((char*)pModelPath.c_str(), (char*)pShaderPath.c_str(), m_camera, pLoadTextures));
+		// Doesn't like paths being const refs
+		m_models.get()->push_back(make_unique<Model>(pModelPath, pShaderPath, m_camera, pLoadTextures));
 		return GetModelAt(id);
 	}
 
-	Light* Renderer::AddNewLight(uint8_t &id, LightType pType, Colour pColour) noexcept
+	Light* Renderer::AddNewLight(uint8_t &id, const LightType& pType, const Colour& pColour) noexcept
 	{
 		// Caps at 255
 		size_t currentAmount = m_lights.get()->size();

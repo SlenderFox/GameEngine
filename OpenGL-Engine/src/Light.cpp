@@ -10,12 +10,14 @@ using glm::radians;
 
 namespace Engine
 {
-	Light::Light(LightType pType, Colour pColour): m_type(pType), m_lightColour(pColour)
+	Light::Light(const LightType& pType, const Colour& pColour)
+	 : m_type(pType), m_lightColour(pColour)
 	{
 		m_angle = cos(radians(20.0f));
 	}
 
-	Light::Light(LightType pType, mat4 pTransform, Colour pColour): m_type(pType), m_lightColour(pColour)
+	Light::Light(const LightType& pType, const mat4& pTransform, const Colour& pColour)
+	 : m_type(pType), m_lightColour(pColour)
 	{
 		Transform::SetTransform(pTransform);
 		m_angle = cos(radians(20.0f));

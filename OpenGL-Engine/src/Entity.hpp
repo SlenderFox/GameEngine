@@ -7,7 +7,7 @@ namespace Engine
 	{
 		friend struct EntityLoader;
 	public:
-		static Entity* CreateWithModel(std::string pModelPath, std::string pShaderPath,
+		static Entity* CreateWithModel(const std::string& pModelPath, const std::string& pShaderPath,
 		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures = true) noexcept;
 
 	private:
@@ -27,12 +27,12 @@ namespace Engine
 		void AddChild(Entity* pChild) noexcept;
 		void RemoveChild(Entity* pChild) noexcept;
 
-		void LoadModel(std::string pModelPath, std::string pShaderPath,
+		void LoadModel(const std::string& pModelPath, const std::string& pShaderPath,
 		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures = true) noexcept;
 		 
 		#pragma region Setters
-		void SetTransform(glm::mat4 pValue) noexcept override;
-		void Translate(glm::vec3 pValue) noexcept override;
+		void SetTransform(const glm::mat4& pValue) noexcept override;
+		void Translate(const glm::vec3& pValue) noexcept override;
 
 		void SetParent(Entity* pParent) noexcept;
 		void RenderOnlyColour(bool pState) noexcept;

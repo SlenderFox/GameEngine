@@ -20,7 +20,7 @@ namespace Engine
 {
 	// ---Static---
 
-	hsv Colour::RGBtoHSV(glm::vec3 pRGB) noexcept
+	hsv Colour::RGBtoHSV(const glm::vec3& pRGB) noexcept
 	{
 		// Sanitise inputs
 		float red = clamp(pRGB.r, 0.0f, 1.0f);
@@ -51,12 +51,12 @@ namespace Engine
 		return result;
 	}
 
-	hsv Colour::RGBtoHSV(rgb255 pRGB) noexcept
+	hsv Colour::RGBtoHSV(const rgb255& pRGB) noexcept
 	{
 		return RGBtoHSV((vec3)pRGB / 255.0f);
 	}
 
-	vec3 Colour::HSVtoRGB(hsv pHSV) noexcept
+	vec3 Colour::HSVtoRGB(const hsv& pHSV) noexcept
 	{
 		// Sanitise inputs
 		uint16_t hue = pHSV.hue % 360;
@@ -99,21 +99,21 @@ namespace Engine
 		return result;
 	}
 
-	vec3 Colour::HSVtoRGB(glm::vec3 pHSV) noexcept
+	vec3 Colour::HSVtoRGB(const glm::vec3& pHSV) noexcept
 	{
 		uint16_t hue = (uint16_t)max(pHSV.r, 0.0f);
 		// No need to sanitise inputs
 		return HSVtoRGB(hsv(hue, pHSV.g, pHSV.b));
 	}
 
-	Colour Colour::CreateWithRGB(vec3 pRGB) noexcept
+	Colour Colour::CreateWithRGB(const vec3& pRGB) noexcept
 	{
 		Colour result;
 		result.m_RGB = clamp(pRGB, 0.0f, 1.0f);
 		return result;
 	}
 
-	Colour Colour::CreateWithRGB(rgb255 pRGB) noexcept
+	Colour Colour::CreateWithRGB(const rgb255& pRGB) noexcept
 	{
 		Colour result;
 		vec3 rgb = (vec3)pRGB / 255.0f;
@@ -121,7 +121,7 @@ namespace Engine
 		return result;
 	}
 
-	Colour Colour::CreateWithHSV(hsv pHSV) noexcept
+	Colour Colour::CreateWithHSV(const hsv& pHSV) noexcept
 	{
 		Colour result;
 		// No need to sanitise inputs
@@ -129,7 +129,7 @@ namespace Engine
 		return result;
 	}
 	
-	Colour Colour::CreateWithHSV(vec3 pHSV) noexcept
+	Colour Colour::CreateWithHSV(const vec3& pHSV) noexcept
 	{
 		uint16_t hue = (uint16_t)max(pHSV.r, 0.0f);
 		// Lazily pass to other function
@@ -160,7 +160,7 @@ namespace Engine
 
 	rgb255 Colour::RGB255() const noexcept
 	{
-		return m_RGB * 255.0f;
+		return (rgb255)(m_RGB * 255.0f);
 	}
 
 	vec3 Colour::HSVvec3() const noexcept

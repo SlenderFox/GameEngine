@@ -26,7 +26,7 @@ namespace Engine
 	// Blame https://stackoverflow.com/a/40937193/15035125 for this
 	struct EntityLoader
 	{
-		static void BackgroundLoadModel(string pModelPath, string pShaderPath,
+		static void BackgroundLoadModel(const string& pModelPath, const string& pShaderPath,
 		 Entity* const& pEntity, bool pLoadTextures = true) noexcept
 		{
 			Renderer* renderer = Renderer::GetInstance();
@@ -40,7 +40,7 @@ namespace Engine
 
 	// Static
 
-	Entity* Entity::CreateWithModel(string pModelPath, string pShaderPath,
+	Entity* Entity::CreateWithModel(const string& pModelPath, const string& pShaderPath,
 	 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures) noexcept
 	{
 		Entity* result = new Entity();
@@ -87,7 +87,7 @@ namespace Engine
 		m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
 	}
 
-	void Entity::LoadModel(string pModelPath, string pShaderPath,
+	void Entity::LoadModel(const string& pModelPath, const string& pShaderPath,
 		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures) noexcept
 	{
 		// Currently this does nothing about the previous model and shader but does not cause a memory leak
@@ -97,13 +97,13 @@ namespace Engine
 	}
 
 	#pragma region Setters
-	void Entity::SetTransform(mat4 pValue) noexcept
+	void Entity::SetTransform(const mat4& pValue) noexcept
 	{
 		Transform::SetTransform(pValue);
 		UpdateModel();
 	}
 
-	void Entity::Translate(vec3 pValue) noexcept
+	void Entity::Translate(const vec3& pValue) noexcept
 	{
 		Transform::Translate(pValue);
 		UpdateModel();

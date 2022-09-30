@@ -18,7 +18,7 @@ namespace Engine
 		uint32_t m_idProgram, m_idVertex, m_idFragment;
 		std::string m_shaderPath;	// The file path of the shaders
 
-		void Load(std::string pShaderPath);
+		void Load(const std::string& pShaderPath);
 		void LoadShader(ShaderType pType);
 		bool CompileShader(uint32_t* const& pId, ShaderType pType, const char* pCode);
 		void CreateShaderProgram();
@@ -27,7 +27,7 @@ namespace Engine
 		constexpr T GetType(ShaderType pType, T ifVertex, T ifFragment) const;
 		
 	public:
-		Shader(std::string pShaderPath = "");
+		Shader(const std::string& pShaderPath = "");
 		~Shader();
 
 		void Use() const noexcept;

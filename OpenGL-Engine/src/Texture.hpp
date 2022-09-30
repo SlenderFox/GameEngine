@@ -1,7 +1,5 @@
-#pragma region 
 #pragma once
 #include <string>
-#pragma endregion
 
 namespace Engine
 {
@@ -19,7 +17,7 @@ namespace Engine
 
 	public:
 		static void UnloadAll() noexcept;
-		static int32_t LoadTextureFromFile(const char* pPath) noexcept;
+		static int32_t LoadTextureFromFile(const std::string& pPath) noexcept;
 		constexpr static uint16_t GetNumTex() noexcept { return s_textureCount; }
 
 	private:
@@ -28,7 +26,7 @@ namespace Engine
 		std::string m_file;
 
 	public:
-		Texture(std::string pPath, TexType pType = TexType::diffuse);
+		Texture(const std::string& pPath, TexType pType = TexType::diffuse);
 		//void Destroy();
 
 		constexpr uint16_t GetId() const noexcept { return m_id; }

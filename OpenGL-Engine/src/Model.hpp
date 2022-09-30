@@ -26,15 +26,16 @@ namespace Engine
 		Shader* m_shader;
 		Camera* m_cameraRef;
 
-		void Init(char* pModelPath, char* pShaderPath);
-		void LoadModel(std::string pPath);
+		void Init(const std::string& pModelPath, const std::string& pShaderPath);
+		void LoadModel(const std::string& pPath);
 		void ProcessNode(aiNode* pNode, const aiScene* pScene) noexcept;
 		std::unique_ptr<Mesh> ProcessMesh(aiMesh* pMesh, const aiScene* pScene) noexcept;
 		std::vector<Texture*> LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType) noexcept;
 		void LoadTexturesToShader() const noexcept;
 
 	public:
-		Model(char* pModelPath, char* pShaderPath, Camera* pCamera = nullptr, bool pLoadTextures = true);
+		Model(const std::string& pModelPath, const std::string& pShaderPath,
+		 Camera* pCamera = nullptr, bool pLoadTextures = true);
 		~Model();
 
 		void Draw(const Camera* const& pCamera = nullptr) const noexcept;

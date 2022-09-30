@@ -22,7 +22,7 @@ namespace Engine
 	// Forward declaration
 	class Application { public: static const bool GladLoaded() noexcept; };
 
-	Shader::Shader(string pShaderPath)
+	Shader::Shader(const string& pShaderPath)
 	{
 		Load(pShaderPath);
 	}
@@ -38,7 +38,7 @@ namespace Engine
 		glUseProgram(m_idProgram);
 	}
 
-	void Shader::Load(string pShaderPath)
+	void Shader::Load(const string& pShaderPath)
 	{
 		m_shaderPath = pShaderPath;
 		LoadShader(ShaderType::VERTEX);

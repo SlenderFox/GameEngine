@@ -98,10 +98,10 @@ void Project::CreateLights()
 	Engine::Renderer::SetClearColour(m_rendererRef->GetLightAt(ID)->GetColour() * Engine::Renderer::s_ambience);
 	// Point
 	light = m_rendererRef->AddNewLight(ID, Engine::LightType::Point, Engine::Colour::CreateWithHSV(Engine::hsv(220, 0.6f, 1.0f)));
-	light->SetCamPosition(vec4(-4, 2, -2, 1));
+	light->SetPosition(vec4(-4, 2, -2, 1));
 	// Spot
 	light = m_rendererRef->AddNewLight(ID, Engine::LightType::Spot, Engine::Colour::CreateWithHSV(Engine::hsv(97, 0.17f, 1.0f)));
-	light->SetCamPosition(vec4(2.0f, 2.5f, 6.0f, 1));
+	light->SetPosition(vec4(2.0f, 2.5f, 6.0f, 1));
 	light->SetDirection(vec3(-0.3f, -0.4f, -1));
 	light->SetAngle(13.0f);
 	light->SetBlur(0.23f);

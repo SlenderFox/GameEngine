@@ -32,7 +32,7 @@ namespace Engine
 
 	// Member
 
-	Model::Model(char* pModelPath, char* pShaderPath, Camera* pCamera, bool pLoadTextures)
+	Model::Model(const string& pModelPath, const string& pShaderPath, Camera* pCamera, bool pLoadTextures)
 	 : m_cameraRef(pCamera), m_loadTextures(pLoadTextures)
 	{
 		Init(pModelPath, pShaderPath);
@@ -45,7 +45,7 @@ namespace Engine
 		m_meshes.release();
 	}
 
-	void Model::Init(char* pModelPath, char* pShaderPath)
+	void Model::Init(const string& pModelPath, const string& pShaderPath)
 	{
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 		m_textures = vector<Texture*>();
@@ -79,7 +79,7 @@ namespace Engine
 		}
 	}
 
-	void Model::LoadModel(string pPath)
+	void Model::LoadModel(const string& pPath)
 	{
 		#ifdef _DEBUG
 		 cout << initBigProcess << "Loading model \"" << pPath << "\"";

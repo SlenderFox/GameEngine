@@ -15,7 +15,7 @@ namespace Engine
 			return s_instance;
 		}
 
-		static void SetClearColour(Colour pColour) noexcept;
+		static void SetClearColour(const Colour& pColour) noexcept;
 
 	private:
 		Camera* m_camera = nullptr;
@@ -41,8 +41,9 @@ namespace Engine
 		void ModifyAllSpotlightAngles(float pValue) noexcept;
 		void ModifyAllSpotlightBlurs(float pValue) noexcept;
 
-		Model* AddNewModel(uint8_t &id, std::string pModelPath, std::string pShaderPath, bool pLoadTextures = true) noexcept;
-		Light* AddNewLight(uint8_t &id, LightType pType, Colour pColour = Colour::White()) noexcept;
+		Model* AddNewModel(uint8_t& id, std::string pModelPath,
+		 std::string pShaderPath, bool pLoadTextures = true) noexcept;
+		Light* AddNewLight(uint8_t& id, const LightType& pType, const Colour& pColour = Colour::White()) noexcept;
 
 		#pragma region Getters
 		uint8_t ModelCount() const noexcept;

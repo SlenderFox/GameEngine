@@ -56,36 +56,36 @@ namespace Engine
 		/// @brief (Preferred overload) Converts colour data from RGB to HSV
 		/// @param pRGB 0-1 Red, 0-1 Green, 0-1 Blue
 		/// @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
-		static hsv RGBtoHSV(glm::vec3 pRGB) noexcept;
+		static hsv RGBtoHSV(const glm::vec3& pRGB) noexcept;
 		/// @brief (Alternate overload) Converts colour data from RGB to HSV
 		/// @param pRGB 0-255 Red, 0-255 Green, 0-255 Blue
 		/// @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
-		static hsv RGBtoHSV(rgb255 pRGB) noexcept;
+		static hsv RGBtoHSV(const rgb255& pRGB) noexcept;
 		/// @brief (Preferred overload) Converts colour data from HSV to RGB
 		/// @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		/// @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
-		static glm::vec3 HSVtoRGB(hsv pHSV) noexcept;
+		static glm::vec3 HSVtoRGB(const hsv& pHSV) noexcept;
 		/// @brief (Alternate overload) Converts colour data from HSV to RGB
 		/// @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		/// @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
-		static glm::vec3 HSVtoRGB(glm::vec3 pHSV) noexcept;
+		static glm::vec3 HSVtoRGB(const glm::vec3& pHSV) noexcept;
 
 		/// @brief (Preferred overload) Create a Colour object from RGB
 		/// @param pRGB 0-1 Red, 0-1 Green, 0-1 Blue
 		/// @return [Colour] A Colour object
-		static Colour CreateWithRGB(glm::vec3 pRGB) noexcept;
+		static Colour CreateWithRGB(const glm::vec3& pRGB) noexcept;
 		/// @brief (Alternate overload) Create a Colour object from RGB
 		/// @param pRGB 0-255 Red, 0-255 Green, 0-255 Blue
 		/// @return [Colour] A Colour object
-		static Colour CreateWithRGB(rgb255 pRGB) noexcept;
+		static Colour CreateWithRGB(const rgb255& pRGB) noexcept;
 		/// @brief (Preferred overload) Create a Colour object from HSV
 		/// @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		/// @return [Colour] A Colour object
-		static Colour CreateWithHSV(hsv pHSV) noexcept;
+		static Colour CreateWithHSV(const hsv& pHSV) noexcept;
 		/// @brief (Alternate overload) Create a Colour object from HSV
 		/// @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		/// @return [Colour] A Colour object
-		static Colour CreateWithHSV(glm::vec3 pHSV) noexcept;
+		static Colour CreateWithHSV(const glm::vec3& pHSV) noexcept;
 
 		#pragma region Presets
 		static Colour Black() noexcept;

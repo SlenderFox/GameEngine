@@ -39,14 +39,14 @@ namespace Engine
 		Application& operator=(Application&&) = delete;
 		#pragma endregion
 
-		bool Init(std::string pTitle, bool pFullscreen);
+		bool Init(const std::string& pTitle, bool pFullscreen);
 		void UpdateCamera() noexcept;
 		void ProcessInput() noexcept;
 
 	public:
 		const double m_fixedDeltaTime = 0.01666666666666666;
 
-		void Run(uint16_t pWidth, uint16_t pHeight, std::string pTitle, bool pFullscreen);
+		void Run(uint16_t pWidth, uint16_t pHeight, const std::string& pTitle, bool pFullscreen);
 		void SetDimensions(uint16_t pWidth, uint16_t pHeight) noexcept;
 		void MouseCallback(double pPosX, double pPosY) noexcept;
 		void ScrollCallback(double pOffsetX, double pOffsetY) noexcept;

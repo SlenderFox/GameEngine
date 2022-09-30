@@ -71,7 +71,7 @@ namespace Engine
 		// Don't need to delete m_window as it is handled by glfwTerminate()
 	}
 
-	void Application::Run(uint16_t pWidth, uint16_t pHeight, string pTitle, bool pFullscreen)
+	void Application::Run(uint16_t pWidth, uint16_t pHeight, const string& pTitle, bool pFullscreen)
 	{
 		SetDimensions(pWidth, pHeight);
 
@@ -139,7 +139,7 @@ namespace Engine
 		return;
 	}
 
-	bool Application::Init(string pTitle, bool pFullscreen)
+	bool Application::Init(const string& pTitle, bool pFullscreen)
 	{
 		#ifdef _DEBUG
 		 auto startTime = std::chrono::high_resolution_clock::now();
