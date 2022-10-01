@@ -14,9 +14,7 @@ Todo:
 	- [x] Functionalise loading light data into shader
 - [x] Fix textures loaded with model only using the first texture location
 - [x] Stop texture loading into shader repeating
-- [ ] Update destroying a single texture to allow for a new one to replace it
 - [x] Currently modifying spotlight is hard-coded to a shader, try improving
-- [ ] Near and far planes affected by fov
 - [x] Move to using entities
 	- [x] Cube and backpack
 	- [x] Lights
@@ -32,15 +30,22 @@ Todo:
 	- [x] Add shader creation logging
 	- [x] Make it clear and concise
 - [x] Mark functions as noexcept and constexpr
-- [ ] Overload entity copy constructor to load model better
 - [x] Format switches and make nullptr checking nicer
 - [x] Redo destruction to avoid passing parameters
 - [x] Make shader owned by model
+- [x] Use const references where possible
+- [ ] Update destroying a single texture to allow for a new one to replace it
+- [ ] Near and far planes affected by fov
+- [ ] Overload entity copy constructor to load model better
 - [ ] Add imgui
 - [ ] Actually use the input class
 	- [ ] Keyboard input
 		- [ ] Keyboard layouts
 	- [ ] Mouse input
-- [ ] Limit lights to the same as in the shader
-- [ ] Have each light type in it's own array
-- [x] Use const references where possible
+- [ ] Overhaul lights
+	- [ ] Have each light type in it's own vector
+	- [ ] Limit lights to the same as in the shader
+	- [ ] Overhaul how lights are rendered in the shader
+		- [ ] Min and max clipped brightness
+			- [ ] Iris
+			- [ ] Retina
