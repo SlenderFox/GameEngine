@@ -38,6 +38,23 @@ namespace Engine
 		}
 	};
 
+	void EntityBase::AddChild(Entity* pChild) noexcept
+	{
+		m_childrenRef.push_back(pChild);
+	}
+
+	void EntityBase::RemoveChild(Entity* pChild) noexcept
+	{
+		for (vector<Entity*>::iterator it = m_childrenRef.begin(); it != m_childrenRef.end(); ++it)
+		{
+			if (*it == pChild)
+			{
+				m_childrenRef.erase(it);
+				break;
+			}
+		}
+	}
+
 	// Static
 
 	Entity* Entity::CreateWithModel(const string& pModelPath, const string& pShaderPath,
@@ -55,30 +72,13 @@ namespace Engine
 	Entity::Entity()
 	{
 		m_childrenRef = vector<Entity*>();
-		SetParent(nullptr);
+		SetParent(Root::GetRoot());
 	}
 
-	Entity::Entity(Entity* pParent)
+	Entity::Entity(EntityBase* pParent)
 	{
 		m_childrenRef = vector<Entity*>();
 		SetParent(pParent);
-	}
-
-	void Entity::AddChild(Entity* pChild) noexcept
-	{
-		m_childrenRef.push_back(pChild);
-	}
-
-	void Entity::RemoveChild(Entity* pChild) noexcept
-	{
-		for (vector<Entity*>::iterator it = m_childrenRef.begin(); it != m_childrenRef.end(); ++it)
-		{
-			if (*it == pChild)
-			{
-				m_childrenRef.erase(it);
-				break;
-			}
-		}
 	}
 
 	void Entity::UpdateModel() const noexcept
@@ -109,7 +109,7 @@ namespace Engine
 		UpdateModel();
 	}
 
-	void Entity::SetParent(Entity* pParent) noexcept
+	void Entity::SetParent(EntityBase* pParent) noexcept
 	{
 		// This may change to not changing anything
 		if (!pParent)

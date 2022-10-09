@@ -66,14 +66,13 @@ void Project::LateUpdate() {}
 
 void Project::CreateScene()
 {
-	Engine::Root* root = Engine::Root::GetRoot();
 	Engine::Model* model = nullptr;
 	Engine::Shader* shader = nullptr;
+	
 	// Place 9 cubes behind
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
 		Engine::Entity* cube = Engine::Entity::CreateWithModel("assets/models/cube/cube.obj", "assets/shaders/default", model, shader);
-		cube->SetParent(root);
 		cube->Translate(m_cubePositions[i]);
 		cube->SetScale(vec3(0.6f));
 		m_cubes.push_back(cube);
@@ -81,7 +80,6 @@ void Project::CreateScene()
 
 	// Create a backpack in the centre
 	Engine::Entity* backpack = Engine::Entity::CreateWithModel("assets/models/backpack/backpack.obj", "assets/shaders/default", model, shader);
-	backpack->SetParent(root);
 	backpack->Translate(vec3(0.0f, 0.0f, 0.9f));
 	backpack->SetScale(vec3(0.6f));
 	object_backpack = backpack;
@@ -106,7 +104,6 @@ void Project::CreateLights()
 	light->SetAngle(13.0f);
 	light->SetBlur(0.23f);
 
-	Engine::Root* root = Engine::Root::GetRoot();
 	Engine::Model* model = nullptr;
 	Engine::Shader* shader = nullptr;
 
@@ -119,7 +116,6 @@ void Project::CreateLights()
 		 || current->GetType() == Engine::LightType::Spot)
 		{
 			current->LoadModel("assets/models/cube/cube.obj", "assets/shaders/default", model, shader, false);
-			current->SetParent(root);
 			current->SetTransform(current->GetTransform());
 			current->SetScale(vec3(0.2f, 0.2f, (current->GetType() == Engine::LightType::Spot) ? 0.4f : 0.2f));
 			current->SetColourInShader(current->GetColour());
