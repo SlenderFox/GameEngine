@@ -101,7 +101,7 @@
     <ClInclude Include="src\Colour.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\defines.hpp">
+    <ClInclude Include="src\Debug.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

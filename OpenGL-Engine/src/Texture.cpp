@@ -3,7 +3,7 @@
 #include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
-#include "defines.hpp"
+#include "Debug.hpp"
 
 #ifdef _DEBUG
  #include <iostream>
@@ -33,13 +33,13 @@ namespace Engine
 	int32_t Texture::LoadTextureFromFile(const std::string& pPath) noexcept
 	{
 		#ifdef _DEBUG
-		 cout << bigProcess << "Loading texture " << s_textureCount << ": \"" << pPath << "\"";
+		 Debug::BigProcess("Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"", false, false);
 		#endif
 
 		if (s_textureCount > 31)
 		{
 			#ifdef _DEBUG
-			 cout << "\n" << bigNote <<"Failed to load texture: Exceeded max texture count (max = 32)" << endl;
+			 Debug::BigNote("Failed to load texture: Exceeded max texture count (max = 32)", true, true);
 			#endif
 			return -1;
 		}
@@ -72,7 +72,7 @@ namespace Engine
 			case 4: format = GL_RGBA; break;
 			default: 
 				#ifdef _DEBUG
-				 cout << "\n" << bigNote <<"Failed to load texture: Too many components" << endl;
+				 Debug::BigNote("Failed to load texture: Too many components");
 				#endif
 				return -1;
 			}
@@ -103,7 +103,7 @@ namespace Engine
 		else
 		{
 			#ifdef _DEBUG
-		 	 cout << "\n" << bigNote <<"Failed to load texture: No file found" << endl;
+			 Debug::BigNote("Failed to load texture: No file found");
 			#endif
 			return -1;
 		}

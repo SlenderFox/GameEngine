@@ -39,7 +39,7 @@
     <ClInclude Include="src\Application.hpp" />
     <ClInclude Include="src\Camera.hpp" />
     <ClInclude Include="src\Colour.hpp" />
-    <ClInclude Include="src\defines.hpp" />
+    <ClInclude Include="src\Debug.hpp" />
     <ClInclude Include="src\Entity.hpp" />
     <ClInclude Include="src\Input.hpp" />
     <ClInclude Include="src\Light.hpp" />

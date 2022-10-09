@@ -5,7 +5,7 @@
 #include "assimp/postprocess.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "assert.h"
-#include "defines.hpp"
+#include "Debug.hpp"
 
 #ifdef _DEBUG
  #include <iostream>
@@ -55,7 +55,7 @@ namespace Engine
 		if (m_loadTextures) LoadTexturesToShader();
 
 		#ifdef _DEBUG
-		 cout << endSmallNote << "Done!" << endl;
+		 Debug::EndSmallNote("Done!", false, true);
 		#endif
 	}
 
@@ -82,8 +82,8 @@ namespace Engine
 	void Model::LoadModel(const string& pPath)
 	{
 		#ifdef _DEBUG
-		 cout << initBigProcess << "Loading model \"" << pPath << "\"";
-		 if (!m_loadTextures) cout << "\n" << smallNote << "Ignoring textures";
+		 Debug::InitBigProcess("Loading model \"" + pPath + "\"", false, false);
+		 if (!m_loadTextures) Debug::SmallNote("Ignoring textures", false, false);
 		 cout << endl;
 		#endif
 
@@ -204,8 +204,7 @@ namespace Engine
 					if (reuseTexture)
 					{
 						#ifdef _DEBUG
-						 cout << smallNote << "Reusing texture " << s_loadedTextures[j]->GetId() << ": "
-						  << s_loadedTextures[j]->GetFile().data() << endl;
+						 Debug::SmallNote("Reusing texture " + std::to_string(s_loadedTextures[j]->GetId()) + ": " + s_loadedTextures[j]->GetFile().data(), false, true);
 						#endif
 						texturesOut.push_back(s_loadedTextures[j]);
 					}
@@ -249,7 +248,7 @@ namespace Engine
 			string location = "u_material." + name + number;
 			m_shader->SetInt(location.c_str(), (int32_t)m_textures[i]->GetId());
 			#ifdef _DEBUG
-			 cout << smallNote << "Setting " << location << " to " << m_textures[i]->GetId() << endl;
+			 Debug::SmallNote("Setting " + location + " to " + std::to_string(m_textures[i]->GetId()), false, true);
 			#endif
 		}
 	}
