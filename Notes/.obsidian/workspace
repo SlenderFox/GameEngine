@@ -84,7 +84,7 @@
                 "showSearch": false,
                 "searchQuery": "",
                 "backlinkCollapsed": false,
-                "unlinkedCollapsed": true
+                "unlinkedCollapsed": false
               }
             }
           },
@@ -96,7 +96,7 @@
               "state": {
                 "file": "Notes.md",
                 "linksCollapsed": false,
-                "unlinkedCollapsed": true
+                "unlinkedCollapsed": false
               }
             }
           },
@@ -130,15 +130,15 @@
   },
   "active": "190804f80bc2bab4",
   "lastOpenFiles": [
-    "Notes.md",
-    "Items/Files/cpp/Model.cpp.md",
-    "Items/Files/cpp/Transform.cpp.md",
-    "Items/Files/cpp/Texture.cpp.md",
-    "Items/Files/cpp/Shader.cpp.md",
-    "Items/Files/cpp/Renderer.cpp.md",
-    "Items/Files/cpp/Project.cpp.md",
+    "Items/Files/cpp/Application.cpp.md",
+    "Items/Files/cpp/Camera.cpp.md",
+    "Items/Files/cpp/Colour.cpp.md",
+    "Items/Files/cpp/Input.cpp.md",
+    "Items/Files/cpp/Entity.cpp.md",
+    "Items/Files/cpp/Light.cpp.md",
     "Items/Files/cpp/Mesh.cpp.md",
     "Items/Files/cpp/main.cpp.md",
-    "Items/Files/cpp/Light.cpp.md"
+    "Items/Files/cpp/Model.cpp.md",
+    "Items/Files/cpp/Project.cpp.md"
   ]
 }

@@ -23,7 +23,7 @@ Todo:
 	- [x] Add bool for model loading to include textures/one in shaders to ignore texture
 	- [x] Add colour option in default shader
 - [x] Test colour conversions
-	- [x] Comment Colour.hpp
+	- [x] Comment [[Colour.hpp]]
 - [x] Remove depreciated code from Mesh
 - [x] Convert lights into a derivation of Entity
 - [x] Upgrade debug logging
@@ -38,11 +38,11 @@ Todo:
 - [ ] Near and far planes affected by fov
 - [ ] Overload entity copy constructor to load model better
 - [ ] Add imgui
-- [ ] Actually use the input class
+- [ ] Actually use the input class ([[Input.hpp]]/[[Input.cpp]])
 	- [ ] Keyboard input
 		- [ ] Keyboard layouts
 	- [ ] Mouse input
-- [ ] Overhaul lights
+- [ ] Overhaul lights ([[Light.hpp]]/[[Light.cpp]])
 	- [ ] Have each light type in it's own vector
 	- [ ] Limit lights to the same as in the shader
 	- [ ] Overhaul how lights are rendered in the shader
