@@ -1,6 +1,6 @@
 {
   "collapse-filter": true,
-  "search": "path:Items/Files/Headers",
+  "search": "path:Items/Files",
   "showTags": false,
   "showAttachments": false,
   "hideUnresolved": false,
@@ -53,6 +53,6 @@
   "repelStrength": 16.3247863247863,
   "linkStrength": 1,
   "linkDistance": 30,
-  "scale": 0.5087618855793052,
+  "scale": 0.2588386562181864,
   "close": false
 }

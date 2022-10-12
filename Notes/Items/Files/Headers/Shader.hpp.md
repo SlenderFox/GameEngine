@@ -1,3 +1,3 @@
-Inherits from:
+Includes:
 - [[Camera.hpp]]
 - [[Texture.hpp]]

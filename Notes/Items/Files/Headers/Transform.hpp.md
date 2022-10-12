@@ -1,2 +1,2 @@
-Inherits from:
+Includes:
 - [[glm.hpp]]

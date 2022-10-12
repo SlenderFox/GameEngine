@@ -1,2 +1,2 @@
-Inherits from:
+Includes:
 - [[Entity.hpp]]

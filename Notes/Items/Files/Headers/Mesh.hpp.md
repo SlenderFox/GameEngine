@@ -1,4 +1,4 @@
-Inherits from:
+Includes:
 - [[Shader.hpp]]
 - [[vector]]
 - [[memory]]

@@ -1,3 +1,3 @@
-Inherits from:
+Includes:
 - [[Renderer.hpp]]
 - [[Input.hpp]]
