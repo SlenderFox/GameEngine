@@ -8,7 +8,7 @@
 
 #ifdef _DEBUG
  #include <iostream>
- using std::cout;
+ using std::wcout;
  using std::endl;
 #endif
 
@@ -211,7 +211,7 @@ return;}";
 		}
 
 		#ifdef _DEBUG
-		 cout << "Success!" << endl;
+		 wcout << "Success!" << endl;
 		#endif
 	}
 

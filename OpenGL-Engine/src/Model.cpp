@@ -9,7 +9,7 @@
 
 #ifdef _DEBUG
  #include <iostream>
- using std::cout;
+ using std::wcout;
  using std::endl;
 #endif
 
@@ -84,7 +84,7 @@ namespace Engine
 		#ifdef _DEBUG
 		 Debug::InitBigProcess("Loading model \"" + pPath + "\"", false, false);
 		 if (!m_loadTextures) Debug::SmallNote("Ignoring textures", false, false);
-		 cout << endl;
+		 wcout << endl;
 		#endif
 
 		Assimp::Importer importer;
@@ -93,7 +93,7 @@ namespace Engine
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
 			#ifdef _DEBUG
-			 cout << "\nERROR::ASSIMP::" << importer.GetErrorString() << endl;
+			 wcout << "\nERROR::ASSIMP::" << importer.GetErrorString() << endl;
 			#endif
 			return;
 		}
@@ -261,7 +261,7 @@ namespace Engine
 		if (pPos > m_meshes.get()->size() - 1)
 		{
 			#ifdef _DEBUG
-			 cout << "Attempting to access mesh outside array size\n";
+			 wcout << "Attempting to access mesh outside array size\n";
 			#endif
 			return nullptr;
 		}

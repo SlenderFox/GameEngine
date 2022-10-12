@@ -2,12 +2,6 @@
 #include "Project.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#ifdef _DEBUG
- #include <iostream>
- using std::cout;
- using std::endl;
-#endif
-
 using std::vector;
 using glm::vec3;
 using glm::vec4;

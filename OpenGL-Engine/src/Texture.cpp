@@ -7,7 +7,7 @@
 
 #ifdef _DEBUG
  #include <iostream>
- using std::cout;
+ using std::wcout;
  using std::endl;
 #endif
 
@@ -94,7 +94,7 @@ namespace Engine
 			stbi_image_free(imageData);
 
 			#ifdef _DEBUG
-			 cout << "...Success!" << endl;
+			 wcout << "...Success!" << endl;
 			#endif
 
 			// Returns the id before incrementing for the next texture

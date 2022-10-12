@@ -8,7 +8,9 @@
 #ifdef _DEBUG
  #include <chrono>
  #include <iostream>
- using std::cout;
+ #include <io.h>
+ #include <fcntl.h>
+ using std::wcout;
  using std::endl;
 #endif
 
@@ -143,13 +145,15 @@ namespace Engine
 	{
 		#ifdef _DEBUG
 		 auto startTime = std::chrono::high_resolution_clock::now();
+		 // Allows utf16 output
+		 _setmode(_fileno(stdout), _O_U16TEXT);
 		#endif
 
 		// glfw: initialise and configure
 		if (glfwInit() == GLFW_FALSE)
 		{
 			#ifdef _DEBUG
-			 cout << "GLFW failed to initialise" << endl;
+			 wcout << "GLFW failed to initialise" << endl;
 			#endif
 			return false;
 		}
@@ -170,7 +174,7 @@ namespace Engine
 		if (!m_window)
 		{
 			#ifdef _DEBUG
-			 cout << "Failed to create GLFW window" << endl;
+			 wcout << "Failed to create GLFW window" << endl;
 			#endif
 			return false;
 		}
@@ -209,7 +213,7 @@ namespace Engine
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
 			#ifdef _DEBUG
-			 cout << "Failed to initialise GLAD" << endl;
+			 wcout << "Failed to initialise GLAD" << endl;
 			#endif
 			return false;
 		}
@@ -225,7 +229,7 @@ namespace Engine
 		#ifdef _DEBUG
 		 auto endTime = std::chrono::high_resolution_clock::now();
 		 std::chrono::duration<double> elapsedTime = endTime - startTime;
-		 cout << "Started in " << elapsedTime.count() << " seconds\n";
+		 wcout << "Started in " << elapsedTime.count() << " seconds\n";
 		#endif
 
 		return true;

@@ -5,7 +5,7 @@
 
 #ifdef _DEBUG
  #include <iostream>
- using std::cout;
+ using std::wcout;
  using std::endl;
 #endif
 
@@ -207,7 +207,7 @@ namespace Engine
 		if (pPos > m_models.get()->size() - 1)
 		{
 			#ifdef _DEBUG
-			 cout << "Attempting to access model outside array size\n";
+			 wcout << "Attempting to access model outside array size\n";
 			#endif
 			return nullptr;
 		}
@@ -223,7 +223,7 @@ namespace Engine
 		if (pPos > m_lights.get()->size() - 1)
 		{
 			#ifdef _DEBUG
-			 cout << "Attempting to access light outside array size\n";
+			 wcout << "Attempting to access light outside array size\n";
 			#endif
 			return nullptr;
 		}

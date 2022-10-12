@@ -49,4 +49,4 @@ Todo:
 		- [ ] Min and max clipped brightness
 			- [ ] Iris
 			- [ ] Retina
-- [ ] Fix ascii printing incorrectly as UTF
+- [x] Fix ascii printing incorrectly as UTF
