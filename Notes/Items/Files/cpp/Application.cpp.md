@@ -4,4 +4,5 @@ Includes:
 - [[glfw3.h]]
 - [[matrix_transform.hpp]]
 - [[Windows.h]]
+- [[Debug.hpp]]
 - [[chrono]]
