@@ -4,9 +4,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 #ifdef _DEBUG
- #include <iostream>
- using std::wcout;
- using std::endl;
+ #include "Debug.hpp"
 #endif
 
 using glm::vec3;
@@ -207,7 +205,7 @@ namespace Engine
 		if (pPos > m_models.get()->size() - 1)
 		{
 			#ifdef _DEBUG
-			 wcout << "Attempting to access model outside array size\n";
+			 Debug::Send("Attempting to access model outside array size");
 			#endif
 			return nullptr;
 		}
@@ -223,7 +221,7 @@ namespace Engine
 		if (pPos > m_lights.get()->size() - 1)
 		{
 			#ifdef _DEBUG
-			 wcout << "Attempting to access light outside array size\n";
+			 Debug::Send("Attempting to access light outside array size");
 			#endif
 			return nullptr;
 		}

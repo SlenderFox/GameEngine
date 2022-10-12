@@ -8,9 +8,7 @@
 #include "Debug.hpp"
 
 #ifdef _DEBUG
- #include <iostream>
- using std::wcout;
- using std::endl;
+ #include "Debug.hpp"
 #endif
 
 using glm::vec2;
@@ -55,7 +53,7 @@ namespace Engine
 		if (m_loadTextures) LoadTexturesToShader();
 
 		#ifdef _DEBUG
-		 Debug::EndSmallNote("Done!", false, true);
+		 Debug::EndSmallNote("Done!");
 		#endif
 	}
 
@@ -83,8 +81,8 @@ namespace Engine
 	{
 		#ifdef _DEBUG
 		 Debug::InitBigProcess("Loading model \"" + pPath + "\"", false, false);
-		 if (!m_loadTextures) Debug::SmallNote("Ignoring textures", false, false);
-		 wcout << endl;
+		 if (!m_loadTextures) Debug::SmallNote("Ignoring textures", true, false);
+		 Debug::NewLine();
 		#endif
 
 		Assimp::Importer importer;
@@ -93,7 +91,7 @@ namespace Engine
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
 			#ifdef _DEBUG
-			 wcout << "\nERROR::ASSIMP::" << importer.GetErrorString() << endl;
+			 Debug::Send("\nERROR::ASSIMP::" + string(importer.GetErrorString()));
 			#endif
 			return;
 		}
@@ -204,7 +202,7 @@ namespace Engine
 					if (reuseTexture)
 					{
 						#ifdef _DEBUG
-						 Debug::SmallNote("Reusing texture " + std::to_string(s_loadedTextures[j]->GetId()) + ": " + s_loadedTextures[j]->GetFile().data(), false, true);
+						 Debug::SmallNote("Reusing texture " + std::to_string(s_loadedTextures[j]->GetId()) + ": " + s_loadedTextures[j]->GetFile().data());
 						#endif
 						texturesOut.push_back(s_loadedTextures[j]);
 					}
@@ -248,7 +246,7 @@ namespace Engine
 			string location = "u_material." + name + number;
 			m_shader->SetInt(location.c_str(), (int32_t)m_textures[i]->GetId());
 			#ifdef _DEBUG
-			 Debug::SmallNote("Setting " + location + " to " + std::to_string(m_textures[i]->GetId()), false, true);
+			 Debug::SmallNote("Setting " + location + " to " + std::to_string(m_textures[i]->GetId()));
 			#endif
 		}
 	}
@@ -261,7 +259,7 @@ namespace Engine
 		if (pPos > m_meshes.get()->size() - 1)
 		{
 			#ifdef _DEBUG
-			 wcout << "Attempting to access mesh outside array size\n";
+			 Debug::Send("Attempting to access mesh outside array size");
 			#endif
 			return nullptr;
 		}

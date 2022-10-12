@@ -6,12 +6,8 @@
 #include <Windows.h>	// Needed for Sleep()
 
 #ifdef _DEBUG
+ #include "Debug.hpp"
  #include <chrono>
- #include <iostream>
- #include <io.h>
- #include <fcntl.h>
- using std::wcout;
- using std::endl;
 #endif
 
 using glm::vec3;
@@ -144,16 +140,15 @@ namespace Engine
 	bool Application::Init(const string& pTitle, bool pFullscreen)
 	{
 		#ifdef _DEBUG
+		 Debug::Init();
 		 auto startTime = std::chrono::high_resolution_clock::now();
-		 // Allows utf16 output
-		 _setmode(_fileno(stdout), _O_U16TEXT);
 		#endif
 
 		// glfw: initialise and configure
 		if (glfwInit() == GLFW_FALSE)
 		{
 			#ifdef _DEBUG
-			 wcout << "GLFW failed to initialise" << endl;
+			 Debug::Send("GLFW failed to initialise");
 			#endif
 			return false;
 		}
@@ -174,7 +169,7 @@ namespace Engine
 		if (!m_window)
 		{
 			#ifdef _DEBUG
-			 wcout << "Failed to create GLFW window" << endl;
+			 Debug::Send("Failed to create GLFW window");
 			#endif
 			return false;
 		}
@@ -213,7 +208,7 @@ namespace Engine
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
 			#ifdef _DEBUG
-			 wcout << "Failed to initialise GLAD" << endl;
+			 Debug::Send("Failed to initialise GLAD");
 			#endif
 			return false;
 		}
@@ -229,7 +224,7 @@ namespace Engine
 		#ifdef _DEBUG
 		 auto endTime = std::chrono::high_resolution_clock::now();
 		 std::chrono::duration<double> elapsedTime = endTime - startTime;
-		 wcout << "Started in " << elapsedTime.count() << " seconds\n";
+		 Debug::Send("Started in " + std::to_string(elapsedTime.count()) + " seconds");
 		#endif
 
 		return true;

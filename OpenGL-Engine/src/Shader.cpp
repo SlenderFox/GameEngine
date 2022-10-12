@@ -7,9 +7,7 @@
 #include "Debug.hpp"
 
 #ifdef _DEBUG
- #include <iostream>
- using std::wcout;
- using std::endl;
+ #include "Debug.hpp"
 #endif
 
 using std::string;
@@ -57,7 +55,7 @@ namespace Engine
 		if (pType == ShaderType::PROGRAM)
 		{
 			#ifdef _DEBUG
-			 Debug::BigNote("ERROR::SHADER::ATTEMPTING_TO_LOAD_PROGRAM");
+			 Debug::BigNote("ERROR::SHADER::ATTEMPTING_TO_LOAD_PROGRAM", true);
 			#endif
 			return;
 		}
@@ -65,6 +63,7 @@ namespace Engine
 		if (std::strcmp(m_shaderPath.c_str(), "") == 0)
 		{
 			m_usingFallback = true;
+			Debug::NewLine();
 		}
 
 		#pragma region Fallback code
@@ -181,7 +180,7 @@ return;}";
 		catch (ifstream::failure e)
 		{
 			#ifdef _DEBUG
-			 Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"), string("FRAGMENT")) + "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE");
+			 Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"), string("FRAGMENT")) + "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE", true);
 			#endif
 
 			m_usingFallback = true;
@@ -204,14 +203,14 @@ return;}";
 			 pType, GetType(pType, vertexFallback, fragmentFallback)))
 			{
 				#ifdef _DEBUG
-				Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"), string("FRAGMENT")) + "::FALLBACK_CODE_FAILURE", false, true);
+				Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"), string("FRAGMENT")) + "::FALLBACK_CODE_FAILURE", true);
 				#endif
 				exit(2);
 			}
 		}
 
 		#ifdef _DEBUG
-		 wcout << "Success!" << endl;
+		 Debug::Send("Success!");
 		#endif
 	}
 
@@ -222,7 +221,7 @@ return;}";
 		{
 		case ShaderType::PROGRAM:
 			#ifdef _DEBUG
-			 Debug::BigNote("ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM");
+			 Debug::BigNote("ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM", true);
 			#endif
 			exit(2);
 		case ShaderType::VERTEX:
@@ -233,7 +232,7 @@ return;}";
 			break;
 		default:
 			#ifdef _DEBUG
-			 Debug::BigNote("ERROR::SHADER::UNKNOWN_SHADER_TYPE");
+			 Debug::BigNote("ERROR::SHADER::UNKNOWN_SHADER_TYPE", true);
 			#endif
 			exit(2);
 		}

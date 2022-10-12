@@ -6,9 +6,7 @@
 #include "Debug.hpp"
 
 #ifdef _DEBUG
- #include <iostream>
- using std::wcout;
- using std::endl;
+ #include "Debug.hpp"
 #endif
 
 using std::string;
@@ -33,13 +31,13 @@ namespace Engine
 	int32_t Texture::LoadTextureFromFile(const std::string& pPath) noexcept
 	{
 		#ifdef _DEBUG
-		 Debug::BigProcess("Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"", false, false);
+		 Debug::BigProcess("Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"...", false, false);
 		#endif
 
 		if (s_textureCount > 31)
 		{
 			#ifdef _DEBUG
-			 Debug::BigNote("Failed to load texture: Exceeded max texture count (max = 32)", true, true);
+			 Debug::BigNote("Failed to load texture: Exceeded max texture count (max = 32)", true);
 			#endif
 			return -1;
 		}
@@ -72,7 +70,7 @@ namespace Engine
 			case 4: format = GL_RGBA; break;
 			default: 
 				#ifdef _DEBUG
-				 Debug::BigNote("Failed to load texture: Too many components");
+				 Debug::BigNote("Failed to load texture: Too many components", true);
 				#endif
 				return -1;
 			}
@@ -94,7 +92,7 @@ namespace Engine
 			stbi_image_free(imageData);
 
 			#ifdef _DEBUG
-			 wcout << "...Success!" << endl;
+			 Debug::Send("Success!");
 			#endif
 
 			// Returns the id before incrementing for the next texture
@@ -103,7 +101,7 @@ namespace Engine
 		else
 		{
 			#ifdef _DEBUG
-			 Debug::BigNote("Failed to load texture: No file found");
+			 Debug::BigNote("Failed to load texture: No file found", true);
 			#endif
 			return -1;
 		}
