@@ -4,7 +4,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <fstream>
 #include <sstream>
-#include "Debug.hpp"
 
 #ifdef _DEBUG
  #include "Debug.hpp"

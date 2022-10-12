@@ -5,7 +5,6 @@
 #include "assimp/postprocess.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "assert.h"
-#include "Debug.hpp"
 
 #ifdef _DEBUG
  #include "Debug.hpp"
