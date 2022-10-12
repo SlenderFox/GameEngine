@@ -184,7 +184,7 @@ return;}";
 			#endif
 
 			m_usingFallback = true;
-			shaderCode = GetType(pType, vertexFallback, fragmentFallback);
+			shaderCode = GetType<const char* const&>(pType, vertexFallback, fragmentFallback);
 		}
 
 		if (!m_usingFallback)
@@ -200,7 +200,7 @@ return;}";
 			Debug::SmallProcess("Compiling fallback code...", false, false);
 			#endif
 			if (!CompileShader(GetType(pType, &m_idVertex, &m_idFragment),
-			 pType, GetType(pType, vertexFallback, fragmentFallback)))
+			 pType, GetType<const char*&>(pType, vertexFallback, fragmentFallback)))
 			{
 				#ifdef _DEBUG
 				Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"), string("FRAGMENT")) + "::FALLBACK_CODE_FAILURE", true);
