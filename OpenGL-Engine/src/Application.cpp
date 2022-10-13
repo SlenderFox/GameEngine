@@ -153,6 +153,7 @@ namespace Engine
 			return false;
 		}
 
+		// ! Important glfw hints !
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -175,6 +176,11 @@ namespace Engine
 		}
 		glfwMakeContextCurrent(m_window);
 
+		glfwSetWindowSizeLimits(m_window, 320, 180, GLFW_DONT_CARE, GLFW_DONT_CARE);
+		//glfwSetWindowAspectRatio(m_window, 16, 9);
+		//int monCount = 0; 
+		//GLFWmonitor** monitors = glfwGetMonitors(&monCount);
+
 		int monPosX, monPosY, monWidth, monHeight;
 		glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
 		#ifdef _DEBUG
@@ -187,22 +193,15 @@ namespace Engine
 		 glfwSetWindowPos(m_window, (int)((monWidth - m_winWidth) * 0.5f), (int)((monHeight - m_winHeight) * 0.5f));
 		#endif
 
-		glfwSetWindowSizeLimits(m_window, 320, 180, GLFW_DONT_CARE, GLFW_DONT_CARE);
-		//glfwSetWindowAspectRatio(m_window, 16, 9);
-
+		//Callbacks
 		glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
-
-		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetScrollCallback(m_window, scroll_callback);
 		glfwSetCursorPosCallback(m_window, mouse_callback);
+
 		glfwGetCursorPos(m_window, &m_mouseLastX, &m_mouseLastY);
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
-
-		glfwSetScrollCallback(m_window, scroll_callback);
-
-		//glfwSetWindowAspectRatio(m_window, 16, 9);
-		//int* monCount = 0; 
-		//GLFWmonitor** monitors = glfwGetMonitors(monCount);
 
 		// glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -292,22 +291,14 @@ namespace Engine
 
 		// Spotlight cone
 		if (glfwGetKey(m_window, GLFW_KEY_T) == GLFW_PRESS)
-		{
 			m_rendererInst->ModifyAllSpotlightAngles(0.05f);
-		}
 		if (glfwGetKey(m_window, GLFW_KEY_G) == GLFW_PRESS)
-		{
 			m_rendererInst->ModifyAllSpotlightAngles(-0.05f);
-		}
 		// Spotlight blur
 		if (glfwGetKey(m_window, GLFW_KEY_Y) == GLFW_PRESS)
-		{
 			m_rendererInst->ModifyAllSpotlightBlurs(-0.005f);
-		}
 		if (glfwGetKey(m_window, GLFW_KEY_H) == GLFW_PRESS)
-		{
 			m_rendererInst->ModifyAllSpotlightBlurs(0.005f);
-		}
 
 		float moveSpeed = 8;
 		// SlowDown
