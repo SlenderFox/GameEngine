@@ -15,7 +15,7 @@ int main()
 {
 	Project* app = new Project();
 	#ifdef _DEBUG
-	 app->Run(1030, 650, "OpenGL Application (_DEBUG)", false);
+	 app->Run(1030, 650, "OpenGL Application (DEBUG)", false);
 	#else
 	 app->Run(1600, 900, "OpenGL Application", false);
 	#endif
