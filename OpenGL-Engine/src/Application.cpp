@@ -28,7 +28,7 @@ void mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY) noexcept
 	Engine::Application::GetApplication()->MouseCallback(pPosX, pPosY);
 }
 
-void scroll_callback(GLFWwindow* window, double pOffsetX, double pOffsetY) noexcept
+void scroll_callback(GLFWwindow* pWindow, double pOffsetX, double pOffsetY) noexcept
 {
 	Engine::Application::GetApplication()->ScrollCallback(pOffsetX, pOffsetY);
 }
@@ -202,6 +202,7 @@ namespace Engine
 		glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 		glfwSetScrollCallback(m_window, scroll_callback);
 		glfwSetCursorPosCallback(m_window, mouse_callback);
+		glfwSetKeyCallback(m_window, Input::Key_callback);
 
 		m_inputInst->Init(m_window);
 		glfwGetCursorPos(m_window, &m_mouseLastX, &m_mouseLastY);
@@ -282,9 +283,8 @@ namespace Engine
 
 	void Application::ProcessInput() noexcept
 	{
-		// End application
-		if (m_inputInst->GetKey(Input::Code::Key_End, Input::State::Press)) Quit();
-
 		// TODO: Add fullscreen toggle
+		// End application
+		if (m_inputInst->GetKey(Input::Key::Key_End, Input::State::Press)) Quit();
 	}
 }

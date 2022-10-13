@@ -16,7 +16,7 @@ namespace Engine
 			Repeat
 		};
 
-		enum class Code: short
+		enum class Key: short
 		{
 			Key_Unknown				= -1,
 			Key_Space				= 32,
@@ -145,6 +145,8 @@ namespace Engine
 			return s_instance;
 		}
 
+		static void Key_callback(GLFWwindow* pWindow, int pKey, int pScancode, int pAction, int pMods);
+
 	private:
 		GLFWwindow* m_windowRef = nullptr;
 
@@ -161,6 +163,6 @@ namespace Engine
 	public:
 		void Init(GLFWwindow* const& pWindowRef) noexcept;
 		void Process() noexcept;
-		bool GetKey(Code pKey, State pState) noexcept;
+		bool GetKey(Key pKey, State pState) noexcept;
 	};
 }

@@ -9,7 +9,7 @@ namespace Engine
 	void Debug::SendWithPrefix(const wchar_t* pPrefix, std::string& pMsg, bool pNewline, bool pEndline) noexcept
 	{
 		if (pNewline) std::wcout << '\n';
-		std::wcout << ' ' << pPrefix << pMsg.c_str();
+		std::wcout << pPrefix << pMsg.c_str();
 		if (pEndline) std::wcout << std::endl;
 	}
 
@@ -22,7 +22,7 @@ namespace Engine
 	void Debug::Send(std::string pMsg, bool pNewline, bool pEndline) noexcept
 	{
 		if (pNewline) std::wcout << '\n';
-		std::wcout <<  ' ' << pMsg.c_str();
+		std::wcout << pMsg.c_str();
 		if (pEndline) std::wcout << std::endl;
 	}
 
