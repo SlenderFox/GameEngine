@@ -34,14 +34,15 @@ Todo:
 - [x] Redo destruction to avoid passing parameters
 - [x] Make shader owned by model
 - [x] Use const references where possible
+- [x] Fix ascii printing incorrectly as UTF
 - [ ] Update destroying a single texture to allow for a new one to replace it
-- [ ] Near and far planes affected by fov
 - [ ] Overload entity copy constructor to load model better
-- [ ] Add imgui
-- [ ] Actually use the input class ([[Input.hpp]]/[[Input.cpp]])
-	- [ ] Keyboard input
+- [x] Actually use the input class ([[Input.hpp]]/[[Input.cpp]])
+	- [x] Keyboard input
 		- [ ] Keyboard layouts
 	- [ ] Mouse input
+	- [ ] Function callbacks
+	- [ ] Controller support
 - [ ] Overhaul lights ([[Light.hpp]]/[[Light.cpp]])
 	- [ ] Have each light type in it's own vector
 	- [ ] Limit lights to the same as in the shader
@@ -49,4 +50,4 @@ Todo:
 		- [ ] Min and max clipped brightness
 			- [ ] Iris
 			- [ ] Retina
-- [x] Fix ascii printing incorrectly as UTF
+- [ ] Add imgui

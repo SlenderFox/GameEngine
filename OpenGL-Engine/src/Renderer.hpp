@@ -7,6 +7,13 @@ namespace Engine
 	{
 		friend class Application;
 	public:
+		enum class Mode: uint8_t
+		{
+			Point,
+			Line,
+			Fill
+		};
+
 		static const float s_ambience;
 
 		static Renderer* GetInstance() noexcept
@@ -16,6 +23,7 @@ namespace Engine
 		}
 
 		static void SetClearColour(const Colour& pColour) noexcept;
+		static void SetRenderMode(Mode pMode = Mode::Fill) noexcept;
 
 	private:
 		Camera* m_camera = nullptr;
@@ -46,6 +54,7 @@ namespace Engine
 		Light* AddNewLight(uint8_t& id, const LightType& pType, const Colour& pColour = Colour::White()) noexcept;
 
 		#pragma region Getters
+		constexpr Camera* const& GetCamera() const noexcept { return m_camera; }
 		uint8_t ModelCount() const noexcept;
 		uint8_t LightCount() const noexcept;
 		Model* GetModelAt(uint8_t pPos) noexcept;

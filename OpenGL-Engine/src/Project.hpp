@@ -20,6 +20,7 @@ private:
 
 	// Local reference to the renderer
 	Engine::Renderer* m_rendererRef;
+	Engine::Input* m_inputRef;
 
 	std::vector<Engine::Light*> m_lightRefs;
 	std::vector<Engine::Entity*> m_cubes;
@@ -27,6 +28,8 @@ private:
 
 	void CreateScene();
 	void CreateLights();
+
+	void ProcessInput() noexcept;
 
 public:
 	Project();

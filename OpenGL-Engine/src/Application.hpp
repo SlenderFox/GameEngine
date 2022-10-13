@@ -12,7 +12,8 @@ namespace Engine
 
 	public:
 		constexpr static Application* const& GetApplication() noexcept { return s_application; }
-		static const bool GladLoaded() noexcept;
+		static const bool GladLoaded() noexcept;	// No definition to allow forward declaration
+		static void Quit() noexcept;
 
 	private:
 		Renderer* m_rendererInst = nullptr;					// A reference to the renderer instance

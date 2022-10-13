@@ -37,6 +37,7 @@ Project::~Project()
 bool Project::Startup()
 {
 	m_rendererRef = Engine::Renderer::GetInstance();
+	m_inputRef = Engine::Input::GetInstance();
 	CreateLights();
 	CreateScene();
 	return true;
@@ -46,6 +47,8 @@ void Project::Shutdown() {}
 
 void Project::Update()
 {
+	ProcessInput();
+
 	// Rotates the cubes
 	for (uint8_t i = 0; i < s_numCubes; i++)
 	{
@@ -117,4 +120,59 @@ void Project::CreateLights()
 			m_lightRefs.push_back(current);
 		}
 	}
+}
+
+void Project::ProcessInput() noexcept
+{
+	// Render triangles normally
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_F1, Engine::Input::State::Press))
+		Engine::Renderer::SetRenderMode(Engine::Renderer::Mode::Fill);
+	// Render triangles as lines
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_F2, Engine::Input::State::Press))
+		Engine::Renderer::SetRenderMode(Engine::Renderer::Mode::Line);
+	// Render triangles as dots
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_F3, Engine::Input::State::Press))
+		Engine::Renderer::SetRenderMode(Engine::Renderer::Mode::Point);
+
+	// Spotlight cone
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_T, Engine::Input::State::Press))
+		m_rendererRef->ModifyAllSpotlightAngles(0.05f);
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_G, Engine::Input::State::Press))
+		m_rendererRef->ModifyAllSpotlightAngles(-0.05f);
+	// Spotlight blur
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_Y, Engine::Input::State::Press))
+		m_rendererRef->ModifyAllSpotlightBlurs(-0.005f);
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_H, Engine::Input::State::Press))
+		m_rendererRef->ModifyAllSpotlightBlurs(0.005f);
+
+	vec3 translation = vec3();
+	float moveSpeed = 4;
+
+	// SlowDown
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_LeftControl, Engine::Input::State::Press))
+		moveSpeed *= 0.1f;
+	// SpeedUp
+	else if (m_inputRef->GetKey(Engine::Input::Code::Key_LeftShift, Engine::Input::State::Press))
+		moveSpeed *= 3;
+
+	// Forwards
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_W, Engine::Input::State::Press))
+		translation += moveSpeed * (float)GetDeltaTime() * (vec3)m_rendererRef->GetCamera()->GetForward();
+	// Backwards
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_S, Engine::Input::State::Press))
+		translation -= moveSpeed * (float)GetDeltaTime() * (vec3)m_rendererRef->GetCamera()->GetForward();
+	// Left
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_A, Engine::Input::State::Press))
+		translation += moveSpeed * (float)GetDeltaTime() * (vec3)m_rendererRef->GetCamera()->GetRight();
+	// Right
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_D, Engine::Input::State::Press))
+		translation -= moveSpeed * (float)GetDeltaTime() * (vec3)m_rendererRef->GetCamera()->GetRight();
+	// Up
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_Space, Engine::Input::State::Press))
+		translation += moveSpeed * (float)GetDeltaTime() * (vec3)m_rendererRef->GetCamera()->GetUp();
+	// Down
+	if (m_inputRef->GetKey(Engine::Input::Code::Key_C, Engine::Input::State::Press))
+		translation -= moveSpeed * (float)GetDeltaTime() * (vec3)m_rendererRef->GetCamera()->GetUp();
+
+	m_rendererRef->GetCamera()->Translate(translation);
 }

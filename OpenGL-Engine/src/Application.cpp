@@ -43,6 +43,11 @@ namespace Engine
 		return s_gladLoaded;
 	}
 
+	void Application::Quit() noexcept
+	{
+		glfwSetWindowShouldClose(Application::GetApplication()->m_window, true);
+	}
+
 	Application::Application()
 	{
 		// Prevents potential memory leak
@@ -198,10 +203,11 @@ namespace Engine
 		glfwSetScrollCallback(m_window, scroll_callback);
 		glfwSetCursorPosCallback(m_window, mouse_callback);
 
+		m_inputInst->Init(m_window);
 		glfwGetCursorPos(m_window, &m_mouseLastX, &m_mouseLastY);
-		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		if (glfwRawMouseMotionSupported())
-			glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+		//glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		//if (glfwRawMouseMotionSupported())
+		//	glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
 		// glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -277,57 +283,8 @@ namespace Engine
 	void Application::ProcessInput() noexcept
 	{
 		// End application
-		if (glfwGetKey(m_window, GLFW_KEY_END) == GLFW_PRESS)
-			glfwSetWindowShouldClose(m_window, true);
-		// Render triangles normally
-		if (glfwGetKey(m_window, GLFW_KEY_F1) == GLFW_PRESS)
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		// Render triangles as lines
-		if (glfwGetKey(m_window, GLFW_KEY_F2) == GLFW_PRESS)
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		// Toggle fullscreen
-		// if (glfwGetKey(m_window, GLFW_KEY_F11) == GLFW_PRESS)
-		// { }
+		if (m_inputInst->GetKey(Input::Code::Key_End, Input::State::Press)) Quit();
 
-		// Spotlight cone
-		if (glfwGetKey(m_window, GLFW_KEY_T) == GLFW_PRESS)
-			m_rendererInst->ModifyAllSpotlightAngles(0.05f);
-		if (glfwGetKey(m_window, GLFW_KEY_G) == GLFW_PRESS)
-			m_rendererInst->ModifyAllSpotlightAngles(-0.05f);
-		// Spotlight blur
-		if (glfwGetKey(m_window, GLFW_KEY_Y) == GLFW_PRESS)
-			m_rendererInst->ModifyAllSpotlightBlurs(-0.005f);
-		if (glfwGetKey(m_window, GLFW_KEY_H) == GLFW_PRESS)
-			m_rendererInst->ModifyAllSpotlightBlurs(0.005f);
-
-		float moveSpeed = 8;
-		// SlowDown
-		if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-			moveSpeed *= 0.2f;
-		// SpeedUp
-		else if (glfwGetKey(m_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-			moveSpeed *= 3;
-
-		vec3 translation = vec3();
-		// Forwards
-		if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS)
-			translation += moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_camera->GetForward();
-		// Backwards
-		if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS)
-			translation -= moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_camera->GetForward();
-		// Left
-		if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS)
-			translation += moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_camera->GetRight();
-		// Right
-		if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS)
-			translation -= moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_camera->GetRight();
-		// Up
-		if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)
-			translation += moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_camera->GetUp();
-		// Down
-		if (glfwGetKey(m_window, GLFW_KEY_C) == GLFW_PRESS)
-			translation -= moveSpeed * (float)m_deltaTime * (vec3)m_rendererInst->m_camera->GetUp();
-
-		m_rendererInst->m_camera->Translate(translation);
+		// TODO: Add fullscreen toggle
 	}
 }

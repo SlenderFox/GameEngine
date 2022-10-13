@@ -31,6 +31,11 @@ namespace Engine
 		glClearColor(col.r, col.g, col.b, 1.0f);
 	}
 
+	void Renderer::SetRenderMode(Mode pMode) noexcept
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + (int)pMode);
+	}
+
 	// Member
 
 	void Renderer::Init(float pAspect) noexcept
