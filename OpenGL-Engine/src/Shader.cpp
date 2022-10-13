@@ -62,7 +62,9 @@ namespace Engine
 		if (std::strcmp(m_shaderPath.c_str(), "") == 0)
 		{
 			m_usingFallback = true;
-			Debug::NewLine();
+			#ifdef _DEBUG
+			 Debug::NewLine();
+			#endif
 		}
 
 		#pragma region Fallback code
