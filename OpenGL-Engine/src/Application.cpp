@@ -23,12 +23,12 @@ void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight) noe
 	glViewport(0, 0, pWidth, pHeight);
 }
 
-void mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY) noexcept
+void mouse_callback(double pPosX, double pPosY) noexcept
 {
 	Engine::Application::GetApplication()->MouseCallback(pPosX, pPosY);
 }
 
-void scroll_callback(GLFWwindow* pWindow, double pOffsetX, double pOffsetY) noexcept
+void scroll_callback(double pOffsetX, double pOffsetY) noexcept
 {
 	Engine::Application::GetApplication()->ScrollCallback(pOffsetX, pOffsetY);
 }
@@ -200,15 +200,12 @@ namespace Engine
 
 		//Callbacks
 		glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
-		glfwSetScrollCallback(m_window, scroll_callback);
-		glfwSetCursorPosCallback(m_window, mouse_callback);
-		glfwSetKeyCallback(m_window, Input::Key_callback);
-
+		
 		m_inputInst->Init(m_window);
+
 		glfwGetCursorPos(m_window, &m_mouseLastX, &m_mouseLastY);
-		//glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		//if (glfwRawMouseMotionSupported())
-		//	glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+		m_inputInst->AddMCall(mouse_callback);
+		m_inputInst->AddSCall(scroll_callback);
 
 		// glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))

@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 
 struct GLFWwindow;
 
@@ -9,6 +10,7 @@ namespace Engine
 	{
 		friend class Application;	// Allowing application access and control
 	public:
+
 		enum class State: unsigned char
 		{
 			Release,
@@ -145,10 +147,17 @@ namespace Engine
 			return s_instance;
 		}
 
-		static void Key_callback(GLFWwindow* pWindow, int pKey, int pScancode, int pAction, int pMods);
+		static void Key_callback(GLFWwindow* pWindow, int pKey, int pScancode, int pAction, int pMods) noexcept;
+		static void Mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY) noexcept;
+		static void Scroll_callback(GLFWwindow* pWindow, double pOffsetX, double pOffsetY) noexcept;
 
 	private:
 		GLFWwindow* m_windowRef = nullptr;
+
+		std::function<void(double, double)> mCall;
+		std::function<void(double, double)> sCall;
+
+		double m_mouseLastX = 0.0, m_mouseLastY = 0.0;	// Mouse position in the last frame
 
 		#pragma region Constructors
 		Input() = default;
@@ -164,5 +173,8 @@ namespace Engine
 		void Init(GLFWwindow* const& pWindowRef) noexcept;
 		void Process() noexcept;
 		bool GetKey(Key pKey, State pState) noexcept;
+
+		void AddMCall(std::function<void(double, double)> f);
+		void AddSCall(std::function<void(double, double)> f);
 	};
 }

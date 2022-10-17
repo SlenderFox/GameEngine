@@ -41,7 +41,8 @@ Todo:
 - [x] Actually use the input class ([[Input.hpp]]/[[Input.cpp]])
 	- [x] Keyboard input
 		- [ ] Keyboard layouts
-	- [ ] Mouse input
+	- [x] Mouse input
+		- [ ] Allow callbacks to pass member functions
 	- [ ] Function callbacks
 	- [ ] Controller support
 - [ ] Overhaul lights ([[Light.hpp]]/[[Light.cpp]])

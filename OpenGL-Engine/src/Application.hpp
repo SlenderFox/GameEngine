@@ -27,7 +27,7 @@ namespace Engine
 		 m_prevTime = 0.0, m_deltaTime = 0.0;				// The time between rendered frames
 		double m_fixedTimer = 0.0f, m_frameTimer = 0.0f;	// Timers used for calling fixed update and displaying fps
 
-		double m_mouseLastX = 400.0, m_mouseLastY = 300.0;	// Mouse position in the last frame
+		double m_mouseLastX = 0.0, m_mouseLastY = 0.0;		// Mouse position in the last frame
 		double m_yaw = 90.0, m_pitch = 0.0;					// The rotation of the camera
 
 		std::string m_title = "Title error";				// The tile of the window
