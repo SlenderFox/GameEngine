@@ -5,5 +5,8 @@
   "textFontFamily": "JetBrains Mono",
   "monospaceFontFamily": "JetBrains Mono",
   "theme": "obsidian",
-  "baseFontSize": 13
+  "baseFontSize": 13,
+  "accentColor": "#9d2525",
+  "showViewHeader": false,
+  "nativeMenus": false
 }

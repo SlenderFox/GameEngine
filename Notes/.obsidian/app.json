@@ -4,5 +4,6 @@
   "spellcheckLanguages": [
     "en-AU"
   ],
-  "spellcheck": true
+  "spellcheck": true,
+  "showInlineTitle": false
 }

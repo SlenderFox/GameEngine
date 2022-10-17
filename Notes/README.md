@@ -1,11 +1,11 @@
-Repo: https://github.com/SlenderFox/OpenGL-Engine
-Following: https://learnopengl.com/
+Repo: https://github.com/SlenderFox/OpenGL-Engine<br>
+Following: https://learnopengl.com/<br>
 Currently at: https://learnopengl.com/Model-Loading/Model
 ___
 Notes:
 - Enable/disable console through
 	Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)
-- https://www.glfw.org/docs/latest/input_guide.html#events
+- https://www.glfw.org/docs/latest/input_guide.html
 ___
 Todo:
 - [x] Add all source files as notes
