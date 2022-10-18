@@ -4,7 +4,8 @@ struct GLFWwindow;
 
 namespace Engine
 {
-	using callbackfunc = void(*)(double, double);
+	using CallbackFunc = void(*)(double, double);
+	
 	// Singleton class used for handling inputs
 	class Input
 	{
@@ -154,8 +155,8 @@ namespace Engine
 	private:
 		GLFWwindow* m_windowRef = nullptr;
 
-		callbackfunc mCall;
-		callbackfunc sCall;
+		CallbackFunc mouseCallback;
+		CallbackFunc scrollCallback;
 
 		double m_mouseLastX = 0.0, m_mouseLastY = 0.0;	// Mouse position in the last frame
 
@@ -174,7 +175,7 @@ namespace Engine
 		void Process() noexcept;
 		bool GetKey(Key pKey, State pState) noexcept;
 
-		void AddMCall(callbackfunc f);
-		void AddSCall(callbackfunc f);
+		void AddMouseCallback(CallbackFunc f) noexcept;
+		void AddSrollCallback(CallbackFunc f) noexcept;
 	};
 }

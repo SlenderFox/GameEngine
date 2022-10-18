@@ -229,8 +229,8 @@ namespace Engine
 		m_inputInst->Init(m_window);
 
 		glfwGetCursorPos(m_window, &m_mouseLastX, &m_mouseLastY);
-		m_inputInst->AddMCall(MouseCallback);
-		m_inputInst->AddSCall(ScrollCallback);
+		m_inputInst->AddMouseCallback(MouseCallback);
+		m_inputInst->AddSrollCallback(ScrollCallback);
 
 		// glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))

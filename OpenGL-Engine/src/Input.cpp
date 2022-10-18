@@ -19,12 +19,12 @@ namespace Engine
 
 	void Input::Mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY) noexcept
 	{
-		Input::GetInstance()->mCall(pPosX, pPosY);
+		Input::GetInstance()->mouseCallback(pPosX, pPosY);
 	}
 
 	void Input::Scroll_callback(GLFWwindow* pWindow, double pOffsetX, double pOffsetY) noexcept
 	{
-		Input::GetInstance()->sCall(pOffsetX, pOffsetY);
+		Input::GetInstance()->scrollCallback(pOffsetX, pOffsetY);
 	}
 
 	// Member
@@ -39,6 +39,8 @@ namespace Engine
 			glfwSetInputMode(m_windowRef, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 			
 		glfwSetKeyCallback(m_windowRef, Key_callback);
+		glfwSetCursorPosCallback(m_windowRef, Mouse_callback);
+		glfwSetScrollCallback(m_windowRef, Scroll_callback);
 	}
 
 	void Input::Process() noexcept
@@ -51,15 +53,13 @@ namespace Engine
 		return (int)pState == glfwGetKey(m_windowRef, (int)pKey);
 	}
 
-	void Input::AddMCall(callbackfunc f)
+	void Input::AddMouseCallback(CallbackFunc f) noexcept
 	{
-		mCall = f;
-		glfwSetCursorPosCallback(m_windowRef, Mouse_callback);
+		mouseCallback = f;
 	}
 
-	void Input::AddSCall(callbackfunc f)
+	void Input::AddSrollCallback(CallbackFunc f) noexcept
 	{
-		sCall = f;
-		glfwSetScrollCallback(m_windowRef, Scroll_callback);
+		scrollCallback = f;
 	}
 }
