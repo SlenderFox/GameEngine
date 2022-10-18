@@ -5,8 +5,6 @@
  #include "Debug.hpp"
 #endif
 
-using std::function;
-
 namespace Engine
 {
 	// Static
@@ -53,13 +51,13 @@ namespace Engine
 		return (int)pState == glfwGetKey(m_windowRef, (int)pKey);
 	}
 
-	void Input::AddMCall(function<void(double, double)> f)
+	void Input::AddMCall(callbackfunc f)
 	{
 		mCall = f;
 		glfwSetCursorPosCallback(m_windowRef, Mouse_callback);
 	}
 
-	void Input::AddSCall(function<void(double, double)> f)
+	void Input::AddSCall(callbackfunc f)
 	{
 		sCall = f;
 		glfwSetScrollCallback(m_windowRef, Scroll_callback);

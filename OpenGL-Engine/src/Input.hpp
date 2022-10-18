@@ -1,10 +1,10 @@
 #pragma once
-#include <functional>
 
 struct GLFWwindow;
 
 namespace Engine
 {
+	using callbackfunc = void(*)(double, double);
 	// Singleton class used for handling inputs
 	class Input
 	{
@@ -154,8 +154,8 @@ namespace Engine
 	private:
 		GLFWwindow* m_windowRef = nullptr;
 
-		std::function<void(double, double)> mCall;
-		std::function<void(double, double)> sCall;
+		callbackfunc mCall;
+		callbackfunc sCall;
 
 		double m_mouseLastX = 0.0, m_mouseLastY = 0.0;	// Mouse position in the last frame
 
@@ -174,7 +174,7 @@ namespace Engine
 		void Process() noexcept;
 		bool GetKey(Key pKey, State pState) noexcept;
 
-		void AddMCall(std::function<void(double, double)> f);
-		void AddSCall(std::function<void(double, double)> f);
+		void AddMCall(callbackfunc f);
+		void AddSCall(callbackfunc f);
 	};
 }

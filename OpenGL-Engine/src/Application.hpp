@@ -14,6 +14,9 @@ namespace Engine
 		constexpr static Application* const& GetApplication() noexcept { return s_application; }
 		static const bool GladLoaded() noexcept;	// No definition to allow forward declaration
 		static void Quit() noexcept;
+		
+		static void MouseCallback(double pPosX, double pPosY) noexcept;
+		static void ScrollCallback(double pOffsetX, double pOffsetY) noexcept;
 
 	private:
 		Renderer* m_rendererInst = nullptr;					// A reference to the renderer instance
@@ -49,8 +52,6 @@ namespace Engine
 
 		void Run(uint16_t pWidth, uint16_t pHeight, const std::string& pTitle, bool pFullscreen);
 		void SetDimensions(uint16_t pWidth, uint16_t pHeight) noexcept;
-		void MouseCallback(double pPosX, double pPosY) noexcept;
-		void ScrollCallback(double pOffsetX, double pOffsetY) noexcept;
 
 		constexpr double GetTime() const noexcept { return m_currentTime; }
 		constexpr double GetDeltaTime() const noexcept { return m_deltaTime; }

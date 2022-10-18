@@ -23,18 +23,10 @@ void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight) noe
 	glViewport(0, 0, pWidth, pHeight);
 }
 
-void mouse_callback(double pPosX, double pPosY) noexcept
-{
-	Engine::Application::GetApplication()->MouseCallback(pPosX, pPosY);
-}
-
-void scroll_callback(double pOffsetX, double pOffsetY) noexcept
-{
-	Engine::Application::GetApplication()->ScrollCallback(pOffsetX, pOffsetY);
-}
-
 namespace Engine
 {
+	// Static 
+
 	Application* Application::s_application = nullptr;
 	bool Application::s_gladLoaded = false;
 
@@ -47,6 +39,39 @@ namespace Engine
 	{
 		glfwSetWindowShouldClose(Application::GetApplication()->m_window, true);
 	}
+
+	void Application::MouseCallback(double pPosX, double pPosY) noexcept
+	{
+		Application* app = Application::GetApplication();
+		double offsetX = pPosX - app->m_mouseLastX;
+		double offsetY = pPosY - app->m_mouseLastY;
+		app->m_mouseLastX = pPosX;
+		app->m_mouseLastY = pPosY;
+		const double sens = 0.05f;
+		offsetX *= sens;
+		offsetY *= sens;
+		app->m_yaw += offsetX;
+		app->m_pitch += offsetY;
+		if (app->m_pitch > 89.0f)
+			app->m_pitch = 89.0f;
+		else if (app->m_pitch < -89.0f)
+			app->m_pitch = -89.0f;
+
+		// The forward direction of the camera
+		vec3 forward = vec3();
+		forward.x = (float)cos(radians(app->m_yaw)) * (float)cos(radians(app->m_pitch));
+		forward.y = (float)sin(radians(app->m_pitch));
+		forward.z = (float)sin(radians(app->m_yaw)) * (float)cos(radians(app->m_pitch));
+		forward = normalize(forward);
+		Renderer::GetInstance()->m_camera->SetForward(forward);
+	}
+
+	void Application::ScrollCallback(double pOffsetX, double pOffsetY) noexcept
+	{
+		Renderer::GetInstance()->m_camera->ModifyFovH((float)pOffsetY * -3.0f);
+	}
+
+	// Member
 
 	Application::Application()
 	{
@@ -204,8 +229,8 @@ namespace Engine
 		m_inputInst->Init(m_window);
 
 		glfwGetCursorPos(m_window, &m_mouseLastX, &m_mouseLastY);
-		m_inputInst->AddMCall(mouse_callback);
-		m_inputInst->AddSCall(scroll_callback);
+		m_inputInst->AddMCall(MouseCallback);
+		m_inputInst->AddSCall(ScrollCallback);
 
 		// glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -246,36 +271,6 @@ namespace Engine
 	{
 		m_rendererInst->m_camera->SetAspectRatio((float)m_winWidth / (float)m_winHeight);
 		m_rendererInst->m_camera->UpdateFovV();
-	}
-
-	void Application::MouseCallback(double pPosX, double pPosY) noexcept
-	{
-		double offsetX = pPosX - m_mouseLastX;
-		double offsetY = pPosY - m_mouseLastY;
-		m_mouseLastX = pPosX;
-		m_mouseLastY = pPosY;
-		const double sens = 0.05f;
-		offsetX *= sens;
-		offsetY *= sens;
-		m_yaw += offsetX;
-		m_pitch += offsetY;
-		if (m_pitch > 89.0f)
-			m_pitch = 89.0f;
-		else if (m_pitch < -89.0f)
-			m_pitch = -89.0f;
-
-		// The forward direction of the camera
-		vec3 forward = vec3();
-		forward.x = (float)cos(radians(m_yaw)) * (float)cos(radians(m_pitch));
-		forward.y = (float)sin(radians(m_pitch));
-		forward.z = (float)sin(radians(m_yaw)) * (float)cos(radians(m_pitch));
-		forward = normalize(forward);
-		m_rendererInst->m_camera->SetForward(forward);
-	}
-
-	void Application::ScrollCallback(double pOffsetX, double pOffsetY) noexcept
-	{
-		m_rendererInst->m_camera->ModifyFovH((float)pOffsetY * -3.0f);
 	}
 
 	void Application::ProcessInput() noexcept
