@@ -42,8 +42,8 @@ Todo:
 	- [x] Keyboard input
 		- [ ] Keyboard layouts
 	- [x] Mouse input
-		- [ ] Allow callbacks to pass member functions
 	- [ ] Function callbacks
+		- [ ] Allow callbacks to pass member functions
 	- [ ] Controller support
 - [ ] Overhaul lights ([[Light.hpp]]/[[Light.cpp]])
 	- [ ] Have each light type in it's own vector

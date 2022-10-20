@@ -113,9 +113,9 @@ void Project::CreateLights()
 		 || current->GetType() == Engine::LightType::Spot)
 		{
 			current->LoadModel("assets/models/cube/cube.obj", "assets/shaders/default", model, shader, false);
-			current->SetTransform(current->GetTransform());
+			current->SetTransform(current->GetTransform());	// Required to update shader
 			current->SetScale(vec3(0.2f, 0.2f, (current->GetType() == Engine::LightType::Spot) ? 0.4f : 0.2f));
-			current->SetColourInShader(current->GetColour());
+			current->SetColourInShader(current->GetColour());	// Required to update shader
 			current->RenderOnlyColour(true);
 			m_lightRefs.push_back(current);
 		}
