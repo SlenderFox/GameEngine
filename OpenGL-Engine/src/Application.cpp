@@ -156,6 +156,7 @@ namespace Engine
 				}
 
 				m_rendererInst->Draw();
+				Draw();
 
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(m_window);

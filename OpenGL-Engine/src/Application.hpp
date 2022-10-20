@@ -56,6 +56,7 @@ namespace Engine
 		constexpr double GetTime() const noexcept { return m_currentTime; }
 		constexpr double GetDeltaTime() const noexcept { return m_deltaTime; }
 		constexpr double GetFixedDeltaTime() const noexcept { return m_fixedDeltaTime; }
+		constexpr GLFWwindow* GetWindow() const noexcept { return m_window; }
 
 	protected:
 		Application();
@@ -66,5 +67,6 @@ namespace Engine
 		virtual void Update() = 0;
 		virtual void FixedUpdate() = 0;
 		virtual void LateUpdate() = 0;
+		virtual void Draw() = 0;
 	};
 }

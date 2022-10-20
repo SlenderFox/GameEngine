@@ -1,5 +1,8 @@
 #pragma once
 #include "Application.hpp"
+#include "../imgui/imgui.h"
+#include "../imgui/imgui_impl_glfw.h"
+#include "../imgui/imgui_impl_opengl3.h"
 
 class Project: public Engine::Application
 {
@@ -28,6 +31,7 @@ private:
 
 	void CreateScene();
 	void CreateLights();
+	void CreateImgui();
 
 	void ProcessInput() noexcept;
 
@@ -40,4 +44,5 @@ public:
 	void Update() override;
 	void FixedUpdate() override;
 	void LateUpdate() override;
+	void Draw() override;
 };
