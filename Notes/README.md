@@ -52,4 +52,6 @@ Todo:
 		- [ ] Min and max clipped brightness
 			- [ ] Iris
 			- [ ] Retina
-- [ ] Add imgui
+- [x] Add imgui
+	- [ ] Make ([[Debug.hpp]]/[[Debug.cpp]]) use imgui
+- [ ] Holding alt releases cursor
