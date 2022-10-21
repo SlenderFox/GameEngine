@@ -142,6 +142,10 @@ namespace Engine
 			Key_Menu				= 348
 		};
 
+		static bool s_KeyCallback;
+		static bool s_MouseCallback;
+		static bool s_ScrollCallback;
+
 		static Input* GetInstance() noexcept
 		{
 			static Input* s_instance = new Input();

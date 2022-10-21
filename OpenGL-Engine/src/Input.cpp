@@ -9,8 +9,13 @@ namespace Engine
 {
 	// Static
 
+	bool Input::s_KeyCallback = true;
+	bool Input::s_MouseCallback = false;
+	bool Input::s_ScrollCallback = false;
+
 	void Input::Key_callback(GLFWwindow* pWindow, int pKey, int pScancode, int pAction, int pMods) noexcept
 	{
+		if (!s_KeyCallback) return;
 		if (pAction != GLFW_PRESS) return;
 		#ifdef _DEBUG
 		 Engine::Debug::Send(std::to_string(pScancode) + " ", false, false);
@@ -19,11 +24,13 @@ namespace Engine
 
 	void Input::Mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY) noexcept
 	{
+		if (!s_MouseCallback) return;
 		Input::GetInstance()->mouseCallback(pPosX, pPosY);
 	}
 
 	void Input::Scroll_callback(GLFWwindow* pWindow, double pOffsetX, double pOffsetY) noexcept
 	{
+		if (!s_ScrollCallback) return;
 		Input::GetInstance()->scrollCallback(pOffsetX, pOffsetY);
 	}
 
@@ -56,10 +63,12 @@ namespace Engine
 	void Input::AddMouseCallback(CallbackFunc f) noexcept
 	{
 		mouseCallback = f;
+		s_MouseCallback = true;
 	}
 
 	void Input::AddSrollCallback(CallbackFunc f) noexcept
 	{
 		scrollCallback = f;
+		s_ScrollCallback = true;
 	}
 }
