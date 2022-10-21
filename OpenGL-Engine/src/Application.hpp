@@ -19,7 +19,7 @@ namespace Engine
 		static void ScrollCallback(double pOffsetX, double pOffsetY) noexcept;
 
 	private:
-		enum class ExitCode: int
+		enum class ExitCode: uint8_t
 		{
 			Okay = 0,
 			Fail_GLFW_Init,
@@ -73,7 +73,6 @@ namespace Engine
 		constexpr double GetTime() const noexcept { return m_currentTime; }
 		constexpr double GetDeltaTime() const noexcept { return m_deltaTime; }
 		constexpr double GetFixedDeltaTime() const noexcept { return m_fixedDeltaTime; }
-		constexpr GLFWwindow* GetWindow() const noexcept { return m_window; }
 
 	protected:
 		Application();

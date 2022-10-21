@@ -186,16 +186,16 @@ namespace Engine
 			return false;
 		}
 
-		if (!SetupImgui())
-		{
-			m_exitCode = ExitCode::Fail_Imgui;
-			return false;
-		}
-
 		// Initialises the renderer
 		if (!m_rendererInst->Init((float)m_winWidth / (float)m_winHeight))
 		{
 			m_exitCode = ExitCode::Fail_Renderer;
+			return false;
+		}
+
+		if (!SetupImgui())
+		{
+			m_exitCode = ExitCode::Fail_Imgui;
 			return false;
 		}
 
@@ -204,6 +204,9 @@ namespace Engine
 			m_exitCode = ExitCode::Fail_Input;
 			return false;
 		}
+		// FIXME: For some reason only works after input class is initialised
+		ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+		
 		//m_inputInst->AddMouseCallback(MouseCallback);
 		//m_inputInst->AddSrollCallback(ScrollCallback);
 
@@ -302,7 +305,7 @@ namespace Engine
 	{
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
-		ImGui_ImplGlfw_InitForOpenGL(GetWindow(), true);
+		//ImGui_ImplGlfw_InitForOpenGL(m_window, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
 		ImGui::GetIO().DisplaySize.x = 1030.0f;
 		ImGui::GetIO().DisplaySize.y = 650.0f;
