@@ -194,8 +194,8 @@ namespace Engine
 
 		m_inputInst->Init(m_window);
 
-		m_inputInst->AddMouseCallback(MouseCallback);
-		m_inputInst->AddSrollCallback(ScrollCallback);
+		//m_inputInst->AddMouseCallback(MouseCallback);
+		//m_inputInst->AddSrollCallback(ScrollCallback);
 
 		if (!SetupGlad()) return false;
 
