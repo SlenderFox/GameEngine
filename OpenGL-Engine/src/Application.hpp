@@ -46,7 +46,9 @@ namespace Engine
 		bool Init(const std::string& pTitle, bool pFullscreen);
 		bool SetupGLFW(const std::string& pTitle, bool pFullscreen);
 		bool SetupGlad();
+		bool SetupImgui();
 		void UpdateCamera() noexcept;
+		void UpdateFrameTimeData() noexcept;
 		void ProcessInput() noexcept;
 
 	public:

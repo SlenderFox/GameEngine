@@ -108,35 +108,18 @@ namespace Engine
 
 		if (Init(pTitle, pFullscreen))
 		{
-			m_currentTime = glfwGetTime() - 0.02f;
-
-			const float radius = 10.0f;
-			const float speed = 0.5f;
+			// Preloads currentTime with an earlier time to prevent first frame weirdness
+			m_currentTime = glfwGetTime() - m_fixedDeltaTime;
 
 			// Render loop
-			while (!glfwWindowShouldClose(m_window))
+			while (!(bool)glfwWindowShouldClose(m_window))
 			{
-				m_prevTime = m_currentTime;
-				m_currentTime = glfwGetTime();
-				m_deltaTime = m_currentTime - m_prevTime;
-				m_fixedTimer += m_deltaTime;
-				m_frameTimer += m_deltaTime;
-				++m_frames;
-				++m_framesPerSecond;
-
-				// Doing this allows me to updates fps as often as I want
-				float secondsPerUpdate = 0.5f;
-				if (m_frameTimer >= secondsPerUpdate)
-				{
-					m_frameTimer -= secondsPerUpdate;
-					m_fps = (uint16_t)((double)m_framesPerSecond / secondsPerUpdate);
-					m_framesPerSecond = 0U;
-					glfwSetWindowTitle(m_window, (m_title + " | FPS: " + std::to_string(m_fps)).c_str());
-				}
+				UpdateFrameTimeData();
 
 				// Input
 				glfwPollEvents();
 				ProcessInput();
+				m_inputInst->Process();
 
 				Update();
 
@@ -147,25 +130,25 @@ namespace Engine
 					FixedUpdate();
 				}
 
-				LateUpdate();
-
 				// Skip drawing if minimised, restricts fps to 15
 				if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) == GLFW_TRUE)
 				{
-					if (m_deltaTime < 50)
-						Sleep(50);
-
+					Sleep((DWORD)std::abs(50.0 - m_deltaTime));
 					continue;
 				}
 
-				m_rendererInst->Draw();
-				
+				// Start a new imgui frame
 				ImGui_ImplOpenGL3_NewFrame();
 				ImGui_ImplGlfw_NewFrame();
 				ImGui::NewFrame();
+
+				LateUpdate();
+
+				m_rendererInst->Draw();
 				
 				ImGui::ShowDemoWindow();
 				
+				// Draw imgui last and on top
 				ImGui::Render();
 				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -174,6 +157,7 @@ namespace Engine
 			}
 		}
 
+		// End imgui
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
@@ -202,12 +186,7 @@ namespace Engine
 		// Initialises the renderer
 		m_rendererInst->Init((float)m_winWidth / (float)m_winHeight);
 
-		ImGui::CreateContext();
-		ImGui::StyleColorsDark();
-		ImGui_ImplGlfw_InitForOpenGL(GetWindow(), true);
-		ImGui_ImplOpenGL3_Init("#version 330");
-		ImGui::GetIO().DisplaySize.x = 1030.0f;
-		ImGui::GetIO().DisplaySize.y = 650.0f;
+		if (!SetupImgui()) return false;
 
 		if (!Startup())
 			return false;
@@ -295,6 +274,18 @@ namespace Engine
 		return true;
 	}
 
+	bool Application::SetupImgui()
+	{
+		ImGui::CreateContext();
+		ImGui::StyleColorsDark();
+		ImGui_ImplGlfw_InitForOpenGL(GetWindow(), true);
+		ImGui_ImplOpenGL3_Init("#version 330");
+		ImGui::GetIO().DisplaySize.x = 1030.0f;
+		ImGui::GetIO().DisplaySize.y = 650.0f;
+
+		return true;
+	}
+
 	void Application::SetDimensions(uint16_t pWidth, uint16_t pHeight) noexcept
 	{
 		m_winWidth = pWidth;
@@ -308,6 +299,27 @@ namespace Engine
 	{
 		m_rendererInst->m_camera->SetAspectRatio((float)m_winWidth / (float)m_winHeight);
 		m_rendererInst->m_camera->UpdateFovV();
+	}
+
+	void Application::UpdateFrameTimeData() noexcept
+	{
+		m_prevTime = m_currentTime;
+		m_currentTime = glfwGetTime();
+		m_deltaTime = m_currentTime - m_prevTime;
+		m_fixedTimer += m_deltaTime;
+		m_frameTimer += m_deltaTime;
+		++m_frames;
+		++m_framesPerSecond;
+
+		// Doing this allows me to updates fps as often as I want
+		float secondsPerUpdate = 0.5f;
+		if (m_frameTimer >= secondsPerUpdate)
+		{
+			m_frameTimer -= secondsPerUpdate;
+			m_fps = (uint16_t)((double)m_framesPerSecond / secondsPerUpdate);
+			m_framesPerSecond = 0U;
+			glfwSetWindowTitle(m_window, (m_title + " | FPS: " + std::to_string(m_fps)).c_str());
+		}
 	}
 
 	void Application::ProcessInput() noexcept
