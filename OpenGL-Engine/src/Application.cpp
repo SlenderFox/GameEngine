@@ -4,6 +4,9 @@
 #include "GLFW/glfw3.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <Windows.h>	// Needed for Sleep()
+#include "../imgui/imgui.h"
+#include "../imgui/imgui_impl_glfw.h"
+#include "../imgui/imgui_impl_opengl3.h"
 
 #ifdef _DEBUG
  #include "Debug.hpp"
@@ -156,12 +159,25 @@ namespace Engine
 				}
 
 				m_rendererInst->Draw();
-				Draw();
+				
+				ImGui_ImplOpenGL3_NewFrame();
+				ImGui_ImplGlfw_NewFrame();
+				ImGui::NewFrame();
+				
+				for (uint16_t i = 0; i < 50; ++i)
+					ImGui::Text("Hello World!");
+				
+				ImGui::Render();
+				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(m_window);
 			}
 		}
+
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
 
 		Shutdown();
 		glfwTerminate();
@@ -186,6 +202,13 @@ namespace Engine
 
 		// Initialises the renderer
 		m_rendererInst->Init((float)m_winWidth / (float)m_winHeight);
+
+		ImGui::CreateContext();
+		ImGui::StyleColorsDark();
+		ImGui_ImplGlfw_InitForOpenGL(GetWindow(), true);
+		ImGui_ImplOpenGL3_Init("#version 330");
+		ImGui::GetIO().DisplaySize.x = 1030.0f;
+		ImGui::GetIO().DisplaySize.y = 650.0f;
 
 		if (!Startup())
 			return false;

@@ -41,7 +41,7 @@ namespace Engine
 		m_windowRef = pWindowRef;
 
 		//glfwGetCursorPos(m_windowRef, &m_mouseLastX, &m_mouseLastY);
-		glfwSetInputMode(m_windowRef, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		//glfwSetInputMode(m_windowRef, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(m_windowRef, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 			

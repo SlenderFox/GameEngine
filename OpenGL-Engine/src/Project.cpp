@@ -40,16 +40,10 @@ bool Project::Startup()
 	m_inputRef = Engine::Input::GetInstance();
 	CreateLights();
 	CreateScene();
-	CreateImgui();
 	return true;
 }
 
-void Project::Shutdown()
-{
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
-}
+void Project::Shutdown() {}
 
 void Project::Update()
 {
@@ -66,19 +60,6 @@ void Project::Update()
 void Project::FixedUpdate() {}
 
 void Project::LateUpdate() {}
-
-void Project::Draw()
-{
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
-
-	for (uint16_t i = 0; i < 50; ++i)
-		ImGui::Text("Hello World!");
-
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
 
 void Project::CreateScene()
 {
@@ -139,16 +120,6 @@ void Project::CreateLights()
 			m_lightRefs.push_back(current);
 		}
 	}
-}
-
-void Project::CreateImgui()
-{
-	ImGui::CreateContext();
-	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(GetWindow(), true);
-	ImGui_ImplOpenGL3_Init("#version 330");
-	ImGui::GetIO().DisplaySize.x = 1030.0f;
-	ImGui::GetIO().DisplaySize.y = 650.0f;
 }
 
 void Project::ProcessInput() noexcept
