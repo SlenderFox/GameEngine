@@ -164,8 +164,7 @@ namespace Engine
 				ImGui_ImplGlfw_NewFrame();
 				ImGui::NewFrame();
 				
-				for (uint16_t i = 0; i < 50; ++i)
-					ImGui::Text("Hello World!");
+				ImGui::ShowDemoWindow();
 				
 				ImGui::Render();
 				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
