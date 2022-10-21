@@ -15,10 +15,10 @@ int main()
 {
 	Project* app = new Project();
 	#ifdef _DEBUG
-	 app->Run(1030, 650, "OpenGL Application (DEBUG)", false);
+	 int code = (int)app->Run(1030, 650, "OpenGL Application (DEBUG)", false);
 	#else
-	 app->Run(1600, 900, "OpenGL Application", false);
+	 int code = (int)app->Run(1600, 900, "OpenGL Application", false);
 	#endif
 	delete app;
-	return 0;
+	return code;
 }

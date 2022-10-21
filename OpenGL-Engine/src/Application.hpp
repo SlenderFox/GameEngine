@@ -19,6 +19,18 @@ namespace Engine
 		static void ScrollCallback(double pOffsetX, double pOffsetY) noexcept;
 
 	private:
+		enum class ExitCode: int
+		{
+			Okay = 0,
+			Fail_GLFW_Init,
+			Fail_GLFW_Window,
+			Fail_Glad,
+			Fail_Imgui,
+			Fail_Renderer,
+			Fail_Input,
+			Fail_Startup
+		};
+
 		Renderer* m_rendererInst = nullptr;					// A reference to the renderer instance
 		Input* m_inputInst = nullptr;						// A reference to the input instance
 		GLFWwindow* m_window = nullptr;						// A reference to the window
@@ -34,6 +46,7 @@ namespace Engine
 		double m_yaw = 90.0, m_pitch = 0.0;					// The rotation of the camera
 
 		std::string m_title = "Title error";				// The tile of the window
+		ExitCode m_exitCode = ExitCode::Okay;
 
 		#pragma region Constructors
 		// Delete copy/move so extra instances can't be created/moved.
@@ -54,7 +67,7 @@ namespace Engine
 	public:
 		const double m_fixedDeltaTime = 0.01666666666666666;
 
-		void Run(uint16_t pWidth, uint16_t pHeight, const std::string& pTitle, bool pFullscreen);
+		ExitCode Run(uint16_t pWidth, uint16_t pHeight, const std::string& pTitle, bool pFullscreen);
 		void SetDimensions(uint16_t pWidth, uint16_t pHeight) noexcept;
 
 		constexpr double GetTime() const noexcept { return m_currentTime; }

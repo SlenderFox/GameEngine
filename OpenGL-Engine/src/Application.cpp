@@ -102,7 +102,7 @@ namespace Engine
 		// Don't need to delete m_window as it is handled by glfwTerminate()
 	}
 
-	void Application::Run(uint16_t pWidth, uint16_t pHeight, const string& pTitle, bool pFullscreen)
+	Application::ExitCode Application::Run(uint16_t pWidth, uint16_t pHeight, const string& pTitle, bool pFullscreen)
 	{
 		SetDimensions(pWidth, pHeight);
 
@@ -158,38 +158,60 @@ namespace Engine
 		}
 
 		// End imgui
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
+		if (ImGui::GetCurrentContext() != NULL)
+		{
+			ImGui_ImplOpenGL3_Shutdown();
+			ImGui_ImplGlfw_Shutdown();
+			ImGui::DestroyContext();
+		}
 
 		Shutdown();
 		glfwTerminate();
-		return;
+		return m_exitCode;
 	}
 
 	bool Application::Init(const string& pTitle, bool pFullscreen)
 	{
 		#ifdef _DEBUG
+		 // Must be first to init
 		 Debug::Init();
 		 auto startTime = std::chrono::high_resolution_clock::now();
 		#endif
 
-		if (!SetupGLFW(pTitle, pFullscreen)) return false;
+		if (!SetupGLFW(pTitle, pFullscreen)) return false;	// Sets own exit code
 
-		m_inputInst->Init(m_window);
+		if (!SetupGlad())
+		{
+			m_exitCode = ExitCode::Fail_Glad;
+			return false;
+		}
 
+		if (!SetupImgui())
+		{
+			m_exitCode = ExitCode::Fail_Imgui;
+			return false;
+		}
+
+		// Initialises the renderer
+		if (!m_rendererInst->Init((float)m_winWidth / (float)m_winHeight))
+		{
+			m_exitCode = ExitCode::Fail_Renderer;
+			return false;
+		}
+
+		if (!m_inputInst->Init(m_window))
+		{
+			m_exitCode = ExitCode::Fail_Input;
+			return false;
+		}
 		//m_inputInst->AddMouseCallback(MouseCallback);
 		//m_inputInst->AddSrollCallback(ScrollCallback);
 
-		if (!SetupGlad()) return false;
-
-		// Initialises the renderer
-		m_rendererInst->Init((float)m_winWidth / (float)m_winHeight);
-
-		if (!SetupImgui()) return false;
-
 		if (!Startup())
+		{
+			m_exitCode = ExitCode::Fail_Startup;
 			return false;
+		}
 
 		// Calculates the time it took to start up
 		#ifdef _DEBUG
@@ -204,11 +226,12 @@ namespace Engine
 	bool Application::SetupGLFW(const std::string& pTitle, bool pFullscreen)
 	{
 		// glfw: initialise and configure
-		if (glfwInit() == GLFW_FALSE)
+		if (!glfwInit())
 		{
 			#ifdef _DEBUG
-			 Debug::Send("GLFW failed to initialise");
+			 Debug::Send("Failed to initialise GLFW");
 			#endif
+			m_exitCode = ExitCode::Fail_GLFW_Init;
 			return false;
 		}
 
@@ -231,6 +254,7 @@ namespace Engine
 			#ifdef _DEBUG
 			 Debug::Send("Failed to create GLFW window");
 			#endif
+			m_exitCode = ExitCode::Fail_GLFW_Window;
 			return false;
 		}
 		glfwMakeContextCurrent(m_window);
