@@ -175,6 +175,33 @@ namespace Engine
 		 auto startTime = std::chrono::high_resolution_clock::now();
 		#endif
 
+		if (!SetupGLFW(pTitle, pFullscreen)) return false;
+
+		m_inputInst->Init(m_window);
+
+		m_inputInst->AddMouseCallback(MouseCallback);
+		m_inputInst->AddSrollCallback(ScrollCallback);
+
+		if (!SetupGlad()) return false;
+
+		// Initialises the renderer
+		m_rendererInst->Init((float)m_winWidth / (float)m_winHeight);
+
+		if (!Startup())
+			return false;
+
+		// Calculates the time it took to start up
+		#ifdef _DEBUG
+		 auto endTime = std::chrono::high_resolution_clock::now();
+		 std::chrono::duration<double> elapsedTime = endTime - startTime;
+		 Debug::Send("Started in " + std::to_string(elapsedTime.count()) + " seconds");
+		#endif
+
+		return true;
+	}
+
+	bool Application::SetupGLFW(const std::string& pTitle, bool pFullscreen)
+	{
 		// glfw: initialise and configure
 		if (glfwInit() == GLFW_FALSE)
 		{
@@ -226,13 +253,14 @@ namespace Engine
 
 		//Callbacks
 		glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
-		
-		m_inputInst->Init(m_window);
 
+		// TODO: Remove
 		glfwGetCursorPos(m_window, &m_mouseLastX, &m_mouseLastY);
-		m_inputInst->AddMouseCallback(MouseCallback);
-		m_inputInst->AddSrollCallback(ScrollCallback);
+		return true;
+	}
 
+	bool Application::SetupGlad()
+	{
 		// glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
@@ -242,20 +270,6 @@ namespace Engine
 			return false;
 		}
 		s_gladLoaded = true;
-
-		// Initialises the renderer
-		m_rendererInst->Init((float)m_winWidth / (float)m_winHeight);
-
-		if (!Startup())
-			return false;
-
-		// Calculates the time it took to start up
-		#ifdef _DEBUG
-		 auto endTime = std::chrono::high_resolution_clock::now();
-		 std::chrono::duration<double> elapsedTime = endTime - startTime;
-		 Debug::Send("Started in " + std::to_string(elapsedTime.count()) + " seconds");
-		#endif
-
 		return true;
 	}
 

@@ -38,7 +38,7 @@ namespace Engine
 
 	// Member
 
-	void Renderer::Init(float pAspect) noexcept
+	bool Renderer::Init(float pAspect) noexcept
 	{
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);
@@ -52,6 +52,8 @@ namespace Engine
 		// Initialise arrays
 		m_models = make_unique<vector<unique_ptr<Model>>>();
 		m_lights = make_unique<vector<unique_ptr<Light>>>();
+
+		return true;
 	}
 
 	Renderer::~Renderer()

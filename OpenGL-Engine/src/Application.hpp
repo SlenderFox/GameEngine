@@ -44,6 +44,8 @@ namespace Engine
 		#pragma endregion
 
 		bool Init(const std::string& pTitle, bool pFullscreen);
+		bool SetupGLFW(const std::string& pTitle, bool pFullscreen);
+		bool SetupGlad();
 		void UpdateCamera() noexcept;
 		void ProcessInput() noexcept;
 

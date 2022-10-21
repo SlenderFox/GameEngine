@@ -40,7 +40,7 @@ namespace Engine
 		Renderer& operator=(Renderer&&) = delete;
 		#pragma endregion
 
-		void Init(float pAspect) noexcept;
+		bool Init(float pAspect) noexcept;
 		void Draw() noexcept;
 
 	public:

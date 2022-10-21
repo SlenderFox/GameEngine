@@ -175,7 +175,7 @@ namespace Engine
 		#pragma endregion
 
 	public:
-		void Init(GLFWwindow* const& pWindowRef) noexcept;
+		bool Init(GLFWwindow* const& pWindowRef) noexcept;
 		void Process() noexcept;
 		bool GetKey(Key pKey, State pState) noexcept;
 

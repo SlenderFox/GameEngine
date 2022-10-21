@@ -36,7 +36,7 @@ namespace Engine
 
 	// Member
 
-	void Input::Init(GLFWwindow* const& pWindowRef) noexcept
+	bool Input::Init(GLFWwindow* const& pWindowRef) noexcept
 	{
 		m_windowRef = pWindowRef;
 
@@ -48,6 +48,8 @@ namespace Engine
 		glfwSetKeyCallback(m_windowRef, Key_callback);
 		glfwSetCursorPosCallback(m_windowRef, Mouse_callback);
 		glfwSetScrollCallback(m_windowRef, Scroll_callback);
+
+		return true;
 	}
 
 	void Input::Process() noexcept
