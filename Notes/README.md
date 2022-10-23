@@ -37,9 +37,9 @@ Todo:
 - [x] Use const references where possible
 - [x] Fix ascii printing incorrectly as UTF
 - [x] Add imgui
-- [ ] Formatting with 120 max width
+- [x] Formatting with 120 max width
+- [x] Try upgrade ([[Colour.hpp]]/[[Colour.cpp]]) with macros
 - [ ] Make more functions pass by reference
-- [ ] Try upgrade ([[Colour.hpp]]/[[Colour.cpp]]) with macros
 - [ ] Holding alt releases cursor
 - [ ] Make ([[Debug.hpp]]/[[Debug.cpp]]) use imgui
 	- [ ] Update ([[Debug.hpp]]/[[Debug.cpp]]) to be used without \_DEBUG enabled
