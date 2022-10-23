@@ -10,7 +10,7 @@ using glm::cross;
 
 namespace Engine
 {
-	#pragma region Constructors
+#	pragma region Constructors
 	Transform::Transform(): m_transform(mat4(1)) {}
 
 	Transform::Transform(const mat4& pValue): m_transform(pValue) {}
@@ -36,9 +36,9 @@ namespace Engine
 		Transform* newObj = new Transform(pOther.GetTransform());
 		return *newObj;
 	}
-	#pragma endregion
+#	pragma endregion
 
-	#pragma region Setters
+#	pragma region Setters
 	void Transform::SetTransform(const mat4& pValue) noexcept
 	{
 		m_transform = pValue;
@@ -81,9 +81,9 @@ namespace Engine
 		vec3 up = cross(pForward, right);
 		SetAxes(right, up, pForward);
 	}
-	#pragma endregion
+#	pragma endregion
 	
-	#pragma region Getters
+#	pragma region Getters
 	constexpr vec4 Transform::GetRight() const noexcept
 	{
 		// The transform is horizontally reversed
@@ -100,5 +100,5 @@ namespace Engine
 		// The transform is horizontally reversed
 		return vec4(-(vec3)m_transform[2], 0);
 	}
-	#pragma endregion
+#	pragma endregion
 }

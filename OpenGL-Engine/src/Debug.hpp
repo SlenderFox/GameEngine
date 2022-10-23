@@ -15,24 +15,24 @@ namespace Engine
 		static void Send(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
 		static void NewLine() noexcept;
 
-		#pragma region Init
+#		pragma region Init
 		static void InitSmallNote(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
 		static void InitBigNote(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
 		static void InitSmallProcess(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
 		static void InitBigProcess(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
-		#pragma endregion
-		#pragma region Mid
+#		pragma endregion
+#		pragma region Mid
 		static void SmallNote(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
 		static void BigNote(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
 		static void SmallProcess(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
 		static void BigProcess(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
-		#pragma endregion
-		#pragma region End
+#		pragma endregion
+#		pragma region End
 		static void EndSmallNote(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
 		static void EndBigNote(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
 		static void EndSmallProcess(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
 		static void EndBigProcess(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
-		#pragma endregion
+#		pragma endregion
 	};
 }
 #endif

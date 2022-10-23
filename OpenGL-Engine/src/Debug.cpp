@@ -31,7 +31,7 @@ namespace Engine
 		std::wcout << std::endl;
 	}
 	
-	#pragma region Init
+#	pragma region Init
 	void Debug::InitSmallNote(std::string pMsg, bool pNewline, bool pEndline) noexcept
 	{
 		// ┌ \xDA 218 \u250C
@@ -55,8 +55,8 @@ namespace Engine
 		// ╤ \xD1 209 \u2564
 		SendWithPrefix(L"\u2564", pMsg, pNewline, pEndline);
 	}
-	#pragma endregion
-	#pragma region Mid
+#	pragma endregion
+#	pragma region Mid
 	void Debug::SmallNote(std::string pMsg, bool pNewline, bool pEndline) noexcept
 	{
 		// ├ \xC3 195 \u251C
@@ -80,8 +80,8 @@ namespace Engine
 		// ╪ \xD8 216 \u256A
 		SendWithPrefix(L"\u256A", pMsg, pNewline, pEndline);
 	}
-	#pragma endregion
-	#pragma region End
+#	pragma endregion
+#	pragma region End
 	void Debug::EndSmallNote(std::string pMsg, bool pNewline, bool pEndline) noexcept
 	{
 		// └ \xC0 192 \u2514
@@ -105,6 +105,6 @@ namespace Engine
 		// ╧ \xCF 207 \u2567
 		SendWithPrefix(L"\u2567", pMsg, pNewline, pEndline);
 	}
-	#pragma endregion
+#	pragma endregion
 }
 #endif

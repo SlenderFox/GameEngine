@@ -87,7 +87,7 @@ namespace Engine
 		/// @return [Colour] A Colour object
 		static Colour CreateWithHSV(const glm::vec3& pHSV) noexcept;
 
-		#pragma region Presets
+#		pragma region Presets
 		static Colour Black() noexcept;
 		static Colour White() noexcept;
 		static Colour Silver() noexcept;
@@ -105,7 +105,7 @@ namespace Engine
 		static Colour Olive() noexcept;
 		static Colour Teal() noexcept;
 		static Colour Purple() noexcept;
-		#pragma endregion
+#		pragma endregion
 
 	private:
 		glm::vec3 m_RGB = glm::vec3(0);	// Colour data stored as 0-1 for easy conversion
@@ -130,16 +130,15 @@ namespace Engine
 		/// @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		hsv HSV() const noexcept;
 
-		#pragma region Operators
+#		pragma region Operators
 		operator glm::vec3() const { return m_RGB; }
 
-		#define COL_OP_CONST_FLOAT(OPERAND) Colour operator OPERAND(const float& pOther) const noexcept;
-		#define COL_OP_CONST_COL(OPERAND) Colour operator OPERAND(const Colour& pOther) const noexcept;
-		#define COL_OP_CONST_VEC3(OPERAND) Colour operator OPERAND(const glm::vec3& pOther) const noexcept;
-
-		#define COL_OP_FLOAT(OPERAND) Colour& operator OPERAND(const float& pOther) noexcept;
-		#define COL_OP_COL(OPERAND) Colour& operator OPERAND(const Colour& pOther) noexcept;
-		#define COL_OP_VEC3(OPERAND) Colour& operator OPERAND(const glm::vec3& pOther) noexcept;
+#		define COL_OP_CONST_FLOAT(OPERAND) Colour operator OPERAND(const float& pOther) const noexcept;
+#		define COL_OP_CONST_COL(OPERAND) Colour operator OPERAND(const Colour& pOther) const noexcept;
+#		define COL_OP_CONST_VEC3(OPERAND) Colour operator OPERAND(const glm::vec3& pOther) const noexcept;
+#		define COL_OP_FLOAT(OPERAND) Colour& operator OPERAND(const float& pOther) noexcept;
+#		define COL_OP_COL(OPERAND) Colour& operator OPERAND(const Colour& pOther) noexcept;
+#		define COL_OP_VEC3(OPERAND) Colour& operator OPERAND(const glm::vec3& pOther) noexcept;
 
 		COL_OP_CONST_FLOAT(+)
 		COL_OP_CONST_FLOAT(-)
@@ -170,31 +169,6 @@ namespace Engine
 		COL_OP_VEC3(-=)
 		COL_OP_VEC3(*=)
 		COL_OP_VEC3(/=)
-
-		//Colour operator +(const float& pOther) const noexcept;
-		//Colour operator -(const float& pOther) const noexcept;
-		//Colour operator *(const float& pOther) const noexcept;
-		//Colour operator /(const float& pOther) const noexcept;
-		//Colour operator +(const Colour& pOther) const noexcept;
-		//Colour operator -(const Colour& pOther) const noexcept;
-		//Colour operator *(const Colour& pOther) const noexcept;
-		//Colour operator /(const Colour& pOther) const noexcept;
-		//Colour operator +(const glm::vec3& pOther) const noexcept;
-		//Colour operator -(const glm::vec3& pOther) const noexcept;
-		//Colour operator *(const glm::vec3& pOther) const noexcept;
-		//Colour operator /(const glm::vec3& pOther) const noexcept;
-		//Colour& operator +=(const float& pOther) noexcept;
-		//Colour& operator -=(const float& pOther) noexcept;
-		//Colour& operator *=(const float& pOther) noexcept;
-		//Colour& operator /=(const float& pOther) noexcept;
-		//Colour& operator +=(const Colour& pOther) noexcept;
-		//Colour& operator -=(const Colour& pOther) noexcept;
-		//Colour& operator *=(const Colour& pOther) noexcept;
-		//Colour& operator /=(const Colour& pOther) noexcept;
-		//Colour& operator +=(const glm::vec3& pOther) noexcept;
-		//Colour& operator -=(const glm::vec3& pOther) noexcept;
-		//Colour& operator *=(const glm::vec3& pOther) noexcept;
-		//Colour& operator /=(const glm::vec3& pOther) noexcept;
-		#pragma endregion
+#		pragma endregion
 	};
 }

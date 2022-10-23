@@ -51,9 +51,9 @@ namespace Engine
 		m_shader = new Shader(pShaderPath);
 		if (m_loadTextures) LoadTexturesToShader();
 
-		#ifdef _DEBUG
+#		ifdef _DEBUG
 		 Debug::EndSmallNote("Done!");
-		#endif
+#		endif
 	}
 
 	void Model::Draw(const Camera* const& pCamera) const noexcept
@@ -78,20 +78,20 @@ namespace Engine
 
 	void Model::LoadModel(const string& pPath)
 	{
-		#ifdef _DEBUG
+#		ifdef _DEBUG
 		 Debug::InitBigProcess("Loading model \"" + pPath + "\"", false, false);
 		 if (!m_loadTextures) Debug::SmallNote("Ignoring textures", true, false);
 		 Debug::NewLine();
-		#endif
+#		endif
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(pPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::Send("\nERROR::ASSIMP::" + string(importer.GetErrorString()));
-			#endif
+#			endif
 			return;
 		}
 		m_directory = pPath.substr(0, pPath.find_last_of('/'));
@@ -200,10 +200,10 @@ namespace Engine
 					// If the texture has not been loaded into this model, reuse it
 					if (reuseTexture)
 					{
-						#ifdef _DEBUG
+#						ifdef _DEBUG
 						 Debug::SmallNote("Reusing texture " + std::to_string(s_loadedTextures[j]->GetId())
 						  + ": " + s_loadedTextures[j]->GetFile().data());
-						#endif
+#						endif
 						texturesOut.push_back(s_loadedTextures[j]);
 					}
 					
@@ -245,9 +245,9 @@ namespace Engine
 
 			string location = "u_material." + name + number;
 			m_shader->SetInt(location.c_str(), (int32_t)m_textures[i]->GetId());
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::SmallNote("Setting " + location + " to " + std::to_string(m_textures[i]->GetId()));
-			#endif
+#			endif
 		}
 	}
 
@@ -258,9 +258,9 @@ namespace Engine
 
 		if (pPos > m_meshes.get()->size() - 1)
 		{
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::Send("Attempting to access mesh outside array size");
-			#endif
+#			endif
 			return nullptr;
 		}
 

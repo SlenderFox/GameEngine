@@ -47,27 +47,27 @@ namespace Engine
 	{
 		m_usingFallback = false;
 		string path = m_shaderPath + GetType(pType, string(".vert"), string(".frag"));
-		#ifdef _DEBUG
+#		ifdef _DEBUG
 		 Debug::SmallProcess("Compiling shader \"" + path + "\"...", false, false);
-		#endif
+#		endif
 
 		if (pType == ShaderType::PROGRAM)
 		{
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::BigNote("ERROR::SHADER::ATTEMPTING_TO_LOAD_PROGRAM", true);
-			#endif
+#			endif
 			return;
 		}
 
 		if (std::strcmp(m_shaderPath.c_str(), "") == 0)
 		{
 			m_usingFallback = true;
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::NewLine();
-			#endif
+#			endif
 		}
 
-		#pragma region Fallback code
+#		pragma region Fallback code
 		 const char* vertexFallback = "#version 330 core\n\
 layout(location=0)in vec3 aPos;\
 layout(location=1)in vec3 aNormal;\
@@ -156,7 +156,7 @@ for(int i=0;i<NR_SPOT_LIGHTS;++i)result+=CalculateSpotLight(u_spotLights[i]);\
 if(u_justColour) FragCol=vec4(u_colour,1);\
 else FragCol=vec4(result*u_colour,1);\
 return;}";
-		#pragma endregion
+#		pragma endregion
 
 		const char* shaderCode;
 		// Must be defined outside the try catch
@@ -180,10 +180,10 @@ return;}";
 		}
 		catch (ifstream::failure e)
 		{
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
 			  string("FRAGMENT")) + "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE", true);
-			#endif
+#			endif
 
 			m_usingFallback = true;
 			shaderCode = GetType<const char* const&>(pType, vertexFallback, fragmentFallback);
@@ -198,23 +198,23 @@ return;}";
 		// Separated to allow bool to potentially change
 		if (m_usingFallback)
 		{
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			Debug::SmallProcess("Compiling fallback code...", false, false);
-			#endif
+#			endif
 			if (!CompileShader(GetType(pType, &m_idVertex, &m_idFragment),
 			 pType, GetType<const char*&>(pType, vertexFallback, fragmentFallback)))
 			{
-				#ifdef _DEBUG
+#				ifdef _DEBUG
 				Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
 				 string("FRAGMENT")) + "::FALLBACK_CODE_FAILURE", true);
-				#endif
+#				endif
 				exit(2);
 			}
 		}
 
-		#ifdef _DEBUG
+#		ifdef _DEBUG
 		 Debug::Send("Success!");
-		#endif
+#		endif
 	}
 
 	bool Shader::CompileShader(uint32_t* const& pId, ShaderType pType, const char* pCode)
@@ -223,9 +223,9 @@ return;}";
 		switch (pType)
 		{
 		case ShaderType::PROGRAM:
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::BigNote("ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM", true);
-			#endif
+#			endif
 			exit(2);
 		case ShaderType::VERTEX:
 			*pId = glCreateShader(GL_VERTEX_SHADER);
@@ -234,9 +234,9 @@ return;}";
 			*pId = glCreateShader(GL_FRAGMENT_SHADER);
 			break;
 		default:
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::BigNote("ERROR::SHADER::UNKNOWN_SHADER_TYPE", true);
-			#endif
+#			endif
 			exit(2);
 		}
 
@@ -280,9 +280,9 @@ return;}";
 			{
 				// In the case of a failure it loads the log and outputs
 				glGetProgramInfoLog(*pShaderID, 512, NULL, infoLog);
-				#ifdef _DEBUG
+#				ifdef _DEBUG
 				 Debug::BigNote("ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog), true, false);
-				#endif
+#				endif
 				return false;
 			}
 		}
@@ -294,10 +294,10 @@ return;}";
 			{
 				// In the case of a failure it loads the log and outputs
 				glGetShaderInfoLog(*pShaderID, 512, NULL, infoLog);
-				#ifdef _DEBUG
+#				ifdef _DEBUG
 				 Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
 				  string("FRAGMENT")) + "::COMPILATION_FAILED:\n" + string(infoLog), true, false);
-				#endif
+#				endif
 				return false;
 			}
 		}
@@ -311,7 +311,7 @@ return;}";
 		return (pType == ShaderType::VERTEX ? ifVertex : ifFragment);
 	}
 
-	#pragma region Setters
+#	pragma region Setters
 	void Shader::SetBool(const string& pName, const bool& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
@@ -365,5 +365,5 @@ return;}";
 		glUseProgram(m_idProgram);
 		glUniformMatrix4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, &pValue[0][0]);
 	}
-	#pragma endregion
+#	pragma endregion
 }

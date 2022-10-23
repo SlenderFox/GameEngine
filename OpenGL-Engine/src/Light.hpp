@@ -21,14 +21,14 @@ namespace Engine
 		float m_blur = 0.23f;			// Only for spotlights
 
 	public:
-		#pragma region Constructors
+#		pragma region Constructors
 		Light(const LightType& pType, const Colour& pColour = Colour::White());
 		Light(const LightType& pType, const glm::mat4& pTransform = glm::mat4(1),
 		 const Colour& pColour = Colour::White());
 		~Light() {}
-		#pragma endregion
+#		pragma endregion
 		
-		#pragma region Setters
+#		pragma region Setters
 		constexpr void SetType			(const LightType& pType)		noexcept { m_type = pType; }
 		constexpr void SetDirection	(const glm::vec3& pDirection)	noexcept { Transform::SetForward(pDirection); }
 		constexpr void SetColour		(const Colour& pColour)			noexcept { m_lightColour = pColour; }
@@ -36,9 +36,9 @@ namespace Engine
 		constexpr void SetQuadratic	(float pValue)						noexcept { m_quadratic = pValue; }
 		constexpr void SetAngle			(float pValue)						noexcept { m_angle = pValue; }	// In degrees
 		constexpr void SetBlur			(float pValue)						noexcept { m_blur = pValue; }		// In degrees
-		#pragma endregion
+#		pragma endregion
 
-		#pragma region Getters
+#		pragma region Getters
 		float GetAngle() const noexcept;
 		float GetBlur() const noexcept;
 		constexpr glm::vec4	GetDirection()	const noexcept { return Transform::GetForward(); }
@@ -48,6 +48,6 @@ namespace Engine
 		constexpr float		GetQuadratic()	const noexcept { return m_quadratic; }
 		constexpr float		GetAngleRaw()	const noexcept { return m_angle; }
 		constexpr float		GetBlurRaw()	const noexcept { return m_blur; }
-		#pragma endregion
+#		pragma endregion
 	};
 }

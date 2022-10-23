@@ -19,9 +19,9 @@ namespace Engine
 	{
 		if (!s_KeyCallback) return;
 		if (pAction != GLFW_PRESS) return;
-		#ifdef _DEBUG
+#		ifdef _DEBUG
 		 Engine::Debug::Send(std::to_string(pScancode) + " ", false, false);
-		#endif
+#		endif
 	}
 
 	void Input::Mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY) noexcept

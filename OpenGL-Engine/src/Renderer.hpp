@@ -30,7 +30,7 @@ namespace Engine
 		std::unique_ptr<std::vector<std::unique_ptr<Model>>> m_models;
 		std::unique_ptr<std::vector<std::unique_ptr<Light>>> m_lights;
 
-		#pragma region Constructors
+#		pragma region Constructors
 		Renderer() = default;
 		~Renderer();
 		// Delete copy/move so extra instances can't be created/moved.
@@ -38,7 +38,7 @@ namespace Engine
 		Renderer& operator=(const Renderer&) = delete;
 		Renderer(Renderer&&) = delete;
 		Renderer& operator=(Renderer&&) = delete;
-		#pragma endregion
+#		pragma endregion
 
 		bool Init(float pAspect) noexcept;
 		void Draw() noexcept;
@@ -54,12 +54,12 @@ namespace Engine
 		Light* AddNewLight(uint8_t& id, const LightType& pType,
 		 const Colour& pColour = Colour::White()) noexcept;
 
-		#pragma region Getters
+#		pragma region Getters
 		constexpr Camera* const& GetCamera() const noexcept { return m_camera; }
 		uint8_t ModelCount() const noexcept;
 		uint8_t LightCount() const noexcept;
 		Model* GetModelAt(uint8_t pPos) noexcept;
 		Light* GetLightAt(uint8_t pPos) noexcept;
-		#pragma endregion
+#		pragma endregion
 	};
 }

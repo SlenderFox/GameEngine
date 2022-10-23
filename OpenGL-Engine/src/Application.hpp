@@ -50,13 +50,13 @@ namespace Engine
 		std::string m_title = "Title error";				// The tile of the window
 		ExitCode m_exitCode = ExitCode::Okay;
 
-		#pragma region Constructors
+#		pragma region Constructors
 		// Delete copy/move so extra instances can't be created/moved.
 		Application(const Application&) = delete;
 		Application& operator=(const Application&) = delete;
 		Application(Application&&) = delete;
 		Application& operator=(Application&&) = delete;
-		#pragma endregion
+#		pragma endregion
 
 		bool Init(const std::string& pTitle, bool pFullscreen);
 		bool SetupGLFW(const std::string& pTitle, bool pFullscreen);

@@ -38,7 +38,7 @@ namespace Engine
 		void LoadModel(const std::string& pModelPath, const std::string& pShaderPath,
 		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures = true) noexcept;
 		 
-		#pragma region Setters
+#		pragma region Setters
 		void SetTransform(const glm::mat4& pValue) noexcept override;
 		void Translate(const glm::vec3& pValue) noexcept override;
 
@@ -46,7 +46,7 @@ namespace Engine
 		void RenderOnlyColour(bool pState) noexcept;
 		void SetScale(glm::vec3 pValue) noexcept;
 		void SetColourInShader(Colour pCol) noexcept;
-		#pragma endregion
+#		pragma endregion
 
 		constexpr EntityBase& GetParent() const noexcept { return *m_parentRef; }
 	};
@@ -61,7 +61,7 @@ namespace Engine
 			return s_root;
 		}
 
-		#pragma region Constructors
+#		pragma region Constructors
 		Root() = default;
 		~Root() {}
 		// Delete copy/move so extra instances can't be created/moved.
@@ -69,6 +69,6 @@ namespace Engine
 		Root& operator=(const Root&) = delete;
 		Root(Root&&) = delete;
 		Root& operator=(Root&&) = delete;
-		#pragma endregion
+#		pragma endregion
 	};
 }

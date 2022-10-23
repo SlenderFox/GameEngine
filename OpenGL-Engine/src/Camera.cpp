@@ -15,7 +15,7 @@ using glm::inverse;
 
 namespace Engine
 {
-	#pragma region Constructors
+#	pragma region Constructors
 	Camera::Camera(float pAspectRatio)
 	{
 		SetAspectRatio(pAspectRatio);
@@ -57,7 +57,7 @@ namespace Engine
 		LookAt(pFrom, pTo, pUp);
 		SetFovH(pFovH);
 	}
-	#pragma endregion
+#	pragma endregion
 
 	void Camera::LookAt(const vec3& pFrom, const vec3& pTo, const vec3& pUp)
 	{
@@ -97,7 +97,7 @@ namespace Engine
 		SetProjection(m_fovV);
 	}
 
-	#pragma region Setters
+#	pragma region Setters
 	void Camera::SetTransform(const mat4& pValue) noexcept
 	{
 		Transform::SetTransform(pValue);
@@ -152,7 +152,7 @@ namespace Engine
 			m_fovV = 1.0f;
 		UpdateFovH();
 	}
-	#pragma endregion
+#	pragma endregion
 
 	mat4 Camera::GetWorldToCameraMatrix() const noexcept
 	{

@@ -38,10 +38,10 @@ namespace Engine
 
 		void Draw() const noexcept;
 
-		#pragma region Getters
+#		pragma region Getters
 		constexpr uint32_t* GetVAO() const noexcept { return m_idVAO; }
 		constexpr uint32_t* GetVBO() const noexcept { return m_idVBO; }
 		constexpr uint32_t* GetEBO() const noexcept { return m_idEBO; }
-		#pragma endregion
+#		pragma endregion
 	};
 }

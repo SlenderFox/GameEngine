@@ -29,15 +29,15 @@ namespace Engine
 
 	int32_t Texture::LoadTextureFromFile(const std::string& pPath) noexcept
 	{
-		#ifdef _DEBUG
+#		ifdef _DEBUG
 		 Debug::BigProcess("Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"...", false, false);
-		#endif
+#		endif
 
 		if (s_textureCount > 31)
 		{
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::BigNote("Failed to load texture: Exceeded max texture count (max = 32)", true);
-			#endif
+#			endif
 			return -1;
 		}
 
@@ -68,9 +68,9 @@ namespace Engine
 			case 3: format = GL_RGB; break;
 			case 4: format = GL_RGBA; break;
 			default: 
-				#ifdef _DEBUG
+#				ifdef _DEBUG
 				 Debug::BigNote("Failed to load texture: Too many components", true);
-				#endif
+#				endif
 				return -1;
 			}
 
@@ -90,18 +90,18 @@ namespace Engine
 			// Frees the image memory
 			stbi_image_free(imageData);
 
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::Send("Success!");
-			#endif
+#			endif
 
 			// Returns the id before incrementing for the next texture
 			return s_textureCount++;
 		}
 		else
 		{
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::BigNote("Failed to load texture: No file found", true);
-			#endif
+#			endif
 			return -1;
 		}
 	}

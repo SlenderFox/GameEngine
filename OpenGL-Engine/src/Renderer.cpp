@@ -145,9 +145,9 @@ namespace Engine
 				 currentLight->GetBlur());
 				++numSpotLights; break;
 			default:
-				#ifdef _DEBUG
+#				ifdef _DEBUG
 				 Debug::Send("Incorrect light type");
-				#endif
+#				endif
 				return;
 			}
 		}
@@ -214,7 +214,7 @@ namespace Engine
 		return GetLightAt(id);
 	}
 
-	#pragma region Getters
+#	pragma region Getters
 	uint8_t Renderer::ModelCount() const noexcept
 	{
 		return (uint8_t)m_models.get()->size();
@@ -232,9 +232,9 @@ namespace Engine
 
 		if (pPos > m_models.get()->size() - 1)
 		{
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::Send("Attempting to access model outside array size");
-			#endif
+#			endif
 			return nullptr;
 		}
 
@@ -248,13 +248,13 @@ namespace Engine
 
 		if (pPos > m_lights.get()->size() - 1)
 		{
-			#ifdef _DEBUG
+#			ifdef _DEBUG
 			 Debug::Send("Attempting to access light outside array size");
-			#endif
+#			endif
 			return nullptr;
 		}
 
 		return (*m_lights.get())[pPos].get();
 	}
-	#pragma endregion
+#	pragma endregion
 }
