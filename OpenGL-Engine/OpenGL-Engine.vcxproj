@@ -68,12 +68,8 @@
     <ClInclude Include="src\Transform.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\shaders\backpack.frag" />
-    <None Include="assets\shaders\backpack.vert" />
-    <None Include="assets\shaders\cube.frag" />
-    <None Include="assets\shaders\cube.vert" />
-    <None Include="assets\shaders\light.frag" />
-    <None Include="assets\shaders\light.vert" />
+    <None Include="assets\shaders\default.frag" />
+    <None Include="assets\shaders\default.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
