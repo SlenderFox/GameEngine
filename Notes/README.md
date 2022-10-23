@@ -36,15 +36,13 @@ Todo:
 - [x] Make shader owned by model
 - [x] Use const references where possible
 - [x] Fix ascii printing incorrectly as UTF
-- [ ] Update destroying a single texture to allow for a new one to replace it
-- [ ] Overload entity copy constructor to load model better
-- [x] Actually use the input class ([[Input.hpp]]/[[Input.cpp]])
-	- [x] Keyboard input
-		- [ ] Keyboard layouts
-	- [x] Mouse input
-	- [ ] Function callbacks
-		- [ ] Allow callbacks to pass member functions
-	- [ ] Controller support
+- [x] Add imgui
+- [ ] Formatting with 120 max width
+- [ ] Make more functions pass by reference
+- [ ] Try upgrade ([[Colour.hpp]]/[[Colour.cpp]]) with macros
+- [ ] Holding alt releases cursor
+- [ ] Make ([[Debug.hpp]]/[[Debug.cpp]]) use imgui
+	- [ ] Update ([[Debug.hpp]]/[[Debug.cpp]]) to be used without \_DEBUG enabled
 - [ ] Overhaul lights ([[Light.hpp]]/[[Light.cpp]])
 	- [ ] Have each light type in it's own vector
 	- [ ] Limit lights to the same as in the shader
@@ -52,6 +50,11 @@ Todo:
 		- [ ] Min and max clipped brightness
 			- [ ] Iris
 			- [ ] Retina
-- [x] Add imgui
-	- [ ] Make ([[Debug.hpp]]/[[Debug.cpp]]) use imgui
-- [ ] Holding alt releases cursor
+- [ ] Overload entity copy constructor to load model better
+- [x] Actually use the input class ([[Input.hpp]]/[[Input.cpp]])
+	- [x] Keyboard input
+		- [ ] Keyboard layouts
+	- [x] Mouse input
+	- [ ] Function callbacks
+		- [ ] Allow callbacks to pass member functions
+- [ ] Update destroying a single texture to allow for a new one to replace it
