@@ -34,7 +34,8 @@ namespace Engine
 			pEntity->m_modelRef = renderer->AddNewModel(ID, pModelPath, pShaderPath, pLoadTextures);
 			renderer->LoadLightsIntoShader(*pEntity->m_modelRef->GetShaderRef());
 			pEntity->m_modelRef->GetShaderRef()->SetMat4("u_model", pEntity->GetTransform());
-			pEntity->m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(pEntity->GetTransform())));
+			pEntity->m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel",
+			 (mat3)transpose(inverse(pEntity->GetTransform())));
 		}
 	};
 
@@ -45,7 +46,7 @@ namespace Engine
 
 	void EntityBase::RemoveChild(Entity* pChild) noexcept
 	{
-		for (vector<Entity*>::iterator it = m_childrenRef.begin(); it != m_childrenRef.end(); ++it)
+		for (auto it = m_childrenRef.begin(); it != m_childrenRef.end(); ++it)
 		{
 			if (*it == pChild)
 			{
@@ -90,7 +91,8 @@ namespace Engine
 	void Entity::LoadModel(const string& pModelPath, const string& pShaderPath,
 		 Model*& pModelOut, Shader*& pShaderOut, bool pLoadTextures) noexcept
 	{
-		// Currently this does nothing about the previous model and shader but does not cause a memory leak
+		// Currently this does nothing about the previous model and shader
+		// but does not cause a memory leak as they are managed by Renderer
 		EntityLoader::BackgroundLoadModel(pModelPath, pShaderPath, this, pLoadTextures);
 		pModelOut = m_modelRef;
 		pShaderOut = m_modelRef->GetShaderRef();

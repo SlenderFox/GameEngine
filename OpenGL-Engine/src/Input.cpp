@@ -1,9 +1,11 @@
+#pragma region
 #include "Input.hpp"
 #include "GLFW/glfw3.h"
 
 #ifdef _DEBUG
  #include "Debug.hpp"
 #endif
+#pragma endregion
 
 namespace Engine
 {
@@ -57,7 +59,7 @@ namespace Engine
 		// TODO
 	}
 
-	bool Input::GetKey(Key pKey, State pState) noexcept
+	bool Input::GetKey(const Key& pKey, const State& pState) noexcept
 	{
 		return (int)pState == glfwGetKey(m_windowRef, (int)pKey);
 	}

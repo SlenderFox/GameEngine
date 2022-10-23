@@ -201,7 +201,8 @@ namespace Engine
 					if (reuseTexture)
 					{
 						#ifdef _DEBUG
-						 Debug::SmallNote("Reusing texture " + std::to_string(s_loadedTextures[j]->GetId()) + ": " + s_loadedTextures[j]->GetFile().data());
+						 Debug::SmallNote("Reusing texture " + std::to_string(s_loadedTextures[j]->GetId())
+						  + ": " + s_loadedTextures[j]->GetFile().data());
 						#endif
 						texturesOut.push_back(s_loadedTextures[j]);
 					}

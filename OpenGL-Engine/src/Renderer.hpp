@@ -51,7 +51,8 @@ namespace Engine
 
 		Model* AddNewModel(uint8_t& id, std::string pModelPath,
 		 std::string pShaderPath, bool pLoadTextures = true) noexcept;
-		Light* AddNewLight(uint8_t& id, const LightType& pType, const Colour& pColour = Colour::White()) noexcept;
+		Light* AddNewLight(uint8_t& id, const LightType& pType,
+		 const Colour& pColour = Colour::White()) noexcept;
 
 		#pragma region Getters
 		constexpr Camera* const& GetCamera() const noexcept { return m_camera; }

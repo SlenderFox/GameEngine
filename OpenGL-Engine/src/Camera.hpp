@@ -15,9 +15,9 @@ namespace Engine
 		#pragma region Constructors
 		Camera(float pAspectRatio);
 		Camera(float pAspectRatio, float pFovH);
-		Camera(float pAspectRatio,				const glm::mat4& pTransform);
+		Camera(float pAspectRatio,					 const glm::mat4& pTransform);
 		Camera(float pAspectRatio, float pFovH, const glm::mat4& pTransform);
-		Camera(float pAspectRatio,				const glm::vec3& pFrom, const glm::vec3& pTo,
+		Camera(float pAspectRatio,					 const glm::vec3& pFrom, const glm::vec3& pTo,
 		 const glm::vec3& pUp = { 0, 1, 0 });
 		Camera(float pAspectRatio, float pFovH, const glm::vec3& pFrom, const glm::vec3& pTo,
 		 const glm::vec3& pUp = { 0, 1, 0 });

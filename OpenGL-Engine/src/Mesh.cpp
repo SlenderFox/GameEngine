@@ -1,6 +1,6 @@
 #pragma region
 #include "Mesh.hpp"
-#include "glad/glad.h" // Include glad to get all the required OpenGL headers
+#include "glad/glad.h"
 #include <assert.h>
 
 using std::string;
@@ -162,7 +162,11 @@ namespace Engine
 		// GL_ARRAY_BUFFER effectively works like a pointer, using the id provided to point to the buffer
 		glBindBuffer(GL_ARRAY_BUFFER,* m_idVBO);
 		// Loads the vertices to the VBO
-		glBufferData(GL_ARRAY_BUFFER, (GLsizei)m_vertices.get()->size() * sizeof(Vertex), &(*m_vertices.get())[0], GL_STATIC_DRAW);
+		glBufferData(
+			GL_ARRAY_BUFFER,
+			(GLsizei)m_vertices.get()->size() * sizeof(Vertex), &(*m_vertices.get())[0],
+			GL_STATIC_DRAW
+		);
 
 		/*GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
 		* GL_STATIC_DRAW: the data is set only once and used many times.
@@ -171,7 +175,12 @@ namespace Engine
 
 		// This buffer stores the indices that reference the elements of the VBO
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,* m_idEBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizei)m_indices.get()->size() * sizeof(uint32_t), &(*m_indices.get())[0], GL_STATIC_DRAW);
+		glBufferData(
+			GL_ELEMENT_ARRAY_BUFFER,
+			(GLsizei)m_indices.get()->size() * sizeof(uint32_t),
+			&(*m_indices.get())[0],
+			GL_STATIC_DRAW
+		);
 
 		/*Tells the shader how to use the vertex data provided
 		* p1: Which vertex attribute we want to configure in the vertex shader (location = 0)

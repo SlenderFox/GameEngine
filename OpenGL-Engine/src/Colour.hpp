@@ -20,7 +20,7 @@ namespace Engine
 			b = (uint8_t)glm::max(pValue.b, 0.0f);
 		}
 
-		operator glm::vec3() const
+		constexpr operator glm::vec3() const noexcept
 		{
 			return glm::vec3(r, g, b);
 		}
@@ -44,9 +44,9 @@ namespace Engine
 			value = glm::clamp(pValue.z, 0.0f, 1.0f);
 		}
 
-		operator glm::vec3() const
+		constexpr operator glm::vec3() const noexcept
 		{
-			return glm::vec3(hue, saturation, value);
+			return glm::vec3((float)hue, saturation, value);
 		}
 	};
 

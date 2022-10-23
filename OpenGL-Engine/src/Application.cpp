@@ -43,7 +43,7 @@ namespace Engine
 		glfwSetWindowShouldClose(Application::GetApplication()->m_window, true);
 	}
 
-	void Application::MouseCallback(double pPosX, double pPosY) noexcept
+	void Application::MouseCallback(double& pPosX, double& pPosY) noexcept
 	{
 		Application* app = Application::GetApplication();
 		double offsetX = pPosX - app->m_mouseLastX;
@@ -69,7 +69,7 @@ namespace Engine
 		Renderer::GetInstance()->m_camera->SetForward(forward);
 	}
 
-	void Application::ScrollCallback(double pOffsetX, double pOffsetY) noexcept
+	void Application::ScrollCallback(double& pOffsetX, double& pOffsetY) noexcept
 	{
 		Renderer::GetInstance()->m_camera->ModifyFovH((float)pOffsetY * -3.0f);
 	}
@@ -102,7 +102,8 @@ namespace Engine
 		// Don't need to delete m_window as it is handled by glfwTerminate()
 	}
 
-	Application::ExitCode Application::Run(uint16_t pWidth, uint16_t pHeight, const string& pTitle, bool pFullscreen)
+	Application::ExitCode Application::Run(const uint16_t& pWidth, 
+	 const uint16_t& pHeight, const string& pTitle, const bool& pFullscreen)
 	{
 		SetDimensions(pWidth, pHeight);
 
@@ -313,7 +314,7 @@ namespace Engine
 		return true;
 	}
 
-	void Application::SetDimensions(uint16_t pWidth, uint16_t pHeight) noexcept
+	void Application::SetDimensions(const uint16_t& pWidth, const uint16_t& pHeight) noexcept
 	{
 		m_winWidth = pWidth;
 		m_winHeight = pHeight;
@@ -335,17 +336,18 @@ namespace Engine
 		m_deltaTime = m_currentTime - m_prevTime;
 		m_fixedTimer += m_deltaTime;
 		m_frameTimer += m_deltaTime;
-		++m_frames;
-		++m_framesPerSecond;
+		++m_totalFrames;
+		++m_perSecondFrameCount;
 
 		// Doing this allows me to updates fps as often as I want
-		float secondsPerUpdate = 0.5f;
+		static const double secondsPerUpdate = 0.5;
 		if (m_frameTimer >= secondsPerUpdate)
 		{
 			m_frameTimer -= secondsPerUpdate;
-			m_fps = (uint16_t)((double)m_framesPerSecond / secondsPerUpdate);
-			m_framesPerSecond = 0U;
-			glfwSetWindowTitle(m_window, (m_title + " | FPS: " + std::to_string(m_fps)).c_str());
+			m_fps = (uint16_t)((double)m_perSecondFrameCount / secondsPerUpdate);
+			m_perSecondFrameCount = 0U;
+			glfwSetWindowTitle(m_window,
+			 (m_title + " | FPS: " + std::to_string(m_fps)).c_str());
 		}
 	}
 

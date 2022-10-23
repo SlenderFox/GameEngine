@@ -181,7 +181,8 @@ return;}";
 		catch (ifstream::failure e)
 		{
 			#ifdef _DEBUG
-			 Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"), string("FRAGMENT")) + "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE", true);
+			 Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
+			  string("FRAGMENT")) + "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE", true);
 			#endif
 
 			m_usingFallback = true;
@@ -204,7 +205,8 @@ return;}";
 			 pType, GetType<const char*&>(pType, vertexFallback, fragmentFallback)))
 			{
 				#ifdef _DEBUG
-				Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"), string("FRAGMENT")) + "::FALLBACK_CODE_FAILURE", true);
+				Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
+				 string("FRAGMENT")) + "::FALLBACK_CODE_FAILURE", true);
 				#endif
 				exit(2);
 			}
@@ -293,7 +295,8 @@ return;}";
 				// In the case of a failure it loads the log and outputs
 				glGetShaderInfoLog(*pShaderID, 512, NULL, infoLog);
 				#ifdef _DEBUG
-				 Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"), string("FRAGMENT")) + "::COMPILATION_FAILED:\n" + string(infoLog), true, false);
+				 Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
+				  string("FRAGMENT")) + "::COMPILATION_FAILED:\n" + string(infoLog), true, false);
 				#endif
 				return false;
 			}
