@@ -1,11 +1,6 @@
-#pragma region
 #include "Input.hpp"
 #include "GLFW/glfw3.h"
-
-#ifdef _DEBUG
- #include "Debug.hpp"
-#endif
-#pragma endregion
+#include "Debug.hpp"
 
 namespace Engine
 {
@@ -19,9 +14,7 @@ namespace Engine
 	{
 		if (!s_KeyCallback) return;
 		if (pAction != GLFW_PRESS) return;
-#		ifdef _DEBUG
-		 Engine::Debug::Send(std::to_string(pScancode) + " ", false, false);
-#		endif
+		Engine::Debug::Send(std::to_string(pScancode) + " ", false, false);
 	}
 
 	void Input::Mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY) noexcept

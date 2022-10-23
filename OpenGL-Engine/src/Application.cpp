@@ -1,17 +1,14 @@
 #pragma region
 #include "Application.hpp"
+#include "Debug.hpp"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <Windows.h>	// Needed for Sleep()
+#include <chrono>
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
-
-#ifdef _DEBUG
- #include "Debug.hpp"
- #include <chrono>
-#endif
 
 using glm::vec3;
 using std::string;
@@ -173,11 +170,9 @@ namespace Engine
 
 	bool Application::Init(const string& pTitle, bool pFullscreen)
 	{
-#		ifdef _DEBUG
-		 // Must be first to init
-		 Debug::Init();
-		 auto startTime = std::chrono::high_resolution_clock::now();
-#		endif
+		// Must be first to init
+		Debug::Init();
+		auto startTime = std::chrono::high_resolution_clock::now();
 
 		if (!SetupGLFW(pTitle, pFullscreen)) return false;	// Sets own exit code
 
@@ -218,11 +213,9 @@ namespace Engine
 		}
 
 		// Calculates the time it took to start up
-#		ifdef _DEBUG
-		 auto endTime = std::chrono::high_resolution_clock::now();
-		 std::chrono::duration<double> elapsedTime = endTime - startTime;
-		 Debug::Send("Started in " + std::to_string(elapsedTime.count()) + " seconds");
-#		endif
+		auto endTime = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsedTime = endTime - startTime;
+		Debug::Send("Started in " + std::to_string(elapsedTime.count()) + " seconds");
 
 		return true;
 	}
@@ -232,9 +225,7 @@ namespace Engine
 		// glfw: initialise and configure
 		if (!glfwInit())
 		{
-#			ifdef _DEBUG
-			 Debug::Send("Failed to initialise GLFW");
-#			endif
+			Debug::Send("Failed to initialise GLFW");
 			m_exitCode = ExitCode::Fail_GLFW_Init;
 			return false;
 		}
@@ -255,9 +246,7 @@ namespace Engine
 			(pFullscreen ? glfwGetPrimaryMonitor() : nullptr), nullptr);
 		if (!m_window)
 		{
-#			ifdef _DEBUG
-			 Debug::Send("Failed to create GLFW window");
-#			endif
+			Debug::Send("Failed to create GLFW window");
 			m_exitCode = ExitCode::Fail_GLFW_Window;
 			return false;
 		}
@@ -268,17 +257,19 @@ namespace Engine
 		//int monCount = 0; 
 		//GLFWmonitor** monitors = glfwGetMonitors(&monCount);
 
-		int monPosX, monPosY, monWidth, monHeight;
-		glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
-#		ifdef _DEBUG
-		 // Moves the window to the lower right of the window
-		 glfwSetWindowPos(m_window, 2, (int)((monHeight - m_winHeight) * 0.5f));
-		 // Moves the console and resizes
-		 MoveWindow(GetConsoleWindow(), m_winWidth - 3, 0, 900, 1040, TRUE);
-#		else
-		 // Moves the window to the center of the workarea
-		 glfwSetWindowPos(m_window, (int)((monWidth - m_winWidth) * 0.5f), (int)((monHeight - m_winHeight) * 0.5f));
-#		endif
+		{
+			int monPosX, monPosY, monWidth, monHeight;
+			glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
+#			ifdef _DEBUG
+			 // Moves the window to the lower right of the window
+			 glfwSetWindowPos(m_window, 2, (int)((monHeight - m_winHeight) * 0.5f));
+			 // Moves the console and resizes
+			 MoveWindow(GetConsoleWindow(), m_winWidth - 3, 0, 900, 1040, TRUE);
+#			else
+			 // Moves the window to the center of the workarea
+			 glfwSetWindowPos(m_window, (int)((monWidth - m_winWidth) * 0.5f), (int)((monHeight - m_winHeight) * 0.5f));
+#			endif
+		}
 
 		//Callbacks
 		glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
@@ -293,9 +284,7 @@ namespace Engine
 		// glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
-#			ifdef _DEBUG
-			 Debug::Send("Failed to initialise GLAD");
-#			endif
+			Debug::Send("Failed to initialise GLAD");
 			return false;
 		}
 		s_gladLoaded = true;

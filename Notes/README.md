@@ -42,7 +42,7 @@ Todo:
 - [ ] Make more functions pass by reference
 - [ ] Holding alt releases cursor
 - [ ] Make ([[Debug.hpp]]/[[Debug.cpp]]) use imgui
-	- [ ] Update ([[Debug.hpp]]/[[Debug.cpp]]) to be used without \_DEBUG enabled
+	- [x] Update ([[Debug.hpp]]/[[Debug.cpp]]) to be used without \_DEBUG enabled
 - [ ] Overhaul lights ([[Light.hpp]]/[[Light.cpp]])
 	- [ ] Have each light type in it's own vector
 	- [ ] Limit lights to the same as in the shader

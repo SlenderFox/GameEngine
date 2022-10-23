@@ -3,10 +3,7 @@
 #include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
-
-#ifdef _DEBUG
- #include "Debug.hpp"
-#endif
+#include "Debug.hpp"
 
 using std::string;
 #pragma endregion
@@ -29,15 +26,11 @@ namespace Engine
 
 	int32_t Texture::LoadTextureFromFile(const std::string& pPath) noexcept
 	{
-#		ifdef _DEBUG
-		 Debug::BigProcess("Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"...", false, false);
-#		endif
+		Debug::BigProcess("Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"...", false, false);
 
 		if (s_textureCount > 31)
 		{
-#			ifdef _DEBUG
-			 Debug::BigNote("Failed to load texture: Exceeded max texture count (max = 32)", true);
-#			endif
+			Debug::BigNote("Failed to load texture: Exceeded max texture count (max = 32)", true);
 			return -1;
 		}
 
@@ -67,10 +60,8 @@ namespace Engine
 			case 1: format = GL_RED; break;
 			case 3: format = GL_RGB; break;
 			case 4: format = GL_RGBA; break;
-			default: 
-#				ifdef _DEBUG
-				 Debug::BigNote("Failed to load texture: Too many components", true);
-#				endif
+			default:
+				Debug::BigNote("Failed to load texture: Too many components", true);
 				return -1;
 			}
 
@@ -90,18 +81,14 @@ namespace Engine
 			// Frees the image memory
 			stbi_image_free(imageData);
 
-#			ifdef _DEBUG
-			 Debug::Send("Success!");
-#			endif
+			Debug::Send("Success!");
 
 			// Returns the id before incrementing for the next texture
 			return s_textureCount++;
 		}
 		else
 		{
-#			ifdef _DEBUG
-			 Debug::BigNote("Failed to load texture: No file found", true);
-#			endif
+			Debug::BigNote("Failed to load texture: No file found", true);
 			return -1;
 		}
 	}

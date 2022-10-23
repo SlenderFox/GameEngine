@@ -4,10 +4,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <fstream>
 #include <sstream>
-
-#ifdef _DEBUG
- #include "Debug.hpp"
-#endif
+#include "Debug.hpp"
 
 using std::string;
 using std::stringstream;
@@ -47,24 +44,18 @@ namespace Engine
 	{
 		m_usingFallback = false;
 		string path = m_shaderPath + GetType(pType, string(".vert"), string(".frag"));
-#		ifdef _DEBUG
-		 Debug::SmallProcess("Compiling shader \"" + path + "\"...", false, false);
-#		endif
+		Debug::SmallProcess("Compiling shader \"" + path + "\"...", false, false);
 
 		if (pType == ShaderType::PROGRAM)
 		{
-#			ifdef _DEBUG
-			 Debug::BigNote("ERROR::SHADER::ATTEMPTING_TO_LOAD_PROGRAM", true);
-#			endif
+			Debug::BigNote("ERROR::SHADER::ATTEMPTING_TO_LOAD_PROGRAM", true);
 			return;
 		}
 
 		if (std::strcmp(m_shaderPath.c_str(), "") == 0)
 		{
 			m_usingFallback = true;
-#			ifdef _DEBUG
-			 Debug::NewLine();
-#			endif
+			Debug::NewLine();
 		}
 
 #		pragma region Fallback code
@@ -180,10 +171,8 @@ return;}";
 		}
 		catch (ifstream::failure e)
 		{
-#			ifdef _DEBUG
-			 Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
-			  string("FRAGMENT")) + "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE", true);
-#			endif
+			Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
+			 string("FRAGMENT")) + "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE", true);
 
 			m_usingFallback = true;
 			shaderCode = GetType<const char* const&>(pType, vertexFallback, fragmentFallback);
@@ -198,23 +187,17 @@ return;}";
 		// Separated to allow bool to potentially change
 		if (m_usingFallback)
 		{
-#			ifdef _DEBUG
 			Debug::SmallProcess("Compiling fallback code...", false, false);
-#			endif
 			if (!CompileShader(GetType(pType, &m_idVertex, &m_idFragment),
 			 pType, GetType<const char*&>(pType, vertexFallback, fragmentFallback)))
 			{
-#				ifdef _DEBUG
 				Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
 				 string("FRAGMENT")) + "::FALLBACK_CODE_FAILURE", true);
-#				endif
 				exit(2);
 			}
 		}
 
-#		ifdef _DEBUG
-		 Debug::Send("Success!");
-#		endif
+		Debug::Send("Success!");
 	}
 
 	bool Shader::CompileShader(uint32_t* const& pId, ShaderType pType, const char* pCode)
@@ -223,9 +206,7 @@ return;}";
 		switch (pType)
 		{
 		case ShaderType::PROGRAM:
-#			ifdef _DEBUG
-			 Debug::BigNote("ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM", true);
-#			endif
+			Debug::BigNote("ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM", true);
 			exit(2);
 		case ShaderType::VERTEX:
 			*pId = glCreateShader(GL_VERTEX_SHADER);
@@ -234,9 +215,7 @@ return;}";
 			*pId = glCreateShader(GL_FRAGMENT_SHADER);
 			break;
 		default:
-#			ifdef _DEBUG
-			 Debug::BigNote("ERROR::SHADER::UNKNOWN_SHADER_TYPE", true);
-#			endif
+			Debug::BigNote("ERROR::SHADER::UNKNOWN_SHADER_TYPE", true);
 			exit(2);
 		}
 
@@ -280,9 +259,7 @@ return;}";
 			{
 				// In the case of a failure it loads the log and outputs
 				glGetProgramInfoLog(*pShaderID, 512, NULL, infoLog);
-#				ifdef _DEBUG
-				 Debug::BigNote("ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog), true, false);
-#				endif
+				Debug::BigNote("ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog), true, false);
 				return false;
 			}
 		}
@@ -294,10 +271,8 @@ return;}";
 			{
 				// In the case of a failure it loads the log and outputs
 				glGetShaderInfoLog(*pShaderID, 512, NULL, infoLog);
-#				ifdef _DEBUG
-				 Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
-				  string("FRAGMENT")) + "::COMPILATION_FAILED:\n" + string(infoLog), true, false);
-#				endif
+				Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
+				 string("FRAGMENT")) + "::COMPILATION_FAILED:\n" + string(infoLog), true, false);
 				return false;
 			}
 		}

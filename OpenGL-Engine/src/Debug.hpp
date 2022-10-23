@@ -1,5 +1,4 @@
 #pragma once
-#ifdef _DEBUG
 #include <string>
 
 namespace Engine
@@ -15,11 +14,11 @@ namespace Engine
 		static void Send(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
 		static void NewLine() noexcept;
 
-#		pragma region Init
-		static void InitSmallNote(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
-		static void InitBigNote(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
-		static void InitSmallProcess(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
-		static void InitBigProcess(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
+#		pragma region Start
+		static void StartSmallNote(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
+		static void StartBigNote(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
+		static void StartSmallProcess(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
+		static void StartBigProcess(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
 #		pragma endregion
 #		pragma region Mid
 		static void SmallNote(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;
@@ -35,4 +34,3 @@ namespace Engine
 #		pragma endregion
 	};
 }
-#endif

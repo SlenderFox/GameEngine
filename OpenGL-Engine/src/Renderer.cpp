@@ -2,10 +2,7 @@
 #include "Renderer.hpp"
 #include "glad/glad.h"
 #include "glm/gtc/matrix_transform.hpp"
-
-#ifdef _DEBUG
- #include "Debug.hpp"
-#endif
+#include "Debug.hpp"
 
 using glm::vec3;
 using glm::mat3;
@@ -145,9 +142,7 @@ namespace Engine
 				 currentLight->GetBlur());
 				++numSpotLights; break;
 			default:
-#				ifdef _DEBUG
-				 Debug::Send("Incorrect light type");
-#				endif
+				Debug::Send("Incorrect light type");
 				return;
 			}
 		}
@@ -232,9 +227,7 @@ namespace Engine
 
 		if (pPos > m_models.get()->size() - 1)
 		{
-#			ifdef _DEBUG
-			 Debug::Send("Attempting to access model outside array size");
-#			endif
+			Debug::Send("Attempting to access model outside array size");
 			return nullptr;
 		}
 
@@ -248,9 +241,7 @@ namespace Engine
 
 		if (pPos > m_lights.get()->size() - 1)
 		{
-#			ifdef _DEBUG
-			 Debug::Send("Attempting to access light outside array size");
-#			endif
+			Debug::Send("Attempting to access light outside array size");
 			return nullptr;
 		}
 

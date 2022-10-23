@@ -5,10 +5,7 @@
 #include "assimp/postprocess.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "assert.h"
-
-#ifdef _DEBUG
- #include "Debug.hpp"
-#endif
+#include "Debug.hpp"
 
 using glm::vec2;
 using glm::vec3;
@@ -50,10 +47,8 @@ namespace Engine
 		LoadModel(pModelPath);
 		m_shader = new Shader(pShaderPath);
 		if (m_loadTextures) LoadTexturesToShader();
-
-#		ifdef _DEBUG
-		 Debug::EndSmallNote("Done!");
-#		endif
+		
+		Debug::EndSmallNote("Done!");
 	}
 
 	void Model::Draw(const Camera* const& pCamera) const noexcept
@@ -78,20 +73,16 @@ namespace Engine
 
 	void Model::LoadModel(const string& pPath)
 	{
-#		ifdef _DEBUG
-		 Debug::InitBigProcess("Loading model \"" + pPath + "\"", false, false);
-		 if (!m_loadTextures) Debug::SmallNote("Ignoring textures", true, false);
-		 Debug::NewLine();
-#		endif
+		Debug::StartBigProcess("Loading model \"" + pPath + "\"", false, false);
+		if (!m_loadTextures) Debug::SmallNote("Ignoring textures", true, false);
+		Debug::NewLine();
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(pPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-#			ifdef _DEBUG
-			 Debug::Send("\nERROR::ASSIMP::" + string(importer.GetErrorString()));
-#			endif
+			Debug::Send("\nERROR::ASSIMP::" + string(importer.GetErrorString()));
 			return;
 		}
 		m_directory = pPath.substr(0, pPath.find_last_of('/'));
@@ -200,10 +191,8 @@ namespace Engine
 					// If the texture has not been loaded into this model, reuse it
 					if (reuseTexture)
 					{
-#						ifdef _DEBUG
-						 Debug::SmallNote("Reusing texture " + std::to_string(s_loadedTextures[j]->GetId())
-						  + ": " + s_loadedTextures[j]->GetFile().data());
-#						endif
+						Debug::SmallNote("Reusing texture " + std::to_string(s_loadedTextures[j]->GetId())
+						 + ": " + s_loadedTextures[j]->GetFile().data());
 						texturesOut.push_back(s_loadedTextures[j]);
 					}
 					
@@ -245,9 +234,7 @@ namespace Engine
 
 			string location = "u_material." + name + number;
 			m_shader->SetInt(location.c_str(), (int32_t)m_textures[i]->GetId());
-#			ifdef _DEBUG
-			 Debug::SmallNote("Setting " + location + " to " + std::to_string(m_textures[i]->GetId()));
-#			endif
+			Debug::SmallNote("Setting " + location + " to " + std::to_string(m_textures[i]->GetId()));
 		}
 	}
 
@@ -258,9 +245,7 @@ namespace Engine
 
 		if (pPos > m_meshes.get()->size() - 1)
 		{
-#			ifdef _DEBUG
-			 Debug::Send("Attempting to access mesh outside array size");
-#			endif
+			Debug::Send("Attempting to access mesh outside array size");
 			return nullptr;
 		}
 
