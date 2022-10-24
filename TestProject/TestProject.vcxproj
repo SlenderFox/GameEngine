@@ -71,34 +71,34 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\</IntDir>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)linking\lib\OpenGL-Engine-$(Configuration)\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <IncludePath>$(SolutionDir)linking\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)build\OpenGL-Engine\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>$(SolutionDir)linking\include;$(SolutionDir)OpenGL-Engine\src\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\</IntDir>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)linking\lib\OpenGL-Engine-$(Configuration)\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <IncludePath>$(SolutionDir)linking\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)build\OpenGL-Engine\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>$(SolutionDir)linking\include;$(SolutionDir)OpenGL-Engine\src\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(Platform)\temp\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)-win32</TargetName>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)linking\lib\OpenGL-Engine-$(Configuration)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
-    <IncludePath>$(SolutionDir)linking\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)build\OpenGL-Engine\$(Configuration);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>$(SolutionDir)linking\include;$(SolutionDir)OpenGL-Engine\src\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(Platform)\temp\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)-win32</TargetName>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)linking\lib\OpenGL-Engine-$(Configuration)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
-    <IncludePath>$(SolutionDir)linking\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)build\OpenGL-Engine\$(Configuration);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>$(SolutionDir)linking\include;$(SolutionDir)OpenGL-Engine\src\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -112,17 +112,14 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc142-mt.lib;glad-debug.lib;OpenGL-Engine-d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc142-mt.lib;glad-$(Configuration).lib;OpenGL-Engine-$(Configuration).lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>rd /s /q ..\build\$(Configuration)\
-Xcopy /E assets\ ..\build\$(Configuration)\assets\
-mkdir ..\build\$(Configuration)\
-copy assimp-vc142-mt.dll ..\build\$(Configuration)\</Command>
+      <Command>rd /s /q $(OutDir)</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>Xcopy /E assets\ $(OutDir)assets\
+copy assimp-vc142-mt.dll "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -141,17 +138,14 @@ copy assimp-vc142-mt.dll ..\build\$(Configuration)\</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc142-mt.lib;glad.lib;OpenGL-Engine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc142-mt.lib;glad-$(Configuration).lib;OpenGL-Engine-$(Configuration).lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>rd /s /q ..\build\$(Configuration)\
-Xcopy /E assets\ ..\build\$(Configuration)\assets\
-mkdir ..\build\$(Configuration)\
-copy assimp-vc142-mt.dll ..\build\$(Configuration)\</Command>
+      <Command>rd /s /q $(OutDir)</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>Xcopy /E assets\ $(OutDir)assets\
+copy assimp-vc142-mt.dll "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -166,17 +160,14 @@ copy assimp-vc142-mt.dll ..\build\$(Configuration)\</Command>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc142-mt.lib;glad-debug.lib;OpenGL-Engine-d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc142-mt.lib;glad-$(Configuration).lib;OpenGL-Engine-$(Configuration).lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>rd /s /q ..\build\$(Configuration)\
-Xcopy /E assets\ ..\build\$(Configuration)\assets\
-mkdir ..\build\$(Configuration)\
-copy assimp-vc142-mt.dll ..\build\$(Configuration)\</Command>
+      <Command>rd /s /q $(OutDir)</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>Xcopy /E assets\ $(OutDir)assets\
+copy assimp-vc142-mt.dll "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -195,17 +186,14 @@ copy assimp-vc142-mt.dll ..\build\$(Configuration)\</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc142-mt.lib;glad.lib;OpenGL-Engine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc142-mt.lib;glad-$(Configuration).lib;OpenGL-Engine-$(Configuration).lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>rd /s /q ..\build\$(Configuration)\
-Xcopy /E assets\ ..\build\$(Configuration)\assets\
-mkdir ..\build\$(Configuration)\
-copy assimp-vc142-mt.dll ..\build\$(Configuration)\</Command>
+      <Command>rd /s /q $(OutDir)</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>Xcopy /E assets\ $(OutDir)assets\
+copy assimp-vc142-mt.dll "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

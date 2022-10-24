@@ -122,7 +122,7 @@
     <LibraryPath>$(SolutionDir)linking\lib\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
     <OutDir>$(SolutionDir)$(Platform)\build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(Platform)\temp\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)-win32</TargetName>
+    <TargetName>$(ProjectName)-$(Configuration)-win32</TargetName>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
     <SourcePath>$(VC_SourcePath);</SourcePath>
   </PropertyGroup>
@@ -132,7 +132,7 @@
     <LibraryPath>$(SolutionDir)linking\lib\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
     <OutDir>$(SolutionDir)$(Platform)\build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(Platform)\temp\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)-win32</TargetName>
+    <TargetName>$(ProjectName)-$(Configuration)-win32</TargetName>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
     <SourcePath>$(VC_SourcePath);</SourcePath>
   </PropertyGroup>
@@ -140,20 +140,21 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)linking\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(SolutionDir)linking\lib\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <OutDir>$(SolutionDir)linking\lib\$(ProjectName)-$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\</IntDir>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
     <SourcePath>$(VC_SourcePath);</SourcePath>
-    <TargetName>$(ProjectName)-d</TargetName>
+    <TargetName>$(ProjectName)-$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)linking\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(SolutionDir)linking\lib\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <OutDir>$(SolutionDir)linking\lib\$(ProjectName)-$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\</IntDir>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
     <SourcePath>$(VC_SourcePath);</SourcePath>
+    <TargetName>$(ProjectName)-$(Configuration)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -172,8 +173,8 @@
       </EntryPointSymbol>
     </Link>
     <PreBuildEvent>
-      <Command>rd /s /q ..\linking\include\$(ProjectName)\
-Xcopy /E src\*.hpp ..\linking\include\$(ProjectName)\</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>
@@ -200,8 +201,8 @@ Xcopy /E src\*.hpp ..\linking\include\$(ProjectName)\</Command>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PreBuildEvent>
-      <Command>rd /s /q ..\linking\include\$(ProjectName)\
-Xcopy /E src\*.hpp ..\linking\include\$(ProjectName)\</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>
@@ -229,8 +230,8 @@ Xcopy /E src\*.hpp ..\linking\include\$(ProjectName)\</Command>
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>rd /s /q ..\linking\include\$(ProjectName)\
-Xcopy /E src\*.hpp ..\linking\include\$(ProjectName)\</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -252,14 +253,6 @@ Xcopy /E src\*.hpp ..\linking\include\$(ProjectName)\</Command>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
-    <PreBuildEvent>
-      <Command>rd /s /q ..\linking\include\$(ProjectName)\
-Xcopy /E src\*.hpp ..\linking\include\$(ProjectName)\</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

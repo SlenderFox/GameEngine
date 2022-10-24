@@ -1,5 +1,5 @@
 #pragma once
-#include "OpenGL-Engine/Application.hpp"
+#include "Application.hpp"
 
 class Project: public Engine::Application
 {
