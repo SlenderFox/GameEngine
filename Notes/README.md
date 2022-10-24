@@ -58,3 +58,4 @@ Todo:
 	- [ ] Function callbacks
 		- [ ] Allow callbacks to pass member functions
 - [ ] Update destroying a single texture to allow for a new one to replace it
+- [ ] Try out reworking entire project on the premise of static engine
