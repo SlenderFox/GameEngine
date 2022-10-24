@@ -144,7 +144,7 @@ namespace Engine
 
 				m_rendererInst->Draw();
 				
-				ImGui::ShowDemoWindow();
+				//ImGui::ShowDemoWindow();
 				
 				// Draw imgui last and on top
 				ImGui::Render();
@@ -201,10 +201,10 @@ namespace Engine
 			return false;
 		}
 		// FIXME: For some reason only works after input class is initialised
-		ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+		//ImGui_ImplGlfw_InitForOpenGL(m_window, true);
 		
-		//m_inputInst->AddMouseCallback(MouseCallback);
-		//m_inputInst->AddSrollCallback(ScrollCallback);
+		m_inputInst->AddMouseCallback(MouseCallback);
+		m_inputInst->AddSrollCallback(ScrollCallback);
 
 		if (!Startup())
 		{
@@ -295,7 +295,7 @@ namespace Engine
 	{
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
-		//ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+		ImGui_ImplGlfw_InitForOpenGL(m_window, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
 		ImGui::GetIO().DisplaySize.x = 1030.0f;
 		ImGui::GetIO().DisplaySize.y = 650.0f;

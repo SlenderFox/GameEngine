@@ -134,11 +134,12 @@ copy assimp-vc142-mt.dll "$(OutDir)"</Command>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc142-mt.lib;glad-$(Configuration).lib;OpenGL-Engine-$(Configuration).lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PreBuildEvent>
       <Command>rd /s /q $(OutDir)</Command>
@@ -182,11 +183,12 @@ copy assimp-vc142-mt.dll "$(OutDir)"</Command>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc142-mt.lib;glad-$(Configuration).lib;OpenGL-Engine-$(Configuration).lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PreBuildEvent>
       <Command>rd /s /q $(OutDir)</Command>
@@ -197,15 +199,15 @@ copy assimp-vc142-mt.dll "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Project.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Project.hpp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="assets\shaders\default.frag" />
     <None Include="assets\shaders\default.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Project.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Project.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
