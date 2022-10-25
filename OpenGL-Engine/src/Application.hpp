@@ -7,18 +7,6 @@ namespace Engine
 	class Application
 	{
 	private:
-		static Application* s_application;	// Static reference to the application
-		static bool s_gladLoaded;				// Whether glad has loaded or not
-
-	public:
-		static Application* const& GetApplication() noexcept { return s_application; }
-		static const bool GladLoaded() noexcept;	// No definition to allow forward declaration
-		static void Quit() noexcept;
-		
-		static void MouseCallback(double& pPosX, double& pPosY) noexcept;
-		static void ScrollCallback(double& pOffsetX, double& pOffsetY) noexcept;
-
-	private:
 		enum class ExitCode: uint8_t
 		{
 			Okay = 0,
@@ -31,23 +19,41 @@ namespace Engine
 			Fail_Startup
 		};
 
-		Renderer* m_rendererInst = nullptr;		// A reference to the renderer instance
-		Input* m_inputInst = nullptr;				// A reference to the input instance
-		GLFWwindow* m_window = nullptr;			// A reference to the window
+		static Application* s_application;	// Static reference to the application
+		static bool s_gladLoaded;				// Whether glad has loaded or not
 
-		uint16_t m_winWidth = 0U, m_winHeight = 0U;	// The width and height of the window
-		uint64_t m_totalFrames = 0U;						// The total amount of frames rendered
+	public:
+		static Application* const& GetApplication() noexcept { return s_application; }
+		static const bool GladLoaded() noexcept;	// No definition to allow forward declaration
+		static void Quit() noexcept;
+
+		static void MouseCallback(double& pPosX, double& pPosY) noexcept;
+		static void ScrollCallback(double& pOffsetX, double& pOffsetY) noexcept;
+
+	private:
+		// Renderer, must be memory managed
+		Renderer* m_rendererInst = nullptr;
+		// Input, must be memory managed
+		Input* m_inputInst = nullptr;
+
+		GLFWwindow* m_windowRef = nullptr;
+
+		// The width and height of the window
+		uint16_t m_winWidth = 0U, m_winHeight = 0U;
+		// The total amount of frames rendered
+		uint64_t m_totalFrames = 0U;
 		// The amount of frames rendered per second
 		uint16_t m_fps = 0U, m_perSecondFrameCount = 0U;
 		// Used for tracking the time between rendered frames
 		double m_currentTime = 0.0, m_prevTime = 0.0, m_deltaTime = 0.0;
 		// Timers used for calling fixed update and displaying fps
 		double m_fixedTimer = 0.0f, m_frameTimer = 0.0f;
-
-		double m_mouseLastX = 0.0, m_mouseLastY = 0.0;	// Mouse position in the last frame
-		double m_yaw = 90.0, m_pitch = 0.0;					// The rotation of the camera
-
-		std::string m_title = "Title error";				// The tile of the window
+		// Mouse position in the last frame
+		double m_mouseLastX = 0.0, m_mouseLastY = 0.0;
+		// The rotation of the camera
+		double m_yaw = 90.0, m_pitch = 0.0;
+		// The tile of the window
+		std::string m_title = "Title error";
 		ExitCode m_exitCode = ExitCode::Okay;
 
 #		pragma region Constructors
@@ -71,7 +77,7 @@ namespace Engine
 		// Should evaluate to 0.01666666666666666
 		const double m_fixedDeltaTime = 1.0 / 60.0;
 
-		ExitCode Run(const uint16_t& pWidth, const uint16_t& pHeight, 
+		ExitCode Run(const uint16_t& pWidth, const uint16_t& pHeight,
 		 const std::string& pTitle, const bool& pFullscreen);
 		void SetDimensions(const uint16_t& pWidth, const uint16_t& pHeight) noexcept;
 

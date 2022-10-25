@@ -37,7 +37,7 @@ namespace Engine
 
 	void Application::Quit() noexcept
 	{
-		glfwSetWindowShouldClose(Application::GetApplication()->m_window, true);
+		glfwSetWindowShouldClose(Application::GetApplication()->m_windowRef, true);
 	}
 
 	void Application::MouseCallback(double& pPosX, double& pPosY) noexcept
@@ -96,7 +96,7 @@ namespace Engine
 		delete m_rendererInst;
 		delete m_inputInst;
 		delete Root::GetRoot();
-		// Don't need to delete m_window as it is handled by glfwTerminate()
+		// Don't need to delete m_windowRef as it is handled by glfwTerminate()
 	}
 
 	Application::ExitCode Application::Run(const uint16_t& pWidth, 
@@ -110,7 +110,7 @@ namespace Engine
 			m_currentTime = glfwGetTime() - m_fixedDeltaTime;
 
 			// Render loop
-			while (!(bool)glfwWindowShouldClose(m_window))
+			while (!(bool)glfwWindowShouldClose(m_windowRef))
 			{
 				UpdateFrameTimeData();
 
@@ -129,7 +129,7 @@ namespace Engine
 				}
 
 				// Skip drawing if minimised, restricts fps to 15
-				if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) == GLFW_TRUE)
+				if (glfwGetWindowAttrib(m_windowRef, GLFW_ICONIFIED) == GLFW_TRUE)
 				{
 					Sleep((DWORD)std::abs(50.0 - m_deltaTime));
 					continue;
@@ -151,7 +151,7 @@ namespace Engine
 				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 				// Check and call events and swap the buffers
-				glfwSwapBuffers(m_window);
+				glfwSwapBuffers(m_windowRef);
 			}
 		}
 
@@ -195,13 +195,13 @@ namespace Engine
 			return false;
 		}
 
-		if (!m_inputInst->Init(m_window))
+		if (!m_inputInst->Init(m_windowRef))
 		{
 			m_exitCode = ExitCode::Fail_Input;
 			return false;
 		}
 		// FIXME: For some reason only works after input class is initialised
-		//ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+		//ImGui_ImplGlfw_InitForOpenGL(m_windowRef, true);
 		
 		m_inputInst->AddMouseCallback(MouseCallback);
 		m_inputInst->AddSrollCallback(ScrollCallback);
@@ -242,18 +242,18 @@ namespace Engine
 		//glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
 
 		// glfw window creation
-		m_window = glfwCreateWindow(m_winWidth, m_winHeight, (m_title = pTitle).c_str(),
+		m_windowRef = glfwCreateWindow(m_winWidth, m_winHeight, (m_title = pTitle).c_str(),
 			(pFullscreen ? glfwGetPrimaryMonitor() : nullptr), nullptr);
-		if (!m_window)
+		if (!m_windowRef)
 		{
 			Debug::Send("Failed to create GLFW window");
 			m_exitCode = ExitCode::Fail_GLFW_Window;
 			return false;
 		}
-		glfwMakeContextCurrent(m_window);
+		glfwMakeContextCurrent(m_windowRef);
 
-		glfwSetWindowSizeLimits(m_window, 320, 180, GLFW_DONT_CARE, GLFW_DONT_CARE);
-		//glfwSetWindowAspectRatio(m_window, 16, 9);
+		glfwSetWindowSizeLimits(m_windowRef, 320, 180, GLFW_DONT_CARE, GLFW_DONT_CARE);
+		//glfwSetWindowAspectRatio(m_windowRef, 16, 9);
 		//int monCount = 0; 
 		//GLFWmonitor** monitors = glfwGetMonitors(&monCount);
 
@@ -262,20 +262,20 @@ namespace Engine
 			glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
 #			ifdef _DEBUG
 			 // Moves the window to the lower right of the window
-			 glfwSetWindowPos(m_window, 2, (int)((monHeight - m_winHeight) * 0.5f));
+			 glfwSetWindowPos(m_windowRef, 2, (int)((monHeight - m_winHeight) * 0.5f));
 			 // Moves the console and resizes
 			 MoveWindow(GetConsoleWindow(), m_winWidth - 3, 0, 900, 1040, TRUE);
 #			else
 			 // Moves the window to the center of the workarea
-			 glfwSetWindowPos(m_window, (int)((monWidth - m_winWidth) * 0.5f), (int)((monHeight - m_winHeight) * 0.5f));
+			 glfwSetWindowPos(m_windowRef, (int)((monWidth - m_winWidth) * 0.5f), (int)((monHeight - m_winHeight) * 0.5f));
 #			endif
 		}
 
 		//Callbacks
-		glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
+		glfwSetFramebufferSizeCallback(m_windowRef, framebuffer_size_callback);
 
 		// TODO: Remove
-		glfwGetCursorPos(m_window, &m_mouseLastX, &m_mouseLastY);
+		glfwGetCursorPos(m_windowRef, &m_mouseLastX, &m_mouseLastY);
 		return true;
 	}
 
@@ -295,7 +295,7 @@ namespace Engine
 	{
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
-		ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+		ImGui_ImplGlfw_InitForOpenGL(m_windowRef, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
 		ImGui::GetIO().DisplaySize.x = 1030.0f;
 		ImGui::GetIO().DisplaySize.y = 650.0f;
@@ -335,7 +335,7 @@ namespace Engine
 			m_frameTimer -= secondsPerUpdate;
 			m_fps = (uint16_t)((double)m_perSecondFrameCount / secondsPerUpdate);
 			m_perSecondFrameCount = 0U;
-			glfwSetWindowTitle(m_window,
+			glfwSetWindowTitle(m_windowRef,
 			 (m_title + " | FPS: " + std::to_string(m_fps)).c_str());
 		}
 	}
