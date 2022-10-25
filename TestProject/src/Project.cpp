@@ -36,8 +36,6 @@ Project::~Project()
 
 bool Project::Startup()
 {
-	m_rendererRef = Engine::Renderer::GetInstance();
-	m_inputRef = Engine::Input::GetInstance();
 	CreateLights();
 	CreateScene();
 	return true;
@@ -97,22 +95,22 @@ void Project::CreateLights()
 	uint8_t ID;
 	Engine::Light* light;
 	// Directional
-	light = m_rendererRef->AddNewLight(
+	light = Engine::Renderer::AddNewLight(
 		ID, Engine::LightType::Directional, Engine::Colour::Silver()
 	);
 	light->SetDirection(vec3(0, -1, 0));
 	Engine::Renderer::SetClearColour(
-		m_rendererRef->GetLightAt(ID)->GetColour() * Engine::Renderer::s_ambience
+		Engine::Renderer::GetLightAt(ID)->GetColour() * Engine::Renderer::s_ambience
 	);
 	// Point
-	light = m_rendererRef->AddNewLight(
+	light = Engine::Renderer::AddNewLight(
 		ID, Engine::LightType::Point, Engine::Colour::CreateWithHSV(
 			Engine::hsv(220, 0.6f, 1.0f)
 		)
 	);
 	light->SetPosition(vec4(-4, 2, -2, 1));
 	// Spot
-	light = m_rendererRef->AddNewLight(
+	light = Engine::Renderer::AddNewLight(
 		ID, Engine::LightType::Spot, Engine::Colour::CreateWithHSV(
 			Engine::hsv(97, 0.17f, 1.0f)
 		)
@@ -126,9 +124,9 @@ void Project::CreateLights()
 	Engine::Shader* shader = nullptr;
 
 	// Gives them physical form
-	for (uint8_t i = 0; i < m_rendererRef->LightCount(); ++i)
+	for (uint8_t i = 0; i < Engine::Renderer::LightCount(); ++i)
 	{
-		Engine::Light* current = m_rendererRef->GetLightAt(i);
+		Engine::Light* current = Engine::Renderer::GetLightAt(i);
 
 		if (current->GetType() == Engine::LightType::Point
 		 || current->GetType() == Engine::LightType::Spot)
@@ -146,54 +144,54 @@ void Project::CreateLights()
 void Project::ProcessInput() noexcept
 {
 	// Render triangles normally
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_F1, Engine::Input::State::Press))
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_F1, Engine::Input::State::Press))
 		Engine::Renderer::SetRenderMode(Engine::Renderer::Mode::Fill);
 	// Render triangles as lines
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_F2, Engine::Input::State::Press))
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_F2, Engine::Input::State::Press))
 		Engine::Renderer::SetRenderMode(Engine::Renderer::Mode::Line);
 	// Render triangles as dots
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_F3, Engine::Input::State::Press))
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_F3, Engine::Input::State::Press))
 		Engine::Renderer::SetRenderMode(Engine::Renderer::Mode::Point);
 
 	// Spotlight cone
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_T, Engine::Input::State::Press))
-		m_rendererRef->ModifyAllSpotlightAngles(0.05f);
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_G, Engine::Input::State::Press))
-		m_rendererRef->ModifyAllSpotlightAngles(-0.05f);
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_T, Engine::Input::State::Press))
+		Engine::Renderer::ModifyAllSpotlightAngles(0.05f);
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_G, Engine::Input::State::Press))
+		Engine::Renderer::ModifyAllSpotlightAngles(-0.05f);
 	// Spotlight blur
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_Y, Engine::Input::State::Press))
-		m_rendererRef->ModifyAllSpotlightBlurs(-0.005f);
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_H, Engine::Input::State::Press))
-		m_rendererRef->ModifyAllSpotlightBlurs(0.005f);
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_Y, Engine::Input::State::Press))
+		Engine::Renderer::ModifyAllSpotlightBlurs(-0.005f);
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_H, Engine::Input::State::Press))
+		Engine::Renderer::ModifyAllSpotlightBlurs(0.005f);
 
 	vec3 translation = vec3();
 	float moveSpeed = 4;
 
 	// SlowDown
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_LeftControl, Engine::Input::State::Press))
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_LeftControl, Engine::Input::State::Press))
 		moveSpeed *= 0.1f;
 	// SpeedUp
-	else if (m_inputRef->GetKey(Engine::Input::Key::Key_LeftShift, Engine::Input::State::Press))
+	else if (Engine::Input::GetKey(Engine::Input::Key::Key_LeftShift, Engine::Input::State::Press))
 		moveSpeed *= 3;
 
 	// Forwards
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_W, Engine::Input::State::Press))
-		translation += moveSpeed * (float)GetDeltaTime() * (vec3)m_rendererRef->GetCamera()->GetForward();
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_W, Engine::Input::State::Press))
+		translation += moveSpeed * (float)GetDeltaTime() * (vec3)Engine::Renderer::GetCamera()->GetForward();
 	// Backwards
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_S, Engine::Input::State::Press))
-		translation -= moveSpeed * (float)GetDeltaTime() * (vec3)m_rendererRef->GetCamera()->GetForward();
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_S, Engine::Input::State::Press))
+		translation -= moveSpeed * (float)GetDeltaTime() * (vec3)Engine::Renderer::GetCamera()->GetForward();
 	// Left
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_A, Engine::Input::State::Press))
-		translation += moveSpeed * (float)GetDeltaTime() * (vec3)m_rendererRef->GetCamera()->GetRight();
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_A, Engine::Input::State::Press))
+		translation += moveSpeed * (float)GetDeltaTime() * (vec3)Engine::Renderer::GetCamera()->GetRight();
 	// Right
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_D, Engine::Input::State::Press))
-		translation -= moveSpeed * (float)GetDeltaTime() * (vec3)m_rendererRef->GetCamera()->GetRight();
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_D, Engine::Input::State::Press))
+		translation -= moveSpeed * (float)GetDeltaTime() * (vec3)Engine::Renderer::GetCamera()->GetRight();
 	// Up
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_Space, Engine::Input::State::Press))
-		translation += moveSpeed * (float)GetDeltaTime() * (vec3)m_rendererRef->GetCamera()->GetUp();
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_Space, Engine::Input::State::Press))
+		translation += moveSpeed * (float)GetDeltaTime() * (vec3)Engine::Renderer::GetCamera()->GetUp();
 	// Down
-	if (m_inputRef->GetKey(Engine::Input::Key::Key_C, Engine::Input::State::Press))
-		translation -= moveSpeed * (float)GetDeltaTime() * (vec3)m_rendererRef->GetCamera()->GetUp();
+	if (Engine::Input::GetKey(Engine::Input::Key::Key_C, Engine::Input::State::Press))
+		translation -= moveSpeed * (float)GetDeltaTime() * (vec3)Engine::Renderer::GetCamera()->GetUp();
 
-	m_rendererRef->GetCamera()->Translate(translation);
+	Engine::Renderer::GetCamera()->Translate(translation);
 }

@@ -9,9 +9,27 @@ namespace Engine
 	// Singleton class used for handling inputs
 	class Input
 	{
-		friend class Application;	// Allowing application access and control
-	public:
+		friend class Application;
+		// Does not need to be memory managed
+		static GLFWwindow* s_windowRef;
+		
+		static CallbackFunc s_mouseCallbackFun;
+		static CallbackFunc s_scrollCallbackFun;
+		// Mouse position in the last frame
+		static double s_mouseLastX, s_mouseLastY;
 
+#		pragma region Constructors
+		// Pure static class
+		Input() = delete;
+		~Input() = delete;
+		// Delete copy/move so extra instances can't be created/moved.
+		Input(const Input&) = delete;
+		Input& operator=(const Input&) = delete;
+		Input(Input&&) = delete;
+		Input& operator=(Input&&) = delete;
+#		pragma endregion
+
+	public:
 		enum class State: unsigned char
 		{
 			Release,
@@ -142,44 +160,15 @@ namespace Engine
 			Key_Menu						= 348
 		};
 
-		static bool s_KeyCallback;
-		static bool s_MouseCallback;
-		static bool s_ScrollCallback;
-
-		static Input* GetInstance() noexcept
-		{
-			static Input* s_instance = new Input();
-			return s_instance;
-		}
+		static bool Init(GLFWwindow* const& pWindowRef) noexcept;
+		static void Process() noexcept;
+		static bool GetKey(const Key& pKey, const State& pState) noexcept;
 
 		static void Key_callback(GLFWwindow* pWindow, int pKey, int pScancode, int pAction, int pMods) noexcept;
 		static void Mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY) noexcept;
 		static void Scroll_callback(GLFWwindow* pWindow, double pOffsetX, double pOffsetY) noexcept;
 
-	private:
-		GLFWwindow* m_windowRef = nullptr;
-
-		CallbackFunc mouseCallback;
-		CallbackFunc scrollCallback;
-
-		double m_mouseLastX = 0.0, m_mouseLastY = 0.0;	// Mouse position in the last frame
-
-#		pragma region Constructors
-		Input() = default;
-		~Input() {};
-		// Delete copy/move so extra instances can't be created/moved.
-		Input(const Input&) = delete;
-		Input& operator=(const Input&) = delete;
-		Input(Input&&) = delete;
-		Input& operator=(Input&&) = delete;
-#		pragma endregion
-
-	public:
-		bool Init(GLFWwindow* const& pWindowRef) noexcept;
-		void Process() noexcept;
-		bool GetKey(const Key& pKey, const State& pState) noexcept;
-
-		void AddMouseCallback(CallbackFunc f) noexcept;
-		void AddSrollCallback(CallbackFunc f) noexcept;
+		static void AddMouseCallback(CallbackFunc pCallback) noexcept;
+		static void AddSrollCallback(CallbackFunc pCallback) noexcept;
 	};
 }

@@ -18,9 +18,9 @@ namespace Engine
 	class Renderer
 	{
 	public:
-		static Renderer* GetInstance();
-		Model* AddNewModel(uint8_t &id, string pModelPath, string pShaderPath, bool pLoadTextures = true);
-		void LoadLightsIntoShader(const Shader& pShader);
+		static void LoadLightsIntoShader(const Shader& pShader) noexcept;
+		static Model* AddNewModel(uint8_t &id, string pModelPath,
+		 string pShaderPath, bool pLoadTextures = true) noexcept;
 	};
 
 	// Blame https://stackoverflow.com/a/40937193/15035125 for this
@@ -29,10 +29,9 @@ namespace Engine
 		static void BackgroundLoadModel(const string& pModelPath, const string& pShaderPath,
 		 Entity* const& pEntity, bool pLoadTextures = true) noexcept
 		{
-			Renderer* renderer = Renderer::GetInstance();
 			uint8_t ID;
-			pEntity->m_modelRef = renderer->AddNewModel(ID, pModelPath, pShaderPath, pLoadTextures);
-			renderer->LoadLightsIntoShader(*pEntity->m_modelRef->GetShaderRef());
+			pEntity->m_modelRef = Renderer::AddNewModel(ID, pModelPath, pShaderPath, pLoadTextures);
+			Renderer::LoadLightsIntoShader(*pEntity->m_modelRef->GetShaderRef());
 			pEntity->m_modelRef->GetShaderRef()->SetMat4("u_model", pEntity->GetTransform());
 			pEntity->m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel",
 			 (mat3)transpose(inverse(pEntity->GetTransform())));

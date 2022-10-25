@@ -1,4 +1,5 @@
 #pragma region
+#define WIN32_LEAN_AND_MEAN
 #include "Application.hpp"
 #include "Debug.hpp"
 #include "glad/glad.h"
@@ -25,10 +26,48 @@ void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight) noe
 
 namespace Engine
 {
-	// Static 
-
+#	pragma region Variables
 	Application* Application::s_application = nullptr;
+	GLFWwindow* Application::s_windowRef = nullptr;
 	bool Application::s_gladLoaded = false;
+	uint16_t Application::s_winWidth = 0U;
+	uint16_t Application::s_winHeight = 0U;
+	uint16_t Application::s_fps = 0U;
+	uint16_t Application::s_perSecondFrameCount = 0U;
+	uint64_t Application::s_totalFrames = 0U;
+	double Application::s_currentTime = 0.0;
+	double Application::s_prevTime = 0.0;
+	double Application::s_deltaTime = 0.0;
+	double Application::s_fixedTimer = 0.0;
+	double Application::s_frameTimer = 0.0;
+	double Application::s_mouseLastX = 0.0;
+	double Application::s_mouseLastY = 0.0;
+	double Application::s_camYaw = 90.0;
+	double Application::s_camPitch = 0.0;
+	string Application::s_title = "Title not set";
+	Application::ExitCode Application::s_exitCode = Application::ExitCode::Okay;
+	
+	const double Application::s_fixedDeltaTime = 1.0 / 60.0;
+#	pragma endregion
+
+	Application::Application()
+	{
+		// Prevents potential memory leak
+		if (s_application)
+		{
+			Terminate();
+			delete s_application;
+		}
+
+		// Applies the static reference
+		s_application = this;
+	}
+
+	Application::~Application()
+	{
+		Renderer::Destroy();
+		delete Root::GetRoot();
+	}
 
 	const bool Application::GladLoaded() noexcept
 	{
@@ -37,66 +76,21 @@ namespace Engine
 
 	void Application::Quit() noexcept
 	{
-		glfwSetWindowShouldClose(Application::GetApplication()->m_windowRef, true);
+		glfwSetWindowShouldClose(Application::s_windowRef, true);
 	}
 
-	void Application::MouseCallback(double& pPosX, double& pPosY) noexcept
+	void Application::Terminate() noexcept
 	{
-		Application* app = Application::GetApplication();
-		double offsetX = pPosX - app->m_mouseLastX;
-		double offsetY = pPosY - app->m_mouseLastY;
-		app->m_mouseLastX = pPosX;
-		app->m_mouseLastY = pPosY;
-		const double sens = 0.05f;
-		offsetX *= sens;
-		offsetY *= sens;
-		app->m_yaw += offsetX;
-		app->m_pitch += offsetY;
-		if (app->m_pitch > 89.0f)
-			app->m_pitch = 89.0f;
-		else if (app->m_pitch < -89.0f)
-			app->m_pitch = -89.0f;
-
-		// The forward direction of the camera
-		vec3 forward = vec3();
-		forward.x = (float)cos(radians(app->m_yaw)) * (float)cos(radians(app->m_pitch));
-		forward.y = (float)sin(radians(app->m_pitch));
-		forward.z = (float)sin(radians(app->m_yaw)) * (float)cos(radians(app->m_pitch));
-		forward = normalize(forward);
-		Renderer::GetInstance()->m_camera->SetForward(forward);
-	}
-
-	void Application::ScrollCallback(double& pOffsetX, double& pOffsetY) noexcept
-	{
-		Renderer::GetInstance()->m_camera->ModifyFovH((float)pOffsetY * -3.0f);
-	}
-
-	// Member
-
-	Application::Application()
-	{
-		// Prevents potential memory leak
-		if (s_application)
+		// End imgui
+		if (ImGui::GetCurrentContext() != NULL)
 		{
-			s_application->Shutdown();
-			glfwTerminate();
-			delete s_application;
+			ImGui_ImplOpenGL3_Shutdown();
+			ImGui_ImplGlfw_Shutdown();
+			ImGui::DestroyContext();
 		}
 
-		// Applies the static reference
-		s_application = this;
-
-		// Need to be instantiated in here to avoid errors if glfw or glad fail
-		m_rendererInst = Renderer::GetInstance();
-		m_inputInst = Input::GetInstance();
-	}
-
-	Application::~Application()
-	{
-		delete m_rendererInst;
-		delete m_inputInst;
-		delete Root::GetRoot();
-		// Don't need to delete m_windowRef as it is handled by glfwTerminate()
+		GetApplication()->Shutdown();
+		glfwTerminate();
 	}
 
 	Application::ExitCode Application::Run(const uint16_t& pWidth, 
@@ -107,31 +101,31 @@ namespace Engine
 		if (Init(pTitle, pFullscreen))
 		{
 			// Preloads currentTime with an earlier time to prevent first frame weirdness
-			m_currentTime = glfwGetTime() - m_fixedDeltaTime;
+			s_currentTime = glfwGetTime() - s_fixedDeltaTime;
 
 			// Render loop
-			while (!(bool)glfwWindowShouldClose(m_windowRef))
+			while (!(bool)glfwWindowShouldClose(s_windowRef))
 			{
 				UpdateFrameTimeData();
 
 				// Input
 				glfwPollEvents();
 				ProcessInput();
-				m_inputInst->Process();
+				Input::Process();
 
-				Update();
+				GetApplication()->Update();
 
 				// Calls fixed update 60 times per second
-				if (m_fixedTimer >= m_fixedDeltaTime)
+				if (s_fixedTimer >= s_fixedDeltaTime)
 				{
-					m_fixedTimer -= m_fixedDeltaTime;
-					FixedUpdate();
+					s_fixedTimer -= s_fixedDeltaTime;
+					GetApplication()->FixedUpdate();
 				}
 
 				// Skip drawing if minimised, restricts fps to 15
-				if (glfwGetWindowAttrib(m_windowRef, GLFW_ICONIFIED) == GLFW_TRUE)
+				if (glfwGetWindowAttrib(s_windowRef, GLFW_ICONIFIED) == GLFW_TRUE)
 				{
-					Sleep((DWORD)std::abs(50.0 - m_deltaTime));
+					Sleep((DWORD)std::abs(50.0 - s_deltaTime));
 					continue;
 				}
 
@@ -140,9 +134,9 @@ namespace Engine
 				ImGui_ImplGlfw_NewFrame();
 				ImGui::NewFrame();
 
-				LateUpdate();
+				GetApplication()->LateUpdate();
 
-				m_rendererInst->Draw();
+				Renderer::Draw();
 				
 				//ImGui::ShowDemoWindow();
 				
@@ -151,21 +145,12 @@ namespace Engine
 				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 				// Check and call events and swap the buffers
-				glfwSwapBuffers(m_windowRef);
+				glfwSwapBuffers(s_windowRef);
 			}
 		}
 
-		// End imgui
-		if (ImGui::GetCurrentContext() != NULL)
-		{
-			ImGui_ImplOpenGL3_Shutdown();
-			ImGui_ImplGlfw_Shutdown();
-			ImGui::DestroyContext();
-		}
-
-		Shutdown();
-		glfwTerminate();
-		return m_exitCode;
+		Terminate();
+		return s_exitCode;
 	}
 
 	bool Application::Init(const string& pTitle, bool pFullscreen)
@@ -178,37 +163,37 @@ namespace Engine
 
 		if (!SetupGlad())
 		{
-			m_exitCode = ExitCode::Fail_Glad;
+			s_exitCode = ExitCode::Fail_Glad;
 			return false;
 		}
 
 		// Initialises the renderer
-		if (!m_rendererInst->Init((float)m_winWidth / (float)m_winHeight))
+		if (!Renderer::Init((float)s_winWidth / (float)s_winHeight))
 		{
-			m_exitCode = ExitCode::Fail_Renderer;
+			s_exitCode = ExitCode::Fail_Renderer;
 			return false;
 		}
 
 		if (!SetupImgui())
 		{
-			m_exitCode = ExitCode::Fail_Imgui;
+			s_exitCode = ExitCode::Fail_Imgui;
 			return false;
 		}
 
-		if (!m_inputInst->Init(m_windowRef))
+		if (!Input::Init(s_windowRef))
 		{
-			m_exitCode = ExitCode::Fail_Input;
+			s_exitCode = ExitCode::Fail_Input;
 			return false;
 		}
-		// FIXME: For some reason only works after input class is initialised
-		//ImGui_ImplGlfw_InitForOpenGL(m_windowRef, true);
+		// FIXME: Only works after input class is initialised
+		//ImGui_ImplGlfw_InitForOpenGL(s_windowRef, true);
 		
-		m_inputInst->AddMouseCallback(MouseCallback);
-		m_inputInst->AddSrollCallback(ScrollCallback);
+		Input::AddMouseCallback(MouseCallback);
+		Input::AddSrollCallback(ScrollCallback);
 
-		if (!Startup())
+		if (!GetApplication()->Startup())
 		{
-			m_exitCode = ExitCode::Fail_Startup;
+			s_exitCode = ExitCode::Fail_Startup;
 			return false;
 		}
 
@@ -226,7 +211,7 @@ namespace Engine
 		if (!glfwInit())
 		{
 			Debug::Send("Failed to initialise GLFW");
-			m_exitCode = ExitCode::Fail_GLFW_Init;
+			s_exitCode = ExitCode::Fail_GLFW_Init;
 			return false;
 		}
 
@@ -242,18 +227,18 @@ namespace Engine
 		//glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
 
 		// glfw window creation
-		m_windowRef = glfwCreateWindow(m_winWidth, m_winHeight, (m_title = pTitle).c_str(),
+		s_windowRef = glfwCreateWindow(s_winWidth, s_winHeight, (s_title = pTitle).c_str(),
 			(pFullscreen ? glfwGetPrimaryMonitor() : nullptr), nullptr);
-		if (!m_windowRef)
+		if (!s_windowRef)
 		{
 			Debug::Send("Failed to create GLFW window");
-			m_exitCode = ExitCode::Fail_GLFW_Window;
+			s_exitCode = ExitCode::Fail_GLFW_Window;
 			return false;
 		}
-		glfwMakeContextCurrent(m_windowRef);
+		glfwMakeContextCurrent(s_windowRef);
 
-		glfwSetWindowSizeLimits(m_windowRef, 320, 180, GLFW_DONT_CARE, GLFW_DONT_CARE);
-		//glfwSetWindowAspectRatio(m_windowRef, 16, 9);
+		glfwSetWindowSizeLimits(s_windowRef, 320, 180, GLFW_DONT_CARE, GLFW_DONT_CARE);
+		//glfwSetWindowAspectRatio(s_windowRef, 16, 9);
 		//int monCount = 0; 
 		//GLFWmonitor** monitors = glfwGetMonitors(&monCount);
 
@@ -262,20 +247,20 @@ namespace Engine
 			glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
 #			ifdef _DEBUG
 			 // Moves the window to the lower right of the window
-			 glfwSetWindowPos(m_windowRef, 2, (int)((monHeight - m_winHeight) * 0.5f));
+			 glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_winHeight) * 0.5f));
 			 // Moves the console and resizes
-			 MoveWindow(GetConsoleWindow(), m_winWidth - 3, 0, 900, 1040, TRUE);
+			 MoveWindow(GetConsoleWindow(), s_winWidth - 3, 0, 900, 1040, TRUE);
 #			else
 			 // Moves the window to the center of the workarea
-			 glfwSetWindowPos(m_windowRef, (int)((monWidth - m_winWidth) * 0.5f), (int)((monHeight - m_winHeight) * 0.5f));
+			 glfwSetWindowPos(s_windowRef, (int)((monWidth - s_winWidth) * 0.5f), (int)((monHeight - s_winHeight) * 0.5f));
 #			endif
 		}
 
 		//Callbacks
-		glfwSetFramebufferSizeCallback(m_windowRef, framebuffer_size_callback);
+		glfwSetFramebufferSizeCallback(s_windowRef, framebuffer_size_callback);
 
 		// TODO: Remove
-		glfwGetCursorPos(m_windowRef, &m_mouseLastX, &m_mouseLastY);
+		glfwGetCursorPos(s_windowRef, &s_mouseLastX, &s_mouseLastY);
 		return true;
 	}
 
@@ -295,7 +280,7 @@ namespace Engine
 	{
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
-		ImGui_ImplGlfw_InitForOpenGL(m_windowRef, true);
+		ImGui_ImplGlfw_InitForOpenGL(s_windowRef, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
 		ImGui::GetIO().DisplaySize.x = 1030.0f;
 		ImGui::GetIO().DisplaySize.y = 650.0f;
@@ -305,38 +290,38 @@ namespace Engine
 
 	void Application::SetDimensions(const uint16_t& pWidth, const uint16_t& pHeight) noexcept
 	{
-		m_winWidth = pWidth;
-		m_winHeight = pHeight;
+		s_winWidth = pWidth;
+		s_winHeight = pHeight;
 
-		if (m_rendererInst->m_camera && pWidth > 0 && pHeight > 0)
+		if (Renderer::s_camera && pWidth > 0 && pHeight > 0)
 			UpdateCamera();
 	}
 
 	void Application::UpdateCamera() noexcept
 	{
-		m_rendererInst->m_camera->SetAspectRatio((float)m_winWidth / (float)m_winHeight);
-		m_rendererInst->m_camera->UpdateFovV();
+		Renderer::s_camera->SetAspectRatio((float)s_winWidth / (float)s_winHeight);
+		Renderer::s_camera->UpdateFovV();
 	}
 
 	void Application::UpdateFrameTimeData() noexcept
 	{
-		m_prevTime = m_currentTime;
-		m_currentTime = glfwGetTime();
-		m_deltaTime = m_currentTime - m_prevTime;
-		m_fixedTimer += m_deltaTime;
-		m_frameTimer += m_deltaTime;
-		++m_totalFrames;
-		++m_perSecondFrameCount;
+		s_prevTime = s_currentTime;
+		s_currentTime = glfwGetTime();
+		s_deltaTime = s_currentTime - s_prevTime;
+		s_fixedTimer += s_deltaTime;
+		s_frameTimer += s_deltaTime;
+		++s_totalFrames;
+		++s_perSecondFrameCount;
 
 		// Doing this allows me to updates fps as often as I want
 		static const double secondsPerUpdate = 0.5;
-		if (m_frameTimer >= secondsPerUpdate)
+		if (s_frameTimer >= secondsPerUpdate)
 		{
-			m_frameTimer -= secondsPerUpdate;
-			m_fps = (uint16_t)((double)m_perSecondFrameCount / secondsPerUpdate);
-			m_perSecondFrameCount = 0U;
-			glfwSetWindowTitle(m_windowRef,
-			 (m_title + " | FPS: " + std::to_string(m_fps)).c_str());
+			s_frameTimer -= secondsPerUpdate;
+			s_fps = (uint16_t)((double)s_perSecondFrameCount / secondsPerUpdate);
+			s_perSecondFrameCount = 0U;
+			glfwSetWindowTitle(s_windowRef,
+			 (s_title + " | FPS: " + std::to_string(s_fps)).c_str());
 		}
 	}
 
@@ -344,6 +329,37 @@ namespace Engine
 	{
 		// TODO: Add fullscreen toggle
 		// End application
-		if (m_inputInst->GetKey(Input::Key::Key_End, Input::State::Press)) Quit();
+		if (Input::GetKey(Input::Key::Key_End, Input::State::Press)) Quit();
+	}
+	
+	void Application::MouseCallback(double& pPosX, double& pPosY) noexcept
+	{
+		Application* app = GetApplication();
+		double offsetX = pPosX - app->s_mouseLastX;
+		double offsetY = pPosY - app->s_mouseLastY;
+		app->s_mouseLastX = pPosX;
+		app->s_mouseLastY = pPosY;
+		const double sens = 0.05f;
+		offsetX *= sens;
+		offsetY *= sens;
+		app->s_camYaw += offsetX;
+		app->s_camPitch += offsetY;
+		if (app->s_camPitch > 89.0f)
+			app->s_camPitch = 89.0f;
+		else if (app->s_camPitch < -89.0f)
+			app->s_camPitch = -89.0f;
+
+		// The forward direction of the camera
+		vec3 forward = vec3();
+		forward.x = (float)cos(radians(app->s_camYaw)) * (float)cos(radians(app->s_camPitch));
+		forward.y = (float)sin(radians(app->s_camPitch));
+		forward.z = (float)sin(radians(app->s_camYaw)) * (float)cos(radians(app->s_camPitch));
+		forward = normalize(forward);
+		Renderer::s_camera->SetForward(forward);
+	}
+
+	void Application::ScrollCallback(double& pOffsetX, double& pOffsetY) noexcept
+	{
+		Renderer::s_camera->ModifyFovH((float)pOffsetY * -3.0f);
 	}
 }

@@ -15,12 +15,12 @@ using std::unique_ptr;
 
 namespace Engine
 {
-	// Forward declaration
-	class Application { public: static const bool GladLoaded() noexcept; };
-
-	// Static
-
+#	pragma region Variables
+	Camera* Renderer::s_camera = nullptr;
+	unique_ptr<vector<unique_ptr<Model>>> Renderer::s_models = nullptr;
+	unique_ptr<vector<unique_ptr<Light>>> Renderer::s_lights = nullptr;
 	const float Renderer::s_ambience = 0.15f;
+#	pragma endregion
 
 	void Renderer::SetClearColour(const Colour& pColour) noexcept
 	{
@@ -33,8 +33,6 @@ namespace Engine
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + (int)pMode);
 	}
 
-	// Member
-
 	bool Renderer::Init(float pAspect) noexcept
 	{
 		// Enables the use of the depth buffer
@@ -43,38 +41,35 @@ namespace Engine
 		//SetClearColour(Colour::CreateWithRGB(vec3(0.1f)));
 
 		// Initialise camera
-		m_camera = new Camera(pAspect, 75.0f);
-		m_camera->SetPosition({ 0.0f, 0.0f, 6.0f });
+		s_camera = new Camera(pAspect, 75.0f);
+		s_camera->SetPosition({ 0.0f, 0.0f, 6.0f });
 
 		// Initialise arrays
-		m_models = make_unique<vector<unique_ptr<Model>>>();
-		m_lights = make_unique<vector<unique_ptr<Light>>>();
+		s_models = make_unique<vector<unique_ptr<Model>>>();
+		s_lights = make_unique<vector<unique_ptr<Light>>>();
 
 		return true;
 	}
 
-	Renderer::~Renderer()
+	void Renderer::Destroy() noexcept
 	{
-		if (Application::GladLoaded())
+		if (s_models)
 		{
-			if (m_models)
-			{
-				m_models.get()->clear();
-				// Smart pointer needs to be manually released or it throws an error :|
-				m_models.release();
+			s_models.get()->clear();
+			// Smart pointer needs to be manually released or it throws an error :|
+			s_models.release();
 
-				// Destroy all textures
-				for (size_t i = 0; i < Model::s_loadedTextures.size(); ++i)
-				{
-					if (Model::s_loadedTextures[i])
-						delete Model::s_loadedTextures[i];
-				}
-				// Unload all textures from memory once finished
-				Texture::UnloadAll();
+			// Destroy all textures
+			for (size_t i = 0; i < Model::s_loadedTextures.size(); ++i)
+			{
+				if (Model::s_loadedTextures[i])
+					delete Model::s_loadedTextures[i];
 			}
+			// Unload all textures from memory once finished
+			Texture::UnloadAll();
 		}
 
-		delete m_camera;
+		delete s_camera;
 	}
 
 	void Renderer::Draw() noexcept
@@ -82,9 +77,9 @@ namespace Engine
 		// Clears to background colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (m_models.get()->size() > 0)
+		if (s_models.get()->size() > 0)
 		{
-			for (uint8_t i = 0; i < m_models.get()->size(); ++i)
+			for (uint8_t i = 0; i < s_models.get()->size(); ++i)
 				GetModelAt(i)->Draw();
 		}
 	}
@@ -96,7 +91,7 @@ namespace Engine
 		uint8_t numPointLights = 0;
 		uint8_t numSpotLights = 0;
 
-		for (uint8_t i = 0; i < m_lights.get()->size(); ++i)
+		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
 		{
 			Light* currentLight = GetLightAt(i);
 			switch (currentLight->GetType())
@@ -150,7 +145,7 @@ namespace Engine
 
 	void Renderer::ModifyAllSpotlightAngles(float pValue) noexcept
 	{
-		for (uint8_t i = 0; i < m_lights.get()->size(); ++i)
+		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
 		{
 			if (GetLightAt(i)->GetType() == LightType::Spot)
 			{
@@ -159,7 +154,7 @@ namespace Engine
 				if (newValue <= 90.0f && newValue >= 0.0f)
 				{
 					currentlLight->SetAngle(newValue);
-					for (uint8_t i = 0; i < m_models.get()->size(); ++i)
+					for (uint8_t i = 0; i < s_models.get()->size(); ++i)
 						GetModelAt(i)->m_shader->SetFloat("u_spotLights[0].cutoff", currentlLight->GetAngle());
 				}
 			}
@@ -168,7 +163,7 @@ namespace Engine
 
 	void Renderer::ModifyAllSpotlightBlurs(float pValue) noexcept
 	{
-		for (uint8_t i = 0; i < m_lights.get()->size(); ++i)
+		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
 		{
 			if (GetLightAt(i)->GetType() == LightType::Spot)
 			{
@@ -177,7 +172,7 @@ namespace Engine
 				if (newValue <= 1.0f && newValue > 0.0f)
 				{
 					currentlLight->SetBlur(newValue);
-					for (uint8_t i = 0; i < m_models.get()->size(); ++i)
+					for (uint8_t i = 0; i < s_models.get()->size(); ++i)
 						GetModelAt(i)->m_shader->SetFloat("u_spotLights[0].blur", currentlLight->GetBlur());
 				}
 			}
@@ -187,65 +182,65 @@ namespace Engine
 	Model* Renderer::AddNewModel(uint8_t &id, string pModelPath, string pShaderPath, bool pLoadTextures) noexcept
 	{
 		// Caps at 255
-		size_t currentAmount = m_models.get()->size();
+		size_t currentAmount = s_models.get()->size();
 		if (currentAmount > 255)
 			return nullptr;
 
 		id = (uint8_t)currentAmount;
 		// Doesn't like paths being const refs
-		m_models.get()->push_back(make_unique<Model>(pModelPath, pShaderPath, m_camera, pLoadTextures));
+		s_models.get()->push_back(make_unique<Model>(pModelPath, pShaderPath, s_camera, pLoadTextures));
 		return GetModelAt(id);
 	}
 
 	Light* Renderer::AddNewLight(uint8_t &id, const LightType& pType, const Colour& pColour) noexcept
 	{
 		// Caps at 255
-		size_t currentAmount = m_lights.get()->size();
+		size_t currentAmount = s_lights.get()->size();
 		if (currentAmount > 255)
 			return nullptr;
 
 		id = (uint8_t)currentAmount;
-		m_lights.get()->push_back(make_unique<Light>(pType, pColour));
+		s_lights.get()->push_back(make_unique<Light>(pType, pColour));
 		return GetLightAt(id);
 	}
 
 #	pragma region Getters
-	uint8_t Renderer::ModelCount() const noexcept
+	uint8_t Renderer::ModelCount() noexcept
 	{
-		return (uint8_t)m_models.get()->size();
+		return (uint8_t)s_models.get()->size();
 	}
 
-	uint8_t Renderer::LightCount() const noexcept
+	uint8_t Renderer::LightCount() noexcept
 	{
-		return (uint8_t)m_lights.get()->size();
+		return (uint8_t)s_lights.get()->size();
 	}
 
 	Model* Renderer::GetModelAt(uint8_t pPos) noexcept
 	{
-		if (!m_models.get())
+		if (!s_models.get())
 			return nullptr;
 
-		if (pPos > m_models.get()->size() - 1)
+		if (pPos > s_models.get()->size() - 1)
 		{
 			Debug::Send("Attempting to access model outside array size");
 			return nullptr;
 		}
 
-		return (*m_models.get())[pPos].get();
+		return (*s_models.get())[pPos].get();
 	}
 
 	Light* Renderer::GetLightAt(uint8_t pPos) noexcept
 	{
-		if (!m_lights.get())
+		if (!s_lights.get())
 			return nullptr;
 
-		if (pPos > m_lights.get()->size() - 1)
+		if (pPos > s_lights.get()->size() - 1)
 		{
 			Debug::Send("Attempting to access light outside array size");
 			return nullptr;
 		}
 
-		return (*m_lights.get())[pPos].get();
+		return (*s_lights.get())[pPos].get();
 	}
 #	pragma endregion
 }
