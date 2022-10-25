@@ -137,17 +137,18 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 300,
+    "width": 253.5,
     "collapsed": true
   },
   "ribbon": {
     "mostRecentAction": ""
   },
-  "active": "09a15ffbb8fcc7f6",
+  "active": "5b931ededbdcf33a",
   "lastOpenFiles": [
     "README.md",
     "Items/Files/cpp/Renderer.cpp.md",

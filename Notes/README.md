@@ -6,12 +6,13 @@ Notes:
 - Enable/disable console through
 	Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)
 - https://www.glfw.org/docs/latest/input_guide.html
+- `git rm -rf --cached .` `git add .`
 ___
 Todo:
 - [x] Add all source files as notes
 	- [x] Construct inheritance graph
 - [x] Make light models
-- [x] Move lights into unique pointer vector
+- [x] Move lights into unique pointer [[vector]]
 	- [x] Functionalise loading light data into shader
 - [x] Fix textures loaded with model only using the first texture location
 - [x] Stop texture loading into shader repeating
@@ -39,12 +40,13 @@ Todo:
 - [x] Add imgui
 - [x] Formatting with 120 max width
 - [x] Try upgrade ([[Colour.hpp]]/[[Colour.cpp]]) with macros
+- [x] Try out reworking entire project on the premise of static engine
 - [ ] Make more functions pass by reference
 - [ ] Holding alt releases cursor
 - [ ] Make ([[Debug.hpp]]/[[Debug.cpp]]) use imgui
 	- [x] Update ([[Debug.hpp]]/[[Debug.cpp]]) to be used without \_DEBUG enabled
 - [ ] Overhaul lights ([[Light.hpp]]/[[Light.cpp]])
-	- [ ] Have each light type in it's own vector
+	- [ ] Have each light type in it's own [[vector]]
 	- [ ] Limit lights to the same as in the shader
 	- [ ] Overhaul how lights are rendered in the shader
 		- [ ] Min and max clipped brightness
@@ -58,4 +60,3 @@ Todo:
 	- [ ] Function callbacks
 		- [ ] Allow callbacks to pass member functions
 - [ ] Update destroying a single texture to allow for a new one to replace it
-- [ ] Try out reworking entire project on the premise of static engine

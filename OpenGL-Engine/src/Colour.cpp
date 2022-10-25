@@ -137,23 +137,23 @@ namespace Engine
 	}
 
 #	pragma region Presets
-	Colour Colour::Black() noexcept		{ return Colour(vec3(0)); }
-	Colour Colour::White() noexcept		{ return Colour(vec3(1)); }
-	Colour Colour::Silver() noexcept	{ return Colour(vec3(0.75f,	0.75f,	0.75f)); }
-	Colour Colour::Grey() noexcept		{ return Colour(vec3(0.5f,	0.5f,	0.5f)); }
-	Colour Colour::DarkGrey() noexcept	{ return Colour(vec3(0.25f,	0.25f,	0.25f)); }
-	Colour Colour::Red() noexcept		{ return Colour(vec3(1,		0,		0)); }
-	Colour Colour::Lime() noexcept		{ return Colour(vec3(0,		1,		0)); }
-	Colour Colour::Blue() noexcept 		{ return Colour(vec3(0,		0,		1)); }
-	Colour Colour::Yellow() noexcept	{ return Colour(vec3(1,		1,		0)); }
-	Colour Colour::Cyan() noexcept		{ return Colour(vec3(0,		1,		1)); }
-	Colour Colour::Magenta() noexcept	{ return Colour(vec3(1,		0,		1)); }
-	Colour Colour::Maroon() noexcept	{ return Colour(vec3(0.5f,	0,		0)); }
-	Colour Colour::Green() noexcept		{ return Colour(vec3(0,		0.5f,	0)); }
-	Colour Colour::Navy() noexcept		{ return Colour(vec3(0,		0,		0.5f)); }
-	Colour Colour::Olive() noexcept		{ return Colour(vec3(0.5f,	0.5f,	0)); }
-	Colour Colour::Teal() noexcept		{ return Colour(vec3(0,		0.5f,	0.5f)); }
-	Colour Colour::Purple() noexcept	{ return Colour(vec3(0.5f,	0,		0.5f)); }
+	Colour Colour::Black()		noexcept { return Colour(vec3(0)); }
+	Colour Colour::White()		noexcept { return Colour(vec3(1)); }
+	Colour Colour::Silver()		noexcept { return Colour(vec3(0.75f,	0.75f,	0.75f	)); }
+	Colour Colour::Grey()		noexcept { return Colour(vec3(0.5f,		0.5f,		0.5f	)); }
+	Colour Colour::DarkGrey()	noexcept { return Colour(vec3(0.25f,	0.25f,	0.25f	)); }
+	Colour Colour::Red()			noexcept { return Colour(vec3(1,			0,			0		)); }
+	Colour Colour::Lime()		noexcept { return Colour(vec3(0,			1,			0		)); }
+	Colour Colour::Blue()		noexcept { return Colour(vec3(0,			0,			1		)); }
+	Colour Colour::Yellow()		noexcept { return Colour(vec3(1,			1,			0		)); }
+	Colour Colour::Cyan()		noexcept { return Colour(vec3(0,			1,			1		)); }
+	Colour Colour::Magenta()	noexcept { return Colour(vec3(1,			0,			1		)); }
+	Colour Colour::Maroon()		noexcept { return Colour(vec3(0.5f,		0,			0		)); }
+	Colour Colour::Green()		noexcept { return Colour(vec3(0,			0.5f,		0		)); }
+	Colour Colour::Navy()		noexcept { return Colour(vec3(0,			0,			0.5f	)); }
+	Colour Colour::Olive()		noexcept { return Colour(vec3(0.5f,		0.5f,		0		)); }
+	Colour Colour::Teal()		noexcept { return Colour(vec3(0,			0.5f,		0.5f	)); }
+	Colour Colour::Purple()		noexcept { return Colour(vec3(0.5f,		0,			0.5f	)); }
 #	pragma endregion
 
 	// ---Member---
@@ -192,27 +192,22 @@ namespace Engine
 	COL_OP_CONST_FLOAT_DEF(-)
 	COL_OP_CONST_FLOAT_DEF(*)
 	COL_OP_CONST_FLOAT_DEF(/)
-
 	COL_OP_CONST_COL_DEF(+)
 	COL_OP_CONST_COL_DEF(-)
 	COL_OP_CONST_COL_DEF(*)
 	COL_OP_CONST_COL_DEF(/)
-
 	COL_OP_CONST_VEC3_DEF(+)
 	COL_OP_CONST_VEC3_DEF(-)
 	COL_OP_CONST_VEC3_DEF(*)
 	COL_OP_CONST_VEC3_DEF(/)
-
 	COL_OP_FLOAT_DEF(+=)
 	COL_OP_FLOAT_DEF(-=)
 	COL_OP_FLOAT_DEF(*=)
 	COL_OP_FLOAT_DEF(/=)
-
 	COL_OP_COL_DEF(+=)
 	COL_OP_COL_DEF(-=)
 	COL_OP_COL_DEF(*=)
 	COL_OP_COL_DEF(/=)
-
 	COL_OP_VEC3_DEF(+=)
 	COL_OP_VEC3_DEF(-=)
 	COL_OP_VEC3_DEF(*=)
