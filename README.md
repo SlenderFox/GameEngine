@@ -1,4 +1,4 @@
-# OpenGL-Engine
+# GameEngine
 Built by loosely following https://learnopengl.com/
 
 ### Libraries used:
