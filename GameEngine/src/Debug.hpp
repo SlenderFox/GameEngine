@@ -9,6 +9,7 @@ namespace Engine
 		static void SendWithPrefix(const wchar_t* pPrefix, std::string& pMsg, bool pNewline, bool pEndline) noexcept;
 
 	public:
+		// Can be removed when transitioned fully to imgui
 		static void Init() noexcept;
 
 		static void Send(std::string pMsg, bool pNewline = false, bool pEndline = true) noexcept;

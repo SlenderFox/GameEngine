@@ -11,8 +11,8 @@
 #include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
 
-using glm::vec3;
 using std::string;
+using glm::vec3;
 using glm::radians;
 using glm::normalize;
 #pragma endregion
@@ -30,8 +30,9 @@ namespace Engine
 	Application* Application::s_application = nullptr;
 	GLFWwindow* Application::s_windowRef = nullptr;
 	bool Application::s_gladLoaded = false;
-	uint16_t Application::s_winWidth = 0U;
-	uint16_t Application::s_winHeight = 0U;
+	bool Application::s_fullscreen = false;
+	uint16_t Application::s_winWidth = 320U;
+	uint16_t Application::s_winHeight = 180U;
 	uint16_t Application::s_fps = 0U;
 	uint16_t Application::s_perSecondFrameCount = 0U;
 	uint64_t Application::s_totalFrames = 0U;
@@ -44,9 +45,9 @@ namespace Engine
 	double Application::s_mouseLastY = 0.0;
 	double Application::s_camYaw = 90.0;
 	double Application::s_camPitch = 0.0;
-	string Application::s_title = "Title not set";
+	string Application::s_title = "Application";
 	Application::ExitCode Application::s_exitCode = Application::ExitCode::Okay;
-	
+
 	const double Application::s_fixedDeltaTime = 1.0 / 60.0;
 #	pragma endregion
 
@@ -58,6 +59,9 @@ namespace Engine
 			Terminate();
 			delete s_application;
 		}
+
+		// Allows debug to always be available
+		Debug::Init();
 
 		// Applies the static reference
 		s_application = this;
@@ -93,12 +97,9 @@ namespace Engine
 		glfwTerminate();
 	}
 
-	Application::ExitCode Application::Run(const uint16_t& pWidth, 
-	 const uint16_t& pHeight, const string& pTitle, const bool& pFullscreen)
+	Application::ExitCode Application::Run()
 	{
-		SetDimensions(pWidth, pHeight);
-
-		if (Init(pTitle, pFullscreen))
+		if (Init())
 		{
 			// Preloads currentTime with an earlier time to prevent first frame weirdness
 			s_currentTime = glfwGetTime() - s_fixedDeltaTime;
@@ -137,9 +138,9 @@ namespace Engine
 				GetApplication()->LateUpdate();
 
 				Renderer::Draw();
-				
+
 				//ImGui::ShowDemoWindow();
-				
+
 				// Draw imgui last and on top
 				ImGui::Render();
 				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -153,13 +154,11 @@ namespace Engine
 		return s_exitCode;
 	}
 
-	bool Application::Init(const string& pTitle, bool pFullscreen)
+	bool Application::Init()
 	{
-		// Must be first to init
-		Debug::Init();
 		auto startTime = std::chrono::high_resolution_clock::now();
 
-		if (!SetupGLFW(pTitle, pFullscreen)) return false;	// Sets own exit code
+		if (!SetupGLFW()) return false;	// Sets own exit code
 
 		if (!SetupGlad())
 		{
@@ -167,7 +166,6 @@ namespace Engine
 			return false;
 		}
 
-		// Initialises the renderer
 		if (!Renderer::Init((float)s_winWidth / (float)s_winHeight))
 		{
 			s_exitCode = ExitCode::Fail_Renderer;
@@ -187,7 +185,8 @@ namespace Engine
 		}
 		// FIXME: Only works after input class is initialised
 		//ImGui_ImplGlfw_InitForOpenGL(s_windowRef, true);
-		
+
+		// TODO: Remove these
 		Input::AddMouseCallback(MouseCallback);
 		Input::AddSrollCallback(ScrollCallback);
 
@@ -205,7 +204,7 @@ namespace Engine
 		return true;
 	}
 
-	bool Application::SetupGLFW(const std::string& pTitle, bool pFullscreen)
+	bool Application::SetupGLFW()
 	{
 		// glfw: initialise and configure
 		if (!glfwInit())
@@ -220,43 +219,49 @@ namespace Engine
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		// Already set by default
-		//glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-		//glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-		//glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
-		//glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
-
 		// glfw window creation
-		s_windowRef = glfwCreateWindow(s_winWidth, s_winHeight, (s_title = pTitle).c_str(),
-			(pFullscreen ? glfwGetPrimaryMonitor() : nullptr), nullptr);
+		int monCount = 0;
+		GLFWmonitor** monitors = glfwGetMonitors(&monCount);
+		GLFWmonitor* primMon = monitors[0];
+		const GLFWvidmode* vid = glfwGetVideoMode(primMon);
+
+		glfwWindowHint(GLFW_RED_BITS, vid->redBits);
+		glfwWindowHint(GLFW_GREEN_BITS, vid->greenBits);
+		glfwWindowHint(GLFW_BLUE_BITS, vid->blueBits);
+		glfwWindowHint(GLFW_REFRESH_RATE, vid->refreshRate);
+
+		GLFWmonitor* mon = s_fullscreen ? primMon : nullptr;
+		int wid = s_winWidth, hei = s_winHeight;
+
+		s_windowRef = glfwCreateWindow(s_winWidth, s_winHeight, s_title.c_str(), mon, nullptr);
+		
 		if (!s_windowRef)
 		{
 			Debug::Send("Failed to create GLFW window");
 			s_exitCode = ExitCode::Fail_GLFW_Window;
 			return false;
 		}
-		glfwMakeContextCurrent(s_windowRef);
 
+		glfwMakeContextCurrent(s_windowRef);
 		glfwSetWindowSizeLimits(s_windowRef, 320, 180, GLFW_DONT_CARE, GLFW_DONT_CARE);
 		//glfwSetWindowAspectRatio(s_windowRef, 16, 9);
-		//int monCount = 0; 
-		//GLFWmonitor** monitors = glfwGetMonitors(&monCount);
 
+		if (!s_fullscreen)
 		{
 			int monPosX, monPosY, monWidth, monHeight;
 			glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
 #			ifdef _DEBUG
-			 // Moves the window to the lower right of the window
+			 // Moves the window to the left of the monitor
 			 glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_winHeight) * 0.5f));
-			 // Moves the console and resizes
+			 // Moves the console to the right and resizes
 			 MoveWindow(GetConsoleWindow(), s_winWidth - 3, 0, 900, 1040, TRUE);
 #			else
 			 // Moves the window to the center of the workarea
-			 glfwSetWindowPos(s_windowRef, (int)((monWidth - s_winWidth) * 0.5f), (int)((monHeight - s_winHeight) * 0.5f));
+			 glfwSetWindowPos(s_windowRef, (int)((monWidth - s_winWidth) * 0.5f),
+			  (int)((monHeight - s_winHeight) * 0.5f));
 #			endif
 		}
 
-		//Callbacks
 		glfwSetFramebufferSizeCallback(s_windowRef, framebuffer_size_callback);
 
 		// TODO: Remove
@@ -295,6 +300,20 @@ namespace Engine
 
 		if (Renderer::s_camera && pWidth > 0 && pHeight > 0)
 			UpdateCamera();
+
+		Debug::Send(string("Dimensions set to " + std::to_string(s_winWidth) + ", " + std::to_string(s_winHeight)));
+	}
+
+	void Application::SetTitle(const string& pTitle) noexcept
+	{
+		s_title = pTitle;
+		Debug::Send("Title set to \"" + s_title + "\"");
+	}
+
+	void Application::SetFullscreen(const bool& pFullscreen) noexcept
+	{
+		s_fullscreen = pFullscreen;
+		Debug::Send("Fullscreen set to " + string(pFullscreen ? "true" : "false"));
 	}
 
 	void Application::UpdateCamera() noexcept
@@ -327,11 +346,31 @@ namespace Engine
 
 	void Application::ProcessInput() noexcept
 	{
-		// TODO: Add fullscreen toggle
+		//// TODO: Proper fullscreen toggle
+		//if (Input::GetKey(Input::Key::Key_F11, Input::State::Press))
+		//{
+		//	s_fullscreen = true;
+		//	GLFWmonitor* primMon = glfwGetPrimaryMonitor();
+		//	int xp, yp;
+		//	glfwGetMonitorPos(primMon, &xp, &yp);
+		//	const GLFWvidmode* vid = glfwGetVideoMode(primMon);
+		//	glfwSetWindowMonitor(s_windowRef, primMon, xp, yp, vid->width, vid->height, vid->refreshRate);
+		//}
+
+		//if (Input::GetKey(Input::Key::Key_K, Input::State::Press))
+		//{
+		//	s_fullscreen = false;
+		//	int monPosX, monPosY, monWidth, monHeight;
+		//	glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
+		//	glfwSetWindowMonitor(s_windowRef, nullptr, 2, (int)((monHeight - s_winHeight) * 0.5f),
+		//	 s_winWidth, s_winHeight, GLFW_DONT_CARE);
+		//	glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_winHeight) * 0.5f));
+		//}
+
 		// End application
 		if (Input::GetKey(Input::Key::Key_End, Input::State::Press)) Quit();
 	}
-	
+
 	void Application::MouseCallback(double& pPosX, double& pPosY) noexcept
 	{
 		Application* app = GetApplication();

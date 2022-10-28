@@ -14,11 +14,14 @@
 int main()
 {
 	Project* app = new Project();
+	app->SetDimensions(1030, 650);
 #	ifdef _DEBUG
-	 int code = (int)app->Run(1030, 650, "OpenGL Application (DEBUG)", false);
+	 app->SetTitle("Application (DEBUG)");
 #	else
-	 int code = (int)app->Run(1600, 900, "OpenGL Application", false);
+	 app->SetTitle("Application (RELEASE)");
 #	endif
+	app->SetFullscreen(false);
+	int code = (int)app->Run();
 	delete app;
 	return code;
 }

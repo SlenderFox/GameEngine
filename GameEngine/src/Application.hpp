@@ -26,7 +26,8 @@ namespace Engine
 		// Whether glad has loaded or not
 		static bool s_gladLoaded;
 
-		// The width and height of the window
+		static bool s_fullscreen;
+		// The width and height of the window, should only be modified through SetDimensions()
 		static uint16_t s_winWidth, s_winHeight;
 		// The amount of frames rendered per second
 		static uint16_t s_fps, s_perSecondFrameCount;
@@ -51,8 +52,8 @@ namespace Engine
 
 		static void Terminate() noexcept;
 
-		static bool Init(const std::string& pTitle, bool pFullscreen);
-		static bool SetupGLFW(const std::string& pTitle, bool pFullscreen);
+		static bool Init();
+		static bool SetupGLFW();
 		static bool SetupGlad();
 		static bool SetupImgui();
 
@@ -68,10 +69,12 @@ namespace Engine
 		static const bool GladLoaded() noexcept;	// No definition to allow forward declaration
 		static void Quit() noexcept;
 
-		static ExitCode Run(const uint16_t& pWidth, const uint16_t& pHeight,
-		 const std::string& pTitle, const bool& pFullscreen);
+		static ExitCode Run();
 		static void SetDimensions(const uint16_t& pWidth, const uint16_t& pHeight) noexcept;
+		static void SetTitle(const std::string& pTitle) noexcept;
+		static void SetFullscreen(const bool& pFullscreen) noexcept;
 
+		// TODO: Remove these
 		static void MouseCallback(double& pPosX, double& pPosY) noexcept;
 		static void ScrollCallback(double& pOffsetX, double& pOffsetY) noexcept;
 
