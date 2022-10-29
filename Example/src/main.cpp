@@ -14,10 +14,11 @@
 int main()
 {
 	Project* app = new Project();
-	app->SetDimensions(1030, 650);
 #	ifdef _DEBUG
+	 app->SetDimensions(1030, 650);
 	 app->SetTitle("Application (DEBUG)");
 #	else
+	 app->SetDimensions(1600, 900);
 	 app->SetTitle("Application (RELEASE)");
 #	endif
 	app->SetFullscreen(false);
