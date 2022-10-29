@@ -41,10 +41,11 @@ Todo:
 - [x] Formatting with 120 max width
 - [x] Try upgrade ([[Colour.hpp]]/[[Colour.cpp]]) with macros
 - [x] Try out reworking entire project on the premise of static engine
-- [ ] Make more functions pass by reference
+- [x] Make more functions pass by reference
 - [ ] Holding alt releases cursor
+- [x] Update ([[Debug.hpp]]/[[Debug.cpp]]) to be used without \_DEBUG enabled
 - [ ] Make ([[Debug.hpp]]/[[Debug.cpp]]) use imgui
-	- [x] Update ([[Debug.hpp]]/[[Debug.cpp]]) to be used without \_DEBUG enabled
+	- [ ] Can open an "event" then post whatever info to it and finally close it
 - [ ] Overhaul lights ([[Light.hpp]]/[[Light.cpp]])
 	- [ ] Have each light type in it's own [[vector]]
 	- [ ] Limit lights to the same as in the shader

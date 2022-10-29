@@ -22,18 +22,7 @@ namespace Engine
 	const float Renderer::s_ambience = 0.15f;
 #	pragma endregion
 
-	void Renderer::SetClearColour(const Colour& pColour) noexcept
-	{
-		vec3 col = pColour.RGBvec3();
-		glClearColor(col.r, col.g, col.b, 1.0f);
-	}
-
-	void Renderer::SetRenderMode(Mode pMode) noexcept
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + (int)pMode);
-	}
-
-	bool Renderer::Init(float pAspect) noexcept
+	bool Renderer::Init(float const& pAspect) noexcept
 	{
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);
@@ -84,7 +73,7 @@ namespace Engine
 		}
 	}
 
-	void Renderer::LoadLightsIntoShader(const Shader& pShader) noexcept
+	void Renderer::LoadLightsIntoShader(Shader const& pShader) noexcept
 	{
 		pShader.SetFloat("u_material.shininess", 32.0f);
 		uint8_t numDirLights = 0;
@@ -97,53 +86,69 @@ namespace Engine
 			switch (currentLight->GetType())
 			{
 			case LightType::Directional:
-				pShader.SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.ambient",
-				 (vec3)currentLight->GetColour() * s_ambience);
-				pShader.SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.diffuse",
-				 currentLight->GetColour());
-				pShader.SetVec3("u_dirLights[" + std::to_string(numDirLights) + "].colour.specular",
-				 currentLight->GetColour());
-				pShader.SetVec4("u_dirLights[" + std::to_string(numDirLights) + "].direction",
-				 currentLight->GetDirection());
+				pShader.SetVec3(
+					"u_dirLights[" + std::to_string(numDirLights) + "].colour.ambient",
+					(vec3)currentLight->GetColour() * s_ambience);
+				pShader.SetVec3(
+					"u_dirLights[" + std::to_string(numDirLights) + "].colour.diffuse",
+					currentLight->GetColour());
+				pShader.SetVec3(
+					"u_dirLights[" + std::to_string(numDirLights) + "].colour.specular",
+					currentLight->GetColour());
+				pShader.SetVec4(
+					"u_dirLights[" + std::to_string(numDirLights) + "].direction",
+					currentLight->GetDirection());
 				++numDirLights; break;
 			case LightType::Point:
-				pShader.SetVec3("u_pointLights[" + std::to_string(numPointLights) + "].colour.diffuse",
-				 currentLight->GetColour());
-				pShader.SetVec3("u_pointLights[" + std::to_string(numPointLights) + "].colour.specular",
-				 currentLight->GetColour());
-				pShader.SetVec4("u_pointLights[" + std::to_string(numPointLights) + "].position",
-				 currentLight->GetPosition());
-				pShader.SetFloat("u_pointLights[" + std::to_string(numPointLights) + "].linear",
-				 currentLight->GetLinear());
-				pShader.SetFloat("u_pointLights[" + std::to_string(numPointLights) + "].quadratic",
-				 currentLight->GetQuadratic());
+				pShader.SetVec3(
+					"u_pointLights[" + std::to_string(numPointLights) + "].colour.diffuse",
+					currentLight->GetColour());
+				pShader.SetVec3(
+					"u_pointLights[" + std::to_string(numPointLights) + "].colour.specular",
+					currentLight->GetColour());
+				pShader.SetVec4(
+					"u_pointLights[" + std::to_string(numPointLights) + "].position",
+					currentLight->GetPosition());
+				pShader.SetFloat(
+					"u_pointLights[" + std::to_string(numPointLights) + "].linear",
+					currentLight->GetLinear());
+				pShader.SetFloat(
+					"u_pointLights[" + std::to_string(numPointLights) + "].quadratic",
+					currentLight->GetQuadratic());
 				++numPointLights; break;
 			case LightType::Spot:
-				pShader.SetVec3("u_spotLights[" + std::to_string(numSpotLights) + "].colour.diffuse",
-				 currentLight->GetColour());
-				pShader.SetVec3("u_spotLights[" + std::to_string(numSpotLights) + "].colour.specular",
-				 currentLight->GetColour());
-				pShader.SetVec4("u_spotLights[" + std::to_string(numSpotLights) + "].position",
-				 currentLight->GetPosition());
-				pShader.SetVec4("u_spotLights[" + std::to_string(numSpotLights) + "].direction",
-				 currentLight->GetDirection());
-				pShader.SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].linear",
-				 currentLight->GetLinear());
-				pShader.SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].quadratic",
-				 currentLight->GetQuadratic());
-				pShader.SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].cutoff",
-				 currentLight->GetAngle());
-				pShader.SetFloat("u_spotLights[" + std::to_string(numSpotLights) + "].blur",
-				 currentLight->GetBlur());
+				pShader.SetVec3(
+					"u_spotLights[" + std::to_string(numSpotLights) + "].colour.diffuse",
+					currentLight->GetColour());
+				pShader.SetVec3(
+					"u_spotLights[" + std::to_string(numSpotLights) + "].colour.specular",
+					currentLight->GetColour());
+				pShader.SetVec4(
+					"u_spotLights[" + std::to_string(numSpotLights) + "].position",
+					currentLight->GetPosition());
+				pShader.SetVec4(
+					"u_spotLights[" + std::to_string(numSpotLights) + "].direction",
+					currentLight->GetDirection());
+				pShader.SetFloat(
+					"u_spotLights[" + std::to_string(numSpotLights) + "].linear",
+					currentLight->GetLinear());
+				pShader.SetFloat(
+					"u_spotLights[" + std::to_string(numSpotLights) + "].quadratic",
+					currentLight->GetQuadratic());
+				pShader.SetFloat(
+					"u_spotLights[" + std::to_string(numSpotLights) + "].cutoff",
+					currentLight->GetAngle());
+				pShader.SetFloat(
+					"u_spotLights[" + std::to_string(numSpotLights) + "].blur",
+					currentLight->GetBlur());
 				++numSpotLights; break;
 			default:
-				Debug::Send("Incorrect light type");
-				return;
+				Debug::Send("Incorrect light type"); return;
 			}
 		}
 	}
 
-	void Renderer::ModifyAllSpotlightAngles(float pValue) noexcept
+	void Renderer::ModifyAllSpotlightAngles(float const& pValue) noexcept
 	{
 		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
 		{
@@ -161,7 +166,7 @@ namespace Engine
 		}
 	}
 
-	void Renderer::ModifyAllSpotlightBlurs(float pValue) noexcept
+	void Renderer::ModifyAllSpotlightBlurs(float const& pValue) noexcept
 	{
 		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
 		{
@@ -179,7 +184,11 @@ namespace Engine
 		}
 	}
 
-	Model* Renderer::AddNewModel(uint8_t &id, string pModelPath, string pShaderPath, bool pLoadTextures) noexcept
+	Model* Renderer::AddNewModel(
+		uint8_t& id,
+		string const& pModelPath,
+		string const& pShaderPath,
+		bool const& pLoadTextures) noexcept
 	{
 		// Caps at 255
 		size_t currentAmount = s_models.get()->size();
@@ -192,7 +201,10 @@ namespace Engine
 		return GetModelAt(id);
 	}
 
-	Light* Renderer::AddNewLight(uint8_t &id, const LightType& pType, const Colour& pColour) noexcept
+	Light* Renderer::AddNewLight(
+		uint8_t &id,
+		LightType const& pType,
+		Colour const& pColour) noexcept
 	{
 		// Caps at 255
 		size_t currentAmount = s_lights.get()->size();
@@ -204,7 +216,17 @@ namespace Engine
 		return GetLightAt(id);
 	}
 
-#	pragma region Getters
+	void Renderer::SetClearColour(Colour const& pColour) noexcept
+	{
+		vec3 col = pColour.RGBvec3();
+		glClearColor(col.r, col.g, col.b, 1.0f);
+	}
+
+	void Renderer::SetRenderMode(Mode const& pMode) noexcept
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + (int)pMode);
+	}
+
 	uint8_t Renderer::ModelCount() noexcept
 	{
 		return (uint8_t)s_models.get()->size();
@@ -215,7 +237,7 @@ namespace Engine
 		return (uint8_t)s_lights.get()->size();
 	}
 
-	Model* Renderer::GetModelAt(uint8_t pPos) noexcept
+	Model* Renderer::GetModelAt(uint8_t const& pPos) noexcept
 	{
 		if (!s_models.get())
 			return nullptr;
@@ -229,7 +251,7 @@ namespace Engine
 		return (*s_models.get())[pPos].get();
 	}
 
-	Light* Renderer::GetLightAt(uint8_t pPos) noexcept
+	Light* Renderer::GetLightAt(uint8_t const& pPos) noexcept
 	{
 		if (!s_lights.get())
 			return nullptr;
@@ -242,5 +264,4 @@ namespace Engine
 
 		return (*s_lights.get())[pPos].get();
 	}
-#	pragma endregion
 }

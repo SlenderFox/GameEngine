@@ -23,8 +23,13 @@ namespace Engine
 
 	// Member
 
-	Model::Model(const string& pModelPath, const string& pShaderPath, Camera* pCamera, bool pLoadTextures)
-	 : m_cameraRef(pCamera), m_loadTextures(pLoadTextures)
+	Model::Model(
+		string const& pModelPath,
+		string const& pShaderPath,
+		Camera* const& pCamera,
+		bool const& pLoadTextures)
+		: m_cameraRef(pCamera),
+		m_loadTextures(pLoadTextures)
 	{
 		Init(pModelPath, pShaderPath);
 	}
@@ -36,7 +41,9 @@ namespace Engine
 		m_meshes.release();
 	}
 
-	void Model::Init(const string& pModelPath, const string& pShaderPath)
+	void Model::Init(
+		string const& pModelPath,
+		string const& pShaderPath)
 	{
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 		m_textures = vector<Texture*>();
@@ -44,8 +51,8 @@ namespace Engine
 		LoadModel(pModelPath);
 		m_shader = new Shader(pShaderPath);
 		if (m_loadTextures) LoadTexturesToShader();
-		
-		Debug::EndSmallNote("Done!");
+
+		Debug::NoteSmallEnd("Done!");
 	}
 
 	void Model::Draw(const Camera* const& pCamera) const noexcept
@@ -68,10 +75,10 @@ namespace Engine
 		}
 	}
 
-	void Model::LoadModel(const string& pPath)
+	void Model::LoadModel(string const& pPath)
 	{
-		Debug::StartBigProcess("Loading model \"" + pPath + "\"", false, false);
-		if (!m_loadTextures) Debug::SmallNote("Ignoring textures", true, false);
+		Debug::ProcessBigStart("Loading model \"" + pPath + "\"", false, false);
+		if (!m_loadTextures) Debug::NoteSmall("Ignoring textures", true, false);
 		Debug::NewLine();
 
 		Assimp::Importer importer;
@@ -85,8 +92,10 @@ namespace Engine
 		m_directory = pPath.substr(0, pPath.find_last_of('/'));
 		ProcessNode(scene->mRootNode, scene);
 	}
-	
-	void Model::ProcessNode(aiNode* pNode, const aiScene* pScene) noexcept
+
+	void Model::ProcessNode(
+		aiNode* const& pNode,
+		const aiScene* const& pScene) noexcept
 	{
 		// Process all the node's meshes (if any)
 		for (uint32_t i = 0; i < pNode->mNumMeshes; ++i)
@@ -101,7 +110,9 @@ namespace Engine
 		}
 	}
 
-	unique_ptr<Mesh> Model::ProcessMesh(aiMesh* pMesh, const aiScene* pScene) noexcept
+	unique_ptr<Mesh> Model::ProcessMesh(
+		aiMesh* const& pMesh,
+		const aiScene* const& pScene) noexcept
 	{
 		vector<Vertex> vertices;
 		vector<uint32_t> indices;
@@ -133,7 +144,7 @@ namespace Engine
 			}
 			else
 				vertex.texCoords = vec2(0.0f, 0.0f);
-				
+
 			vertices.push_back(vertex);
 		}
 		// Process indices
@@ -160,7 +171,10 @@ namespace Engine
 		return make_unique<Mesh>(vertices, indices);
 	}
 
-	vector<Texture*> Model::LoadMaterialTextures(aiMaterial* pMat, aiTextureType pType, TexType pTexType) noexcept
+	vector<Texture*> Model::LoadMaterialTextures(
+		aiMaterial* const& pMat,
+		aiTextureType const& pType,
+		TexType const& pTexType) noexcept
 	{
 		// Textures from this specific node being output
 		vector<Texture*> texturesOut;
@@ -188,11 +202,11 @@ namespace Engine
 					// If the texture has not been loaded into this model, reuse it
 					if (reuseTexture)
 					{
-						Debug::SmallNote("Reusing texture " + std::to_string(s_loadedTextures[j]->GetId())
+						Debug::NoteSmall("Reusing texture " + std::to_string(s_loadedTextures[j]->GetId())
 						 + ": " + s_loadedTextures[j]->GetFile().data());
 						texturesOut.push_back(s_loadedTextures[j]);
 					}
-					
+
 					loadTexture = false;
 					break;
 				}
@@ -231,11 +245,11 @@ namespace Engine
 
 			string location = "u_material." + name + number;
 			m_shader->SetInt(location.c_str(), (int32_t)m_textures[i]->GetId());
-			Debug::SmallNote("Setting " + location + " to " + std::to_string(m_textures[i]->GetId()));
+			Debug::NoteSmall("Setting " + location + " to " + std::to_string(m_textures[i]->GetId()));
 		}
 	}
 
-	Mesh* Model::GetMeshAt(uint16_t pPos) const  noexcept
+	Mesh* Model::GetMeshAt(uint16_t const& pPos) const  noexcept
 	{
 		if (!m_meshes.get())
 			return nullptr;

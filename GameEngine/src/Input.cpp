@@ -20,7 +20,7 @@ namespace Engine
 		glfwSetInputMode(s_windowRef, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(s_windowRef, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
-			
+
 		glfwSetKeyCallback(s_windowRef, Key_callback);
 		glfwSetCursorPosCallback(s_windowRef, Mouse_callback);
 		glfwSetScrollCallback(s_windowRef, Scroll_callback);
@@ -33,24 +33,35 @@ namespace Engine
 		// TODO
 	}
 
-	bool Input::GetKey(const Key& pKey, const State& pState) noexcept
+	bool Input::GetKey(Key const& pKey, State const& pState) noexcept
 	{
 		return (int)pState == glfwGetKey(s_windowRef, (int)pKey);
 	}
-	
-	void Input::Key_callback(GLFWwindow* pWindow, int pKey, int pScancode, int pAction, int pMods) noexcept
+
+	void Input::Key_callback(
+		GLFWwindow* pWindow,
+		int pKey,
+		int pScancode,
+		int pAction,
+		int pMods) noexcept
 	{
 		if (pAction != GLFW_PRESS) return;
 		Engine::Debug::Send(std::to_string(pScancode) + " ", false, false);
 	}
 
-	void Input::Mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY) noexcept
+	void Input::Mouse_callback(
+		GLFWwindow* pWindow,
+		double pPosX,
+		double pPosY) noexcept
 	{
 		if (!s_mouseCallbackFun) return;
 		s_mouseCallbackFun(pPosX, pPosY);
 	}
 
-	void Input::Scroll_callback(GLFWwindow* pWindow, double pOffsetX, double pOffsetY) noexcept
+	void Input::Scroll_callback(
+		GLFWwindow* pWindow,
+		double pOffsetX,
+		double pOffsetY) noexcept
 	{
 		if (!s_scrollCallbackFun) return;
 		s_scrollCallbackFun(pOffsetX, pOffsetY);

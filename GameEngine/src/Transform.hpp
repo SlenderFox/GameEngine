@@ -11,29 +11,31 @@ namespace Engine
 	public:
 #		pragma region Constructors
 		Transform();
-		Transform(const glm::mat4& pValue);
+		Transform(glm::mat4 const& pValue);
 		virtual ~Transform() {}
 
 		// Copy, takes lvalue
-		Transform(const Transform& pOther);
-		Transform& operator=(const Transform& pOther);
+		Transform(Transform const& pOther);
+		Transform& operator=(Transform const& pOther);
 		// Move, take rvalue
 		Transform(Transform&& pOther) noexcept;
 		Transform& operator=(Transform&& pOther) noexcept;
 #		pragma endregion
 
 #		pragma region Setters
-		virtual void SetTransform(const glm::mat4& pValue) noexcept;
-		virtual void SetPosition(const glm::vec3& pValue) noexcept;
-		virtual void Translate(const glm::vec3& pValue) noexcept;
-		virtual void SetAxes(const glm::vec3& pRight, const glm::vec3& pUp, const glm::vec3& pForward) noexcept;
-		virtual void SetRight(const glm::vec3& pRight) noexcept;
-		virtual void SetUp(const glm::vec3& pUp) noexcept;
-		virtual void SetForward(const glm::vec3& pForward) noexcept;
+		virtual void SetTransform(	glm::mat4 const& pValue) noexcept;
+		virtual void SetPosition(	glm::vec3 const& pValue) noexcept;
+		virtual void Translate(		glm::vec3 const& pValue) noexcept;
+		virtual void SetAxes(		glm::vec3 const& pRight,
+											glm::vec3 const& pUp,
+											glm::vec3 const& pForward) noexcept;
+		virtual void SetRight(		glm::vec3 const& pRight) noexcept;
+		virtual void SetUp(			glm::vec3 const& pUp) noexcept;
+		virtual void SetForward(	glm::vec3 const& pForward) noexcept;
 #		pragma endregion
 
 #		pragma region Getters
-		constexpr const glm::mat4& GetTransform() const noexcept { return m_transform; }
+		constexpr glm::mat4 const& GetTransform() const noexcept { return m_transform; }
 		constexpr virtual glm::vec4 GetPosition() const noexcept { return m_transform[3]; }
 		constexpr virtual glm::vec4 GetRight() const noexcept;
 		constexpr virtual glm::vec4 GetUp() const noexcept;

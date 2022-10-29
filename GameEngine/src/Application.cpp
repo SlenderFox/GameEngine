@@ -234,7 +234,7 @@ namespace Engine
 		int wid = s_winWidth, hei = s_winHeight;
 
 		s_windowRef = glfwCreateWindow(s_winWidth, s_winHeight, s_title.c_str(), mon, nullptr);
-		
+
 		if (!s_windowRef)
 		{
 			Debug::Send("Failed to create GLFW window");
@@ -251,14 +251,14 @@ namespace Engine
 			int monPosX, monPosY, monWidth, monHeight;
 			glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
 #			ifdef _DEBUG
-			 // Moves the window to the left of the monitor
-			 glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_winHeight) * 0.5f));
-			 // Moves the console to the right and resizes
-			 MoveWindow(GetConsoleWindow(), s_winWidth - 3, 0, 900, 1040, TRUE);
+				// Moves the window to the left of the monitor
+				glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_winHeight) * 0.5f));
+				// Moves the console to the right and resizes
+				MoveWindow(GetConsoleWindow(), s_winWidth - 3, 0, 900, 1040, TRUE);
 #			else
-			 // Moves the window to the center of the workarea
-			 glfwSetWindowPos(s_windowRef, (int)((monWidth - s_winWidth) * 0.5f),
-			  (int)((monHeight - s_winHeight) * 0.5f));
+				// Moves the window to the center of the workarea
+				glfwSetWindowPos(s_windowRef, (int)((monWidth - s_winWidth) * 0.5f),
+					(int)((monHeight - s_winHeight) * 0.5f));
 #			endif
 		}
 
@@ -293,7 +293,7 @@ namespace Engine
 		return true;
 	}
 
-	void Application::SetDimensions(const uint16_t& pWidth, const uint16_t& pHeight) noexcept
+	void Application::SetDimensions(uint16_t const& pWidth, uint16_t const& pHeight) noexcept
 	{
 		s_winWidth = pWidth;
 		s_winHeight = pHeight;
@@ -304,13 +304,13 @@ namespace Engine
 		Debug::Send(string("Dimensions set to " + std::to_string(s_winWidth) + ", " + std::to_string(s_winHeight)));
 	}
 
-	void Application::SetTitle(const string& pTitle) noexcept
+	void Application::SetTitle(string const& pTitle) noexcept
 	{
 		s_title = pTitle;
 		Debug::Send("Title set to \"" + s_title + "\"");
 	}
 
-	void Application::SetFullscreen(const bool& pFullscreen) noexcept
+	void Application::SetFullscreen(bool const& pFullscreen) noexcept
 	{
 		s_fullscreen = pFullscreen;
 		Debug::Send("Fullscreen set to " + string(pFullscreen ? "true" : "false"));
@@ -340,13 +340,13 @@ namespace Engine
 			s_fps = (uint16_t)((double)s_perSecondFrameCount / secondsPerUpdate);
 			s_perSecondFrameCount = 0U;
 			glfwSetWindowTitle(s_windowRef,
-			 (s_title + " | FPS: " + std::to_string(s_fps)).c_str());
+				(s_title + " | FPS: " + std::to_string(s_fps)).c_str());
 		}
 	}
 
 	void Application::ProcessInput() noexcept
 	{
-		//// TODO: Proper fullscreen toggle
+		// TODO: Proper fullscreen toggle
 		//if (Input::GetKey(Input::Key::Key_F11, Input::State::Press))
 		//{
 		//	s_fullscreen = true;
@@ -356,14 +356,14 @@ namespace Engine
 		//	const GLFWvidmode* vid = glfwGetVideoMode(primMon);
 		//	glfwSetWindowMonitor(s_windowRef, primMon, xp, yp, vid->width, vid->height, vid->refreshRate);
 		//}
-
+		//
 		//if (Input::GetKey(Input::Key::Key_K, Input::State::Press))
 		//{
 		//	s_fullscreen = false;
 		//	int monPosX, monPosY, monWidth, monHeight;
 		//	glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
 		//	glfwSetWindowMonitor(s_windowRef, nullptr, 2, (int)((monHeight - s_winHeight) * 0.5f),
-		//	 s_winWidth, s_winHeight, GLFW_DONT_CARE);
+		//		s_winWidth, s_winHeight, GLFW_DONT_CARE);
 		//	glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_winHeight) * 0.5f));
 		//}
 

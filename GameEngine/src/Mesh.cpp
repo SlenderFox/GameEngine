@@ -15,7 +15,7 @@ namespace Engine
 	class Application { public: static const bool GladLoaded() noexcept; };
 
 	//Static
-	float* Mesh::s_cubeVerticesArr = new float[288] {
+	const float* Mesh::s_cubeVerticesArr = new float[288] {
 		// Positions		   // Normals			  // Texture coords
 	    -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 0.0f,
 	     0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    1.0f, 0.0f,
@@ -23,35 +23,35 @@ namespace Engine
 	     0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    1.0f, 1.0f,
 	    -0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 1.0f,
 	    -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 0.0f,
-	
+
 	    -0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    0.0f, 0.0f,
 	     0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    1.0f, 0.0f,
 	     0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    1.0f, 1.0f,
 	     0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    1.0f, 1.0f,
 	    -0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    0.0f, 1.0f,
 	    -0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    0.0f, 0.0f,
-	
+
 	    -0.5f,  0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,    1.0f, 0.0f,
 	    -0.5f,  0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,    1.0f, 1.0f,
 	    -0.5f, -0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,    0.0f, 1.0f,
 	    -0.5f, -0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,    0.0f, 1.0f,
 	    -0.5f, -0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,    0.0f, 0.0f,
 	    -0.5f,  0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,    1.0f, 0.0f,
-	
+
 	     0.5f,  0.5f,  0.5f,    1.0f,  0.0f,  0.0f,    1.0f, 0.0f,
 	     0.5f,  0.5f, -0.5f,    1.0f,  0.0f,  0.0f,    1.0f, 1.0f,
 	     0.5f, -0.5f, -0.5f,    1.0f,  0.0f,  0.0f,    0.0f, 1.0f,
 	     0.5f, -0.5f, -0.5f,    1.0f,  0.0f,  0.0f,    0.0f, 1.0f,
 	     0.5f, -0.5f,  0.5f,    1.0f,  0.0f,  0.0f,    0.0f, 0.0f,
 	     0.5f,  0.5f,  0.5f,    1.0f,  0.0f,  0.0f,    1.0f, 0.0f,
-	
+
 	    -0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,    0.0f, 1.0f,
 	     0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,    1.0f, 1.0f,
 	     0.5f, -0.5f,  0.5f,    0.0f, -1.0f,  0.0f,    1.0f, 0.0f,
 	     0.5f, -0.5f,  0.5f,    0.0f, -1.0f,  0.0f,    1.0f, 0.0f,
 	    -0.5f, -0.5f,  0.5f,    0.0f, -1.0f,  0.0f,    0.0f, 0.0f,
 	    -0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,    0.0f, 1.0f,
-	
+
 	    -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,    0.0f, 1.0f,
 	     0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,    1.0f, 1.0f,
 	     0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,    1.0f, 0.0f,
@@ -60,15 +60,15 @@ namespace Engine
 	    -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,    0.0f, 1.0f
 	};
 
-	uint32_t* Mesh::s_indicesArr = new uint32_t[36] {
-		0U, 1U, 2U, 3U, 4U, 5U,			// Face 1
-		6U, 7U, 8U,	9U, 10U, 11U,		// Face 2
-		12U, 13U, 14U, 15U, 16U, 17U,	// Face 3
-		18U, 19U, 20U, 21U, 22U, 23U,	// Face 4
-		24U, 25U, 26U, 27U, 28U, 29U,	// Face 5
-		30U, 31U, 32U, 33U, 34U, 35U	// Face 6
+	const uint32_t* Mesh::s_indicesArr = new uint32_t[36] {
+		0U,	1U,	2U,	3U,	4U,	5U,	// Face 1
+		6U, 	7U,	8U,	9U,	10U,	11U,	// Face 2
+		12U,	13U,	14U,	15U,	16U,	17U,	// Face 3
+		18U,	19U,	20U,	21U,	22U,	23U,	// Face 4
+		24U,	25U,	26U,	27U,	28U,	29U,	// Face 5
+		30U,	31U,	32U,	33U,	34U,	35U	// Face 6
 	};
-	
+
 	vector<Vertex> Mesh::GenerateVertices() noexcept
 	{
 		vector<Vertex> verts = vector<Vertex>();
@@ -112,11 +112,13 @@ namespace Engine
 	{
 		m_vertices = make_unique<vector<Vertex>>(GenerateVertices());
 		m_indices = make_unique<vector<uint32_t>>(GenerateIndices());
-		
+
 		SetupMesh();
 	}
 
-	Mesh::Mesh(vector<Vertex> pVertices, vector<uint32_t> pIndices)
+	Mesh::Mesh(
+		const std::vector<Vertex>& pVertices,
+		const std::vector<uint32_t>& pIndices)
 	{
 		m_vertices = make_unique<vector<Vertex>>(pVertices);
 		m_indices = make_unique<vector<uint32_t>>(pIndices);
@@ -140,7 +142,7 @@ namespace Engine
 		delete m_idVBO;
 		delete m_idEBO;
 	}
-	
+
 	void Mesh::Draw() const noexcept
 	{
 		glBindVertexArray(*m_idVAO);
@@ -160,11 +162,12 @@ namespace Engine
 		glBindVertexArray(*m_idVAO);
 
 		// GL_ARRAY_BUFFER effectively works like a pointer, using the id provided to point to the buffer
-		glBindBuffer(GL_ARRAY_BUFFER,* m_idVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, *m_idVBO);
 		// Loads the vertices to the VBO
 		glBufferData(
 			GL_ARRAY_BUFFER,
-			(GLsizei)m_vertices.get()->size() * sizeof(Vertex), &(*m_vertices.get())[0],
+			(GLsizei)m_vertices.get()->size() * sizeof(Vertex),
+			&(*m_vertices.get())[0],	// Returns the zeroth element in the vector
 			GL_STATIC_DRAW
 		);
 
@@ -174,11 +177,11 @@ namespace Engine
 		*/
 
 		// This buffer stores the indices that reference the elements of the VBO
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,* m_idEBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *m_idEBO);
 		glBufferData(
 			GL_ELEMENT_ARRAY_BUFFER,
 			(GLsizei)m_indices.get()->size() * sizeof(uint32_t),
-			&(*m_indices.get())[0],
+			&(*m_indices.get())[0],	// Returns the zeroth element in the vector
 			GL_STATIC_DRAW
 		);
 

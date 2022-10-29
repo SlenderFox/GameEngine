@@ -24,13 +24,13 @@ namespace Engine
 			glDeleteTextures(s_textureCount, s_textureIds);
 	}
 
-	int32_t Texture::LoadTextureFromFile(const std::string& pPath) noexcept
+	int32_t Texture::LoadTextureFromFile(string const& pPath) noexcept
 	{
-		Debug::BigProcess("Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"...", false, false);
+		Debug::ProcessBig("Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"...", false, false);
 
 		if (s_textureCount > 31)
 		{
-			Debug::BigNote("Failed to load texture: Exceeded max texture count (max = 32)", true);
+			Debug::NoteBig("Failed to load texture: Exceeded max texture count (max = 32)", true);
 			return -1;
 		}
 
@@ -61,7 +61,7 @@ namespace Engine
 			case 3: format = GL_RGB; break;
 			case 4: format = GL_RGBA; break;
 			default:
-				Debug::BigNote("Failed to load texture: Too many components", true);
+				Debug::NoteBig("Failed to load texture: Too many components", true);
 				return -1;
 			}
 
@@ -88,14 +88,18 @@ namespace Engine
 		}
 		else
 		{
-			Debug::BigNote("Failed to load texture: No file found", true);
+			Debug::NoteBig("Failed to load texture: No file found", true);
 			return -1;
 		}
 	}
 
 	// Member
 
-	Texture::Texture(const string& pPath, TexType pType): m_file(pPath), m_type(pType)
+	Texture::Texture(
+		string const& pPath,
+		TexType const& pType)
+		: m_file(pPath),
+		m_type(pType)
 	{
 		m_id = LoadTextureFromFile(pPath);
 	}

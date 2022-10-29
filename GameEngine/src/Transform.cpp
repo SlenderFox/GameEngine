@@ -13,14 +13,14 @@ namespace Engine
 #	pragma region Constructors
 	Transform::Transform(): m_transform(mat4(1)) {}
 
-	Transform::Transform(const mat4& pValue): m_transform(pValue) {}
+	Transform::Transform(mat4 const& pValue): m_transform(pValue) {}
 
-	Transform::Transform(const Transform& pOther)
+	Transform::Transform(Transform const& pOther)
 	{
 		m_transform = pOther.GetTransform();
 	}
 
-	Transform& Transform::operator=(const Transform& pOther)
+	Transform& Transform::operator=(Transform const& pOther)
 	{
 		Transform* newObj = new Transform(pOther.GetTransform());
 		return *newObj;
@@ -39,50 +39,53 @@ namespace Engine
 #	pragma endregion
 
 #	pragma region Setters
-	void Transform::SetTransform(const mat4& pValue) noexcept
+	void Transform::SetTransform(mat4 const& pValue) noexcept
 	{
 		m_transform = pValue;
 	}
 
-	void Transform::SetPosition(const vec3& pValue) noexcept
+	void Transform::SetPosition(vec3 const& pValue) noexcept
 	{
 		m_transform[3] = vec4(pValue, m_transform[3][3]);
 	}
 
-	void Transform::Translate(const vec3& pValue) noexcept
+	void Transform::Translate(vec3 const& pValue) noexcept
 	{
 		m_transform[3] = vec4((vec3)m_transform[3] + pValue, m_transform[3][3]);
 	}
 
-	void Transform::SetAxes(const vec3& pRight, const vec3& pUp, const vec3& pForward) noexcept
+	void Transform::SetAxes(
+		vec3 const& pRight,
+		vec3 const& pUp,
+		vec3 const& pForward) noexcept
 	{
 		m_transform[0] = vec4(normalize(pRight), 0);
 		m_transform[1] = vec4(normalize(pUp), 0);
 		m_transform[2] = vec4(normalize(pForward), 0);
 	}
 
-	void Transform::SetRight(const vec3& pRight) noexcept
+	void Transform::SetRight(vec3 const& pRight) noexcept
 	{
 		vec3 forward = cross(pRight, vec3(0, 1, 0));
 		vec3 up = cross(pRight, forward);
 		SetAxes(pRight, up, forward);
 	}
 
-	void Transform::SetUp(const vec3& pUp) noexcept
+	void Transform::SetUp(vec3 const& pUp) noexcept
 	{
 		vec3 right = cross(pUp, vec3(0, 0, 1));
 		vec3 forward = cross(pUp, right);
 		SetAxes(right, pUp, forward);
 	}
 
-	void Transform::SetForward(const vec3& pForward) noexcept
+	void Transform::SetForward(vec3 const& pForward) noexcept
 	{
 		vec3 right = cross(vec3(0, 1, 0), pForward);
 		vec3 up = cross(pForward, right);
 		SetAxes(right, up, pForward);
 	}
 #	pragma endregion
-	
+
 #	pragma region Getters
 	constexpr vec4 Transform::GetRight() const noexcept
 	{

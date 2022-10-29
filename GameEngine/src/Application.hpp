@@ -38,14 +38,14 @@ namespace Engine
 		// Timers used for calling fixed update and displaying fps
 		static double s_fixedTimer, s_frameTimer;
 		static double s_mouseLastX, s_mouseLastY, s_camYaw, s_camPitch;
-		
+
 		static std::string s_title;
 		static ExitCode s_exitCode;
 
 #		pragma region Constructors
 		// Delete copy/move so extra instances can't be created/moved.
-		Application(const Application&) = delete;
-		Application& operator=(const Application&) = delete;
+		Application(Application const&) = delete;
+		Application& operator=(Application const&) = delete;
 		Application(Application&&) = delete;
 		Application& operator=(Application&&) = delete;
 #		pragma endregion
@@ -70,9 +70,9 @@ namespace Engine
 		static void Quit() noexcept;
 
 		static ExitCode Run();
-		static void SetDimensions(const uint16_t& pWidth, const uint16_t& pHeight) noexcept;
-		static void SetTitle(const std::string& pTitle) noexcept;
-		static void SetFullscreen(const bool& pFullscreen) noexcept;
+		static void SetDimensions(uint16_t const& pWidth, uint16_t const& pHeight) noexcept;
+		static void SetTitle(std::string const& pTitle) noexcept;
+		static void SetFullscreen(bool const& pFullscreen) noexcept;
 
 		// TODO: Remove these
 		static void MouseCallback(double& pPosX, double& pPosY) noexcept;

@@ -13,36 +13,56 @@ namespace Engine
 
 	public:
 #		pragma region Constructors
-		Camera(float pAspectRatio);
-		Camera(float pAspectRatio, float pFovH);
-		Camera(float pAspectRatio,					 const glm::mat4& pTransform);
-		Camera(float pAspectRatio, float pFovH, const glm::mat4& pTransform);
-		Camera(float pAspectRatio,					 const glm::vec3& pFrom, const glm::vec3& pTo,
-		 const glm::vec3& pUp = { 0, 1, 0 });
-		Camera(float pAspectRatio, float pFovH, const glm::vec3& pFrom, const glm::vec3& pTo,
-		 const glm::vec3& pUp = { 0, 1, 0 });
+		Camera(float const& pAspectRatio);
+		Camera(
+			float const& pAspectRatio,
+			float const& pFovH);
+		Camera(
+			float const& pAspectRatio,
+			glm::mat4 const& pTransform);
+		Camera(
+			float const& pAspectRatio,
+			float const& pFovH,
+			glm::mat4 const& pTransform);
+		Camera(
+			float const& pAspectRatio,
+			glm::vec3 const& pFrom,
+			glm::vec3 const& pTo,
+			glm::vec3 const& pUp = { 0, 1, 0 });
+		Camera(
+			float const& pAspectRatio,
+			float const& pFovH,
+			glm::vec3 const& pFrom,
+			glm::vec3 const& pTo,
+			glm::vec3 const& pUp = { 0, 1, 0 });
 #		pragma endregion
 
-		void LookAt(const glm::vec3& pFrom, const glm::vec3& pTo, const glm::vec3& pUp = { 0, 1, 0 });
+		void LookAt(
+			glm::vec3 const& pFrom,
+			glm::vec3 const& pTo,
+			glm::vec3 const& pUp = { 0, 1, 0 });
 
-		void ModifyFovH(float pValue) noexcept;
-		void ModifyFovV(float pValue) noexcept;
+		void ModifyFovH(float const& pValue) noexcept;
+		void ModifyFovV(float const& pValue) noexcept;
 		void UpdateFovH() noexcept;
 		void UpdateFovV() noexcept;
 
 #		pragma region Setters
-		void SetTransform(const glm::mat4& pValue) noexcept override;
-		void SetView(const glm::mat4& pValue) noexcept;
-		void SetProjection(float pFovV) noexcept;
-		constexpr void SetProjection(const glm::mat4& pValue) noexcept { m_projection = pValue; }
-		constexpr void SetAspectRatio(float pAspectRatio) noexcept { m_aspectRatio = pAspectRatio; }
+		void SetTransform(glm::mat4 const& pValue) noexcept override;
+		void SetView(glm::mat4 const& pValue) noexcept;
+		void SetProjection(float const& pFovV) noexcept;
+		constexpr void SetProjection(glm::mat4 const& pValue) noexcept { m_projection = pValue; }
+		constexpr void SetAspectRatio(float const& pAspectRatio) noexcept { m_aspectRatio = pAspectRatio; }
 
-		void SetPosition(const glm::vec3& pValue) noexcept override;
-		void Translate(const glm::vec3& pValue) noexcept override;
-		void SetAxes(const glm::vec3& pRight, const glm::vec3& pUp, const glm::vec3& pForward) noexcept override;
+		void SetPosition(glm::vec3 const& pValue) noexcept override;
+		void Translate(glm::vec3 const& pValue) noexcept override;
+		void SetAxes(
+			glm::vec3 const& pRight,
+			glm::vec3 const& pUp,
+			glm::vec3 const& pForward) noexcept override;
 
-		void SetFovH(float pFovH) noexcept;
-		void SetFovV(float pFovV) noexcept;
+		void SetFovH(float const& pFovH) noexcept;
+		void SetFovV(float const& pFovV) noexcept;
 #		pragma endregion
 
 #		pragma region Getters

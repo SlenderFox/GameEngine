@@ -21,21 +21,20 @@ namespace Engine
 		float m_blur = 0.23f;			// Only for spotlights
 
 	public:
-#		pragma region Constructors
-		Light(const LightType& pType, const Colour& pColour = Colour::White());
-		Light(const LightType& pType, const glm::mat4& pTransform = glm::mat4(1),
-		 const Colour& pColour = Colour::White());
+		Light(
+			LightType const& pType = LightType::Directional,
+			Colour const& pColour = Colour::White(),
+			glm::mat4 const& pTransform = glm::mat4(1));
 		~Light() {}
-#		pragma endregion
-		
+
 #		pragma region Setters
-		constexpr void SetType			(const LightType& pType)		noexcept { m_type = pType; }
-		constexpr void SetDirection	(const glm::vec3& pDirection)	noexcept { Transform::SetForward(pDirection); }
-		constexpr void SetColour		(const Colour& pColour)			noexcept { m_lightColour = pColour; }
-		constexpr void SetLinear		(float pValue)						noexcept { m_linear = pValue; }
-		constexpr void SetQuadratic	(float pValue)						noexcept { m_quadratic = pValue; }
-		constexpr void SetAngle			(float pValue)						noexcept { m_angle = pValue; }	// In degrees
-		constexpr void SetBlur			(float pValue)						noexcept { m_blur = pValue; }		// In degrees
+		constexpr void SetType			(LightType const& pType)		noexcept { m_type = pType; }
+		constexpr void SetDirection	(glm::vec3 const& pDirection)	noexcept { Transform::SetForward(pDirection); }
+		constexpr void SetColour		(Colour const& pColour)			noexcept { m_lightColour = pColour; }
+		constexpr void SetLinear		(float const& pValue)			noexcept { m_linear = pValue; }
+		constexpr void SetQuadratic	(float const& pValue)			noexcept { m_quadratic = pValue; }
+		constexpr void SetAngle			(float const& pValue)			noexcept { m_angle = pValue; }	// In degrees
+		constexpr void SetBlur			(float const& pValue)			noexcept { m_blur = pValue; }		// In degrees
 #		pragma endregion
 
 #		pragma region Getters

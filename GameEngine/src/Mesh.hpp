@@ -14,8 +14,8 @@ namespace Engine
 	class Mesh
 	{
 	private:
-		static float* s_cubeVerticesArr;
-		static uint32_t* s_indicesArr;
+		static const float* s_cubeVerticesArr;
+		static const uint32_t* s_indicesArr;
 		// ↑↓ Both of these are depreciated
 	public:
 		static std::vector<Vertex> GenerateVertices() noexcept;
@@ -33,7 +33,9 @@ namespace Engine
 
 	public:
 		Mesh();
-		Mesh(std::vector<Vertex> pVertices, std::vector<uint32_t> pIndices);
+		Mesh(
+			const std::vector<Vertex>& pVertices,
+			const std::vector<uint32_t>& pIndices);
 		~Mesh();
 
 		void Draw() const noexcept;

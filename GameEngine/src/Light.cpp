@@ -10,14 +10,12 @@ using glm::radians;
 
 namespace Engine
 {
-	Light::Light(const LightType& pType, const Colour& pColour)
-	 : m_type(pType), m_lightColour(pColour)
-	{
-		m_angle = cos(radians(20.0f));
-	}
-
-	Light::Light(const LightType& pType, const mat4& pTransform, const Colour& pColour)
-	 : m_type(pType), m_lightColour(pColour)
+	Light::Light(
+		LightType const& pType,
+		Colour const& pColour,
+		mat4 const& pTransform)
+		: m_type(pType),
+		m_lightColour(pColour)
 	{
 		Transform::SetTransform(pTransform);
 		m_angle = cos(radians(20.0f));
@@ -27,7 +25,7 @@ namespace Engine
 	{
 		return cos(radians(m_angle));
 	}
-	
+
 	float Light::GetBlur() const noexcept
 	{
 		return sin(radians(90 * m_blur));

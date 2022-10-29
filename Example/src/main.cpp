@@ -15,11 +15,11 @@ int main()
 {
 	Project* app = new Project();
 #	ifdef _DEBUG
-	 app->SetDimensions(1030, 650);
-	 app->SetTitle("Application (DEBUG)");
+		app->SetDimensions(1030, 650);
+		app->SetTitle("Application (DEBUG)");
 #	else
-	 app->SetDimensions(1600, 900);
-	 app->SetTitle("Application (RELEASE)");
+		app->SetDimensions(1600, 900);
+		app->SetTitle("Application (RELEASE)");
 #	endif
 	app->SetFullscreen(false);
 	int code = (int)app->Run();

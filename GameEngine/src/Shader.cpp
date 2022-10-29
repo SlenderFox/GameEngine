@@ -16,7 +16,7 @@ namespace Engine
 	// Forward declaration
 	class Application { public: static const bool GladLoaded() noexcept; };
 
-	Shader::Shader(const string& pShaderPath)
+	Shader::Shader(string const& pShaderPath)
 	{
 		Load(pShaderPath);
 	}
@@ -32,7 +32,7 @@ namespace Engine
 		glUseProgram(m_idProgram);
 	}
 
-	void Shader::Load(const string& pShaderPath)
+	void Shader::Load(string const& pShaderPath)
 	{
 		m_shaderPath = pShaderPath;
 		LoadShader(ShaderType::VERTEX);
@@ -44,11 +44,11 @@ namespace Engine
 	{
 		m_usingFallback = false;
 		string path = m_shaderPath + GetType(pType, string(".vert"), string(".frag"));
-		Debug::SmallProcess("Compiling shader \"" + path + "\"...", false, false);
+		Debug::ProcessSmall("Compiling shader \"" + path + "\"...", false, false);
 
 		if (pType == ShaderType::PROGRAM)
 		{
-			Debug::BigNote("ERROR::SHADER::ATTEMPTING_TO_LOAD_PROGRAM", true);
+			Debug::NoteBig("ERROR::SHADER::ATTEMPTING_TO_LOAD_PROGRAM", true);
 			return;
 		}
 
@@ -171,8 +171,8 @@ return;}";
 		}
 		catch (ifstream::failure e)
 		{
-			Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
-			 string("FRAGMENT")) + "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE", true);
+			Debug::NoteBig("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
+				string("FRAGMENT")) + "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE", true);
 
 			m_usingFallback = true;
 			shaderCode = GetType<const char* const&>(pType, vertexFallback, fragmentFallback);
@@ -187,12 +187,12 @@ return;}";
 		// Separated to allow bool to potentially change
 		if (m_usingFallback)
 		{
-			Debug::SmallProcess("Compiling fallback code...", false, false);
+			Debug::ProcessSmall("Compiling fallback code...", false, false);
 			if (!CompileShader(GetType(pType, &m_idVertex, &m_idFragment),
-			 pType, GetType<const char*&>(pType, vertexFallback, fragmentFallback)))
+				pType, GetType<const char*&>(pType, vertexFallback, fragmentFallback)))
 			{
-				Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
-				 string("FRAGMENT")) + "::FALLBACK_CODE_FAILURE", true);
+				Debug::NoteBig("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
+					string("FRAGMENT")) + "::FALLBACK_CODE_FAILURE", true);
 				exit(2);
 			}
 		}
@@ -206,7 +206,7 @@ return;}";
 		switch (pType)
 		{
 		case ShaderType::PROGRAM:
-			Debug::BigNote("ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM", true);
+			Debug::NoteBig("ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM", true);
 			exit(2);
 		case ShaderType::VERTEX:
 			*pId = glCreateShader(GL_VERTEX_SHADER);
@@ -215,7 +215,7 @@ return;}";
 			*pId = glCreateShader(GL_FRAGMENT_SHADER);
 			break;
 		default:
-			Debug::BigNote("ERROR::SHADER::UNKNOWN_SHADER_TYPE", true);
+			Debug::NoteBig("ERROR::SHADER::UNKNOWN_SHADER_TYPE", true);
 			exit(2);
 		}
 
@@ -244,7 +244,7 @@ return;}";
 		glUseProgram(m_idProgram);
 		m_shaderLoaded = true;
 	}
-		
+
 	bool Shader::CheckForErrors(const uint32_t* const& pShaderID, ShaderType pType) noexcept
 	{
 		// Boolean output as int32
@@ -259,7 +259,7 @@ return;}";
 			{
 				// In the case of a failure it loads the log and outputs
 				glGetProgramInfoLog(*pShaderID, 512, NULL, infoLog);
-				Debug::BigNote("ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog), true, false);
+				Debug::NoteBig("ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog), true, false);
 				return false;
 			}
 		}
@@ -271,8 +271,8 @@ return;}";
 			{
 				// In the case of a failure it loads the log and outputs
 				glGetShaderInfoLog(*pShaderID, 512, NULL, infoLog);
-				Debug::BigNote("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
-				 string("FRAGMENT")) + "::COMPILATION_FAILED:\n" + string(infoLog), true, false);
+				Debug::NoteBig("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
+					string("FRAGMENT")) + "::COMPILATION_FAILED:\n" + string(infoLog), true, false);
 				return false;
 			}
 		}
@@ -287,55 +287,55 @@ return;}";
 	}
 
 #	pragma region Setters
-	void Shader::SetBool(const string& pName, const bool& pValue) const noexcept
+	void Shader::SetBool(string const& pName, bool const& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), (int32_t)pValue);
 	}
 
-	void Shader::SetInt(const string& pName, const int32_t& pValue) const noexcept
+	void Shader::SetInt(string const& pName, int32_t const& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetUint(const string& pName, const uint32_t& pValue) const noexcept
+	void Shader::SetUint(string const& pName, uint32_t const& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1ui(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetFloat(const string& pName, const float& pValue) const noexcept
+	void Shader::SetFloat(string const& pName, float const& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetVec2(const string& pName, const glm::vec2& pValue) const noexcept
+	void Shader::SetVec2(string const& pName, glm::vec2 const& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform2fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetVec3(const string& pName, const glm::vec3& pValue) const noexcept
+	void Shader::SetVec3(string const& pName, glm::vec3 const& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetVec4(const string& pName, const glm::vec4& pValue) const noexcept
+	void Shader::SetVec4(string const& pName, glm::vec4 const& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetMat3(const string& pName, const glm::mat3& pValue) const noexcept
+	void Shader::SetMat3(string const& pName, glm::mat3 const& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniformMatrix3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, &pValue[0][0]);
 	}
 
-	void Shader::SetMat4(const string& pName, const glm::mat4& pValue) const noexcept
+	void Shader::SetMat4(string const& pName, glm::mat4 const& pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniformMatrix4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, &pValue[0][0]);

@@ -5,14 +5,14 @@ struct GLFWwindow;
 namespace Engine
 {
 	using CallbackFunc = void(*)(double&, double&);
-	
+
 	// Singleton class used for handling inputs
 	class Input
 	{
 		friend class Application;
 		// Does not need to be memory managed
 		static GLFWwindow* s_windowRef;
-		
+
 		static CallbackFunc s_mouseCallbackFun;
 		static CallbackFunc s_scrollCallbackFun;
 		// Mouse position in the last frame
@@ -23,8 +23,8 @@ namespace Engine
 		Input() = delete;
 		~Input() = delete;
 		// Delete copy/move so extra instances can't be created/moved.
-		Input(const Input&) = delete;
-		Input& operator=(const Input&) = delete;
+		Input(Input const&) = delete;
+		Input& operator=(Input const&) = delete;
 		Input(Input&&) = delete;
 		Input& operator=(Input&&) = delete;
 #		pragma endregion
@@ -162,11 +162,22 @@ namespace Engine
 
 		static bool Init(GLFWwindow* const& pWindowRef) noexcept;
 		static void Process() noexcept;
-		static bool GetKey(const Key& pKey, const State& pState) noexcept;
+		static bool GetKey(Key const& pKey, State const& pState) noexcept;
 
-		static void Key_callback(GLFWwindow* pWindow, int pKey, int pScancode, int pAction, int pMods) noexcept;
-		static void Mouse_callback(GLFWwindow* pWindow, double pPosX, double pPosY) noexcept;
-		static void Scroll_callback(GLFWwindow* pWindow, double pOffsetX, double pOffsetY) noexcept;
+		static void Key_callback(
+			GLFWwindow* pWindow,
+			int pKey,
+			int pScancode,
+			int pAction,
+			int pMods) noexcept;
+		static void Mouse_callback(
+			GLFWwindow* pWindow,
+			double pPosX,
+			double pPosY) noexcept;
+		static void Scroll_callback(
+			GLFWwindow* pWindow,
+			double pOffsetX,
+			double pOffsetY) noexcept;
 
 		static void AddMouseCallback(CallbackFunc pCallback) noexcept;
 		static void AddSrollCallback(CallbackFunc pCallback) noexcept;
