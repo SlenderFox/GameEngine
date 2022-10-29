@@ -24,7 +24,7 @@ namespace Engine
 			glDeleteTextures(s_textureCount, s_textureIds);
 	}
 
-	int32_t Texture::LoadTextureFromFile(string const& pPath) noexcept
+	int32_t Texture::LoadTextureFromFile(string pPath) noexcept
 	{
 		Debug::ProcessBig("Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"...", false, false);
 
@@ -96,8 +96,8 @@ namespace Engine
 	// Member
 
 	Texture::Texture(
-		string const& pPath,
-		TexType const& pType)
+		string pPath,
+		TexType pType)
 		: m_file(pPath),
 		m_type(pType)
 	{

@@ -160,9 +160,9 @@ namespace Engine
 			Key_Menu						= 348
 		};
 
-		static bool Init(GLFWwindow* const& pWindowRef) noexcept;
+		static bool Init(GLFWwindow* pWindowRef) noexcept;
 		static void Process() noexcept;
-		static bool GetKey(Key const& pKey, State const& pState) noexcept;
+		static bool GetKey(Key pKey, State pState) noexcept;
 
 		static void Key_callback(
 			GLFWwindow* pWindow,

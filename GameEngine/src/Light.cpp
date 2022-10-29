@@ -11,9 +11,9 @@ using glm::radians;
 namespace Engine
 {
 	Light::Light(
-		LightType const& pType,
-		Colour const& pColour,
-		mat4 const& pTransform)
+		LightType pType,
+		Colour pColour,
+		mat4 pTransform)
 		: m_type(pType),
 		m_lightColour(pColour)
 	{

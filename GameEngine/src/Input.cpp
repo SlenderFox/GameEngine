@@ -12,7 +12,7 @@ namespace Engine
 	double Input::s_mouseLastY = 0.0;
 #	pragma endregion
 
-	bool Input::Init(GLFWwindow* const& pWindowRef) noexcept
+	bool Input::Init(GLFWwindow* pWindowRef) noexcept
 	{
 		s_windowRef = pWindowRef;
 
@@ -33,7 +33,7 @@ namespace Engine
 		// TODO
 	}
 
-	bool Input::GetKey(Key const& pKey, State const& pState) noexcept
+	bool Input::GetKey(Key pKey, State pState) noexcept
 	{
 		return (int)pState == glfwGetKey(s_windowRef, (int)pKey);
 	}

@@ -117,8 +117,8 @@ namespace Engine
 	}
 
 	Mesh::Mesh(
-		const std::vector<Vertex>& pVertices,
-		const std::vector<uint32_t>& pIndices)
+		std::vector<Vertex> pVertices,
+		std::vector<uint32_t> pIndices)
 	{
 		m_vertices = make_unique<vector<Vertex>>(pVertices);
 		m_indices = make_unique<vector<uint32_t>>(pIndices);

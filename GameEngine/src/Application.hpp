@@ -65,14 +65,14 @@ namespace Engine
 		// Should evaluate to 0.01666666666666666
 		static const double s_fixedDeltaTime/* = 1.0 / 60.0*/;
 
-		static Application* const& GetApplication() noexcept { return s_application; }
+		static Application* GetApplication() noexcept { return s_application; }
 		static const bool GladLoaded() noexcept;	// No definition to allow forward declaration
 		static void Quit() noexcept;
 
 		static ExitCode Run();
-		static void SetDimensions(uint16_t const& pWidth, uint16_t const& pHeight) noexcept;
-		static void SetTitle(std::string const& pTitle) noexcept;
-		static void SetFullscreen(bool const& pFullscreen) noexcept;
+		static void SetDimensions(uint16_t pWidth, uint16_t pHeight) noexcept;
+		static void SetTitle(std::string pTitle) noexcept;
+		static void SetFullscreen(bool pFullscreen) noexcept;
 
 		// TODO: Remove these
 		static void MouseCallback(double& pPosX, double& pPosY) noexcept;

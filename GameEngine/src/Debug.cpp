@@ -21,7 +21,7 @@ namespace Engine
 	}
 
 	void Debug::Send(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -34,7 +34,7 @@ namespace Engine
 
 	void Debug::SendWithPrefix(
 		const wchar_t* pPrefix, 
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -54,7 +54,7 @@ namespace Engine
 	
 #	pragma region Start
 	void Debug::NoteSmallStart(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -63,7 +63,7 @@ namespace Engine
 	}
 
 	void Debug::NoteBigStart(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -72,7 +72,7 @@ namespace Engine
 	}
 
 	void Debug::ProcessSmallStart(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -81,7 +81,7 @@ namespace Engine
 	}
 
 	void Debug::ProcessBigStart(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -92,7 +92,7 @@ namespace Engine
 
 #	pragma region Mid
 	void Debug::NoteSmall(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -101,7 +101,7 @@ namespace Engine
 	}
 
 	void Debug::NoteBig(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -110,7 +110,7 @@ namespace Engine
 	}
 
 	void Debug::ProcessSmall(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -119,7 +119,7 @@ namespace Engine
 	}
 
 	void Debug::ProcessBig(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -130,7 +130,7 @@ namespace Engine
 
 #	pragma region End
 	void Debug::NoteSmallEnd(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -139,7 +139,7 @@ namespace Engine
 	}
 
 	void Debug::NoteBigEnd(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -148,7 +148,7 @@ namespace Engine
 	}
 
 	void Debug::ProcessSmallEnd(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{
@@ -157,7 +157,7 @@ namespace Engine
 	}
 
 	void Debug::ProcessBigEnd(
-		string const& pMsg, 
+		string pMsg, 
 		bool pNewline, 
 		bool pEndline) noexcept
 	{

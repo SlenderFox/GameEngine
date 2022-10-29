@@ -293,7 +293,7 @@ namespace Engine
 		return true;
 	}
 
-	void Application::SetDimensions(uint16_t const& pWidth, uint16_t const& pHeight) noexcept
+	void Application::SetDimensions(uint16_t pWidth, uint16_t pHeight) noexcept
 	{
 		s_winWidth = pWidth;
 		s_winHeight = pHeight;
@@ -304,13 +304,13 @@ namespace Engine
 		Debug::Send(string("Dimensions set to " + std::to_string(s_winWidth) + ", " + std::to_string(s_winHeight)));
 	}
 
-	void Application::SetTitle(string const& pTitle) noexcept
+	void Application::SetTitle(string pTitle) noexcept
 	{
 		s_title = pTitle;
 		Debug::Send("Title set to \"" + s_title + "\"");
 	}
 
-	void Application::SetFullscreen(bool const& pFullscreen) noexcept
+	void Application::SetFullscreen(bool pFullscreen) noexcept
 	{
 		s_fullscreen = pFullscreen;
 		Debug::Send("Fullscreen set to " + string(pFullscreen ? "true" : "false"));

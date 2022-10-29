@@ -24,10 +24,10 @@ namespace Engine
 	// Member
 
 	Model::Model(
-		string const& pModelPath,
-		string const& pShaderPath,
-		Camera* const& pCamera,
-		bool const& pLoadTextures)
+		string pModelPath,
+		string pShaderPath,
+		Camera* pCamera,
+		bool pLoadTextures)
 		: m_cameraRef(pCamera),
 		m_loadTextures(pLoadTextures)
 	{
@@ -42,8 +42,8 @@ namespace Engine
 	}
 
 	void Model::Init(
-		string const& pModelPath,
-		string const& pShaderPath)
+		string pModelPath,
+		string pShaderPath)
 	{
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 		m_textures = vector<Texture*>();
@@ -55,7 +55,7 @@ namespace Engine
 		Debug::NoteSmallEnd("Done!");
 	}
 
-	void Model::Draw(const Camera* const& pCamera) const noexcept
+	void Model::Draw(const Camera* pCamera) const noexcept
 	{
 		m_shader->Use();
 		if (pCamera)
@@ -75,7 +75,7 @@ namespace Engine
 		}
 	}
 
-	void Model::LoadModel(string const& pPath)
+	void Model::LoadModel(string pPath)
 	{
 		Debug::ProcessBigStart("Loading model \"" + pPath + "\"", false, false);
 		if (!m_loadTextures) Debug::NoteSmall("Ignoring textures", true, false);
@@ -94,8 +94,8 @@ namespace Engine
 	}
 
 	void Model::ProcessNode(
-		aiNode* const& pNode,
-		const aiScene* const& pScene) noexcept
+		aiNode* pNode,
+		const aiScene* pScene) noexcept
 	{
 		// Process all the node's meshes (if any)
 		for (uint32_t i = 0; i < pNode->mNumMeshes; ++i)
@@ -111,8 +111,8 @@ namespace Engine
 	}
 
 	unique_ptr<Mesh> Model::ProcessMesh(
-		aiMesh* const& pMesh,
-		const aiScene* const& pScene) noexcept
+		aiMesh* pMesh,
+		const aiScene* pScene) noexcept
 	{
 		vector<Vertex> vertices;
 		vector<uint32_t> indices;
@@ -172,9 +172,9 @@ namespace Engine
 	}
 
 	vector<Texture*> Model::LoadMaterialTextures(
-		aiMaterial* const& pMat,
-		aiTextureType const& pType,
-		TexType const& pTexType) noexcept
+		aiMaterial* pMat,
+		aiTextureType pType,
+		TexType pTexType) noexcept
 	{
 		// Textures from this specific node being output
 		vector<Texture*> texturesOut;
@@ -249,7 +249,7 @@ namespace Engine
 		}
 	}
 
-	Mesh* Model::GetMeshAt(uint16_t const& pPos) const  noexcept
+	Mesh* Model::GetMeshAt(uint16_t pPos) const  noexcept
 	{
 		if (!m_meshes.get())
 			return nullptr;

@@ -23,7 +23,7 @@ namespace Engine
 		Renderer& operator=(Renderer&&) = delete;
 #		pragma endregion
 
-		static bool Init(float const& pAspect) noexcept;
+		static bool Init(float pAspect) noexcept;
 		static void Draw() noexcept;
 
 	public:
@@ -38,27 +38,27 @@ namespace Engine
 
 		static void Destroy() noexcept;
 
-		static void LoadLightsIntoShader(Shader const& pShader) noexcept;
-		static void ModifyAllSpotlightAngles(float const& pValue) noexcept;
-		static void ModifyAllSpotlightBlurs(float const& pValue) noexcept;
+		static void LoadLightsIntoShader(Shader* pShader) noexcept;
+		static void ModifyAllSpotlightAngles(float pValue) noexcept;
+		static void ModifyAllSpotlightBlurs(float pValue) noexcept;
 
 		static Model* AddNewModel(
 			uint8_t& id,
-			std::string const& pModelPath,
-			std::string const& pShaderPath,
-			bool const& pLoadTextures = true) noexcept;
+			std::string pModelPath,
+			std::string pShaderPath,
+			bool pLoadTextures = true) noexcept;
 		static Light* AddNewLight(
 			uint8_t& id,
-			LightType const& pType,
-			Colour const& pColour = Colour::White()) noexcept;
+			LightType pType,
+			Colour pColour = Colour::White()) noexcept;
 
-		static void SetClearColour(Colour const& pColour) noexcept;
-		static void SetRenderMode(Mode const& pMode = Mode::Fill) noexcept;
+		static void SetClearColour(const Colour pColour) noexcept;
+		static void SetRenderMode(const Mode pMode = Mode::Fill) noexcept;
 
-		static constexpr Camera* const& GetCamera() noexcept { return s_camera; }
+		static constexpr Camera* GetCamera() noexcept { return s_camera; }
 		static uint8_t ModelCount() noexcept;
 		static uint8_t LightCount() noexcept;
-		static Model* GetModelAt(uint8_t const& pPos) noexcept;
-		static Light* GetLightAt(uint8_t const& pPos) noexcept;
+		static Model* GetModelAt(uint8_t pPos) noexcept;
+		static Light* GetLightAt(uint8_t pPos) noexcept;
 	};
 }

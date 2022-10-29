@@ -16,7 +16,7 @@ namespace Engine
 	// Forward declaration
 	class Application { public: static const bool GladLoaded() noexcept; };
 
-	Shader::Shader(string const& pShaderPath)
+	Shader::Shader(string pShaderPath)
 	{
 		Load(pShaderPath);
 	}
@@ -32,7 +32,7 @@ namespace Engine
 		glUseProgram(m_idProgram);
 	}
 
-	void Shader::Load(string const& pShaderPath)
+	void Shader::Load(string pShaderPath)
 	{
 		m_shaderPath = pShaderPath;
 		LoadShader(ShaderType::VERTEX);
@@ -200,7 +200,7 @@ return;}";
 		Debug::Send("Success!");
 	}
 
-	bool Shader::CompileShader(uint32_t* const& pId, ShaderType pType, const char* pCode)
+	bool Shader::CompileShader(uint32_t* pId, ShaderType pType, const char* pCode)
 	{
 		// Creates a shader object and assigns to an id
 		switch (pType)
@@ -245,7 +245,7 @@ return;}";
 		m_shaderLoaded = true;
 	}
 
-	bool Shader::CheckForErrors(const uint32_t* const& pShaderID, ShaderType pType) noexcept
+	bool Shader::CheckForErrors(const uint32_t* pShaderID, ShaderType pType) noexcept
 	{
 		// Boolean output as int32
 		int32_t success;
@@ -287,55 +287,55 @@ return;}";
 	}
 
 #	pragma region Setters
-	void Shader::SetBool(string const& pName, bool const& pValue) const noexcept
+	void Shader::SetBool(string pName, bool pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), (int32_t)pValue);
 	}
 
-	void Shader::SetInt(string const& pName, int32_t const& pValue) const noexcept
+	void Shader::SetInt(string pName, int32_t pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetUint(string const& pName, uint32_t const& pValue) const noexcept
+	void Shader::SetUint(string pName, uint32_t pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1ui(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetFloat(string const& pName, float const& pValue) const noexcept
+	void Shader::SetFloat(string pName, float pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1f(glGetUniformLocation(m_idProgram, pName.c_str()), pValue);
 	}
 
-	void Shader::SetVec2(string const& pName, glm::vec2 const& pValue) const noexcept
+	void Shader::SetVec2(string pName, glm::vec2 pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform2fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetVec3(string const& pName, glm::vec3 const& pValue) const noexcept
+	void Shader::SetVec3(string pName, glm::vec3 pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetVec4(string const& pName, glm::vec4 const& pValue) const noexcept
+	void Shader::SetVec4(string pName, glm::vec4 pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, &pValue[0]);
 	}
 
-	void Shader::SetMat3(string const& pName, glm::mat3 const& pValue) const noexcept
+	void Shader::SetMat3(string pName, glm::mat3 pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniformMatrix3fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, &pValue[0][0]);
 	}
 
-	void Shader::SetMat4(string const& pName, glm::mat4 const& pValue) const noexcept
+	void Shader::SetMat4(string pName, glm::mat4 pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniformMatrix4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, &pValue[0][0]);

@@ -18,38 +18,38 @@ namespace Engine
 	class Renderer
 	{
 	public:
-		static void LoadLightsIntoShader(Shader const& pShader) noexcept;
+		static void LoadLightsIntoShader(Shader* pShader) noexcept;
 		static Model* AddNewModel(
 			uint8_t &id,
-			string const& pModelPath,
-			string const& pShaderPath,
-			bool const& pLoadTextures = true) noexcept;
+			string pModelPath,
+			string pShaderPath,
+			bool pLoadTextures = true) noexcept;
 	};
 
 	// Blame https://stackoverflow.com/a/40937193/15035125 for this
 	struct EntityLoader
 	{
 		static void BackgroundLoadModel(
-			string const& pModelPath,
-			string const& pShaderPath,
-			Entity* const& pEntity,
+			string pModelPath,
+			string pShaderPath,
+			Entity* pEntity,
 			bool pLoadTextures = true) noexcept
 		{
 			uint8_t ID;
 			pEntity->m_modelRef = Renderer::AddNewModel(ID, pModelPath, pShaderPath, pLoadTextures);
-			Renderer::LoadLightsIntoShader(*pEntity->m_modelRef->GetShaderRef());
+			Renderer::LoadLightsIntoShader(pEntity->m_modelRef->GetShaderRef());
 			pEntity->m_modelRef->GetShaderRef()->SetMat4("u_model", pEntity->GetTransform());
 			pEntity->m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel",
 				(mat3)transpose(inverse(pEntity->GetTransform())));
 		}
 	};
 
-	void EntityBase::AddChild(Entity* const& pChild) noexcept
+	void EntityBase::AddChild(Entity* pChild) noexcept
 	{
 		m_childrenRef.push_back(pChild);
 	}
 
-	void EntityBase::RemoveChild(Entity* const& pChild) noexcept
+	void EntityBase::RemoveChild(Entity* pChild) noexcept
 	{
 		for (auto it = m_childrenRef.begin(); it != m_childrenRef.end(); ++it)
 		{
@@ -64,8 +64,8 @@ namespace Engine
 	// Static
 
 	Entity* Entity::CreateWithModel(
-		string const& pModelPath,
-		string const& pShaderPath,
+		string pModelPath,
+		string pShaderPath,
 		Model*& pModelOut,
 		Shader*& pShaderOut,
 		bool pLoadTextures) noexcept
@@ -85,7 +85,7 @@ namespace Engine
 		SetParent(Root::GetRoot());
 	}
 
-	Entity::Entity(EntityBase* const& pParent)
+	Entity::Entity(EntityBase* pParent)
 	{
 		m_childrenRef = vector<Entity*>();
 		SetParent(pParent);
@@ -98,8 +98,8 @@ namespace Engine
 	}
 
 	void Entity::LoadModel(
-		string const& pModelPath,
-		string const& pShaderPath,
+		string pModelPath,
+		string pShaderPath,
 		Model*& pModelOut,
 		Shader*& pShaderOut,
 		bool pLoadTextures) noexcept
@@ -112,19 +112,19 @@ namespace Engine
 	}
 
 #	pragma region Setters
-	void Entity::SetTransform(mat4 const& pValue) noexcept
+	void Entity::SetTransform(mat4 pValue) noexcept
 	{
 		Transform::SetTransform(pValue);
 		UpdateModel();
 	}
 
-	void Entity::Translate(vec3 const& pValue) noexcept
+	void Entity::Translate(vec3 pValue) noexcept
 	{
 		Transform::Translate(pValue);
 		UpdateModel();
 	}
 
-	void Entity::SetParent(EntityBase* const& pParent) noexcept
+	void Entity::SetParent(EntityBase* pParent) noexcept
 	{
 		// This may change to not changing anything
 		if (!pParent)
@@ -142,17 +142,17 @@ namespace Engine
 		m_parentRef->AddChild(this);
 	}
 
-	void Entity::RenderOnlyColour(bool const& pState) noexcept
+	void Entity::RenderOnlyColour(bool pState) noexcept
 	{
 		m_modelRef->GetShaderRef()->SetBool("u_justColour", pState);
 	}
 
-	void Entity::SetScale(vec3 const& pValue) noexcept
+	void Entity::SetScale(vec3 pValue) noexcept
 	{
 		m_modelRef->GetShaderRef()->SetVec3("u_scale", pValue);
 	}
 
-	void Entity::SetColourInShader(Colour const& pCol) noexcept
+	void Entity::SetColourInShader(Colour pCol) noexcept
 	{
 		m_modelRef->GetShaderRef()->SetVec3("u_colour", pCol.RGBvec3());
 	}
