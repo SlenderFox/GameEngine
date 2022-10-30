@@ -1,5 +1,5 @@
-Repo: https://github.com/SlenderFox/OpenGL-Engine<br>
-Following: https://learnopengl.com/<br>
+Repo: https://github.com/SlenderFox/OpenGL-Engine
+Following: https://learnopengl.com/
 Currently at: https://learnopengl.com/Model-Loading/Model
 ___
 Notes:

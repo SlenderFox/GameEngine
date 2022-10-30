@@ -52,7 +52,12 @@ namespace Engine
 		m_shader = new Shader(pShaderPath);
 		if (m_loadTextures) LoadTexturesToShader();
 
-		Debug::NoteSmallEnd("Done!");
+		Debug::SendWithPrefix(
+			"Done!",
+			Debug::Type::Note,
+			Debug::Impact::Small,
+			Debug::Stage::End
+		);
 	}
 
 	void Model::Draw(const Camera* pCamera) const noexcept
@@ -77,16 +82,33 @@ namespace Engine
 
 	void Model::LoadModel(string pPath)
 	{
-		Debug::ProcessBigStart("Loading model \"" + pPath + "\"", false, false);
-		if (!m_loadTextures) Debug::NoteSmall("Ignoring textures", true, false);
-		Debug::NewLine();
+		Debug::SendWithPrefix(
+			"Loading model \"" + pPath + "\"",
+			Debug::Type::Process,
+			Debug::Impact::Large,
+			Debug::Stage::Begin
+		);
+		if (!m_loadTextures) 
+		{
+			Debug::SendWithPrefix(
+				"Ignoring textures",
+				Debug::Type::Note,
+				Debug::Impact::Small,
+				Debug::Stage::Mid
+			);
+		}
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(pPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			Debug::Send("\nERROR::ASSIMP::" + string(importer.GetErrorString()));
+			Debug::SendWithPrefix(
+				"ERROR::ASSIMP::" + string(importer.GetErrorString()),
+				Debug::Type::Note,
+				Debug::Impact::Large,
+				Debug::Stage::Mid
+			);
 			return;
 		}
 		m_directory = pPath.substr(0, pPath.find_last_of('/'));
@@ -202,8 +224,16 @@ namespace Engine
 					// If the texture has not been loaded into this model, reuse it
 					if (reuseTexture)
 					{
-						Debug::NoteSmall("Reusing texture " + std::to_string(s_loadedTextures[j]->GetId())
-						 + ": " + s_loadedTextures[j]->GetFile().data());
+						string msg = "Reusing texture "
+							+ std::to_string(s_loadedTextures[j]->GetId())
+							+ ": "
+							+ s_loadedTextures[j]->GetFile().data();
+						Debug::SendWithPrefix(
+							msg,
+							Debug::Type::Note,
+							Debug::Impact::Small,
+							Debug::Stage::Mid
+						);
 						texturesOut.push_back(s_loadedTextures[j]);
 					}
 
@@ -245,7 +275,16 @@ namespace Engine
 
 			string location = "u_material." + name + number;
 			m_shader->SetInt(location.c_str(), (int32_t)m_textures[i]->GetId());
-			Debug::NoteSmall("Setting " + location + " to " + std::to_string(m_textures[i]->GetId()));
+			string msg = "Setting "
+				+ location
+				+ " to "
+				+ std::to_string(m_textures[i]->GetId());
+			Debug::SendWithPrefix(
+				msg,
+				Debug::Type::Note,
+				Debug::Impact::Small,
+				Debug::Stage::Mid
+			);
 		}
 	}
 

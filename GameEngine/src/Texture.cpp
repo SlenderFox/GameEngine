@@ -26,11 +26,24 @@ namespace Engine
 
 	int32_t Texture::LoadTextureFromFile(string pPath) noexcept
 	{
-		Debug::ProcessBig("Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"...", false, false);
+		Debug::SendWithPrefix(
+			"Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"...",
+			Debug::Type::Process,
+			Debug::Impact::Large,
+			Debug::Stage::Mid,
+			false,
+			false
+		);
 
 		if (s_textureCount > 31)
 		{
-			Debug::NoteBig("Failed to load texture: Exceeded max texture count (max = 32)", true);
+			Debug::SendWithPrefix(
+				"Failed to load texture: Exceeded max texture count (max = 32)",
+				Debug::Type::Note,
+				Debug::Impact::Large,
+				Debug::Stage::Mid,
+				true
+			);
 			return -1;
 		}
 
@@ -61,7 +74,13 @@ namespace Engine
 			case 3: format = GL_RGB; break;
 			case 4: format = GL_RGBA; break;
 			default:
-				Debug::NoteBig("Failed to load texture: Too many components", true);
+				Debug::SendWithPrefix(
+					"Failed to load texture: Too many components",
+					Debug::Type::Note,
+					Debug::Impact::Large,
+					Debug::Stage::Mid,
+					true
+				);
 				return -1;
 			}
 
@@ -88,7 +107,13 @@ namespace Engine
 		}
 		else
 		{
-			Debug::NoteBig("Failed to load texture: No file found", true);
+			Debug::SendWithPrefix(
+				"Failed to load texture: No file found",
+				Debug::Type::Note,
+				Debug::Impact::Large,
+				Debug::Stage::Mid,
+				true
+			);
 			return -1;
 		}
 	}

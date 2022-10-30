@@ -42,24 +42,8 @@ namespace Engine
 
 	void Shader::LoadShader(ShaderType pType)
 	{
-		m_usingFallback = false;
-		string path = m_shaderPath + GetType(pType, string(".vert"), string(".frag"));
-		Debug::ProcessSmall("Compiling shader \"" + path + "\"...", false, false);
-
-		if (pType == ShaderType::PROGRAM)
-		{
-			Debug::NoteBig("ERROR::SHADER::ATTEMPTING_TO_LOAD_PROGRAM", true);
-			return;
-		}
-
-		if (std::strcmp(m_shaderPath.c_str(), "") == 0)
-		{
-			m_usingFallback = true;
-			Debug::NewLine();
-		}
-
 #		pragma region Fallback code
-		 const char* vertexFallback = "#version 330 core\n\
+		 static const char* vertexFallback = "#version 330 core\n\
 layout(location=0)in vec3 aPos;\
 layout(location=1)in vec3 aNormal;\
 layout(location=2)in vec2 aTexCoords;\
@@ -76,7 +60,7 @@ TexCoords=aTexCoords;\
 Normal=u_transposeInverseOfModel*aNormal;\
 FragPos=vec3(vertModel);\
 gl_Position=u_camera*vertModel;}";
-		 const char* fragmentFallback = "#version 330 core\n\
+		 static const char* fragmentFallback = "#version 330 core\n\
 #define normalise normalize\n\
 const int NR_DIR_LIGHTS=3;\
 const int NR_POINT_LIGHTS=30;\
@@ -149,7 +133,37 @@ else FragCol=vec4(result*u_colour,1);\
 return;}";
 #		pragma endregion
 
-		const char* shaderCode;
+		m_usingFallback = false;
+
+		if (pType == ShaderType::PROGRAM)
+		{
+			Debug::SendWithPrefix(
+				"ERROR::SHADER::LOADING_INCORRECT_SHADER_TYPE",
+				Debug::Type::Note,
+				Debug::Impact::Large,
+				Debug::Stage::Mid
+			);
+			return;
+		}
+
+		string path = m_shaderPath + GetType(pType, string(".vert"), string(".frag"));
+		Debug::SendWithPrefix(
+			"Compiling shader \"" + path + "\"...",
+			Debug::Type::Process,
+			Debug::Impact::Small,
+			Debug::Stage::Mid,
+			false,
+			false
+		);
+
+		if (std::strcmp(m_shaderPath.c_str(), "") == 0)
+		{
+			m_usingFallback = true;
+			Debug::NewLine();
+		}
+
+		const char* shaderCode = "";
+
 		// Must be defined outside the try catch
 		string codeString;
 
@@ -171,8 +185,16 @@ return;}";
 		}
 		catch (ifstream::failure e)
 		{
-			Debug::NoteBig("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
-				string("FRAGMENT")) + "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE", true);
+			string msg = "ERROR::SHADER::"
+				+ GetType(pType, string("VERTEX"), string("FRAGMENT"))
+				+ "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE";
+			Debug::SendWithPrefix(
+				msg,
+				Debug::Type::Note,
+				Debug::Impact::Large,
+				Debug::Stage::Mid,
+				true
+			);
 
 			m_usingFallback = true;
 			shaderCode = GetType<const char* const&>(pType, vertexFallback, fragmentFallback);
@@ -187,12 +209,34 @@ return;}";
 		// Separated to allow bool to potentially change
 		if (m_usingFallback)
 		{
-			Debug::ProcessSmall("Compiling fallback code...", false, false);
-			if (!CompileShader(GetType(pType, &m_idVertex, &m_idFragment),
-				pType, GetType<const char*&>(pType, vertexFallback, fragmentFallback)))
+			Debug::SendWithPrefix(
+				"Compiling fallback code...",
+				Debug::Type::Process,
+				Debug::Impact::Small,
+				Debug::Stage::Mid,
+				false,
+				false
+			);
+
+			if (
+				!CompileShader(
+					GetType(pType, &m_idVertex, &m_idFragment),
+					pType,
+					GetType<const char*&>(pType, vertexFallback, fragmentFallback)
+				)
+			)
 			{
-				Debug::NoteBig("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
-					string("FRAGMENT")) + "::FALLBACK_CODE_FAILURE", true);
+				string msg = "ERROR::SHADER::"
+					+ GetType(pType, string("VERTEX"), string("FRAGMENT"))
+					+ "::FALLBACK_CODE_FAILURE";
+				Debug::SendWithPrefix(
+					msg,
+					Debug::Type::Note,
+					Debug::Impact::Large,
+					Debug::Stage::Mid,
+					true
+				);
+
 				exit(2);
 			}
 		}
@@ -206,7 +250,13 @@ return;}";
 		switch (pType)
 		{
 		case ShaderType::PROGRAM:
-			Debug::NoteBig("ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM", true);
+			Debug::SendWithPrefix(
+				"ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM",
+				Debug::Type::Note,
+				Debug::Impact::Large,
+				Debug::Stage::Mid,
+				true
+			);
 			exit(2);
 		case ShaderType::VERTEX:
 			*pId = glCreateShader(GL_VERTEX_SHADER);
@@ -215,7 +265,13 @@ return;}";
 			*pId = glCreateShader(GL_FRAGMENT_SHADER);
 			break;
 		default:
-			Debug::NoteBig("ERROR::SHADER::UNKNOWN_SHADER_TYPE", true);
+			Debug::SendWithPrefix(
+				"ERROR::SHADER::UNKNOWN_SHADER_TYPE",
+				Debug::Type::Note,
+				Debug::Impact::Large,
+				Debug::Stage::Mid,
+				true
+			);
 			exit(2);
 		}
 
@@ -259,7 +315,14 @@ return;}";
 			{
 				// In the case of a failure it loads the log and outputs
 				glGetProgramInfoLog(*pShaderID, 512, NULL, infoLog);
-				Debug::NoteBig("ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog), true, false);
+				Debug::SendWithPrefix(
+					"ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog),
+					Debug::Type::Note,
+					Debug::Impact::Large,
+					Debug::Stage::Mid,
+					true,
+					false
+				);
 				return false;
 			}
 		}
@@ -271,8 +334,18 @@ return;}";
 			{
 				// In the case of a failure it loads the log and outputs
 				glGetShaderInfoLog(*pShaderID, 512, NULL, infoLog);
-				Debug::NoteBig("ERROR::SHADER::" + GetType(pType, string("VERTEX"),
-					string("FRAGMENT")) + "::COMPILATION_FAILED:\n" + string(infoLog), true, false);
+				string msg = "ERROR::SHADER::"
+					+ GetType(pType, string("VERTEX"), string("FRAGMENT"))
+					+ "::COMPILATION_FAILED:\n"
+					+ string(infoLog);
+				Debug::SendWithPrefix(
+					msg,
+					Debug::Type::Note,
+					Debug::Impact::Large,
+					Debug::Stage::Mid,
+					true,
+					false
+				);
 				return false;
 			}
 		}
