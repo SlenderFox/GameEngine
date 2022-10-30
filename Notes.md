@@ -42,8 +42,8 @@ Todo:
 - [x] Try upgrade ([[Colour.hpp]]/[[Colour.cpp]]) with macros
 - [x] Try out reworking entire project on the premise of static engine
 - [x] Make more functions pass by reference
-- [ ] Holding alt releases cursor
 - [x] Update ([[Debug.hpp]]/[[Debug.cpp]]) to be used without \_DEBUG enabled
+- [ ] Holding alt releases cursor
 - [ ] Make ([[Debug.hpp]]/[[Debug.cpp]]) use imgui
 	- [ ] Can open an "event" then post whatever info to it and finally close it
 - [ ] Overhaul lights ([[Light.hpp]]/[[Light.cpp]])
@@ -51,13 +51,14 @@ Todo:
 	- [ ] Limit lights to the same as in the shader
 	- [ ] Overhaul how lights are rendered in the shader
 		- [ ] Min and max clipped brightness
-			- [ ] Iris
-			- [ ] Retina
+			- [ ] Iris, instant brightness response
+			- [ ] Retina, slower brightness response
 - [ ] Overload entity copy constructor to load model better
-- [x] Actually use the input class ([[Input.hpp]]/[[Input.cpp]])
-	- [x] Keyboard input
-		- [ ] Keyboard layouts
-	- [x] Mouse input
-	- [ ] Function callbacks
-		- [ ] Allow callbacks to pass member functions
+- [ ] Fully utilise the input class ([[Input.hpp]]/[[Input.cpp]])
+	- [x] Basic key checking
+	- [ ] Key state tracking
+	- [ ] Key callbacks
+	- [x] Mouse callback
+	- [x] Scroll callback
+	- [ ] Allow callbacks to pass member functions
 - [ ] Update destroying a single texture to allow for a new one to replace it

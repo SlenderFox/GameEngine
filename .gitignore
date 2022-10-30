@@ -3,4 +3,8 @@
 [Tt]emp/
 [Bb]uild/
 Win32/
-TestProject/imgui.ini
+
+Example/imgui.ini
+
+.obsidian/
+ObsidianGraph/
