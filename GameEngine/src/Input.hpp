@@ -30,6 +30,7 @@ namespace Engine
 #		pragma endregion
 
 	public:
+#		pragma region Bullshit
 		enum class State: unsigned char
 		{
 			Release,
@@ -160,10 +161,6 @@ namespace Engine
 			Key_Menu						= 348
 		};
 
-		static bool Init(GLFWwindow* pWindowRef) noexcept;
-		static void Process() noexcept;
-		static bool GetKeyState(Key pKey, State pState) noexcept;
-
 		static void Key_callback(
 			GLFWwindow* pWindow,
 			int pKey,
@@ -178,6 +175,11 @@ namespace Engine
 			GLFWwindow* pWindow,
 			double pOffsetX,
 			double pOffsetY) noexcept;
+#		pragma endregion
+
+		static bool Init(GLFWwindow* pWindowRef) noexcept;
+		static void Process() noexcept;
+		static bool GetKeyState(Key pKey, State pState) noexcept;
 
 		static inline void AddMouseCallback(CallbackFunc pCallback) noexcept
 		{ s_mouseCallbackFun = pCallback; }

@@ -28,13 +28,13 @@ namespace Engine
 		~Light() {}
 
 #		pragma region Setters
-		constexpr void SetType			(LightType pType)		noexcept { m_type = pType; }
-		constexpr void SetDirection	(glm::vec3 pDirection)	noexcept { Transform::SetForward(pDirection); }
-		constexpr void SetColour		(Colour pColour)			noexcept { m_lightColour = pColour; }
-		constexpr void SetLinear		(float pValue)			noexcept { m_linear = pValue; }
-		constexpr void SetQuadratic	(float pValue)			noexcept { m_quadratic = pValue; }
-		constexpr void SetAngle			(float pValue)			noexcept { m_angle = pValue; }	// In degrees
-		constexpr void SetBlur			(float pValue)			noexcept { m_blur = pValue; }		// In degrees
+		constexpr void SetType		 (LightType pType)		noexcept { m_type = pType; }
+		constexpr void SetDirection (glm::vec3 pDirection)	noexcept { Transform::SetForward(pDirection); }
+		constexpr void SetColour	 (Colour pColour)			noexcept { m_lightColour = pColour; }
+		constexpr void SetLinear	 (float pValue)			noexcept { m_linear = pValue; }
+		constexpr void SetQuadratic (float pValue)			noexcept { m_quadratic = pValue; }
+		constexpr void SetAngle		 (float pValue)			noexcept { m_angle = pValue; }	// In degrees
+		constexpr void SetBlur		 (float pValue)			noexcept { m_blur = pValue; }		// In degrees
 #		pragma endregion
 
 #		pragma region Getters

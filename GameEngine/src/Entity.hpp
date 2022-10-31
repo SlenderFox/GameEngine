@@ -53,7 +53,7 @@ namespace Engine
 		void SetParent(EntityBase* pParent) noexcept;
 		void RenderOnlyColour(bool pState) noexcept;
 		void SetScale(glm::vec3 pValue) noexcept;
-		void SetColourInShader(Colour pCol) noexcept;
+		void SentTint(Colour pCol) noexcept;
 #		pragma endregion
 
 		constexpr EntityBase& GetParent() const noexcept { return *m_parentRef; }

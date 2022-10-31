@@ -29,18 +29,18 @@ namespace Engine
 #	pragma region Variables
 	Application* Application::s_application = nullptr;
 	GLFWwindow* Application::s_windowRef = nullptr;
-	bool Application::s_gladLoaded = false;
-	bool Application::s_fullscreen = false;
-	uint16_t Application::s_winWidth = 320U;
-	uint16_t Application::s_winHeight = 180U;
-	uint16_t Application::s_fps = 0U;
-	uint16_t Application::s_perSecondFrameCount = 0U;
+	bool Application::s_gladLoaded = false,
+		Application::s_fullscreen = false;
+	uint16_t Application::s_winWidth = 320U,
+		Application::s_winHeight = 180U,
+		Application::s_fps = 0U,
+		Application::s_perSecondFrameCount = 0U;
 	uint64_t Application::s_totalFrames = 0U;
-	double Application::s_currentTime = 0.0;
-	double Application::s_prevTime = 0.0;
-	double Application::s_deltaTime = 0.0;
-	double Application::s_fixedTimer = 0.0;
-	double Application::s_frameTimer = 0.0;
+	double Application::s_currentTime = 0.0,
+		Application::s_prevTime = 0.0,
+		Application::s_deltaTime = 0.0,
+		Application::s_fixedTimer = 0.0,
+		Application::s_frameTimer = 0.0;
 	string Application::s_title = "Application";
 	Application::ExitCode Application::s_exitCode = Application::ExitCode::Okay;
 

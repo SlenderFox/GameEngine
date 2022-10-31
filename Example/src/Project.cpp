@@ -88,8 +88,8 @@ void Project::Update()
 	{
 		float angle = (float)GetDeltaTime() * 5.0f * ((i + 1) / (i * 0.2f + 1));
 		m_cubes[i]->SetTransform(rotate(
-			m_cubes[i]->GetTransform(), 
-			radians(angle), 
+			m_cubes[i]->GetTransform(),
+			radians(angle),
 			glm::normalize(vec3(1.0f, 0.3f, 0.5f))
 			)
 		);
@@ -104,7 +104,7 @@ void Project::CreateScene()
 {
 	Engine::Model* model = nullptr;
 	Engine::Shader* shader = nullptr;
-	
+
 	// Place 9 cubes behind
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
@@ -127,34 +127,50 @@ void Project::CreateScene()
 
 void Project::CreateLights()
 {
+	// Allows me to toggle at will
+	const bool directional = true,
+		point = true,
+		spot = true;
+
 	// Creates lights
 	uint8_t ID;
 	Engine::Light* light;
-	// Directional
-	light = Renderer::AddNewLight(
-		ID, Engine::LightType::Directional, Engine::Colour::Silver()
-	);
-	light->SetDirection(vec3(0, -1, 0));
-	Renderer::SetClearColour(
-		Renderer::GetLightAt(ID)->GetColour() * Renderer::s_ambience
-	);
-	// Point
-	light = Renderer::AddNewLight(
-		ID, Engine::LightType::Point, Engine::Colour::CreateWithHSV(
-			Engine::hsv(220, 0.6f, 1.0f)
-		)
-	);
-	light->SetPosition(vec4(-4, 2, -2, 1));
-	// Spot
-	light = Renderer::AddNewLight(
-		ID, Engine::LightType::Spot, Engine::Colour::CreateWithHSV(
-			Engine::hsv(97, 0.17f, 1.0f)
-		)
-	);
-	light->SetPosition(vec4(2.0f, 2.5f, 6.0f, 1));
-	light->SetDirection(vec3(-0.3f, -0.4f, -1));
-	light->SetAngle(13.0f);
-	light->SetBlur(0.23f);
+	if (directional)
+	{
+		light = Renderer::AddNewLight(
+			ID, Engine::LightType::Directional, Engine::Colour::CreateWithHSV(
+				Engine::hsv(0, 0.0f, 0.4f)
+			)
+		);
+		light->SetDirection(vec3(0, -1, 0));
+		Renderer::SetClearColour(
+			Renderer::GetLightAt(ID)->GetColour() * Renderer::s_ambience
+		);
+	}
+	if (point)
+	{
+		light = Renderer::AddNewLight(
+			ID, Engine::LightType::Point, Engine::Colour::CreateWithHSV(
+				Engine::hsv(220, 0.6f, 1.0f)
+			)
+		);
+		light->SetPosition(vec4(-4, 2, -2, 1));
+	}
+	if (spot)
+	{
+		light = Renderer::AddNewLight(
+			ID, Engine::LightType::Spot, Engine::Colour::CreateWithHSV(
+				Engine::hsv(97, 0.17f, 1.0f)
+			)
+		);
+		light->SetPosition(vec4(2.0f, 2.5f, 6.0f, 1));
+		light->SetDirection(vec3(-0.3f, -0.4f, -1));
+		light->SetAngle(13.0f);
+		light->SetBlur(0.23f);
+	}
+
+	// Don't bother if there are no lights
+	if (Renderer::LightCount() == 0) return;
 
 	Engine::Model* model = nullptr;
 	Engine::Shader* shader = nullptr;
@@ -162,17 +178,16 @@ void Project::CreateLights()
 	// Gives them physical form
 	for (uint8_t i = 0; i < Renderer::LightCount(); ++i)
 	{
-		Engine::Light* current = Renderer::GetLightAt(i);
+		light = Renderer::GetLightAt(i);
 
-		if (current->GetType() == Engine::LightType::Point
-		 || current->GetType() == Engine::LightType::Spot)
+		if (light->GetType() == Engine::LightType::Point
+		 || light->GetType() == Engine::LightType::Spot)
 		{
-			current->LoadModel("assets/models/cube/cube.obj", "assets/shaders/default", model, shader, false);
-			current->SetTransform(current->GetTransform());	// Required to update shader
-			current->SetScale(vec3(0.2f, 0.2f, (current->GetType() == Engine::LightType::Spot) ? 0.4f : 0.2f));
-			current->SetColourInShader(current->GetColour());	// Required to update shader
-			current->RenderOnlyColour(true);
-			m_lightRefs.push_back(current);
+			light->LoadModel("assets/models/cube/cube.obj", "assets/shaders/default", model, shader, false);
+			light->SetScale(vec3(0.2f, 0.2f, (light->GetType() == Engine::LightType::Spot) ? 0.4f : 0.2f));
+			light->SentTint(light->GetColour());
+			light->RenderOnlyColour(true);
+			m_lightRefs.push_back(light);
 		}
 	}
 }

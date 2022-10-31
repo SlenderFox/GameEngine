@@ -41,6 +41,7 @@ namespace Engine
 			pEntity->m_modelRef->GetShaderRef()->SetMat4("u_model", pEntity->GetTransform());
 			pEntity->m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel",
 				(mat3)transpose(inverse(pEntity->GetTransform())));
+			pEntity->UpdateModel();
 		}
 	};
 
@@ -152,7 +153,7 @@ namespace Engine
 		m_modelRef->GetShaderRef()->SetVec3("u_scale", pValue);
 	}
 
-	void Entity::SetColourInShader(Colour pCol) noexcept
+	void Entity::SentTint(Colour pCol) noexcept
 	{
 		m_modelRef->GetShaderRef()->SetVec3("u_colour", pCol.RGBvec3());
 	}
