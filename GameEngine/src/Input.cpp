@@ -38,7 +38,7 @@ namespace Engine
 		// TODO
 	}
 
-	bool Input::GetKey(Key pKey, State pState) noexcept
+	bool Input::GetKeyState(Key pKey, State pState) noexcept
 	{
 		return (int)pState == glfwGetKey(s_windowRef, (int)pKey);
 	}

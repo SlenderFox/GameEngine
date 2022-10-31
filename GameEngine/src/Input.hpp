@@ -162,7 +162,7 @@ namespace Engine
 
 		static bool Init(GLFWwindow* pWindowRef) noexcept;
 		static void Process() noexcept;
-		static bool GetKey(Key pKey, State pState) noexcept;
+		static bool GetKeyState(Key pKey, State pState) noexcept;
 
 		static void Key_callback(
 			GLFWwindow* pWindow,

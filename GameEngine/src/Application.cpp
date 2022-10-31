@@ -358,6 +358,6 @@ namespace Engine
 		//}
 
 		// End application
-		if (Input::GetKey(Input::Key::Key_End, Input::State::Press)) Quit();
+		if (Input::GetKeyState(Input::Key::Key_End, Input::State::Press)) Quit();
 	}
 }
