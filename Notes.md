@@ -44,7 +44,7 @@ Todo:
 - [x] Try out reworking entire project on the premise of static engine
 - [x] Make more functions pass by reference
 - [x] Update ([[Debug.hpp]]/[[Debug.cpp]]) to be used without \_DEBUG enabled
-- [ ] Holding alt releases cursor
+- [ ] Alt releases cursor
 - [ ] Make ([[Debug.hpp]]/[[Debug.cpp]]) use imgui
 	- [ ] Can open an "event" then post whatever info to it and finally close it
 - [ ] Overhaul lights ([[Light.hpp]]/[[Light.cpp]])

@@ -15,7 +15,7 @@ namespace Engine
 
 		static CallbackFunc s_mouseCallbackFun;
 		static CallbackFunc s_scrollCallbackFun;
-		
+
 		static double s_mouseX, s_mouseY, s_mouseLastX, s_mouseLastY;
 
 #		pragma region Constructors
@@ -179,8 +179,9 @@ namespace Engine
 			double pOffsetX,
 			double pOffsetY) noexcept;
 
-		// TODO: Try make constexpr
-		static void AddMouseCallback(CallbackFunc pCallback) noexcept;
-		static void AddSrollCallback(CallbackFunc pCallback) noexcept;
+		static inline void AddMouseCallback(CallbackFunc pCallback) noexcept
+		{ s_mouseCallbackFun = pCallback; }
+		static inline void AddSrollCallback(CallbackFunc pCallback) noexcept
+		{ s_scrollCallbackFun = pCallback; }
 	};
 }

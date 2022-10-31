@@ -76,14 +76,4 @@ namespace Engine
 		if (!s_scrollCallbackFun) return;
 		s_scrollCallbackFun(pOffsetX, pOffsetY);
 	}
-
-	void Input::AddMouseCallback(CallbackFunc pCallback) noexcept
-	{
-		s_mouseCallbackFun = pCallback;
-	}
-
-	void Input::AddSrollCallback(CallbackFunc pCallback) noexcept
-	{
-		s_scrollCallbackFun = pCallback;
-	}
 }
