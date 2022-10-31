@@ -187,6 +187,7 @@ namespace Engine
 		//ImGui_ImplGlfw_InitForOpenGL(s_windowRef, true);
 
 		// TODO: Remove these
+		glfwGetCursorPos(s_windowRef, &s_mouseLastX, &s_mouseLastY);
 		Input::AddMouseCallback(MouseCallback);
 		Input::AddSrollCallback(ScrollCallback);
 
@@ -264,8 +265,6 @@ namespace Engine
 
 		glfwSetFramebufferSizeCallback(s_windowRef, framebuffer_size_callback);
 
-		// TODO: Remove
-		glfwGetCursorPos(s_windowRef, &s_mouseLastX, &s_mouseLastY);
 		return true;
 	}
 
@@ -371,7 +370,7 @@ namespace Engine
 		if (Input::GetKey(Input::Key::Key_End, Input::State::Press)) Quit();
 	}
 
-	void Application::MouseCallback(double& pPosX, double& pPosY) noexcept
+	void Application::MouseCallback(double pPosX, double pPosY) noexcept
 	{
 		Application* app = GetApplication();
 		double offsetX = pPosX - app->s_mouseLastX;
@@ -397,7 +396,7 @@ namespace Engine
 		Renderer::s_camera->SetForward(forward);
 	}
 
-	void Application::ScrollCallback(double& pOffsetX, double& pOffsetY) noexcept
+	void Application::ScrollCallback(double pOffsetX, double pOffsetY) noexcept
 	{
 		Renderer::s_camera->ModifyFovH((float)pOffsetY * -3.0f);
 	}

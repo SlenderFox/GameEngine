@@ -75,8 +75,8 @@ namespace Engine
 		static void SetFullscreen(bool pFullscreen) noexcept;
 
 		// TODO: Remove these
-		static void MouseCallback(double& pPosX, double& pPosY) noexcept;
-		static void ScrollCallback(double& pOffsetX, double& pOffsetY) noexcept;
+		static void MouseCallback(double pPosX, double pPosY) noexcept;
+		static void ScrollCallback(double pOffsetX, double pOffsetY) noexcept;
 
 		static double GetTime() noexcept { return s_currentTime; }
 		static double GetDeltaTime() noexcept { return s_deltaTime; }

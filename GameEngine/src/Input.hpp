@@ -4,7 +4,7 @@ struct GLFWwindow;
 
 namespace Engine
 {
-	using CallbackFunc = void(*)(double&, double&);
+	using CallbackFunc = void(*)(double, double);
 
 	// Singleton class used for handling inputs
 	class Input
