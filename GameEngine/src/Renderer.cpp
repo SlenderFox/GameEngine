@@ -240,7 +240,10 @@ namespace Engine
 	Model* Renderer::GetModelAt(uint8_t pPos) noexcept
 	{
 		if (!s_models.get())
+		{
+			Debug::Send("No model vector found");
 			return nullptr;
+		}
 
 		if (pPos > s_models.get()->size() - 1)
 		{
@@ -254,7 +257,10 @@ namespace Engine
 	Light* Renderer::GetLightAt(uint8_t pPos) noexcept
 	{
 		if (!s_lights.get())
+		{
+			Debug::Send("No light vector found");
 			return nullptr;
+		}
 
 		if (pPos > s_lights.get()->size() - 1)
 		{
