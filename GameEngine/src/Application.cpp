@@ -41,10 +41,6 @@ namespace Engine
 	double Application::s_deltaTime = 0.0;
 	double Application::s_fixedTimer = 0.0;
 	double Application::s_frameTimer = 0.0;
-	double Application::s_mouseLastX = 0.0;
-	double Application::s_mouseLastY = 0.0;
-	double Application::s_camYaw = 90.0;
-	double Application::s_camPitch = 0.0;
 	string Application::s_title = "Application";
 	Application::ExitCode Application::s_exitCode = Application::ExitCode::Okay;
 
@@ -185,11 +181,6 @@ namespace Engine
 		}
 		// FIXME: Only works after input class is initialised
 		//ImGui_ImplGlfw_InitForOpenGL(s_windowRef, true);
-
-		// TODO: Remove these
-		glfwGetCursorPos(s_windowRef, &s_mouseLastX, &s_mouseLastY);
-		Input::AddMouseCallback(MouseCallback);
-		Input::AddSrollCallback(ScrollCallback);
 
 		if (!GetApplication()->Startup())
 		{
@@ -368,36 +359,5 @@ namespace Engine
 
 		// End application
 		if (Input::GetKey(Input::Key::Key_End, Input::State::Press)) Quit();
-	}
-
-	void Application::MouseCallback(double pPosX, double pPosY) noexcept
-	{
-		Application* app = GetApplication();
-		double offsetX = pPosX - app->s_mouseLastX;
-		double offsetY = pPosY - app->s_mouseLastY;
-		app->s_mouseLastX = pPosX;
-		app->s_mouseLastY = pPosY;
-		const double sens = 0.05f;
-		offsetX *= sens;
-		offsetY *= sens;
-		app->s_camYaw += offsetX;
-		app->s_camPitch += offsetY;
-		if (app->s_camPitch > 89.0f)
-			app->s_camPitch = 89.0f;
-		else if (app->s_camPitch < -89.0f)
-			app->s_camPitch = -89.0f;
-
-		// The forward direction of the camera
-		vec3 forward = vec3();
-		forward.x = (float)cos(radians(app->s_camYaw)) * (float)cos(radians(app->s_camPitch));
-		forward.y = (float)sin(radians(app->s_camPitch));
-		forward.z = (float)sin(radians(app->s_camYaw)) * (float)cos(radians(app->s_camPitch));
-		forward = normalize(forward);
-		Renderer::s_camera->SetForward(forward);
-	}
-
-	void Application::ScrollCallback(double pOffsetX, double pOffsetY) noexcept
-	{
-		Renderer::s_camera->ModifyFovH((float)pOffsetY * -3.0f);
 	}
 }

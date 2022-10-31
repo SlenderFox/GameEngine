@@ -16,6 +16,38 @@ using Engine::Renderer;
 using Engine::Input;
 #pragma endregion
 
+// Static
+
+double Project::s_camYaw = 90.0;
+double Project::s_camPitch = 0.0;
+
+void Project::MouseCallback(double pDeltaX, double pDeltaY) noexcept
+{
+	const double sens = 0.05f;
+	pDeltaX *= sens;
+	pDeltaY *= sens;
+	s_camYaw += pDeltaX;
+	s_camPitch += pDeltaY;
+	if (s_camPitch > 89.0f)
+		s_camPitch = 89.0f;
+	else if (s_camPitch < -89.0f)
+		s_camPitch = -89.0f;
+	// The forward direction of the camera
+	vec3 forward = vec3();
+	forward.x = (float)(cos(radians(s_camYaw)) * cos(radians(s_camPitch)));
+	forward.y = (float)sin(radians(s_camPitch));
+	forward.z = (float)(sin(radians(s_camYaw)) * cos(radians(s_camPitch)));
+	forward = normalize(forward);
+	Renderer::GetCamera()->SetForward(forward);
+}
+
+void Project::ScrollCallback(double pOffsetX, double pOffsetY) noexcept
+{
+	Renderer::GetCamera()->ModifyFovH((float)pOffsetY * -3.0f);
+}
+
+// Member
+
 Project::Project()
 {
 	m_lightRefs = vector<Engine::Light*>();
@@ -40,6 +72,8 @@ bool Project::Startup()
 {
 	CreateLights();
 	CreateScene();
+	Input::AddMouseCallback(MouseCallback);
+	Input::AddSrollCallback(ScrollCallback);
 	return true;
 }
 

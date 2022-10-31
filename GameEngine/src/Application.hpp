@@ -37,7 +37,6 @@ namespace Engine
 		static double s_currentTime, s_prevTime, s_deltaTime;
 		// Timers used for calling fixed update and displaying fps
 		static double s_fixedTimer, s_frameTimer;
-		static double s_mouseLastX, s_mouseLastY, s_camYaw, s_camPitch;
 
 		static std::string s_title;
 		static ExitCode s_exitCode;
@@ -73,10 +72,6 @@ namespace Engine
 		static void SetDimensions(uint16_t pWidth, uint16_t pHeight) noexcept;
 		static void SetTitle(std::string pTitle) noexcept;
 		static void SetFullscreen(bool pFullscreen) noexcept;
-
-		// TODO: Remove these
-		static void MouseCallback(double pPosX, double pPosY) noexcept;
-		static void ScrollCallback(double pOffsetX, double pOffsetY) noexcept;
 
 		static double GetTime() noexcept { return s_currentTime; }
 		static double GetDeltaTime() noexcept { return s_deltaTime; }

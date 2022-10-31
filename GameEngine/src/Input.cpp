@@ -8,6 +8,8 @@ namespace Engine
 	GLFWwindow* Input::s_windowRef = nullptr;
 	CallbackFunc Input::s_mouseCallbackFun = nullptr;
 	CallbackFunc Input::s_scrollCallbackFun = nullptr;
+	double Input::s_mouseX = 0.0;
+	double Input::s_mouseY = 0.0;
 	double Input::s_mouseLastX = 0.0;
 	double Input::s_mouseLastY = 0.0;
 #	pragma endregion
@@ -16,7 +18,10 @@ namespace Engine
 	{
 		s_windowRef = pWindowRef;
 
-		//glfwGetCursorPos(s_windowRef, &m_mouseLastX, &m_mouseLastY);
+		glfwGetCursorPos(s_windowRef, &s_mouseX, &s_mouseY);
+		s_mouseLastX = s_mouseX;
+		s_mouseLastY = s_mouseY;
+
 		glfwSetInputMode(s_windowRef, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(s_windowRef, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
@@ -54,8 +59,13 @@ namespace Engine
 		double pPosX,
 		double pPosY) noexcept
 	{
+		s_mouseLastX = s_mouseX;
+		s_mouseLastY = s_mouseY;
+		s_mouseX = pPosX;
+		s_mouseY = pPosY;
 		if (!s_mouseCallbackFun) return;
-		s_mouseCallbackFun(pPosX, pPosY);
+		// Pass the delta
+		s_mouseCallbackFun(s_mouseX - s_mouseLastX, s_mouseY - s_mouseLastY);
 	}
 
 	void Input::Scroll_callback(

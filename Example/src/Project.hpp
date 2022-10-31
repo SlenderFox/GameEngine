@@ -3,6 +3,11 @@
 
 class Project: public Engine::Application
 {
+	static double s_camYaw, s_camPitch;
+	
+	static void MouseCallback(double pDeltaX, double pDeltaY) noexcept;
+	static void ScrollCallback(double pOffsetX, double pOffsetY) noexcept;
+
 private:
 	static const uint8_t s_numCubes = 9;
 

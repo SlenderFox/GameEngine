@@ -7,6 +7,7 @@ Notes:
 	Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)
 - https://www.glfw.org/docs/latest/input_guide.html
 - `git rm -rf --cached .` `git add .`
+- https://github.com/irisengine/iris
 ___
 Todo:
 - [x] Add all source files as notes
