@@ -52,7 +52,7 @@ namespace Engine
 		m_shader = new Shader(pShaderPath);
 		if (m_loadTextures) LoadTexturesToShader();
 
-		Debug::SendWithPrefix(
+		Debug::Send(
 			"Done!",
 			Debug::Type::Note,
 			Debug::Impact::Small,
@@ -82,7 +82,7 @@ namespace Engine
 
 	void Model::LoadModel(string pPath)
 	{
-		Debug::SendWithPrefix(
+		Debug::Send(
 			"Loading model \"" + pPath + "\"",
 			Debug::Type::Process,
 			Debug::Impact::Large,
@@ -90,7 +90,7 @@ namespace Engine
 		);
 		if (!m_loadTextures) 
 		{
-			Debug::SendWithPrefix(
+			Debug::Send(
 				"Ignoring textures",
 				Debug::Type::Note,
 				Debug::Impact::Small,
@@ -103,7 +103,7 @@ namespace Engine
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			Debug::SendWithPrefix(
+			Debug::Send(
 				"ERROR::ASSIMP::" + string(importer.GetErrorString()),
 				Debug::Type::Note,
 				Debug::Impact::Large,
@@ -228,7 +228,7 @@ namespace Engine
 							+ std::to_string(s_loadedTextures[j]->GetId())
 							+ ": "
 							+ s_loadedTextures[j]->GetFile().data();
-						Debug::SendWithPrefix(
+						Debug::Send(
 							msg,
 							Debug::Type::Note,
 							Debug::Impact::Small,
@@ -279,7 +279,7 @@ namespace Engine
 				+ location
 				+ " to "
 				+ std::to_string(m_textures[i]->GetId());
-			Debug::SendWithPrefix(
+			Debug::Send(
 				msg,
 				Debug::Type::Note,
 				Debug::Impact::Small,

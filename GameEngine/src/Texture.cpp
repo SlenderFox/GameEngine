@@ -26,7 +26,7 @@ namespace Engine
 
 	int32_t Texture::LoadTextureFromFile(string pPath) noexcept
 	{
-		Debug::SendWithPrefix(
+		Debug::Send(
 			"Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"...",
 			Debug::Type::Process,
 			Debug::Impact::Large,
@@ -37,7 +37,7 @@ namespace Engine
 
 		if (s_textureCount > 31)
 		{
-			Debug::SendWithPrefix(
+			Debug::Send(
 				"Failed to load texture: Exceeded max texture count (max = 32)",
 				Debug::Type::Note,
 				Debug::Impact::Large,
@@ -74,7 +74,7 @@ namespace Engine
 			case 3: format = GL_RGB; break;
 			case 4: format = GL_RGBA; break;
 			default:
-				Debug::SendWithPrefix(
+				Debug::Send(
 					"Failed to load texture: Too many components",
 					Debug::Type::Note,
 					Debug::Impact::Large,
@@ -107,7 +107,7 @@ namespace Engine
 		}
 		else
 		{
-			Debug::SendWithPrefix(
+			Debug::Send(
 				"Failed to load texture: No file found",
 				Debug::Type::Note,
 				Debug::Impact::Large,

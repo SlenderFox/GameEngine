@@ -52,12 +52,12 @@ namespace Engine
 			std::string pMsg,
 			bool pNewline = false,
 			bool pEndline = true) noexcept;
-		static void SendWithPrefix(
+		static void Send(
 			std::string pMsg,
 			const wchar_t* pPrefix,
 			bool pNewline = false,
 			bool pEndline = true) noexcept;
-		static void SendWithPrefix(
+		static void Send(
 			std::string pMsg,
 			Type pType,
 			Impact pImpact,

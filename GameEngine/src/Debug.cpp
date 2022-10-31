@@ -48,7 +48,7 @@ namespace Engine
 #		endif
 	}
 
-	void Debug::SendWithPrefix(
+	void Debug::Send(
 		string pMsg,
 		const wchar_t* pPrefix,
 		bool pNewline,
@@ -61,7 +61,7 @@ namespace Engine
 #		endif
 	}
 
-	void Debug::SendWithPrefix(
+	void Debug::Send(
 		string pMsg,
 		Type pType,
 		Impact pImpact,
@@ -70,7 +70,7 @@ namespace Engine
 		bool pEndline) noexcept
 	{
 		uint8_t pre = (uint8_t)pType + (uint8_t)pImpact + (uint8_t)pStage;
-		SendWithPrefix(pMsg, s_prefixes[pre], pNewline, pEndline);
+		Send(pMsg, s_prefixes[pre], pNewline, pEndline);
 	}
 
 	void Debug::NewLine() noexcept

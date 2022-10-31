@@ -134,10 +134,11 @@ return;}";
 #		pragma endregion
 
 		m_usingFallback = false;
+		string codeString;
 
 		if (pType == ShaderType::PROGRAM)
 		{
-			Debug::SendWithPrefix(
+			Debug::Send(
 				"ERROR::SHADER::LOADING_INCORRECT_SHADER_TYPE",
 				Debug::Type::Note,
 				Debug::Impact::Large,
@@ -147,7 +148,7 @@ return;}";
 		}
 
 		string path = m_shaderPath + GetType(pType, string(".vert"), string(".frag"));
-		Debug::SendWithPrefix(
+		Debug::Send(
 			"Compiling shader \"" + path + "\"...",
 			Debug::Type::Process,
 			Debug::Impact::Small,
@@ -161,55 +162,58 @@ return;}";
 			m_usingFallback = true;
 			Debug::NewLine();
 		}
-
-		const char* shaderCode = "";
-
-		// Must be defined outside the try catch
-		string codeString;
-
-		// Try to retrieve the vertex/fragment source code from filePath
-		try
+		else
 		{
-			ifstream fileStream;
-			stringstream codeStream;
-			// Ensure ifstream objects can throw exceptions
-			fileStream.exceptions(ifstream::failbit | ifstream::badbit);
+			// Try to retrieve the vertex/fragment source code from filePath
+			try
+			{
+				ifstream fileStream;
+				stringstream codeStream;
+				// Ensure ifstream objects can throw exceptions
+				fileStream.exceptions(ifstream::failbit | ifstream::badbit);
 
-			fileStream.open(path);
-			codeStream << fileStream.rdbuf();
-			fileStream.close();
+				fileStream.open(path);
+				codeStream << fileStream.rdbuf();
+				fileStream.close();
 
-			// Convert stream into string, has to be this dumb way
-			codeString = codeStream.str();
-			shaderCode = codeString.c_str();
-		}
-		catch (ifstream::failure e)
-		{
-			string msg = "ERROR::SHADER::"
-				+ GetType(pType, string("VERTEX"), string("FRAGMENT"))
-				+ "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE";
-			Debug::SendWithPrefix(
-				msg,
-				Debug::Type::Note,
-				Debug::Impact::Large,
-				Debug::Stage::Mid,
-				true
-			);
+				// Convert stream into string
+				codeString = codeStream.str();
+			}
+			catch (ifstream::failure e)
+			{
+				string msg = "ERROR::SHADER::"
+					+ GetType(pType, string("VERTEX"), string("FRAGMENT"))
+					+ "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE";
+				Debug::Send(
+					msg,
+					Debug::Type::Note,
+					Debug::Impact::Large,
+					Debug::Stage::Mid,
+					true
+				);
 
-			m_usingFallback = true;
-			shaderCode = GetType<const char* const&>(pType, vertexFallback, fragmentFallback);
+				m_usingFallback = true;
+			}
 		}
 
 		if (!m_usingFallback)
 		{
-			if (!CompileShader(GetType(pType, &m_idVertex, &m_idFragment), pType, shaderCode))
+			if (
+				!CompileShader(
+					GetType(pType, &m_idVertex, &m_idFragment),
+					pType,
+					codeString.c_str()
+				)
+			)
+			{
 				m_usingFallback = true;
+			}
 		}
 
 		// Separated to allow bool to potentially change
 		if (m_usingFallback)
 		{
-			Debug::SendWithPrefix(
+			Debug::Send(
 				"Compiling fallback code...",
 				Debug::Type::Process,
 				Debug::Impact::Small,
@@ -229,7 +233,7 @@ return;}";
 				string msg = "ERROR::SHADER::"
 					+ GetType(pType, string("VERTEX"), string("FRAGMENT"))
 					+ "::FALLBACK_CODE_FAILURE";
-				Debug::SendWithPrefix(
+				Debug::Send(
 					msg,
 					Debug::Type::Note,
 					Debug::Impact::Large,
@@ -250,7 +254,7 @@ return;}";
 		switch (pType)
 		{
 		case ShaderType::PROGRAM:
-			Debug::SendWithPrefix(
+			Debug::Send(
 				"ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM",
 				Debug::Type::Note,
 				Debug::Impact::Large,
@@ -265,7 +269,7 @@ return;}";
 			*pId = glCreateShader(GL_FRAGMENT_SHADER);
 			break;
 		default:
-			Debug::SendWithPrefix(
+			Debug::Send(
 				"ERROR::SHADER::UNKNOWN_SHADER_TYPE",
 				Debug::Type::Note,
 				Debug::Impact::Large,
@@ -315,7 +319,7 @@ return;}";
 			{
 				// In the case of a failure it loads the log and outputs
 				glGetProgramInfoLog(*pShaderID, 512, NULL, infoLog);
-				Debug::SendWithPrefix(
+				Debug::Send(
 					"ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog),
 					Debug::Type::Note,
 					Debug::Impact::Large,
@@ -338,7 +342,7 @@ return;}";
 					+ GetType(pType, string("VERTEX"), string("FRAGMENT"))
 					+ "::COMPILATION_FAILED:\n"
 					+ string(infoLog);
-				Debug::SendWithPrefix(
+				Debug::Send(
 					msg,
 					Debug::Type::Note,
 					Debug::Impact::Large,
