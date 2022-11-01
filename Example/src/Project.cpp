@@ -87,12 +87,12 @@ void Project::Update()
 	for (uint8_t i = 0; i < s_numCubes; i++)
 	{
 		float angle = (float)GetDeltaTime() * 5.0f * ((i + 1) / (i * 0.2f + 1));
-		m_cubes[i]->SetTransform(rotate(
+		mat4 rot = rotate(
 			m_cubes[i]->GetTransform(),
 			radians(angle),
 			glm::normalize(vec3(1.0f, 0.3f, 0.5f))
-			)
 		);
+		m_cubes[i]->SetTransform(&rot);
 	}
 }
 

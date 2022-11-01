@@ -114,7 +114,7 @@ namespace Engine
 	}
 
 #	pragma region Setters
-	void Entity::SetTransform(mat4 pValue) noexcept
+	void Entity::SetTransform(mat4* pValue) noexcept
 	{
 		Transform::SetTransform(pValue);
 		UpdateModel();

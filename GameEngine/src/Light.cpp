@@ -17,7 +17,7 @@ namespace Engine
 		: m_type(pType),
 		m_lightColour(pColour)
 	{
-		Transform::SetTransform(pTransform);
+		Transform::SetTransform(&pTransform);
 		m_angle = cos(radians(20.0f));
 	}
 

@@ -47,7 +47,7 @@ namespace Engine
 			bool pLoadTextures = true) noexcept;
 
 #		pragma region Setters
-		void SetTransform(glm::mat4 pValue) noexcept override;
+		void SetTransform(glm::mat4* pValue) noexcept override;
 		void SetPosition(glm::vec3 pValue) noexcept override;
 		void Translate(glm::vec3 pValue) noexcept override;
 

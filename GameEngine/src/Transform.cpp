@@ -39,11 +39,6 @@ namespace Engine
 #	pragma endregion
 
 #	pragma region Setters
-	void Transform::SetTransform(mat4 pValue) noexcept
-	{
-		m_transform = pValue;
-	}
-
 	void Transform::SetPosition(vec3 pValue) noexcept
 	{
 		m_transform[3] = vec4(pValue, m_transform[3][3]);

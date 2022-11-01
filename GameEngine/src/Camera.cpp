@@ -18,8 +18,9 @@ namespace Engine
 #	pragma region Constructors
 	Camera::Camera(float pAspectRatio)
 	{
+		mat4 id = mat4(1.0f);
 		SetAspectRatio(pAspectRatio);
-		SetTransform(mat4(1.0f));
+		SetTransform(&id);
 		SetFovH(75.0f);
 	}
 
@@ -27,8 +28,9 @@ namespace Engine
 		float pAspectRatio,
 		float pFovH)
 	{
+		mat4 id = mat4(1.0f);
 		SetAspectRatio(pAspectRatio);
-		SetTransform(mat4(1.0f));
+		SetTransform(&id);
 		SetFovH(pFovH);
 	}
 
@@ -37,7 +39,7 @@ namespace Engine
 		mat4 pTransform)
 	{
 		SetAspectRatio(pAspectRatio);
-		SetTransform(pTransform);
+		SetTransform(&pTransform);
 		SetFovH(75.0f);
 	}
 
@@ -47,7 +49,7 @@ namespace Engine
 		mat4 pTransform)
 	{
 		SetAspectRatio(pAspectRatio);
-		SetTransform(pTransform);
+		SetTransform(&pTransform);
 		SetFovH(pFovH);
 	}
 
@@ -117,7 +119,7 @@ namespace Engine
 	}
 
 #	pragma region Setters
-	void Camera::SetTransform(mat4 pValue) noexcept
+	void Camera::SetTransform(mat4* pValue) noexcept
 	{
 		Transform::SetTransform(pValue);
 		m_view = inverse(GetTransform());
@@ -126,7 +128,8 @@ namespace Engine
 	void Camera::SetView(mat4 pValue) noexcept
 	{
 		m_view = pValue;
-		Transform::SetTransform(inverse(m_view));
+		mat4 inv = inverse(m_view);
+		Transform::SetTransform(&inv);
 	}
 
 	void Camera::SetProjection(float pFovV) noexcept

@@ -23,7 +23,7 @@ namespace Engine
 #		pragma endregion
 
 #		pragma region Setters
-		virtual void SetTransform(	glm::mat4 pValue) noexcept;
+		virtual constexpr void SetTransform(glm::mat4* pValue) noexcept { m_transform = *pValue; }
 		virtual void SetPosition(	glm::vec3 pValue) noexcept;
 		virtual void Translate(		glm::vec3 pValue) noexcept;
 		virtual void SetAxes(		glm::vec3 pRight,
@@ -36,10 +36,11 @@ namespace Engine
 
 #		pragma region Getters
 		constexpr glm::mat4 GetTransform() const noexcept { return m_transform; }
-		constexpr virtual glm::vec4 GetPosition() const noexcept { return m_transform[3]; }
-		constexpr virtual glm::vec4 GetRight() const noexcept;
-		constexpr virtual glm::vec4 GetUp() const noexcept;
-		constexpr virtual glm::vec4 GetForward() const noexcept;
+		constexpr glm::vec4 GetPosition() const noexcept { return m_transform[3]; }
+		// Why the fuck do these three need to be virtual, nothing overrides them
+		virtual constexpr glm::vec4 GetRight() const noexcept;
+		virtual constexpr glm::vec4 GetUp() const noexcept;
+		virtual constexpr glm::vec4 GetForward() const noexcept;
 #		pragma endregion
 	};
 }
