@@ -94,6 +94,7 @@ namespace Engine
 
 	void Entity::UpdateModel() const noexcept
 	{
+		if (!m_modelRef) return;
 		m_modelRef->GetShaderRef()->SetMat4("u_model", GetTransform());
 		m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
 	}
@@ -116,6 +117,12 @@ namespace Engine
 	void Entity::SetTransform(mat4 pValue) noexcept
 	{
 		Transform::SetTransform(pValue);
+		UpdateModel();
+	}
+
+	void Entity::SetPosition(vec3 pValue) noexcept
+	{
+		Transform::SetPosition(pValue);
 		UpdateModel();
 	}
 

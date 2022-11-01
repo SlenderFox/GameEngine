@@ -48,6 +48,7 @@ namespace Engine
 
 #		pragma region Setters
 		void SetTransform(glm::mat4 pValue) noexcept override;
+		void SetPosition(glm::vec3 pValue) noexcept override;
 		void Translate(glm::vec3 pValue) noexcept override;
 
 		void SetParent(EntityBase* pParent) noexcept;
