@@ -13,3 +13,6 @@ Example/imgui.ini
 # obsidian stuff
 .obsidian/
 ObsidianGraph/
+
+#testing out doxygen
+doxygen/
