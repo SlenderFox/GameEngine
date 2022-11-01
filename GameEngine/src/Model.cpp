@@ -190,7 +190,7 @@ namespace Engine
 			}
 		}
 
-		return make_unique<Mesh>(vertices, indices);
+		return make_unique<Mesh>(&vertices, &indices);
 	}
 
 	vector<Texture*> Model::LoadMaterialTextures(

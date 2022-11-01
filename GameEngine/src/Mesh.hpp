@@ -33,10 +33,9 @@ namespace Engine
 
 	public:
 		Mesh();
-		// TODO: Look into
 		Mesh(
-			std::vector<Vertex> pVertices,
-			std::vector<uint32_t> pIndices);
+			std::vector<Vertex>* pVertices,
+			std::vector<uint32_t>* pIndices);
 		~Mesh();
 
 		void Draw() const noexcept;
