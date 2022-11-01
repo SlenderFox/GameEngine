@@ -27,6 +27,8 @@ void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight) noe
 namespace Engine
 {
 #	pragma region Variables
+	const double Application::s_fixedDeltaTime = 1.0 / 60.0;
+
 	Application* Application::s_application = nullptr;
 	GLFWwindow* Application::s_windowRef = nullptr;
 	bool Application::s_gladLoaded = false,
@@ -43,8 +45,6 @@ namespace Engine
 		Application::s_frameTimer = 0.0;
 	string Application::s_title = "Application";
 	Application::ExitCode Application::s_exitCode = Application::ExitCode::Okay;
-
-	const double Application::s_fixedDeltaTime = 1.0 / 60.0;
 #	pragma endregion
 
 	Application::Application()
