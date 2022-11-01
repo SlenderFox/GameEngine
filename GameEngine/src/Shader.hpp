@@ -27,7 +27,7 @@ namespace Engine
 		constexpr T GetType(ShaderType pType, T ifVertex, T ifFragment) const;
 
 	public:
-		Shader(std::string pShaderPath = "");
+		Shader(std::string* pShaderPath = nullptr);
 		~Shader();
 
 		void Use() const noexcept;

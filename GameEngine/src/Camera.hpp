@@ -49,9 +49,9 @@ namespace Engine
 
 #		pragma region Setters
 		void SetTransform(glm::mat4* pValue) noexcept override;
-		void SetView(glm::mat4 pValue) noexcept;
+		void SetView(glm::mat4* pValue) noexcept;
 		void SetProjection(float pFovV) noexcept;
-		constexpr void SetProjection(glm::mat4 pValue) noexcept { m_projection = pValue; }
+		constexpr void SetProjection(glm::mat4* pValue) noexcept { m_projection = *pValue; }
 		constexpr void SetAspectRatio(float pAspectRatio) noexcept { m_aspectRatio = pAspectRatio; }
 
 		void SetPosition(glm::vec3 pValue) noexcept override;

@@ -24,8 +24,8 @@ namespace Engine
 	// Member
 
 	Model::Model(
-		string pModelPath,
-		string pShaderPath,
+		string* pModelPath,
+		string* pShaderPath,
 		Camera* pCamera,
 		bool pLoadTextures)
 		: m_cameraRef(pCamera),
@@ -42,8 +42,8 @@ namespace Engine
 	}
 
 	void Model::Init(
-		string pModelPath,
-		string pShaderPath)
+		string* pModelPath,
+		string* pShaderPath)
 	{
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 		m_textures = vector<Texture*>();
@@ -80,10 +80,10 @@ namespace Engine
 		}
 	}
 
-	void Model::LoadModel(string pPath)
+	void Model::LoadModel(string* pPath)
 	{
 		Debug::Send(
-			"Loading model \"" + pPath + "\"",
+			"Loading model \"" + *pPath + "\"",
 			Debug::Type::Process,
 			Debug::Impact::Large,
 			Debug::Stage::Begin
@@ -99,7 +99,7 @@ namespace Engine
 		}
 
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(pPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene* scene = importer.ReadFile(*pPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -111,7 +111,7 @@ namespace Engine
 			);
 			return;
 		}
-		m_directory = pPath.substr(0, pPath.find_last_of('/'));
+		m_directory = (*pPath).substr(0, (*pPath).find_last_of('/'));
 		ProcessNode(scene->mRootNode, scene);
 	}
 

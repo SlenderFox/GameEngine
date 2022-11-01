@@ -83,7 +83,7 @@ namespace Engine
 		vec3 pUp)
 	{
 		m_view = glm::lookAt(pFrom, pTo, pUp);
-		SetView(m_view);
+		SetView(&m_view);
 	}
 
 	void Camera::ModifyFovH(float pValue) noexcept
@@ -125,9 +125,9 @@ namespace Engine
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::SetView(mat4 pValue) noexcept
+	void Camera::SetView(mat4* pValue) noexcept
 	{
-		m_view = pValue;
+		m_view = *pValue;
 		mat4 inv = inverse(m_view);
 		Transform::SetTransform(&inv);
 	}

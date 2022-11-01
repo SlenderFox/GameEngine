@@ -27,9 +27,9 @@ namespace Engine
 		Camera* m_cameraRef;
 
 		void Init(
-			std::string pModelPath,
-			std::string pShaderPath);
-		void LoadModel(std::string pPath);
+			std::string* pModelPath,
+			std::string* pShaderPath);
+		void LoadModel(std::string* pPath);
 		void ProcessNode(
 			aiNode* pNode,
 			const aiScene* pScene) noexcept;
@@ -44,8 +44,8 @@ namespace Engine
 
 	public:
 		Model(
-			std::string pModelPath,
-			std::string pShaderPath,
+			std::string* pModelPath,
+			std::string* pShaderPath,
 			Camera* pCamera = nullptr,
 			bool pLoadTextures = true);
 		~Model();

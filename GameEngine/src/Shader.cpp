@@ -16,9 +16,9 @@ namespace Engine
 	// Forward declaration
 	class Application { public: static const bool GladLoaded() noexcept; };
 
-	Shader::Shader(string pShaderPath)
+	Shader::Shader(string* pShaderPath)
 	{
-		Load(pShaderPath);
+		Load(pShaderPath ? *pShaderPath : "");
 	}
 
 	Shader::~Shader()

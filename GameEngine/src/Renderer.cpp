@@ -186,8 +186,8 @@ namespace Engine
 
 	Model* Renderer::AddNewModel(
 		uint8_t& id,
-		string pModelPath,
-		string pShaderPath,
+		string* pModelPath,
+		string* pShaderPath,
 		bool pLoadTextures) noexcept
 	{
 		// Caps at 255

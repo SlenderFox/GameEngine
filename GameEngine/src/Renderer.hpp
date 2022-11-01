@@ -44,8 +44,8 @@ namespace Engine
 
 		static Model* AddNewModel(
 			uint8_t& id,
-			std::string pModelPath,
-			std::string pShaderPath,
+			std::string* pModelPath,
+			std::string* pShaderPath,
 			bool pLoadTextures = true) noexcept;
 		static Light* AddNewLight(
 			uint8_t& id,

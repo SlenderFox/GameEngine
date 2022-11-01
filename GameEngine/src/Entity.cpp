@@ -1,5 +1,6 @@
 #pragma region
 #include "Entity.hpp"
+#include "Renderer.hpp"
 
 using std::string;
 using glm::vec3;
@@ -14,24 +15,12 @@ using glm::inverse;
 
 namespace Engine
 {
-	// Forward declaration
-	class Renderer
-	{
-	public:
-		static void LoadLightsIntoShader(Shader* pShader) noexcept;
-		static Model* AddNewModel(
-			uint8_t &id,
-			string pModelPath,
-			string pShaderPath,
-			bool pLoadTextures = true) noexcept;
-	};
-
 	// Blame https://stackoverflow.com/a/40937193/15035125 for this
 	struct EntityLoader
 	{
 		static void BackgroundLoadModel(
-			string pModelPath,
-			string pShaderPath,
+			string* pModelPath,
+			string* pShaderPath,
 			Entity* pEntity,
 			bool pLoadTextures = true) noexcept
 		{
@@ -72,7 +61,7 @@ namespace Engine
 		bool pLoadTextures) noexcept
 	{
 		Entity* result = new Entity();
-		EntityLoader::BackgroundLoadModel(pModelPath, pShaderPath, result, pLoadTextures);
+		EntityLoader::BackgroundLoadModel(&pModelPath, &pShaderPath, result, pLoadTextures);
 		pModelOut = result->m_modelRef;
 		pShaderOut = result->m_modelRef->GetShaderRef();
 		return result;
@@ -108,7 +97,7 @@ namespace Engine
 	{
 		// Currently this does nothing about the previous model and shader
 		// but does not cause a memory leak as they are managed by Renderer
-		EntityLoader::BackgroundLoadModel(pModelPath, pShaderPath, this, pLoadTextures);
+		EntityLoader::BackgroundLoadModel(&pModelPath, &pShaderPath, this, pLoadTextures);
 		pModelOut = m_modelRef;
 		pShaderOut = m_modelRef->GetShaderRef();
 	}
