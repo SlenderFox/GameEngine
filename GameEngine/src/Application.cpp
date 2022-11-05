@@ -21,7 +21,7 @@ using glm::normalize;
 void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight) noexcept
 {
 	Engine::Application::GetApplication()->SetDimensions(pWidth, pHeight);
-	glViewport(0, 0, pWidth, pHeight);
+	Engine::Renderer::SetResolution(pWidth, pHeight);
 }
 
 namespace Engine

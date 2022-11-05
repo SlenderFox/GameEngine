@@ -54,12 +54,13 @@ namespace Engine
 
 		static void SetClearColour(const Colour pColour) noexcept;
 		static void SetRenderMode(const Mode pMode = Mode::Fill) noexcept;
+		static void SetResolution(size_t pWidth, size_t pHeight) noexcept;
 
 		static uint8_t ModelCount() noexcept;
 		static uint8_t LightCount() noexcept;
 		static Model* GetModelAt(uint8_t pPos) noexcept;
 		static Light* GetLightAt(uint8_t pPos) noexcept;
-		
+
 		static constexpr Camera* GetCamera() noexcept { return s_camera; }
 	};
 }

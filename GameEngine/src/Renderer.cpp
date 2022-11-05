@@ -227,6 +227,11 @@ namespace Engine
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + (int)pMode);
 	}
 
+	void Renderer::SetResolution(size_t pWidth, size_t pHeight) noexcept
+	{
+		glViewport(0, 0, pWidth, pHeight);
+	}
+
 	uint8_t Renderer::ModelCount() noexcept
 	{
 		return (uint8_t)s_models.get()->size();
