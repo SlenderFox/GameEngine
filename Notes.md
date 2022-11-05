@@ -1,6 +1,6 @@
-Repo: https://github.com/SlenderFox/OpenGL-Engine
-Following: https://learnopengl.com/
-Currently at: https://learnopengl.com/Model-Loading/Model
+Repo: https://github.com/SlenderFox/OpenGL-Engine  
+Following: https://learnopengl.com  
+Currently at: https://learnopengl.com/Advanced-OpenGL/Depth-testing
 ___
 Notes:
 - Enable/disable console through
