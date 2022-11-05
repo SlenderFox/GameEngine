@@ -12,6 +12,7 @@
 #include "../imgui/imgui_impl_opengl3.h"
 
 using std::string;
+using std::to_string;
 using glm::vec3;
 using glm::radians;
 using glm::normalize;
@@ -191,7 +192,7 @@ namespace Engine
 		// Calculates the time it took to start up
 		auto endTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTime = endTime - startTime;
-		Debug::Send("Started in " + std::to_string(elapsedTime.count()) + " seconds");
+		Debug::Send("Started in " + to_string(elapsedTime.count()) + " seconds");
 
 		return true;
 	}
@@ -291,25 +292,19 @@ namespace Engine
 		if (Renderer::s_camera && pWidth > 0 && pHeight > 0)
 			UpdateCamera();
 
-		Debug::Send(string("Dimensions set to " + std::to_string(s_winWidth) + ", " + std::to_string(s_winHeight)));
+		//Debug::Send(string("Dimensions set to " + to_string(s_winWidth) + ", " + to_string(s_winHeight)));
 	}
 
 	void Application::SetTitle(string pTitle) noexcept
 	{
 		s_title = pTitle;
-		Debug::Send("Title set to \"" + s_title + "\"");
+		//Debug::Send("Title set to \"" + s_title + "\"");
 	}
 
 	void Application::SetFullscreen(bool pFullscreen) noexcept
 	{
 		s_fullscreen = pFullscreen;
-		Debug::Send("Fullscreen set to " + string(pFullscreen ? "true" : "false"));
-	}
-
-	void Application::UpdateCamera() noexcept
-	{
-		Renderer::s_camera->SetAspectRatio((float)s_winWidth / (float)s_winHeight);
-		Renderer::s_camera->UpdateFovV();
+		//Debug::Send("Fullscreen set to " + string(pFullscreen ? "true" : "false"));
 	}
 
 	void Application::UpdateFrameTimeData() noexcept
@@ -329,9 +324,28 @@ namespace Engine
 			s_frameTimer -= secondsPerUpdate;
 			s_fps = (uint16_t)((double)s_perSecondFrameCount / secondsPerUpdate);
 			s_perSecondFrameCount = 0U;
-			glfwSetWindowTitle(s_windowRef,
-				(s_title + " | FPS: " + std::to_string(s_fps)).c_str());
+			UpdateTitle();
 		}
+	}
+
+	void Application::UpdateCamera() noexcept
+	{
+		Renderer::s_camera->SetAspectRatio((float)s_winWidth / (float)s_winHeight);
+		Renderer::s_camera->UpdateFovV();
+	}
+
+	void Application::UpdateTitle() noexcept
+	{
+		string title = {
+			s_title
+			+ " | "
+			+ to_string(s_winWidth)
+			+ "x"
+			+ to_string(s_winHeight)
+			+ " | "
+			+ to_string(s_fps)
+		};
+		glfwSetWindowTitle(s_windowRef, title.c_str());
 	}
 
 	void Application::ProcessInput() noexcept

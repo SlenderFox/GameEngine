@@ -56,8 +56,9 @@ namespace Engine
 		static bool SetupGlad();
 		static bool SetupImgui();
 
-		static void UpdateCamera() noexcept;
 		static void UpdateFrameTimeData() noexcept;
+		static void UpdateCamera() noexcept;
+		static void UpdateTitle() noexcept;
 		static void ProcessInput() noexcept;
 
 	public:
