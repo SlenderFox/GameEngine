@@ -3,7 +3,7 @@
  * @author SlenderFox
  * @brief Handles debug output
  *
- * -----Prefixes:
+ * @note -----Prefixes:
  * 00: Begin-Small-Note   : ┌ \xDA 218 \u250C
  * 01: Begin-Small-Process: ┬ \xC2 194 \u252C
  * 02: Begin-Large-Note   : ╒ \xD5 213 \u2552
