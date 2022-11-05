@@ -18,13 +18,6 @@ using glm::radians;
 using glm::normalize;
 #pragma endregion
 
-// Called when the user resizes the window
-void framebuffer_size_callback(GLFWwindow* pWindow, int pWidth, int pHeight) noexcept
-{
-	Engine::Application::GetApplication()->SetDimensions(pWidth, pHeight);
-	Engine::Renderer::SetResolution(pWidth, pHeight);
-}
-
 namespace Engine
 {
 #	pragma region Variables
@@ -255,7 +248,7 @@ namespace Engine
 #			endif
 		}
 
-		glfwSetFramebufferSizeCallback(s_windowRef, framebuffer_size_callback);
+		glfwSetFramebufferSizeCallback(s_windowRef, FramebufferSizeCallback);
 
 		return true;
 	}
@@ -373,5 +366,11 @@ namespace Engine
 
 		// End application
 		if (Input::GetKeyState(Input::Key::Key_End, Input::State::Press)) Quit();
+	}
+	
+	void Application::FramebufferSizeCallback(GLFWwindow* pWindow, int pWidth, int pHeight) noexcept
+	{
+		SetDimensions(pWidth, pHeight);
+		Renderer::SetResolution(pWidth, pHeight);
 	}
 }

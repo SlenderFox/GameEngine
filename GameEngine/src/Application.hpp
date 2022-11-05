@@ -61,6 +61,8 @@ namespace Engine
 		static void UpdateTitle() noexcept;
 		static void ProcessInput() noexcept;
 
+		static void FramebufferSizeCallback(GLFWwindow* pWindow, int pWidth, int pHeight) noexcept;
+
 	public:
 		// Should evaluate to 0.01666666666666666
 		static const double s_fixedDeltaTime/* = 1.0 / 60.0*/;
