@@ -7,12 +7,7 @@
 [Bb]uild/
 Win32/
 
-# temp file
-Example/imgui.ini
-
-# obsidian stuff
+# additional stuff
 .obsidian/
-ObsidianGraph/
-
-#testing out doxygen
 doxygen/
+imgui.ini
