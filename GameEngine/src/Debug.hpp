@@ -49,21 +49,21 @@ namespace Engine
 		static void Init() noexcept;
 
 		static void Send(
-			std::string pMsg,
-			bool pNewline = false,
-			bool pEndline = true) noexcept;
+			const std::string pMsg,
+			const bool pNewline = false,
+			const bool pEndline = true) noexcept;
 		static void Send(
-			std::string pMsg,
+			const std::string pMsg,
 			const wchar_t* pPrefix,
-			bool pNewline = false,
-			bool pEndline = true) noexcept;
+			const bool pNewline = false,
+			const bool pEndline = true) noexcept;
 		static void Send(
-			std::string pMsg,
-			Type pType,
-			Impact pImpact,
-			Stage pStage,
-			bool pNewline = false,
-			bool pEndline = true) noexcept;
+			const std::string pMsg,
+			const Type pType,
+			const Impact pImpact,
+			const Stage pStage,
+			const bool pNewline = false,
+			const bool pEndline = true) noexcept;
 
 		static void NewLine() noexcept;
 	};

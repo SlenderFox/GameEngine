@@ -23,7 +23,7 @@ namespace Engine
 		Renderer& operator=(Renderer&&) = delete;
 #		pragma endregion
 
-		static bool Init(float pAspect) noexcept;
+		static bool Init(const float pAspect) noexcept;
 		static void Draw() noexcept;
 
 	public:
@@ -38,28 +38,28 @@ namespace Engine
 
 		static void Destroy() noexcept;
 
-		static void LoadLightsIntoShader(Shader* pShader) noexcept;
-		static void ModifyAllSpotlightAngles(float pValue) noexcept;
-		static void ModifyAllSpotlightBlurs(float pValue) noexcept;
+		static void LoadLightsIntoShader(const Shader* pShader) noexcept;
+		static void ModifyAllSpotlightAngles(const float pValue) noexcept;
+		static void ModifyAllSpotlightBlurs(const float pValue) noexcept;
 
 		static Model* AddNewModel(
 			uint8_t& id,
-			std::string* pModelPath,
-			std::string* pShaderPath,
-			bool pLoadTextures = true) noexcept;
+			const std::string* pModelPath,
+			const std::string* pShaderPath,
+			const bool pLoadTextures = true) noexcept;
 		static Light* AddNewLight(
 			uint8_t& id,
-			LightType pType,
-			Colour pColour = Colour::White()) noexcept;
+			const LightType pType,
+			const Colour pColour = Colour::White()) noexcept;
 
 		static void SetClearColour(const Colour pColour) noexcept;
 		static void SetRenderMode(const Mode pMode = Mode::Fill) noexcept;
-		static void SetResolution(size_t pWidth, size_t pHeight) noexcept;
+		static void SetResolution(const size_t pWidth, const size_t pHeight) noexcept;
 
 		static uint8_t ModelCount() noexcept;
 		static uint8_t LightCount() noexcept;
-		static Model* GetModelAt(uint8_t pPos) noexcept;
-		static Light* GetLightAt(uint8_t pPos) noexcept;
+		static Model* GetModelAt(const uint8_t pPos) noexcept;
+		static Light* GetLightAt(const uint8_t pPos) noexcept;
 
 		static constexpr Camera* GetCamera() noexcept { return s_camera; }
 	};

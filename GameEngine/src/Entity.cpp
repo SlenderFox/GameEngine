@@ -22,7 +22,7 @@ namespace Engine
 			string* pModelPath,
 			string* pShaderPath,
 			Entity* pEntity,
-			bool pLoadTextures = true) noexcept
+			const bool pLoadTextures = true) noexcept
 		{
 			uint8_t ID;
 			pEntity->m_modelRef = Renderer::AddNewModel(ID, pModelPath, pShaderPath, pLoadTextures);
@@ -39,7 +39,7 @@ namespace Engine
 		m_childrenRef.push_back(pChild);
 	}
 
-	void EntityBase::RemoveChild(Entity* pChild) noexcept
+	void EntityBase::RemoveChild(const Entity* pChild) noexcept
 	{
 		for (auto it = m_childrenRef.begin(); it != m_childrenRef.end(); ++it)
 		{
@@ -58,7 +58,7 @@ namespace Engine
 		string pShaderPath,
 		Model*& pModelOut,
 		Shader*& pShaderOut,
-		bool pLoadTextures) noexcept
+		const bool pLoadTextures) noexcept
 	{
 		Entity* result = new Entity();
 		EntityLoader::BackgroundLoadModel(&pModelPath, &pShaderPath, result, pLoadTextures);
@@ -93,7 +93,7 @@ namespace Engine
 		string pShaderPath,
 		Model*& pModelOut,
 		Shader*& pShaderOut,
-		bool pLoadTextures) noexcept
+		const bool pLoadTextures) noexcept
 	{
 		// Currently this does nothing about the previous model and shader
 		// but does not cause a memory leak as they are managed by Renderer
@@ -103,19 +103,19 @@ namespace Engine
 	}
 
 #	pragma region Setters
-	void Entity::SetTransform(mat4* pValue) noexcept
+	void Entity::SetTransform(const mat4* pValue) noexcept
 	{
 		Transform::SetTransform(pValue);
 		UpdateModel();
 	}
 
-	void Entity::SetPosition(vec3 pValue) noexcept
+	void Entity::SetPosition(const vec3 pValue) noexcept
 	{
 		Transform::SetPosition(pValue);
 		UpdateModel();
 	}
 
-	void Entity::Translate(vec3 pValue) noexcept
+	void Entity::Translate(const vec3 pValue) noexcept
 	{
 		Transform::Translate(pValue);
 		UpdateModel();
@@ -139,17 +139,17 @@ namespace Engine
 		m_parentRef->AddChild(this);
 	}
 
-	void Entity::RenderOnlyColour(bool pState) noexcept
+	void Entity::RenderOnlyColour(const bool pState) noexcept
 	{
 		m_modelRef->GetShaderRef()->SetBool("u_justColour", pState);
 	}
 
-	void Entity::SetScale(vec3 pValue) noexcept
+	void Entity::SetScale(const vec3 pValue) noexcept
 	{
 		m_modelRef->GetShaderRef()->SetVec3("u_scale", pValue);
 	}
 
-	void Entity::SentTint(Colour pCol) noexcept
+	void Entity::SentTint(const Colour pCol) noexcept
 	{
 		m_modelRef->GetShaderRef()->SetVec3("u_colour", pCol.RGBvec3());
 	}

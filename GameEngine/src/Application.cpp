@@ -277,7 +277,7 @@ namespace Engine
 		return true;
 	}
 
-	void Application::SetDimensions(uint16_t pWidth, uint16_t pHeight) noexcept
+	void Application::SetDimensions(const uint16_t pWidth, const uint16_t pHeight) noexcept
 	{
 		s_winWidth = pWidth;
 		s_winHeight = pHeight;
@@ -288,13 +288,13 @@ namespace Engine
 		//Debug::Send(string("Dimensions set to " + to_string(s_winWidth) + ", " + to_string(s_winHeight)));
 	}
 
-	void Application::SetTitle(string pTitle) noexcept
+	void Application::SetTitle(const string pTitle) noexcept
 	{
 		s_title = pTitle;
 		//Debug::Send("Title set to \"" + s_title + "\"");
 	}
 
-	void Application::SetFullscreen(bool pFullscreen) noexcept
+	void Application::SetFullscreen(const bool pFullscreen) noexcept
 	{
 		s_fullscreen = pFullscreen;
 		//Debug::Send("Fullscreen set to " + string(pFullscreen ? "true" : "false"));
@@ -368,7 +368,7 @@ namespace Engine
 		if (Input::GetKeyState(Input::Key::Key_End, Input::State::Press)) Quit();
 	}
 	
-	void Application::FramebufferSizeCallback(GLFWwindow* pWindow, int pWidth, int pHeight) noexcept
+	void Application::FramebufferSizeCallback(GLFWwindow* pWindow, const int pWidth, const int pHeight) noexcept
 	{
 		SetDimensions(pWidth, pHeight);
 		Renderer::SetResolution(pWidth, pHeight);

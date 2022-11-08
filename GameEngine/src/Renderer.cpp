@@ -22,10 +22,11 @@ namespace Engine
 	const float Renderer::s_ambience = 0.15f;
 #	pragma endregion
 
-	bool Renderer::Init(float pAspect) noexcept
+	bool Renderer::Init(const float pAspect) noexcept
 	{
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_STENCIL_TEST);
 
 		//SetClearColour(Colour::CreateWithRGB(vec3(0.1f)));
 
@@ -47,16 +48,17 @@ namespace Engine
 			s_models.get()->clear();
 			// Smart pointer needs to be manually released or it throws an error :|
 			s_models.release();
-
-			// Destroy all textures
-			for (size_t i = 0; i < Model::s_loadedTextures.size(); ++i)
-			{
-				if (Model::s_loadedTextures[i])
-					delete Model::s_loadedTextures[i];
-			}
-			// Unload all textures from memory once finished
-			Texture::UnloadAll();
 		}
+
+		// Destroy all textures
+		for (size_t i = 0; i < Model::s_loadedTextures.size(); ++i)
+		{
+			// For safety
+			if (Model::s_loadedTextures.at(i))
+				delete Model::s_loadedTextures.at(i);
+		}
+		// Unload all textures from memory once finished
+		Texture::UnloadAll();
 
 		delete s_camera;
 	}
@@ -73,7 +75,7 @@ namespace Engine
 		}
 	}
 
-	void Renderer::LoadLightsIntoShader(Shader* pShader) noexcept
+	void Renderer::LoadLightsIntoShader(const Shader* pShader) noexcept
 	{
 		pShader->SetFloat("u_material.shininess", 32.0f);
 		uint8_t numDirLights = 0;
@@ -148,7 +150,7 @@ namespace Engine
 		}
 	}
 
-	void Renderer::ModifyAllSpotlightAngles(float pValue) noexcept
+	void Renderer::ModifyAllSpotlightAngles(const float pValue) noexcept
 	{
 		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
 		{
@@ -166,7 +168,7 @@ namespace Engine
 		}
 	}
 
-	void Renderer::ModifyAllSpotlightBlurs(float pValue) noexcept
+	void Renderer::ModifyAllSpotlightBlurs(const float pValue) noexcept
 	{
 		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
 		{
@@ -186,9 +188,9 @@ namespace Engine
 
 	Model* Renderer::AddNewModel(
 		uint8_t& id,
-		string* pModelPath,
-		string* pShaderPath,
-		bool pLoadTextures) noexcept
+		const string* pModelPath,
+		const string* pShaderPath,
+		const bool pLoadTextures) noexcept
 	{
 		// Caps at 255
 		size_t currentAmount = s_models.get()->size();
@@ -202,9 +204,9 @@ namespace Engine
 	}
 
 	Light* Renderer::AddNewLight(
-		uint8_t &id,
-		LightType pType,
-		Colour pColour) noexcept
+		uint8_t& id,
+		const LightType pType,
+		const Colour pColour) noexcept
 	{
 		// Caps at 255
 		size_t currentAmount = s_lights.get()->size();
@@ -227,9 +229,9 @@ namespace Engine
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + (int)pMode);
 	}
 
-	void Renderer::SetResolution(size_t pWidth, size_t pHeight) noexcept
+	void Renderer::SetResolution(const size_t pWidth, const size_t pHeight) noexcept
 	{
-		glViewport(0, 0, pWidth, pHeight);
+		glViewport(0, 0, (GLsizei)pWidth, (GLsizei)pHeight);
 	}
 
 	uint8_t Renderer::ModelCount() noexcept
@@ -242,7 +244,7 @@ namespace Engine
 		return (uint8_t)s_lights.get()->size();
 	}
 
-	Model* Renderer::GetModelAt(uint8_t pPos) noexcept
+	Model* Renderer::GetModelAt(const uint8_t pPos) noexcept
 	{
 		if (!s_models.get())
 		{
@@ -259,7 +261,7 @@ namespace Engine
 		return (*s_models.get())[pPos].get();
 	}
 
-	Light* Renderer::GetLightAt(uint8_t pPos) noexcept
+	Light* Renderer::GetLightAt(const uint8_t pPos) noexcept
 	{
 		if (!s_lights.get())
 		{

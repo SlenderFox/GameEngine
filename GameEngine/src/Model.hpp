@@ -26,28 +26,25 @@ namespace Engine
 		Shader* m_shader;
 		Camera* m_cameraRef;
 
-		void Init(
-			std::string* pModelPath,
-			std::string* pShaderPath);
-		void LoadModel(std::string* pPath);
+		void LoadModel(const std::string* pPath);
 		void ProcessNode(
-			aiNode* pNode,
+			const aiNode* pNode,
 			const aiScene* pScene) noexcept;
 		std::unique_ptr<Mesh> ProcessMesh(
-			aiMesh* pMesh,
+			const aiMesh* pMesh,
 			const aiScene* pScene) noexcept;
 		std::vector<Texture*> LoadMaterialTextures(
-			aiMaterial* pMat,
-			aiTextureType pType,
-			TexType pTexType) noexcept;
+			const aiMaterial* pMat,
+			const aiTextureType pType,
+			const TexType pTexType) noexcept;
 		void LoadTexturesToShader() const noexcept;
 
 	public:
 		Model(
-			std::string* pModelPath,
-			std::string* pShaderPath,
+			const std::string* pModelPath,
+			const std::string* pShaderPath,
 			Camera* pCamera = nullptr,
-			bool pLoadTextures = true);
+			const bool pLoadTextures = true);
 		~Model();
 
 		void Draw(const Camera* pCamera = nullptr) const noexcept;
@@ -56,6 +53,6 @@ namespace Engine
 		constexpr void SetShaderRef(Shader* pShader) noexcept { m_shader = pShader; }
 
 		constexpr Shader* GetShaderRef() const noexcept { return m_shader; }
-		Mesh* GetMeshAt(uint16_t pPos) const noexcept;
+		Mesh* GetMeshAt(const uint16_t pPos) const noexcept;
 	};
 }

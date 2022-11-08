@@ -5,13 +5,12 @@ namespace Engine
 {
 	class Transform
 	{
-	private:
 		glm::mat4 m_transform;
 
 	public:
 #		pragma region Constructors
 		Transform();
-		Transform(glm::mat4 pValue);
+		Transform(const glm::mat4 pValue);
 		virtual ~Transform() {}
 
 		// Copy, takes lvalue
@@ -23,15 +22,16 @@ namespace Engine
 #		pragma endregion
 
 #		pragma region Setters
-		virtual constexpr void SetTransform(glm::mat4* pValue) noexcept { m_transform = *pValue; }
-		virtual void SetPosition(	glm::vec3 pValue) noexcept;
-		virtual void Translate(		glm::vec3 pValue) noexcept;
-		virtual void SetAxes(		glm::vec3 pRight,
-											glm::vec3 pUp,
-											glm::vec3 pForward) noexcept;
-		virtual void SetRight(		glm::vec3 pRight) noexcept;
-		virtual void SetUp(			glm::vec3 pUp) noexcept;
-		virtual void SetForward(	glm::vec3 pForward) noexcept;
+		virtual constexpr void SetTransform(const glm::mat4* pValue) noexcept { m_transform = *pValue; }
+		virtual void SetPosition(const glm::vec3 pValue) noexcept;
+		virtual void Translate(const glm::vec3 pValue) noexcept;
+		virtual void SetAxes(
+			const glm::vec3 pRight,
+			const glm::vec3 pUp,
+			const glm::vec3 pForward) noexcept;
+		virtual void SetRight(const glm::vec3 pRight) noexcept;
+		virtual void SetUp(const glm::vec3 pUp) noexcept;
+		virtual void SetForward(const glm::vec3 pForward) noexcept;
 #		pragma endregion
 
 #		pragma region Getters

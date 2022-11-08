@@ -24,10 +24,10 @@ namespace Engine
 			glDeleteTextures(s_textureCount, s_textureIds);
 	}
 
-	int32_t Texture::LoadTextureFromFile(string pPath) noexcept
+	int32_t Texture::LoadTextureFromFile(const string* pPath) noexcept
 	{
 		Debug::Send(
-			"Loading texture " + std::to_string(s_textureCount) + ": \"" + pPath + "\"...",
+			"Loading texture " + std::to_string(s_textureCount) + ": \"" + *pPath + "\"...",
 			Debug::Type::Process,
 			Debug::Impact::Large,
 			Debug::Stage::Mid,
@@ -51,7 +51,7 @@ namespace Engine
 		stbi_set_flip_vertically_on_load(true);
 
 		int texWidth = 0, texHeight = 0, numComponents = 0;
-		unsigned char* imageData = stbi_load(pPath.c_str(), &texWidth, &texHeight, &numComponents, 0);
+		unsigned char* imageData = stbi_load(pPath->c_str(), &texWidth, &texHeight, &numComponents, 0);
 		if (imageData)
 		{
 			float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -126,7 +126,7 @@ namespace Engine
 		: m_file(pPath),
 		m_type(pType)
 	{
-		m_id = LoadTextureFromFile(pPath);
+		m_id = LoadTextureFromFile(&pPath);
 	}
 
 	//void Texture::Destroy()

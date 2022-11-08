@@ -61,7 +61,7 @@ namespace Engine
 		static void UpdateTitle() noexcept;
 		static void ProcessInput() noexcept;
 
-		static void FramebufferSizeCallback(GLFWwindow* pWindow, int pWidth, int pHeight) noexcept;
+		static void FramebufferSizeCallback(GLFWwindow* pWindow, const int pWidth, const int pHeight) noexcept;
 
 	public:
 		// Should evaluate to 0.01666666666666666
@@ -72,9 +72,9 @@ namespace Engine
 		static void Quit() noexcept;
 
 		static ExitCode Run();
-		static void SetDimensions(uint16_t pWidth, uint16_t pHeight) noexcept;
-		static void SetTitle(std::string pTitle) noexcept;
-		static void SetFullscreen(bool pFullscreen) noexcept;
+		static void SetDimensions(const uint16_t pWidth, const uint16_t pHeight) noexcept;
+		static void SetTitle(const std::string pTitle) noexcept;
+		static void SetFullscreen(const bool pFullscreen) noexcept;
 
 		static double GetTime() noexcept { return s_currentTime; }
 		static double GetDeltaTime() noexcept { return s_deltaTime; }

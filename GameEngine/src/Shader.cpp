@@ -16,7 +16,7 @@ namespace Engine
 	// Forward declaration
 	class Application { public: static const bool GladLoaded() noexcept; };
 
-	Shader::Shader(string* pShaderPath)
+	Shader::Shader(const string* pShaderPath)
 	{
 		Load(pShaderPath ? *pShaderPath : "");
 	}
@@ -40,7 +40,7 @@ namespace Engine
 		CreateShaderProgram();
 	}
 
-	void Shader::LoadShader(ShaderType pType)
+	void Shader::LoadShader(const ShaderType pType)
 	{
 #		pragma region Fallback code
 		 static const char* vertexFallback = "#version 330 core\n\
@@ -133,7 +133,7 @@ else FragCol=vec4(result*u_colour,1);\
 return;}";
 #		pragma endregion
 
-		m_usingFallback = false;
+		bool m_usingFallback = false;
 		string codeString;
 
 		if (pType == ShaderType::PROGRAM)
@@ -305,7 +305,7 @@ return;}";
 		m_shaderLoaded = true;
 	}
 
-	bool Shader::CheckForErrors(const uint32_t* pShaderID, ShaderType pType) noexcept
+	bool Shader::CheckForErrors(const uint32_t* pShaderID, const ShaderType pType) noexcept
 	{
 		// Boolean output as int32
 		int32_t success;
@@ -357,7 +357,7 @@ return;}";
 	}
 
 	template<typename T>
-	constexpr T Shader::GetType(ShaderType pType, T ifVertex, T ifFragment) const
+	constexpr T Shader::GetType(const ShaderType pType, T ifVertex, T ifFragment) const
 	{
 		if (pType == ShaderType::PROGRAM) exit(2);
 		return (pType == ShaderType::VERTEX ? ifVertex : ifFragment);

@@ -12,7 +12,7 @@ namespace Engine
 
 	public:
 		void AddChild(Entity* pChild) noexcept;
-		void RemoveChild(Entity* pChild) noexcept;
+		void RemoveChild(const Entity* pChild) noexcept;
 
 		constexpr std::vector<Entity*> GetChildren() const noexcept { return m_childrenRef; }
 	};
@@ -26,7 +26,7 @@ namespace Engine
 			std::string pShaderPath,
 			Model*& pModelOut,
 			Shader*& pShaderOut,
-			bool pLoadTextures = true) noexcept;
+			const bool pLoadTextures = true) noexcept;
 
 	private:
 		EntityBase* m_parentRef = nullptr;
@@ -44,17 +44,17 @@ namespace Engine
 			std::string pShaderPath,
 			Model*& pModelOut,
 			Shader*& pShaderOut,
-			bool pLoadTextures = true) noexcept;
+			const bool pLoadTextures = true) noexcept;
 
 #		pragma region Setters
-		void SetTransform(glm::mat4* pValue) noexcept override;
-		void SetPosition(glm::vec3 pValue) noexcept override;
-		void Translate(glm::vec3 pValue) noexcept override;
+		void SetTransform(const glm::mat4* pValue) noexcept override;
+		void SetPosition(const glm::vec3 pValue) noexcept override;
+		void Translate(const glm::vec3 pValue) noexcept override;
 
 		void SetParent(EntityBase* pParent) noexcept;
-		void RenderOnlyColour(bool pState) noexcept;
-		void SetScale(glm::vec3 pValue) noexcept;
-		void SentTint(Colour pCol) noexcept;
+		void RenderOnlyColour(const bool pState) noexcept;
+		void SetScale(const glm::vec3 pValue) noexcept;
+		void SentTint(const Colour pCol) noexcept;
 #		pragma endregion
 
 		constexpr EntityBase& GetParent() const noexcept { return *m_parentRef; }
@@ -62,7 +62,6 @@ namespace Engine
 
 	/**
 	 * @brief Root is a special, static entity that only has children
-	 * 
 	 */
 	class Root: public EntityBase
 	{

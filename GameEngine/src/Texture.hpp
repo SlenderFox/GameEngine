@@ -17,7 +17,7 @@ namespace Engine
 
 	public:
 		static void UnloadAll() noexcept;
-		static int32_t LoadTextureFromFile(std::string pPath) noexcept;
+		static int32_t LoadTextureFromFile(const std::string* pPath) noexcept;
 		constexpr static uint16_t GetNumTex() noexcept { return s_textureCount; }
 
 	private:

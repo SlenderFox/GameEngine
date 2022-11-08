@@ -48,7 +48,7 @@ namespace Engine
 		void UpdateFovV() noexcept;
 
 #		pragma region Setters
-		void SetTransform(glm::mat4* pValue) noexcept override;
+		void SetTransform(const glm::mat4* pValue) noexcept override;
 		void SetView(glm::mat4* pValue) noexcept;
 		void SetProjection(float pFovV) noexcept;
 		constexpr void SetProjection(glm::mat4* pValue) noexcept { m_projection = *pValue; }

@@ -4,9 +4,14 @@ struct GLFWwindow;
 
 namespace Engine
 {
+	/**
+	 * @brief The callback function used for mouse and scroll movement
+	 */
 	using CallbackFunc = void(*)(double, double);
 
-	// Singleton class used for handling inputs
+	/**
+	 * @brief Pure static class for handling inputs
+	 */
 	class Input
 	{
 		friend class Application;
@@ -177,9 +182,14 @@ namespace Engine
 			double pOffsetY) noexcept;
 #		pragma endregion
 
+		/**
+		 * @brief Initialise input with GLFW
+		 * @param pWindowRef The active window
+		 * @return [bool] Success
+		 */
 		static bool Init(GLFWwindow* pWindowRef) noexcept;
 		static void Process() noexcept;
-		static bool GetKeyState(Key pKey, State pState) noexcept;
+		static bool GetKeyState(const Key pKey, const State pState) noexcept;
 
 		static inline void AddMouseCallback(CallbackFunc pCallback) noexcept
 		{ s_mouseCallbackFun = pCallback; }

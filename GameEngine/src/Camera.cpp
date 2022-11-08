@@ -119,7 +119,7 @@ namespace Engine
 	}
 
 #	pragma region Setters
-	void Camera::SetTransform(mat4* pValue) noexcept
+	void Camera::SetTransform(const mat4* pValue) noexcept
 	{
 		Transform::SetTransform(pValue);
 		m_view = inverse(GetTransform());

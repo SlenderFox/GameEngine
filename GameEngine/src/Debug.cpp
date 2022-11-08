@@ -14,8 +14,7 @@ using std::string;
 
 namespace Engine
 {
-	const wchar_t* Debug::s_prefixes[12] =
-	{
+	const wchar_t* Debug::s_prefixes[12] = {
 		L"\u250C",
 		L"\u252C",
 		L"\u2552",
@@ -37,9 +36,9 @@ namespace Engine
 	}
 
 	void Debug::Send(
-		string pMsg,
-		bool pNewline,
-		bool pEndline) noexcept
+		const string pMsg,
+		const bool pNewline,
+		const bool pEndline) noexcept
 	{
 #		ifdef _DEBUG
 			if (pNewline) wcout << '\n';
@@ -49,10 +48,10 @@ namespace Engine
 	}
 
 	void Debug::Send(
-		string pMsg,
+		const string pMsg,
 		const wchar_t* pPrefix,
-		bool pNewline,
-		bool pEndline) noexcept
+		const bool pNewline,
+		const bool pEndline) noexcept
 	{
 #		ifdef _DEBUG
 			if (pNewline) wcout << '\n';
@@ -62,12 +61,12 @@ namespace Engine
 	}
 
 	void Debug::Send(
-		string pMsg,
-		Type pType,
-		Impact pImpact,
-		Stage pStage,
-		bool pNewline,
-		bool pEndline) noexcept
+		const string pMsg,
+		const Type pType,
+		const Impact pImpact,
+		const Stage pStage,
+		const bool pNewline,
+		const bool pEndline) noexcept
 	{
 		uint8_t pre = (uint8_t)pType + (uint8_t)pImpact + (uint8_t)pStage;
 		Send(pMsg, s_prefixes[pre], pNewline, pEndline);

@@ -24,26 +24,12 @@ namespace Engine
 	// Member
 
 	Model::Model(
-		string* pModelPath,
-		string* pShaderPath,
+		const string* pModelPath,
+		const string* pShaderPath,
 		Camera* pCamera,
-		bool pLoadTextures)
+		const bool pLoadTextures)
 		: m_cameraRef(pCamera),
 		m_loadTextures(pLoadTextures)
-	{
-		Init(pModelPath, pShaderPath);
-	}
-
-	Model::~Model()
-	{
-		delete m_shader;
-		m_meshes.get()->clear();
-		m_meshes.release();
-	}
-
-	void Model::Init(
-		string* pModelPath,
-		string* pShaderPath)
 	{
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 		m_textures = vector<Texture*>();
@@ -58,6 +44,13 @@ namespace Engine
 			Debug::Impact::Small,
 			Debug::Stage::End
 		);
+	}
+
+	Model::~Model()
+	{
+		delete m_shader;
+		m_meshes.get()->clear();
+		m_meshes.release();
 	}
 
 	void Model::Draw(const Camera* pCamera) const noexcept
@@ -80,7 +73,7 @@ namespace Engine
 		}
 	}
 
-	void Model::LoadModel(string* pPath)
+	void Model::LoadModel(const string* pPath)
 	{
 		Debug::Send(
 			"Loading model \"" + *pPath + "\"",
@@ -116,7 +109,7 @@ namespace Engine
 	}
 
 	void Model::ProcessNode(
-		aiNode* pNode,
+		const aiNode* pNode,
 		const aiScene* pScene) noexcept
 	{
 		// Process all the node's meshes (if any)
@@ -133,7 +126,7 @@ namespace Engine
 	}
 
 	unique_ptr<Mesh> Model::ProcessMesh(
-		aiMesh* pMesh,
+		const aiMesh* pMesh,
 		const aiScene* pScene) noexcept
 	{
 		vector<Vertex> vertices;
@@ -194,9 +187,9 @@ namespace Engine
 	}
 
 	vector<Texture*> Model::LoadMaterialTextures(
-		aiMaterial* pMat,
-		aiTextureType pType,
-		TexType pTexType) noexcept
+		const aiMaterial* pMat,
+		const aiTextureType pType,
+		const TexType pTexType) noexcept
 	{
 		// Textures from this specific node being output
 		vector<Texture*> texturesOut;
@@ -288,7 +281,7 @@ namespace Engine
 		}
 	}
 
-	Mesh* Model::GetMeshAt(uint16_t pPos) const  noexcept
+	Mesh* Model::GetMeshAt(const uint16_t pPos) const  noexcept
 	{
 		if (!m_meshes.get())
 			return nullptr;

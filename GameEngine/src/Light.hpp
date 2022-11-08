@@ -22,18 +22,18 @@ namespace Engine
 
 	public:
 		Light(
-			LightType pType = LightType::Directional,
-			Colour pColour = Colour::White(),
+			const LightType pType = LightType::Directional,
+			const Colour pColour = Colour::White(),
 			glm::mat4 pTransform = glm::mat4(1));
 		~Light() {}
 
 #		pragma region Setters
-		constexpr void SetType		 (LightType pType)		noexcept { m_type = pType; }
 		/**
 		 * @brief Wrapper function that passes to SetForward
 		 * @param pDirection Value to be set
 		 */
-		constexpr void SetDirection (glm::vec3 pDirection)	noexcept { Transform::SetForward(pDirection); }
+		constexpr void SetDirection (const glm::vec3 pDirection)	noexcept { Transform::SetForward(pDirection); }
+		constexpr void SetType		 (LightType pType)		noexcept { m_type = pType; }
 		constexpr void SetColour	 (Colour pColour)			noexcept { m_lightColour = pColour; }
 		constexpr void SetLinear	 (float pValue)			noexcept { m_linear = pValue; }
 		constexpr void SetQuadratic (float pValue)			noexcept { m_quadratic = pValue; }

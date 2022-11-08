@@ -13,7 +13,7 @@ namespace Engine
 #	pragma region Constructors
 	Transform::Transform(): m_transform(mat4(1)) {}
 
-	Transform::Transform(mat4 pValue): m_transform(pValue) {}
+	Transform::Transform(const mat4 pValue): m_transform(pValue) {}
 
 	Transform::Transform(Transform const& pOther)
 	{
@@ -39,7 +39,7 @@ namespace Engine
 #	pragma endregion
 
 #	pragma region Setters
-	void Transform::SetPosition(vec3 pValue) noexcept
+	void Transform::SetPosition(const vec3 pValue) noexcept
 	{
 		m_transform[3] = vec4(pValue, m_transform[3][3]);
 	}
@@ -50,30 +50,30 @@ namespace Engine
 	}
 
 	void Transform::SetAxes(
-		vec3 pRight,
-		vec3 pUp,
-		vec3 pForward) noexcept
+		const vec3 pRight,
+		const vec3 pUp,
+		const vec3 pForward) noexcept
 	{
 		m_transform[0] = vec4(normalize(pRight), 0);
 		m_transform[1] = vec4(normalize(pUp), 0);
 		m_transform[2] = vec4(normalize(pForward), 0);
 	}
 
-	void Transform::SetRight(vec3 pRight) noexcept
+	void Transform::SetRight(const vec3 pRight) noexcept
 	{
 		vec3 forward = cross(pRight, vec3(0, 1, 0));
 		vec3 up = cross(pRight, forward);
 		SetAxes(pRight, up, forward);
 	}
 
-	void Transform::SetUp(vec3 pUp) noexcept
+	void Transform::SetUp(const vec3 pUp) noexcept
 	{
 		vec3 right = cross(pUp, vec3(0, 0, 1));
 		vec3 forward = cross(pUp, right);
 		SetAxes(right, pUp, forward);
 	}
 
-	void Transform::SetForward(vec3 pForward) noexcept
+	void Transform::SetForward(const vec3 pForward) noexcept
 	{
 		vec3 right = cross(vec3(0, 1, 0), pForward);
 		vec3 up = cross(pForward, right);
