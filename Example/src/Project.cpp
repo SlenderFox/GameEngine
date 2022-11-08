@@ -139,7 +139,7 @@ void Project::CreateLights()
 	{
 		light = Renderer::AddNewLight(
 			ID, Engine::LightType::Directional, Engine::Colour::CreateWithHSV(
-				Engine::hsv(0, 0.0f, 0.4f)
+				Engine::hsv(0, 0.0f, 0.6f)
 			)
 		);
 		light->SetDirection(vec3(0, -1, 0));
