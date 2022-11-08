@@ -6,6 +6,7 @@
 #include "Debug.hpp"
 
 using std::string;
+using std::vector;
 #pragma endregion
 
 namespace Engine
@@ -17,6 +18,7 @@ namespace Engine
 
 	uint32_t Texture::s_textureIds[32];
 	uint16_t Texture::s_textureCount = 0;
+	vector<Texture*> Texture::s_loadedTextures = vector<Texture*>();
 
 	void Texture::UnloadAll() noexcept
 	{

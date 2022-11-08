@@ -15,8 +15,6 @@ namespace Engine
 	{
 		friend class Renderer;
 	private:
-		static std::vector<Texture*> s_loadedTextures;	// Memory handled by renderer
-
 		bool m_loadTextures;
 
 		std::unique_ptr<std::vector<std::unique_ptr<Mesh>>> m_meshes = nullptr;

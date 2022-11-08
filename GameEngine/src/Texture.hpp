@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 namespace Engine
 {
@@ -16,6 +17,8 @@ namespace Engine
 		static uint16_t s_textureCount;		// How many textures have been loaded
 
 	public:
+		static std::vector<Texture*> s_loadedTextures;	// Memory handled by renderer
+
 		static void UnloadAll() noexcept;
 		static int32_t LoadTextureFromFile(const std::string* pPath) noexcept;
 		constexpr static uint16_t GetNumTex() noexcept { return s_textureCount; }

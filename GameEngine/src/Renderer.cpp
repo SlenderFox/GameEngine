@@ -51,11 +51,11 @@ namespace Engine
 		}
 
 		// Destroy all textures
-		for (size_t i = 0; i < Model::s_loadedTextures.size(); ++i)
+		for (size_t i = 0; i < Texture::s_loadedTextures.size(); ++i)
 		{
 			// For safety
-			if (Model::s_loadedTextures.at(i))
-				delete Model::s_loadedTextures.at(i);
+			if (Texture::s_loadedTextures.at(i))
+				delete Texture::s_loadedTextures.at(i);
 		}
 		// Unload all textures from memory once finished
 		Texture::UnloadAll();

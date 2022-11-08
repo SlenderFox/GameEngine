@@ -17,12 +17,6 @@ using std::make_unique;
 
 namespace Engine
 {
-	// Static
-
-	vector<Texture*> Model::s_loadedTextures = vector<Texture*>();
-
-	// Member
-
 	Model::Model(
 		const string* pModelPath,
 		const string* pShaderPath,
@@ -198,48 +192,50 @@ namespace Engine
 			aiString file;
 			pMat->GetTexture(pType, i, &file);
 			bool loadTexture = true;
-			// Compares to all currently loaded textures
-			for (size_t j = 0; j < s_loadedTextures.size(); ++j)
+			string path = (m_directory + '/' + file.C_Str());
+			
+			// First we check if the texture has already been loaded into memory
+			for (size_t j = 0; j < Texture::s_loadedTextures.size(); ++j)
 			{
-				// If texture is already in the loaded textures vector
-				if (std::strcmp(s_loadedTextures[j]->GetFile().data(), (m_directory + '/' + file.C_Str()).data()) == 0)
-				{
-					bool reuseTexture = true;
-					for (size_t k = 0; k < m_textures.size(); ++k)
-					{
-						// If the texture has already been loaded into this model, don't bother reloading it
-						if (std::strcmp(m_textures[k]->GetFile().data(), (m_directory + '/' + file.C_Str()).data()) == 0)
-						{
-							reuseTexture = false;
-							break;
-						}
-					}
-					// If the texture has not been loaded into this model, reuse it
-					if (reuseTexture)
-					{
-						string msg = "Reusing texture "
-							+ std::to_string(s_loadedTextures[j]->GetId())
-							+ ": "
-							+ s_loadedTextures[j]->GetFile().data();
-						Debug::Send(
-							msg,
-							Debug::Type::Note,
-							Debug::Impact::Small,
-							Debug::Stage::Mid
-						);
-						texturesOut.push_back(s_loadedTextures[j]);
-					}
+				if (Texture::s_loadedTextures[j]->GetFile() != path) continue;
 
-					loadTexture = false;
-					break;
+				// If the texture has already been loaded into memory we check if it has been loaded into this model
+				bool reuseTexture = true;
+				for (size_t k = 0; k < m_textures.size(); ++k)
+				{
+					if (m_textures[k]->GetFile() == path)
+					{
+						reuseTexture = false;
+						break;
+					}
 				}
+				
+				if (reuseTexture)
+				{
+					string msg = "Reusing texture "
+						+ std::to_string(Texture::s_loadedTextures[j]->GetId())
+						+ ": "
+						+ Texture::s_loadedTextures[j]->GetFile().data();
+					Debug::Send(
+						msg,
+						Debug::Type::Note,
+						Debug::Impact::Small,
+						Debug::Stage::Mid
+					);
+					texturesOut.push_back(Texture::s_loadedTextures[j]);
+				}
+
+				// Texture has already been loaded
+				loadTexture = false;
+				break;
 			}
+
 			// If texture has not been loaded before, load it for the first time
 			if (loadTexture)
 			{
-				Texture* tex = new Texture(string(m_directory + '/' + file.C_Str()), pTexType);
+				Texture* tex = new Texture(path, pTexType);
 				texturesOut.push_back(tex);
-				s_loadedTextures.push_back(tex);
+				Texture::s_loadedTextures.push_back(tex);
 			}
 		}
 		return texturesOut;

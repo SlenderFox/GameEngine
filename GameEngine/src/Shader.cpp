@@ -157,7 +157,7 @@ return;}";
 			false
 		);
 
-		if (std::strcmp(m_shaderPath.c_str(), "") == 0)
+		if (m_shaderPath == "")
 		{
 			m_usingFallback = true;
 			Debug::NewLine();
