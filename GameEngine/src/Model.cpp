@@ -22,8 +22,8 @@ namespace Engine
 		const string* pShaderPath,
 		Camera* pCamera,
 		const bool pLoadTextures)
-		: m_cameraRef(pCamera),
-		m_loadTextures(pLoadTextures)
+		: m_cameraRef(pCamera)
+		, m_loadTextures(pLoadTextures)
 	{
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 		m_textures = vector<Texture*>();

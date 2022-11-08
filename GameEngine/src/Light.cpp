@@ -14,8 +14,8 @@ namespace Engine
 		const LightType pType,
 		const Colour pColour,
 		mat4 pTransform)
-		: m_type(pType),
-		m_lightColour(pColour)
+		: m_type(pType)
+		, m_lightColour(pColour)
 	{
 		Transform::SetTransform(&pTransform);
 		m_angle = cos(radians(20.0f));

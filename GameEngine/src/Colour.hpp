@@ -11,7 +11,8 @@ namespace Engine
 
 		rgb255(): r(0), g(0), b(0) {}
 
-		rgb255(uint8_t pR, uint8_t pG, uint8_t pB): r(pR), g(pG), b(pB) {}
+		rgb255(uint8_t pR, uint8_t pG, uint8_t pB)
+		: r(pR), g(pG), b(pB) {}
 
 		rgb255(const glm::vec3 pValue)
 		{

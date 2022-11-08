@@ -125,8 +125,8 @@ namespace Engine
 	Texture::Texture(
 		string pPath,
 		TexType pType)
-		: m_file(pPath),
-		m_type(pType)
+		: m_file(pPath)
+		, m_type(pType)
 	{
 		m_id = LoadTextureFromFile(&pPath);
 	}
