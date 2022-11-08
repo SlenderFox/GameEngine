@@ -35,9 +35,10 @@ namespace Engine
 		s_mouseLastY = s_mouseY;
 		s_mouseX = pPosX;
 		s_mouseY = pPosY;
-		if (!s_mouseCallbackFun) return;
-		// Pass the delta
-		s_mouseCallbackFun(s_mouseX - s_mouseLastX, s_mouseY - s_mouseLastY);
+		double deltaX = s_mouseX - s_mouseLastX;
+		double deltaY = s_mouseY - s_mouseLastY;
+		if (s_mouseCallbackFun)
+			s_mouseCallbackFun(deltaX, deltaY);
 	}
 
 	void Input::Scroll_callback(
@@ -45,8 +46,8 @@ namespace Engine
 		double pOffsetX,
 		double pOffsetY) noexcept
 	{
-		if (!s_scrollCallbackFun) return;
-		s_scrollCallbackFun(pOffsetX, pOffsetY);
+		if (s_scrollCallbackFun)
+			s_scrollCallbackFun(pOffsetX, pOffsetY);
 	}
 #	pragma endregion
 
