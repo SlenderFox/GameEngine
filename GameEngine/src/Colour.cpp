@@ -137,23 +137,23 @@ namespace Engine
 	}
 
 #	pragma region Presets
-	Colour Colour::Black()		noexcept { return Colour(vec3(0)); }
-	Colour Colour::White()		noexcept { return Colour(vec3(1)); }
-	Colour Colour::Silver()		noexcept { return Colour(vec3(0.75f,	0.75f,	0.75f	)); }
-	Colour Colour::Grey()		noexcept { return Colour(vec3(0.5f,		0.5f,		0.5f	)); }
-	Colour Colour::DarkGrey()	noexcept { return Colour(vec3(0.25f,	0.25f,	0.25f	)); }
-	Colour Colour::Red()			noexcept { return Colour(vec3(1,			0,			0		)); }
-	Colour Colour::Lime()		noexcept { return Colour(vec3(0,			1,			0		)); }
-	Colour Colour::Blue()		noexcept { return Colour(vec3(0,			0,			1		)); }
-	Colour Colour::Yellow()		noexcept { return Colour(vec3(1,			1,			0		)); }
-	Colour Colour::Cyan()		noexcept { return Colour(vec3(0,			1,			1		)); }
-	Colour Colour::Magenta()	noexcept { return Colour(vec3(1,			0,			1		)); }
-	Colour Colour::Maroon()		noexcept { return Colour(vec3(0.5f,		0,			0		)); }
-	Colour Colour::Green()		noexcept { return Colour(vec3(0,			0.5f,		0		)); }
-	Colour Colour::Navy()		noexcept { return Colour(vec3(0,			0,			0.5f	)); }
-	Colour Colour::Olive()		noexcept { return Colour(vec3(0.5f,		0.5f,		0		)); }
-	Colour Colour::Teal()		noexcept { return Colour(vec3(0,			0.5f,		0.5f	)); }
-	Colour Colour::Purple()		noexcept { return Colour(vec3(0.5f,		0,			0.5f	)); }
+	inline Colour Colour::Black()		noexcept { return Colour(vec3(0)); }
+	inline Colour Colour::White()		noexcept { return Colour(vec3(1)); }
+	inline Colour Colour::Silver()	noexcept { return Colour(vec3(0.75f,	0.75f,	0.75f	)); }
+	inline Colour Colour::Grey()		noexcept { return Colour(vec3(0.5f,		0.5f,		0.5f	)); }
+	inline Colour Colour::DarkGrey()	noexcept { return Colour(vec3(0.25f,	0.25f,	0.25f	)); }
+	inline Colour Colour::Red()		noexcept { return Colour(vec3(1,			0,			0		)); }
+	inline Colour Colour::Lime()		noexcept { return Colour(vec3(0,			1,			0		)); }
+	inline Colour Colour::Blue()		noexcept { return Colour(vec3(0,			0,			1		)); }
+	inline Colour Colour::Yellow()	noexcept { return Colour(vec3(1,			1,			0		)); }
+	inline Colour Colour::Cyan()		noexcept { return Colour(vec3(0,			1,			1		)); }
+	inline Colour Colour::Magenta()	noexcept { return Colour(vec3(1,			0,			1		)); }
+	inline Colour Colour::Maroon()	noexcept { return Colour(vec3(0.5f,		0,			0		)); }
+	inline Colour Colour::Green()		noexcept { return Colour(vec3(0,			0.5f,		0		)); }
+	inline Colour Colour::Navy()		noexcept { return Colour(vec3(0,			0,			0.5f	)); }
+	inline Colour Colour::Olive()		noexcept { return Colour(vec3(0.5f,		0.5f,		0		)); }
+	inline Colour Colour::Teal()		noexcept { return Colour(vec3(0,			0.5f,		0.5f	)); }
+	inline Colour Colour::Purple()	noexcept { return Colour(vec3(0.5f,		0,			0.5f	)); }
 #	pragma endregion
 
 	// ---Member---

@@ -61,5 +61,5 @@ Todo:
 	- [ ] Key callbacks
 	- [x] Mouse callback
 	- [x] Scroll callback
-	- [ ] Allow callbacks to pass member functions
+	- [ ] ~~Allow callbacks to pass member functions~~
 - [ ] Update destroying a single texture to allow for a new one to replace it

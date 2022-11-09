@@ -59,24 +59,28 @@ namespace Engine
 		 * @param pRGB 0-1 Red, 0-1 Green, 0-1 Blue
 		 * @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 */
+		[[nodiscard("Engine::Colour::RGBtoHSV (Preferred)")]]
 		static hsv RGBtoHSV(const glm::vec3 pRGB) noexcept;
 		/**
 		 * @brief (Alternate overload) Converts colour data from RGB to HSV
 		 * @param pRGB 0-255 Red, 0-255 Green, 0-255 Blue
 		 * @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 */
+		[[nodiscard("Engine::Colour::RGBtoHSV (Alternate)")]]
 		static hsv RGBtoHSV(const rgb255 pRGB) noexcept;
 		/**
 		 * @brief (Preferred overload) Converts colour data from HSV to RGB
 		 * @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		 */
+		[[nodiscard("Engine::Colour::HSVtoRGB (Preferred)")]]
 		static glm::vec3 HSVtoRGB(const hsv pHSV) noexcept;
 		/**
 		 * @brief (Alternate overload) Converts colour data from HSV to RGB
 		 * @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		 */
+		[[nodiscard("Engine::Colour::HSVtoRGB (Alternate)")]]
 		static glm::vec3 HSVtoRGB(const glm::vec3 pHSV) noexcept;
 
 		/**
@@ -84,44 +88,48 @@ namespace Engine
 		 * @param pRGB 0-1 Red, 0-1 Green, 0-1 Blue
 		 * @return [Colour] A Colour object
 		 */
+		[[nodiscard("Engine::Colour::CreateWithRGB (Preferred)")]]
 		static Colour CreateWithRGB(const glm::vec3 pRGB) noexcept;
 		/**
 		 * @brief (Alternate overload) Create a Colour object from RGB
 		 * @param pRGB 0-255 Red, 0-255 Green, 0-255 Blue
 		 * @return [Colour] A Colour object
 		 */
+		[[nodiscard("Engine::Colour::CreateWithRGB (Alternate)")]]
 		static Colour CreateWithRGB(const rgb255 pRGB) noexcept;
 		/**
 		 * @brief (Preferred overload) Create a Colour object from HSV
 		 * @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 * @return [Colour] A Colour object
 		 */
+		[[nodiscard("Engine::Colour::CreateWithHSV (Preferred)")]]
 		static Colour CreateWithHSV(const hsv pHSV) noexcept;
 		/**
 		 * @brief (Alternate overload) Create a Colour object from HSV
 		 * @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 * @return [Colour] A Colour object
 		 */
+		[[nodiscard("Engine::Colour::CreateWithHSV (Alternate)")]]
 		static Colour CreateWithHSV(const glm::vec3 pHSV) noexcept;
 
 #		pragma region Presets
-		static Colour Black() noexcept;
-		static Colour White() noexcept;
-		static Colour Silver() noexcept;
-		static Colour Grey() noexcept;
-		static Colour DarkGrey() noexcept;
-		static Colour Red() noexcept;
-		static Colour Lime() noexcept;
-		static Colour Blue() noexcept;
-		static Colour Yellow() noexcept;
-		static Colour Cyan() noexcept;
-		static Colour Magenta() noexcept;
-		static Colour Maroon() noexcept;
-		static Colour Green() noexcept;
-		static Colour Navy() noexcept;
-		static Colour Olive() noexcept;
-		static Colour Teal() noexcept;
-		static Colour Purple() noexcept;
+		static inline Colour Black() noexcept;
+		static inline Colour White() noexcept;
+		static inline Colour Silver() noexcept;
+		static inline Colour Grey() noexcept;
+		static inline Colour DarkGrey() noexcept;
+		static inline Colour Red() noexcept;
+		static inline Colour Lime() noexcept;
+		static inline Colour Blue() noexcept;
+		static inline Colour Yellow() noexcept;
+		static inline Colour Cyan() noexcept;
+		static inline Colour Magenta() noexcept;
+		static inline Colour Maroon() noexcept;
+		static inline Colour Green() noexcept;
+		static inline Colour Navy() noexcept;
+		static inline Colour Olive() noexcept;
+		static inline Colour Teal() noexcept;
+		static inline Colour Purple() noexcept;
 #		pragma endregion
 
 	private:
@@ -138,21 +146,25 @@ namespace Engine
 		 * @brief Get the colour as RGB stored in a vec3
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		 */
+		[[nodiscard("Engine::Colour::RGBvec3")]]
 		constexpr glm::vec3 RGBvec3() const noexcept { return m_RGB; }
 		/**
 		 * @brief Get the colour as RGB stored in a custom structure
 		 * @return [rgb255] 0-255 Red, 0-255 Green, 0-255 Blue
 		 */
+		[[nodiscard("Engine::Colour::RGB255")]]
 		rgb255 RGB255() const noexcept;
 		/**
 		 * @brief Get the colour as HSV stored in a vec3
 		 * @return [glm::vec3] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 */
+		[[nodiscard("Engine::Colour::HSVvec3")]]
 		glm::vec3 HSVvec3() const noexcept;
 		/**
 		 * @brief Get the colour as HSV stored in a custom structure
 		 * @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 */
+		[[nodiscard("Engine::Colour::HSV")]]
 		hsv HSV() const noexcept;
 
 #		pragma region Operators
