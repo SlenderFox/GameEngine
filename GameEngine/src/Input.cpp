@@ -1,3 +1,4 @@
+#pragma warning(disable:4100)
 #include "Input.hpp"
 #include "GLFW/glfw3.h"
 #include "Debug.hpp"

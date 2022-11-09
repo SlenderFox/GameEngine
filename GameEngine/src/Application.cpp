@@ -1,4 +1,5 @@
 #pragma region
+#pragma warning(disable:4100)
 #define WIN32_LEAN_AND_MEAN
 #include "Application.hpp"
 #include "Debug.hpp"
@@ -217,7 +218,7 @@ namespace Engine
 		glfwWindowHint(GLFW_REFRESH_RATE, vid->refreshRate);
 
 		GLFWmonitor* mon = s_fullscreen ? primMon : nullptr;
-		int wid = s_winWidth, hei = s_winHeight;
+		//int wid = s_winWidth, hei = s_winHeight;
 
 		s_windowRef = glfwCreateWindow(s_winWidth, s_winHeight, s_title.c_str(), mon, nullptr);
 
@@ -370,7 +371,7 @@ namespace Engine
 	
 	void Application::FramebufferSizeCallback(GLFWwindow* pWindow, const int pWidth, const int pHeight) noexcept
 	{
-		SetDimensions(pWidth, pHeight);
+		SetDimensions((const uint16_t)pWidth, (const uint16_t)pHeight);
 		Renderer::SetResolution(pWidth, pHeight);
 	}
 }

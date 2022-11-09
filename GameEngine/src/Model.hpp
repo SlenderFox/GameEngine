@@ -6,7 +6,7 @@ struct aiNode;
 struct aiMesh;
 struct aiScene;
 struct aiMaterial;
-enum aiTextureType;
+enum aiTextureType: int;
 #pragma endregion
 
 namespace Engine

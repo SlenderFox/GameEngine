@@ -17,7 +17,7 @@ namespace Engine
 	// Static
 
 	uint32_t Texture::s_textureIds[32];
-	uint16_t Texture::s_textureCount = 0;
+	uint32_t Texture::s_textureCount = 0;
 	vector<Texture*> Texture::s_loadedTextures = vector<Texture*>();
 
 	void Texture::UnloadAll() noexcept

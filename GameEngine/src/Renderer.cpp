@@ -161,7 +161,7 @@ namespace Engine
 				if (newValue <= 90.0f && newValue >= 0.0f)
 				{
 					currentlLight->SetAngle(newValue);
-					for (uint8_t i = 0; i < s_models.get()->size(); ++i)
+					for (uint8_t j = 0; j < s_models.get()->size(); ++j)
 						GetModelAt(i)->m_shader->SetFloat("u_spotLights[0].cutoff", currentlLight->GetAngle());
 				}
 			}
@@ -179,7 +179,7 @@ namespace Engine
 				if (newValue <= 1.0f && newValue > 0.0f)
 				{
 					currentlLight->SetBlur(newValue);
-					for (uint8_t i = 0; i < s_models.get()->size(); ++i)
+					for (uint8_t j = 0; j < s_models.get()->size(); ++j)
 						GetModelAt(i)->m_shader->SetFloat("u_spotLights[0].blur", currentlLight->GetBlur());
 				}
 			}
