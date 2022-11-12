@@ -81,14 +81,14 @@ namespace Engine
 			{
 				switch (j)
 				{
-				case 0: vert.position.x  = vert.position.x  = s_cubeVerticesArr[i * 8 + j]; break;
-				case 1: vert.position.y  = vert.position.y  = s_cubeVerticesArr[i * 8 + j]; break;
-				case 2: vert.position.z  = vert.position.z  = s_cubeVerticesArr[i * 8 + j]; break;
-				case 3: vert.normal.x    = vert.normal.x    = s_cubeVerticesArr[i * 8 + j]; break;
-				case 4: vert.normal.y    = vert.normal.y    = s_cubeVerticesArr[i * 8 + j]; break;
-				case 5: vert.normal.z    = vert.normal.z    = s_cubeVerticesArr[i * 8 + j]; break;
-				case 6: vert.texCoords.x = vert.texCoords.x = s_cubeVerticesArr[i * 8 + j]; break;
-				case 7: vert.texCoords.y = vert.texCoords.y = s_cubeVerticesArr[i * 8 + j]; break;
+				case 0: vert.position.x  = s_cubeVerticesArr[i * 8 + j]; break;
+				case 1: vert.position.y  = s_cubeVerticesArr[i * 8 + j]; break;
+				case 2: vert.position.z  = s_cubeVerticesArr[i * 8 + j]; break;
+				case 3: vert.normal.x    = s_cubeVerticesArr[i * 8 + j]; break;
+				case 4: vert.normal.y    = s_cubeVerticesArr[i * 8 + j]; break;
+				case 5: vert.normal.z    = s_cubeVerticesArr[i * 8 + j]; break;
+				case 6: vert.texCoords.x = s_cubeVerticesArr[i * 8 + j]; break;
+				case 7: vert.texCoords.y = s_cubeVerticesArr[i * 8 + j]; break;
 				}
 			}
 			verts.push_back(vert);
