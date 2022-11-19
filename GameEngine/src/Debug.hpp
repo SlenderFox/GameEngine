@@ -49,7 +49,7 @@ namespace Engine
 
 		static void Init(GLFWwindow* pWindow) noexcept;
 		static void Terminate() noexcept;
-		static void Update() noexcept;
+		static void Draw() noexcept;
 
 		static void Send(
 			const std::string pMsg,

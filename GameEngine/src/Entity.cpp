@@ -1,5 +1,5 @@
 #pragma region
-#include "Entity.hpp"
+//#include "Entity.hpp"	// Included upstream by Renderer.hpp
 #include "Renderer.hpp"
 
 using std::string;

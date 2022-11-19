@@ -52,12 +52,6 @@ namespace Engine
 		s_application = this;
 	}
 
-	Application::~Application()
-	{
-		Renderer::Terminate();
-		delete Root::GetRoot();
-	}
-
 	const bool Application::GladLoaded() noexcept
 	{
 		return s_gladLoaded;
@@ -70,10 +64,11 @@ namespace Engine
 
 	void Application::Terminate() noexcept
 	{
-		Debug::Terminate();
-
 		GetApplication()->Shutdown();
+		Debug::Terminate();
 		glfwTerminate();
+		Renderer::Terminate();
+		delete Root::GetRoot();
 	}
 
 	Application::ExitCode Application::Run()
@@ -114,7 +109,7 @@ namespace Engine
 				Renderer::Draw();
 
 				//Updates imgui
-				Debug::Update();
+				Debug::Draw();
 
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(s_windowRef);

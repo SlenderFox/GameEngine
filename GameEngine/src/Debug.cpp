@@ -56,7 +56,7 @@ namespace Engine
 		}
 	}
 
-	void Debug::Update() noexcept
+	void Debug::Draw() noexcept
 	{
 		// Start a new imgui frame
 		ImGui_ImplOpenGL3_NewFrame();
@@ -65,7 +65,7 @@ namespace Engine
 
 		//ImGui::ShowDemoWindow();
 
-		// Draw imgui last and on top
+		// Finish and draw the frane
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}

@@ -80,7 +80,7 @@ namespace Engine
 
 	protected:
 		Application();
-		virtual ~Application();
+		virtual ~Application() {}
 
 		virtual bool Startup() = 0;
 		virtual void Shutdown() = 0;
