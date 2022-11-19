@@ -196,53 +196,53 @@ void Project::CreateLights()
 void Project::ProcessInput() noexcept
 {
 	// Render triangles normally
-	if (Input::GetKeyState(Input::Key::Key_F1, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_F1, Input::State::Press))
 		Renderer::SetRenderMode(Renderer::Mode::Fill);
 	// Render triangles as lines
-	if (Input::GetKeyState(Input::Key::Key_F2, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_F2, Input::State::Press))
 		Renderer::SetRenderMode(Renderer::Mode::Line);
 	// Render triangles as dots
-	if (Input::GetKeyState(Input::Key::Key_F3, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_F3, Input::State::Press))
 		Renderer::SetRenderMode(Renderer::Mode::Point);
 
 	// Spotlight cone
-	if (Input::GetKeyState(Input::Key::Key_T, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_T, Input::State::Press))
 		Renderer::ModifyAllSpotlightAngles(0.05f);
-	if (Input::GetKeyState(Input::Key::Key_G, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_G, Input::State::Press))
 		Renderer::ModifyAllSpotlightAngles(-0.05f);
 	// Spotlight blur
-	if (Input::GetKeyState(Input::Key::Key_Y, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_Y, Input::State::Press))
 		Renderer::ModifyAllSpotlightBlurs(-0.005f);
-	if (Input::GetKeyState(Input::Key::Key_H, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_H, Input::State::Press))
 		Renderer::ModifyAllSpotlightBlurs(0.005f);
 
 	vec3 translation = vec3();
 	float moveSpeed = 4;
 
 	// SlowDown
-	if (Input::GetKeyState(Input::Key::Key_LeftControl, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_LeftControl, Input::State::Press))
 		moveSpeed *= 0.1f;
 	// SpeedUp
-	else if (Input::GetKeyState(Input::Key::Key_LeftShift, Input::State::Press))
+	else if (Input::CheckKeyState(Input::Key::Key_LeftShift, Input::State::Press))
 		moveSpeed *= 3;
 
 	// Forwards
-	if (Input::GetKeyState(Input::Key::Key_W, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_W, Input::State::Press))
 		translation += moveSpeed * (float)GetDeltaTime() * (vec3)Renderer::GetCamera()->GetForward();
 	// Backwards
-	if (Input::GetKeyState(Input::Key::Key_S, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_S, Input::State::Press))
 		translation -= moveSpeed * (float)GetDeltaTime() * (vec3)Renderer::GetCamera()->GetForward();
 	// Left
-	if (Input::GetKeyState(Input::Key::Key_A, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_A, Input::State::Press))
 		translation += moveSpeed * (float)GetDeltaTime() * (vec3)Renderer::GetCamera()->GetRight();
 	// Right
-	if (Input::GetKeyState(Input::Key::Key_D, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_D, Input::State::Press))
 		translation -= moveSpeed * (float)GetDeltaTime() * (vec3)Renderer::GetCamera()->GetRight();
 	// Up
-	if (Input::GetKeyState(Input::Key::Key_Space, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_Space, Input::State::Press))
 		translation += moveSpeed * (float)GetDeltaTime() * (vec3)Renderer::GetCamera()->GetUp();
 	// Down
-	if (Input::GetKeyState(Input::Key::Key_C, Input::State::Press))
+	if (Input::CheckKeyState(Input::Key::Key_C, Input::State::Press))
 		translation -= moveSpeed * (float)GetDeltaTime() * (vec3)Renderer::GetCamera()->GetUp();
 
 	Renderer::GetCamera()->Translate(translation);

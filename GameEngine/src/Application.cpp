@@ -319,7 +319,7 @@ namespace Engine
 		//}
 
 		// End application
-		if (Input::GetKeyState(Input::Key::Key_End, Input::State::Press)) Quit();
+		if (Input::CheckKeyState(Input::Key::Key_End, Input::State::Press)) Quit();
 	}
 
 	void Application::FramebufferSizeCallback(GLFWwindow* pWindow, const int pWidth, const int pHeight) noexcept

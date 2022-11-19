@@ -189,7 +189,7 @@ namespace Engine
 		 */
 		static bool Init(GLFWwindow* pWindowRef) noexcept;
 		static void Process() noexcept;
-		static bool GetKeyState(const Key pKey, const State pState) noexcept;
+		static bool CheckKeyState(const Key pKey, const State pState) noexcept;
 
 		static inline void AddMouseCallback(CallbackFunc pCallback) noexcept
 		{ s_mouseCallbackFun = pCallback; }
