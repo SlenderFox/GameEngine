@@ -36,7 +36,7 @@ namespace Engine
 
 		static const float s_ambience;
 
-		static void Destroy() noexcept;
+		static void Terminate() noexcept;
 
 		static void LoadLightsIntoShader(const Shader* pShader) noexcept;
 		static void ModifyAllSpotlightAngles(const float pValue) noexcept;

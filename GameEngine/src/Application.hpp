@@ -12,7 +12,6 @@ namespace Engine
 			Fail_GLFW_Init,
 			Fail_GLFW_Window,
 			Fail_Glad,
-			Fail_Imgui,
 			Fail_Renderer,
 			Fail_Input,
 			Fail_Startup
@@ -54,7 +53,6 @@ namespace Engine
 		static bool Init();
 		static bool SetupGLFW();
 		static bool SetupGlad();
-		static bool SetupImgui();
 
 		static void UpdateFrameTimeData() noexcept;
 		static void UpdateCamera() noexcept;

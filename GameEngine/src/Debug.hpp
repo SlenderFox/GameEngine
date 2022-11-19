@@ -20,6 +20,8 @@
 #pragma once
 #include <string>
 
+struct GLFWwindow;
+
 namespace Engine
 {
 	struct Debug
@@ -45,8 +47,9 @@ namespace Engine
 
 		static const wchar_t* s_prefixes[12];
 
-		// Can be removed when transitioned fully to imgui
-		static void Init() noexcept;
+		static void Init(GLFWwindow* pWindow) noexcept;
+		static void Terminate() noexcept;
+		static void Update() noexcept;
 
 		static void Send(
 			const std::string pMsg,

@@ -2,6 +2,9 @@
 #include "Debug.hpp"
 #include <io.h>
 #include <fcntl.h>
+#include "../imgui/imgui.h"
+#include "../imgui/imgui_impl_glfw.h"
+#include "../imgui/imgui_impl_opengl3.h"
 
 #ifdef _DEBUG
 # include <iostream>
@@ -29,10 +32,42 @@ namespace Engine
 		L"\u2567",
 	};
 
-	void Debug::Init() noexcept
+	void Debug::Init(GLFWwindow* pWindow) noexcept
 	{
-		// Allows utf16 output
+		// Allows utf16 output to console
 		_setmode(_fileno(stdout), _O_U16TEXT);
+
+		ImGui::CreateContext();
+		ImGui::StyleColorsDark();
+		ImGui_ImplGlfw_InitForOpenGL(pWindow, false);
+		ImGui_ImplOpenGL3_Init("#version 330");
+		ImGui::GetIO().DisplaySize.x = 1030.0f;
+		ImGui::GetIO().DisplaySize.y = 650.0f;
+	}
+
+	void Debug::Terminate() noexcept
+	{
+		// End imgui
+		if (ImGui::GetCurrentContext() != NULL)
+		{
+			ImGui_ImplOpenGL3_Shutdown();
+			ImGui_ImplGlfw_Shutdown();
+			ImGui::DestroyContext();
+		}
+	}
+
+	void Debug::Update() noexcept
+	{
+		// Start a new imgui frame
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		//ImGui::ShowDemoWindow();
+
+		// Draw imgui last and on top
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
 	void Debug::Send(

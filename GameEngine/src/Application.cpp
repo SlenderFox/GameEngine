@@ -8,9 +8,6 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include <Windows.h>	// Needed for Sleep()
 #include <chrono>
-#include "../imgui/imgui.h"
-#include "../imgui/imgui_impl_glfw.h"
-#include "../imgui/imgui_impl_opengl3.h"
 
 using std::string;
 using std::to_string;
@@ -51,16 +48,13 @@ namespace Engine
 			delete s_application;
 		}
 
-		// Allows debug to always be available
-		Debug::Init();
-
 		// Applies the static reference
 		s_application = this;
 	}
 
 	Application::~Application()
 	{
-		Renderer::Destroy();
+		Renderer::Terminate();
 		delete Root::GetRoot();
 	}
 
@@ -76,13 +70,7 @@ namespace Engine
 
 	void Application::Terminate() noexcept
 	{
-		// End imgui
-		if (ImGui::GetCurrentContext() != NULL)
-		{
-			ImGui_ImplOpenGL3_Shutdown();
-			ImGui_ImplGlfw_Shutdown();
-			ImGui::DestroyContext();
-		}
+		Debug::Terminate();
 
 		GetApplication()->Shutdown();
 		glfwTerminate();
@@ -115,26 +103,18 @@ namespace Engine
 				}
 
 				// Skip drawing if minimised, restricts fps to 15
-				if (glfwGetWindowAttrib(s_windowRef, GLFW_ICONIFIED) == GLFW_TRUE)
+				if ((bool)glfwGetWindowAttrib(s_windowRef, GLFW_ICONIFIED))
 				{
-					Sleep((DWORD)std::abs(50.0 - s_deltaTime));
+					Sleep(66UL);
 					continue;
 				}
-
-				// Start a new imgui frame
-				ImGui_ImplOpenGL3_NewFrame();
-				ImGui_ImplGlfw_NewFrame();
-				ImGui::NewFrame();
 
 				GetApplication()->LateUpdate();
 
 				Renderer::Draw();
 
-				//ImGui::ShowDemoWindow();
-
-				// Draw imgui last and on top
-				ImGui::Render();
-				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+				//Updates imgui
+				Debug::Update();
 
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(s_windowRef);
@@ -157,15 +137,12 @@ namespace Engine
 			return false;
 		}
 
+		// Has to be initialised after glfw and glad
+		Debug::Init(s_windowRef);
+
 		if (!Renderer::Init((float)s_winWidth / (float)s_winHeight))
 		{
 			s_exitCode = ExitCode::Fail_Renderer;
-			return false;
-		}
-
-		if (!SetupImgui())
-		{
-			s_exitCode = ExitCode::Fail_Imgui;
 			return false;
 		}
 
@@ -174,8 +151,6 @@ namespace Engine
 			s_exitCode = ExitCode::Fail_Input;
 			return false;
 		}
-		// FIXME: Only works after input class is initialised
-		//ImGui_ImplGlfw_InitForOpenGL(s_windowRef, true);
 
 		if (!GetApplication()->Startup())
 		{
@@ -196,7 +171,6 @@ namespace Engine
 		// glfw: initialise and configure
 		if (!glfwInit())
 		{
-			Debug::Send("Failed to initialise GLFW");
 			s_exitCode = ExitCode::Fail_GLFW_Init;
 			return false;
 		}
@@ -224,7 +198,6 @@ namespace Engine
 
 		if (!s_windowRef)
 		{
-			Debug::Send("Failed to create GLFW window");
 			s_exitCode = ExitCode::Fail_GLFW_Window;
 			return false;
 		}
@@ -257,25 +230,10 @@ namespace Engine
 	bool Application::SetupGlad()
 	{
 		// glad: load all OpenGL function pointers
-		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-		{
-			Debug::Send("Failed to initialise GLAD");
-			return false;
-		}
-		s_gladLoaded = true;
-		return true;
-	}
+		if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+			return s_gladLoaded = true;
 
-	bool Application::SetupImgui()
-	{
-		ImGui::CreateContext();
-		ImGui::StyleColorsDark();
-		ImGui_ImplGlfw_InitForOpenGL(s_windowRef, true);
-		ImGui_ImplOpenGL3_Init("#version 330");
-		ImGui::GetIO().DisplaySize.x = 1030.0f;
-		ImGui::GetIO().DisplaySize.y = 650.0f;
-
-		return true;
+		return false;
 	}
 
 	void Application::SetDimensions(const uint16_t pWidth, const uint16_t pHeight) noexcept
@@ -368,7 +326,7 @@ namespace Engine
 		// End application
 		if (Input::GetKeyState(Input::Key::Key_End, Input::State::Press)) Quit();
 	}
-	
+
 	void Application::FramebufferSizeCallback(GLFWwindow* pWindow, const int pWidth, const int pHeight) noexcept
 	{
 		SetDimensions((const uint16_t)pWidth, (const uint16_t)pHeight);

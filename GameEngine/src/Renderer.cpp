@@ -41,7 +41,7 @@ namespace Engine
 		return true;
 	}
 
-	void Renderer::Destroy() noexcept
+	void Renderer::Terminate() noexcept
 	{
 		if (s_models)
 		{
