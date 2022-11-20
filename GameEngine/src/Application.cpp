@@ -18,7 +18,7 @@ using glm::normalize;
 
 namespace Engine
 {
-#	pragma region Variables
+	#pragma region Variables
 	const double Application::s_fixedDeltaTime = 1.0 / 60.0;
 
 	Application* Application::s_application = nullptr;
@@ -37,7 +37,7 @@ namespace Engine
 		Application::s_frameTimer = 0.0;
 	string Application::s_title = "Application";
 	Application::ExitCode Application::s_exitCode = Application::ExitCode::Okay;
-#	pragma endregion
+	#pragma endregion
 
 	Application::Application()
 	{
@@ -205,16 +205,16 @@ namespace Engine
 		{
 			int monPosX, monPosY, monWidth, monHeight;
 			glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
-#			ifdef _DEBUG
+			#ifdef _DEBUG
 				// Moves the window to the left of the monitor
 				glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_winHeight) * 0.5f));
 				// Moves the console to the right and resizes
 				MoveWindow(GetConsoleWindow(), s_winWidth - 3, 0, 900, 1040, TRUE);
-#			else
+			#else
 				// Moves the window to the center of the workarea
 				glfwSetWindowPos(s_windowRef, (int)((monWidth - s_winWidth) * 0.5f),
 					(int)((monHeight - s_winHeight) * 0.5f));
-#			endif
+			#endif
 		}
 
 		glfwSetFramebufferSizeCallback(s_windowRef, FramebufferSizeCallback);

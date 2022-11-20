@@ -23,7 +23,7 @@ namespace Engine
 
 		static double s_mouseX, s_mouseY, s_mouseLastX, s_mouseLastY;
 
-#		pragma region Constructors
+		#pragma region Constructors
 		// Pure static class
 		Input() = delete;
 		~Input() = delete;
@@ -32,10 +32,10 @@ namespace Engine
 		Input& operator=(Input const&) = delete;
 		Input(Input&&) = delete;
 		Input& operator=(Input&&) = delete;
-#		pragma endregion
+		#pragma endregion
 
 	public:
-#		pragma region Bullshit
+		#pragma region Bullshit
 		enum class State: unsigned char
 		{
 			Release,
@@ -180,7 +180,7 @@ namespace Engine
 			GLFWwindow* pWindow,
 			double pOffsetX,
 			double pOffsetY) noexcept;
-#		pragma endregion
+		#pragma endregion
 
 		/**
 		 * @brief Initialise input with GLFW

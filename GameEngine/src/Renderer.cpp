@@ -15,12 +15,12 @@ using std::unique_ptr;
 
 namespace Engine
 {
-#	pragma region Variables
+	#pragma region Variables
 	Camera* Renderer::s_camera = nullptr;
 	unique_ptr<vector<unique_ptr<Model>>> Renderer::s_models = nullptr;
 	unique_ptr<vector<unique_ptr<Light>>> Renderer::s_lights = nullptr;
 	const float Renderer::s_ambience = 0.15f;
-#	pragma endregion
+	#pragma endregion
 
 	bool Renderer::Init(const float pAspect) noexcept
 	{

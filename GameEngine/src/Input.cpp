@@ -5,7 +5,7 @@
 
 namespace Engine
 {
-#	pragma region Variables
+	#pragma region Variables
 	GLFWwindow* Input::s_windowRef = nullptr;
 	CallbackFunc Input::s_mouseCallbackFun = nullptr,
 		Input::s_scrollCallbackFun = nullptr;
@@ -13,9 +13,9 @@ namespace Engine
 		Input::s_mouseY = 0.0,
 		Input::s_mouseLastX = 0.0,
 		Input::s_mouseLastY = 0.0;
-#	pragma endregion
+	#pragma endregion
 
-#	pragma region Bullshit
+	#pragma region Bullshit
 	void Input::Key_callback(
 		GLFWwindow* pWindow,
 		int pKey,
@@ -50,7 +50,7 @@ namespace Engine
 		if (s_scrollCallbackFun)
 			s_scrollCallbackFun(pOffsetX, pOffsetY);
 	}
-#	pragma endregion
+	#pragma endregion
 
 	bool Input::Init(GLFWwindow* pWindowRef) noexcept
 	{

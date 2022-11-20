@@ -112,7 +112,7 @@ namespace Engine
 		[[nodiscard("Engine::Colour::CreateWithHSV (Alternate)")]]
 		static Colour CreateWithHSV(const glm::vec3 pHSV) noexcept;
 
-#		pragma region Presets
+		#pragma region Presets
 		static inline Colour Black() noexcept;
 		static inline Colour White() noexcept;
 		static inline Colour Silver() noexcept;
@@ -130,7 +130,7 @@ namespace Engine
 		static inline Colour Olive() noexcept;
 		static inline Colour Teal() noexcept;
 		static inline Colour Purple() noexcept;
-#		pragma endregion
+		#pragma endregion
 
 	private:
 		glm::vec3 m_RGB = glm::vec3(0);	// Colour data stored as 0-1 for easy conversion
@@ -167,15 +167,15 @@ namespace Engine
 		[[nodiscard("Engine::Colour::HSV")]]
 		hsv HSV() const noexcept;
 
-#		pragma region Operators
+		#pragma region Operators
 		operator glm::vec3() const { return m_RGB; }
 
-#		define COL_OP_CONST_FLOAT(OPERAND) Colour operator OPERAND(float const& pOther) const noexcept;
-#		define COL_OP_CONST_COL(OPERAND) Colour operator OPERAND(Colour const& pOther) const noexcept;
-#		define COL_OP_CONST_VEC3(OPERAND) Colour operator OPERAND(glm::vec3 const& pOther) const noexcept;
-#		define COL_OP_FLOAT(OPERAND) Colour& operator OPERAND(float const& pOther) noexcept;
-#		define COL_OP_COL(OPERAND) Colour& operator OPERAND(Colour const& pOther) noexcept;
-#		define COL_OP_VEC3(OPERAND) Colour& operator OPERAND(glm::vec3 const& pOther) noexcept;
+		#define COL_OP_CONST_FLOAT(OPERAND) Colour operator OPERAND(float const& pOther) const noexcept;
+		#define COL_OP_CONST_COL(OPERAND) Colour operator OPERAND(Colour const& pOther) const noexcept;
+		#define COL_OP_CONST_VEC3(OPERAND) Colour operator OPERAND(glm::vec3 const& pOther) const noexcept;
+		#define COL_OP_FLOAT(OPERAND) Colour& operator OPERAND(float const& pOther) noexcept;
+		#define COL_OP_COL(OPERAND) Colour& operator OPERAND(Colour const& pOther) noexcept;
+		#define COL_OP_VEC3(OPERAND) Colour& operator OPERAND(glm::vec3 const& pOther) noexcept;
 
 		COL_OP_CONST_FLOAT(+)
 		COL_OP_CONST_FLOAT(-)
@@ -206,6 +206,6 @@ namespace Engine
 		COL_OP_VEC3(-=)
 		COL_OP_VEC3(*=)
 		COL_OP_VEC3(/=)
-#		pragma endregion
+		#pragma endregion
 	};
 }

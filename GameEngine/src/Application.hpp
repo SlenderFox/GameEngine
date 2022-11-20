@@ -40,13 +40,13 @@ namespace Engine
 		static std::string s_title;
 		static ExitCode s_exitCode;
 
-#		pragma region Constructors
+		#pragma region Constructors
 		// Delete copy/move so extra instances can't be created/moved.
 		Application(Application const&) = delete;
 		Application& operator=(Application const&) = delete;
 		Application(Application&&) = delete;
 		Application& operator=(Application&&) = delete;
-#		pragma endregion
+		#pragma endregion
 
 		static void Terminate() noexcept;
 

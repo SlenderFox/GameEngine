@@ -75,11 +75,11 @@ namespace Engine
 		const bool pNewline,
 		const bool pEndline) noexcept
 	{
-#		ifdef _DEBUG
+		#ifdef _DEBUG
 			if (pNewline) wcout << '\n';
 			wcout << pMsg.c_str();
 			if (pEndline) wcout << endl;
-#		endif
+		#endif
 	}
 
 	void Debug::Send(
@@ -88,11 +88,11 @@ namespace Engine
 		const bool pNewline,
 		const bool pEndline) noexcept
 	{
-#		ifdef _DEBUG
+		#ifdef _DEBUG
 			if (pNewline) wcout << '\n';
 			wcout << pPrefix << pMsg.c_str();
 			if (pEndline) wcout << endl;
-#		endif
+		#endif
 	}
 
 	void Debug::Send(
@@ -109,8 +109,8 @@ namespace Engine
 
 	void Debug::NewLine() noexcept
 	{
-#		ifdef _DEBUG
+		#ifdef _DEBUG
 			wcout << endl;
-#		endif
+		#endif
 	}
 }

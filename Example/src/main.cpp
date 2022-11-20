@@ -19,13 +19,13 @@
 int main()
 {
 	Project* app = new Project();
-#	ifdef _DEBUG
+	#ifdef _DEBUG
 		app->SetDimensions(1030, 650);
 		app->SetTitle("Application (DEBUG)");
-#	else
+	#else
 		app->SetDimensions(1600, 900);
 		app->SetTitle("Application (RELEASE)");
-#	endif
+	#endif
 	app->SetFullscreen(false);
 	int code = (int)app->Run();
 	delete app;

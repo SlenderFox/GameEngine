@@ -102,7 +102,7 @@ namespace Engine
 		pShaderOut = m_modelRef->GetShaderRef();
 	}
 
-#	pragma region Setters
+	#pragma region Setters
 	void Entity::SetTransform(const mat4* pValue) noexcept
 	{
 		Transform::SetTransform(pValue);
@@ -153,5 +153,5 @@ namespace Engine
 	{
 		m_modelRef->GetShaderRef()->SetVec3("u_colour", pCol.RGBvec3());
 	}
-#	pragma endregion
+	#pragma endregion
 }

@@ -27,7 +27,7 @@ namespace Engine
 			glm::mat4 pTransform = glm::mat4(1));
 		~Light() {}
 
-#		pragma region Setters
+		#pragma region Setters
 		/**
 		 * @brief Wrapper function that passes to SetForward
 		 * @param pDirection Value to be set
@@ -39,9 +39,9 @@ namespace Engine
 		constexpr void SetQuadratic (float pValue)			noexcept { m_quadratic = pValue; }
 		constexpr void SetAngle		 (float pValue)			noexcept { m_angle = pValue; }	// In degrees
 		constexpr void SetBlur		 (float pValue)			noexcept { m_blur = pValue; }		// In degrees
-#		pragma endregion
+		#pragma endregion
 
-#		pragma region Getters
+		#pragma region Getters
 		float GetAngle() const noexcept;
 		float GetBlur() const noexcept;
 		/**
@@ -55,6 +55,6 @@ namespace Engine
 		constexpr float		GetQuadratic()	const noexcept { return m_quadratic; }
 		constexpr float		GetAngleRaw()	const noexcept { return m_angle; }
 		constexpr float		GetBlurRaw()	const noexcept { return m_blur; }
-#		pragma endregion
+		#pragma endregion
 	};
 }

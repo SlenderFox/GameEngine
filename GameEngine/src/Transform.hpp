@@ -8,7 +8,7 @@ namespace Engine
 		glm::mat4 m_transform;
 
 	public:
-#		pragma region Constructors
+		#pragma region Constructors
 		Transform();
 		Transform(const glm::mat4 pValue);
 		virtual ~Transform() {}
@@ -19,9 +19,9 @@ namespace Engine
 		// Move, take rvalue
 		Transform(Transform&& pOther) noexcept;
 		Transform& operator=(Transform&& pOther) noexcept;
-#		pragma endregion
+		#pragma endregion
 
-#		pragma region Setters
+		#pragma region Setters
 		virtual constexpr void SetTransform(const glm::mat4* pValue) noexcept { m_transform = *pValue; }
 		virtual void SetPosition(const glm::vec3 pValue) noexcept;
 		virtual void Translate(const glm::vec3 pValue) noexcept;
@@ -32,15 +32,15 @@ namespace Engine
 		virtual void SetRight(const glm::vec3 pRight) noexcept;
 		virtual void SetUp(const glm::vec3 pUp) noexcept;
 		virtual void SetForward(const glm::vec3 pForward) noexcept;
-#		pragma endregion
+		#pragma endregion
 
-#		pragma region Getters
+		#pragma region Getters
 		constexpr glm::mat4 GetTransform() const noexcept { return m_transform; }
 		constexpr glm::vec4 GetPosition() const noexcept { return m_transform[3]; }
 		// Why the fuck do these three need to be virtual, nothing overrides them
 		virtual constexpr glm::vec4 GetRight() const noexcept;
 		virtual constexpr glm::vec4 GetUp() const noexcept;
 		virtual constexpr glm::vec4 GetForward() const noexcept;
-#		pragma endregion
+		#pragma endregion
 	};
 }

@@ -42,7 +42,7 @@ namespace Engine
 
 	void Shader::LoadShader(const ShaderType pType)
 	{
-#		pragma region Fallback code
+		#pragma region Fallback code
 		 static const char* vertexFallback = "#version 330 core\n\
 layout(location=0)in vec3 aPos;\
 layout(location=1)in vec3 aNormal;\
@@ -131,7 +131,7 @@ for(int i=0;i<NR_SPOT_LIGHTS;++i)result+=CalculateSpotLight(u_spotLights[i]);\
 if(u_justColour) FragCol=vec4(u_colour,1);\
 else FragCol=vec4(result*u_colour,1);\
 return;}";
-#		pragma endregion
+		#pragma endregion
 
 		bool m_usingFallback = false;
 		string codeString;
@@ -357,13 +357,13 @@ return;}";
 	}
 
 	template<typename T>
-	constexpr T Shader::GetType(const ShaderType pType, T ifVertex, T ifFragment) const
+	T Shader::GetType(const ShaderType pType, T ifVertex, T ifFragment) const
 	{
 		if (pType == ShaderType::PROGRAM) exit(2);
 		return (pType == ShaderType::VERTEX ? ifVertex : ifFragment);
 	}
 
-#	pragma region Setters
+	#pragma region Setters
 	void Shader::SetBool(string pName, bool pValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
@@ -417,5 +417,5 @@ return;}";
 		glUseProgram(m_idProgram);
 		glUniformMatrix4fv(glGetUniformLocation(m_idProgram, pName.c_str()), 1, GL_FALSE, &pValue[0][0]);
 	}
-#	pragma endregion
+	#pragma endregion
 }

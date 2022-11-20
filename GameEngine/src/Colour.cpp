@@ -128,7 +128,7 @@ namespace Engine
 		result.m_RGB = HSVtoRGB(pHSV);
 		return result;
 	}
-	
+
 	Colour Colour::CreateWithHSV(const vec3 pHSV) noexcept
 	{
 		uint16_t hue = (uint16_t)clamp(pHSV.r, 0.0f, 360.f);
@@ -136,7 +136,7 @@ namespace Engine
 		return CreateWithHSV(hsv(hue, pHSV.g, pHSV.b));
 	}
 
-#	pragma region Presets
+	#pragma region Presets
 	inline Colour Colour::Black()		noexcept { return Colour(vec3(0)); }
 	inline Colour Colour::White()		noexcept { return Colour(vec3(1)); }
 	inline Colour Colour::Silver()	noexcept { return Colour(vec3(0.75f,	0.75f,	0.75f	)); }
@@ -154,7 +154,7 @@ namespace Engine
 	inline Colour Colour::Olive()		noexcept { return Colour(vec3(0.5f,		0.5f,		0		)); }
 	inline Colour Colour::Teal()		noexcept { return Colour(vec3(0,			0.5f,		0.5f	)); }
 	inline Colour Colour::Purple()	noexcept { return Colour(vec3(0.5f,		0,			0.5f	)); }
-#	pragma endregion
+	#pragma endregion
 
 	// ---Member---
 
@@ -172,20 +172,20 @@ namespace Engine
 	{
 		return RGBtoHSV(m_RGB);
 	}
-	
-#	pragma region Operators
-#	define COL_OP_CONST_FLOAT_DEF(OPERAND) Colour Colour::operator OPERAND(float const& pOther) const noexcept\
+
+	#pragma region Operators
+	#define COL_OP_CONST_FLOAT_DEF(OPERAND) Colour Colour::operator OPERAND(float const& pOther) const noexcept\
 	{ return Colour::CreateWithRGB(m_RGB OPERAND pOther); }
-#	define COL_OP_CONST_COL_DEF(OPERAND) Colour Colour::operator OPERAND(Colour const& pOther) const noexcept\
+	#define COL_OP_CONST_COL_DEF(OPERAND) Colour Colour::operator OPERAND(Colour const& pOther) const noexcept\
 	{ return Colour::CreateWithRGB(m_RGB OPERAND pOther.m_RGB); }
-#	define COL_OP_CONST_VEC3_DEF(OPERAND) Colour Colour::operator OPERAND(vec3 const& pOther) const noexcept\
+	#define COL_OP_CONST_VEC3_DEF(OPERAND) Colour Colour::operator OPERAND(vec3 const& pOther) const noexcept\
 	{ return Colour::CreateWithRGB(m_RGB OPERAND pOther); }
 
-#	define COL_OP_FLOAT_DEF(OPERAND) Colour& Colour::operator OPERAND(float const& pOther) noexcept\
+	#define COL_OP_FLOAT_DEF(OPERAND) Colour& Colour::operator OPERAND(float const& pOther) noexcept\
 	{ m_RGB OPERAND pOther; return *this; }
-#	define COL_OP_COL_DEF(OPERAND) Colour& Colour::operator OPERAND(Colour const& pOther) noexcept\
+	#define COL_OP_COL_DEF(OPERAND) Colour& Colour::operator OPERAND(Colour const& pOther) noexcept\
 	{ m_RGB OPERAND pOther.m_RGB; return *this; }
-#	define COL_OP_VEC3_DEF(OPERAND) Colour& Colour::operator OPERAND(vec3 const& pOther) noexcept\
+	#define COL_OP_VEC3_DEF(OPERAND) Colour& Colour::operator OPERAND(vec3 const& pOther) noexcept\
 	{ m_RGB OPERAND pOther; return *this; }
 
 	COL_OP_CONST_FLOAT_DEF(+)
@@ -212,5 +212,5 @@ namespace Engine
 	COL_OP_VEC3_DEF(-=)
 	COL_OP_VEC3_DEF(*=)
 	COL_OP_VEC3_DEF(/=)
-#	pragma endregion
+	#pragma endregion
 }

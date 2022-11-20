@@ -12,7 +12,7 @@ namespace Engine
 		static std::unique_ptr<std::vector<std::unique_ptr<Model>>> s_models;
 		static std::unique_ptr<std::vector<std::unique_ptr<Light>>> s_lights;
 
-#		pragma region Constructors
+		#pragma region Constructors
 		// Pure static class
 		Renderer() = delete;
 		~Renderer() = delete;
@@ -21,7 +21,7 @@ namespace Engine
 		Renderer& operator=(Renderer const&) = delete;
 		Renderer(Renderer&&) = delete;
 		Renderer& operator=(Renderer&&) = delete;
-#		pragma endregion
+		#pragma endregion
 
 		static bool Init(const float pAspect) noexcept;
 		static void Draw() noexcept;

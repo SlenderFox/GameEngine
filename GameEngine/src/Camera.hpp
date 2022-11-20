@@ -12,7 +12,7 @@ namespace Engine
 		glm::mat4 m_projection;
 
 	public:
-#		pragma region Constructors
+		#pragma region Constructors
 		Camera(float pAspectRatio);
 		Camera(
 			float pAspectRatio,
@@ -35,7 +35,7 @@ namespace Engine
 			glm::vec3 pFrom,
 			glm::vec3 pTo,
 			glm::vec3 pUp = { 0, 1, 0 });
-#		pragma endregion
+		#pragma endregion
 
 		void LookAt(
 			glm::vec3 pFrom,
@@ -47,7 +47,7 @@ namespace Engine
 		void UpdateFovH() noexcept;
 		void UpdateFovV() noexcept;
 
-#		pragma region Setters
+		#pragma region Setters
 		void SetTransform(const glm::mat4* pValue) noexcept override;
 		void SetView(glm::mat4* pValue) noexcept;
 		void SetProjection(float pFovV) noexcept;
@@ -63,12 +63,12 @@ namespace Engine
 
 		void SetFovH(float pFovH) noexcept;
 		void SetFovV(float pFovV) noexcept;
-#		pragma endregion
+		#pragma endregion
 
-#		pragma region Getters
+		#pragma region Getters
 		glm::mat4 GetWorldToCameraMatrix() const noexcept;
 		constexpr glm::mat4 GetView() const noexcept { return m_view; }
 		constexpr glm::mat4 GetProjection() const noexcept { return m_projection; }
-#		pragma endregion
+		#pragma endregion
 	};
 }
