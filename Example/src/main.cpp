@@ -1,15 +1,17 @@
 /**
  * @file main.cpp
  * @author SlenderFox
+ * @date 2022-11-19
+ * @copyright Copyright (c) 2022
  * @brief Following: https://learnopengl.com/
- * Enable/disable console through
+ * @note Disable console through:
  * [Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)]
- * Resolutions:
+ * @note Resolutions:
  * 800, 600
  * 1280, 720
  * 1600, 900
  * 1920, 1080
- * Refer to Obsidian to see TODO and notes
+ * @ref Refer to Notes.md to see TODO and notes
  */
 
 #include "Project.hpp"

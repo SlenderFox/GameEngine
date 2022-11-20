@@ -1,3 +1,10 @@
+/**
+ * @file Project.cpp
+ * @author SlenderFox
+ * @date 2022-11-19
+ * @copyright Copyright (c) 2022
+ * @brief Example project source file
+ */
 #pragma region
 #pragma warning(disable:4100)
 #include "Project.hpp"
