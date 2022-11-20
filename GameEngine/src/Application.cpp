@@ -322,7 +322,10 @@ namespace Engine
 		if (Input::CheckKeyState(Input::Key::Key_End, Input::State::Press)) Quit();
 	}
 
-	void Application::FramebufferSizeCallback(GLFWwindow* pWindow, const int pWidth, const int pHeight) noexcept
+	void Application::FramebufferSizeCallback(
+		GLFWwindow* pWindow,
+		const int pWidth,
+		const int pHeight) noexcept
 	{
 		SetDimensions((const uint16_t)pWidth, (const uint16_t)pHeight);
 		Renderer::SetResolution(pWidth, pHeight);
