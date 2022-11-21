@@ -63,3 +63,4 @@ Todo:
 	- [x] Scroll callback
 	- [ ] ~~Allow callbacks to pass member functions~~
 - [ ] Update destroying a single texture to allow for a new one to replace it
+- [ ] Create a new project for unit tests, use constexpr asserts

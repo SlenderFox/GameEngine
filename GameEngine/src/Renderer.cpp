@@ -173,36 +173,42 @@ namespace Engine
 
 	void Renderer::ModifyAllSpotlightAngles(const float pValue) noexcept
 	{
+		uint8_t numSpotLights = 0;
 		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
 		{
 			if (GetLightAt(i)->GetType() == LightType::Spot)
 			{
 				Light* currentlLight = GetLightAt(i);
 				float newValue = currentlLight->GetAngleRaw() + pValue;
+				string numLights = std::to_string(numSpotLights);
 				if (newValue <= 90.0f && newValue >= 0.0f)
 				{
 					currentlLight->SetAngle(newValue);
 					for (uint8_t j = 0; j < s_models.get()->size(); ++j)
-						GetModelAt(i)->m_shader->SetFloat("u_spotLights[0].cutoff", currentlLight->GetAngle());
+						GetModelAt(j)->m_shader->SetFloat("u_spotLights[" + numLights + "].cutoff", currentlLight->GetAngle());
 				}
+				++numSpotLights;
 			}
 		}
 	}
-
+	// TODO: Optimise these ↑↓
 	void Renderer::ModifyAllSpotlightBlurs(const float pValue) noexcept
 	{
+		uint8_t numSpotLights = 0;
 		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
 		{
 			if (GetLightAt(i)->GetType() == LightType::Spot)
 			{
 				Light* currentlLight = GetLightAt(i);
 				float newValue = currentlLight->GetBlurRaw() + pValue;
+				string numLights = std::to_string(numSpotLights);
 				if (newValue <= 1.0f && newValue > 0.0f)
 				{
 					currentlLight->SetBlur(newValue);
 					for (uint8_t j = 0; j < s_models.get()->size(); ++j)
-						GetModelAt(i)->m_shader->SetFloat("u_spotLights[0].blur", currentlLight->GetBlur());
+						GetModelAt(j)->m_shader->SetFloat("u_spotLights[" + numLights + "].blur", currentlLight->GetBlur());
 				}
+				++numSpotLights;
 			}
 		}
 	}
