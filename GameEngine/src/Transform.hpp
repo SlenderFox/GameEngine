@@ -37,10 +37,9 @@ namespace Engine
 		#pragma region Getters
 		constexpr glm::mat4 GetTransform() const noexcept { return m_transform; }
 		constexpr glm::vec4 GetPosition() const noexcept { return m_transform[3]; }
-		// Why the fuck do these three need to be virtual, nothing overrides them
-		virtual constexpr glm::vec4 GetRight() const noexcept;
-		virtual constexpr glm::vec4 GetUp() const noexcept;
-		virtual constexpr glm::vec4 GetForward() const noexcept;
+		glm::vec4 GetRight() const noexcept;
+		glm::vec4 GetUp() const noexcept;
+		glm::vec4 GetForward() const noexcept;
 		#pragma endregion
 	};
 }

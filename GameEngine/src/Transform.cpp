@@ -82,18 +82,18 @@ namespace Engine
 	#pragma endregion
 
 	#pragma region Getters
-	constexpr vec4 Transform::GetRight() const noexcept
+	vec4 Transform::GetRight() const noexcept
 	{
 		// The transform is horizontally reversed
 		return vec4(-(vec3)m_transform[0], 0);
 	}
 
-	constexpr vec4 Transform::GetUp() const noexcept
+	vec4 Transform::GetUp() const noexcept
 	{
 		return vec4((vec3)m_transform[1], 0);
 	}
 
-	constexpr vec4 Transform::GetForward() const noexcept
+	vec4 Transform::GetForward() const noexcept
 	{
 		// The transform is horizontally reversed
 		return vec4(-(vec3)m_transform[2], 0);

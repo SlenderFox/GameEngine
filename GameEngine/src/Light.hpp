@@ -32,7 +32,7 @@ namespace Engine
 		 * @brief Wrapper function that passes to SetForward
 		 * @param pDirection Value to be set
 		 */
-		constexpr void SetDirection (const glm::vec3 pDirection)	noexcept { Transform::SetForward(pDirection); }
+		void SetDirection (const glm::vec3 pDirection)	noexcept { Transform::SetForward(pDirection); }
 		constexpr void SetType		 (LightType pType)		noexcept { m_type = pType; }
 		constexpr void SetColour	 (Colour pColour)			noexcept { m_lightColour = pColour; }
 		constexpr void SetLinear	 (float pValue)			noexcept { m_linear = pValue; }
@@ -48,7 +48,7 @@ namespace Engine
 		 * @brief Wrapper function to GetForward
 		 * @return [constexpr glm::vec4] The forward direction
 		 */
-		constexpr glm::vec4	GetDirection()	const noexcept { return Transform::GetForward(); }
+		glm::vec4	GetDirection()	const noexcept { return Transform::GetForward(); }
 		constexpr LightType	GetType()		const noexcept { return m_type; }
 		constexpr Colour		GetColour()		const noexcept { return m_lightColour; }
 		constexpr float		GetLinear()		const noexcept { return m_linear; }
