@@ -26,7 +26,7 @@ class Project: public Engine::Application
 	static void ScrollCallback(double pOffsetX, double pOffsetY) noexcept;
 
 private:
-	static constexpr uint8_t s_numCubes = 9;
+	static constexpr uint8_t s_numCubes = 9U;
 
 	const glm::vec3 m_cubePositions[s_numCubes] =
 	{

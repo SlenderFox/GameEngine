@@ -19,8 +19,6 @@ using glm::normalize;
 namespace Engine
 {
 	#pragma region Variables
-	const double Application::s_fixedDeltaTime = 1.0 / 60.0;
-
 	Application* Application::s_application = nullptr;
 	GLFWwindow* Application::s_windowRef = nullptr;
 	bool Application::s_gladLoaded = false,

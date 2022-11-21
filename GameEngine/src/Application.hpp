@@ -66,7 +66,7 @@ namespace Engine
 
 	public:
 		// Should evaluate to 0.01666666666666666
-		static const double s_fixedDeltaTime/* = 1.0 / 60.0*/;
+		static constexpr double s_fixedDeltaTime = 1.0 / 60.0;
 
 		static Application* GetApplication() noexcept { return s_application; }
 		static const bool GladLoaded() noexcept;	// No definition to allow forward declaration
@@ -79,7 +79,6 @@ namespace Engine
 
 		static double GetTime() noexcept { return s_currentTime; }
 		static double GetDeltaTime() noexcept { return s_deltaTime; }
-		static constexpr double GetFixedDeltaTime() noexcept { return s_fixedDeltaTime; }
 
 	protected:
 		Application();
