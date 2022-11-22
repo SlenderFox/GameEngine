@@ -84,10 +84,10 @@ namespace Engine
 		Application();
 		virtual ~Application() {}
 
-		virtual bool Startup() = 0;
-		virtual void Shutdown() = 0;
-		virtual void Update() = 0;
-		virtual void FixedUpdate() = 0;
-		virtual void LateUpdate() = 0;
+		virtual bool Startup() = NULL;
+		virtual void Shutdown() = NULL;
+		virtual void Update() = NULL;
+		virtual void FixedUpdate() = NULL;
+		virtual void LateUpdate() = NULL;
 	};
 }
