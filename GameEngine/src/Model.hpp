@@ -34,7 +34,7 @@ namespace Engine
 		std::vector<Texture*> LoadMaterialTextures(
 			const aiMaterial* pMat,
 			const aiTextureType pType,
-			const TexType pTexType) noexcept;
+			const Texture::TexType pTexType) noexcept;
 		void LoadTexturesToShader() const noexcept;
 
 	public:

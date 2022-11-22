@@ -75,7 +75,7 @@ namespace Engine
 			Debug::Impact::Large,
 			Debug::Stage::Begin
 		);
-		if (!m_loadTextures) 
+		if (!m_loadTextures)
 		{
 			Debug::Send(
 				"Ignoring textures",
@@ -164,17 +164,22 @@ namespace Engine
 				indices.push_back(face.mIndices[j]);
 		}
 
-		if (m_loadTextures)
+		// Process material
+		if (m_loadTextures && pMesh->mMaterialIndex >= 0U)
 		{
-			// Process material
-			if (pMesh->mMaterialIndex >= 0U)
-			{
-				aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
-				vector<Texture*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TexType::diffuse);
-				m_textures.insert(m_textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-				vector<Texture*> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TexType::specular);
-				m_textures.insert(m_textures.end(), specularMaps.begin(), specularMaps.end());
-			}
+			aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
+			vector<Texture*> diffuseMaps = LoadMaterialTextures(
+				material,
+				aiTextureType_DIFFUSE,
+				Texture::TexType::Diffuse
+			);
+			m_textures.insert(m_textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+			vector<Texture*> specularMaps = LoadMaterialTextures(
+				material,
+				aiTextureType_SPECULAR,
+				Texture::TexType::Specular
+			);
+			m_textures.insert(m_textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 
 		return make_unique<Mesh>(&vertices, &indices);
@@ -183,7 +188,7 @@ namespace Engine
 	vector<Texture*> Model::LoadMaterialTextures(
 		const aiMaterial* pMat,
 		const aiTextureType pType,
-		const TexType pTexType) noexcept
+		const Texture::TexType pTexType) noexcept
 	{
 		// Textures from this specific node being output
 		vector<Texture*> texturesOut;
@@ -193,7 +198,7 @@ namespace Engine
 			pMat->GetTexture(pType, i, &file);
 			bool loadTexture = true;
 			string path = (m_directory + '/' + file.C_Str());
-			
+
 			// First we check if the texture has already been loaded into memory
 			for (size_t j = 0; j < Texture::s_loadedTextures.size(); ++j)
 			{
@@ -209,7 +214,7 @@ namespace Engine
 						break;
 					}
 				}
-				
+
 				if (reuseTexture)
 				{
 					string msg = "Reusing texture "
@@ -252,11 +257,11 @@ namespace Engine
 			string number;
 			switch (m_textures[i]->GetType())
 			{
-			case TexType::diffuse:
+			case Texture::TexType::Diffuse:
 				name = "texture_diffuse";
 				number = std::to_string(diffuseNr++);
 				break;
-			case TexType::specular:
+			case Texture::TexType::Specular:
 				name = "texture_specular";
 				number = std::to_string(specularNr++);
 				break;
@@ -264,10 +269,12 @@ namespace Engine
 
 			string location = "u_material." + name + number;
 			m_shader->SetInt(location.c_str(), (int32_t)m_textures[i]->GetId());
-			string msg = "Setting "
+			string msg = {
+				"Setting "
 				+ location
 				+ " to "
-				+ std::to_string(m_textures[i]->GetId());
+				+ std::to_string(m_textures[i]->GetId())
+			};
 			Debug::Send(
 				msg,
 				Debug::Type::Note,
