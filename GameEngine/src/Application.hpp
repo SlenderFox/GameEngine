@@ -84,10 +84,17 @@ namespace Engine
 		Application();
 		virtual ~Application() {}
 
+		/** Called once at the start of runtime
+		 * @return [bool] False will terminate application
+		 */
 		virtual bool Startup() = NULL;
+		/** Called when the application shuts down */
 		virtual void Shutdown() = NULL;
+		/** Called once at the start of every frame */
 		virtual void Update() = NULL;
+		/** Called 60 times per second, after Update */
 		virtual void FixedUpdate() = NULL;
+		/** Called once per frame, after FixedUpdate but still before rendering */
 		virtual void LateUpdate() = NULL;
 	};
 }

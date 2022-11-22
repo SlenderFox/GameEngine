@@ -60,9 +60,7 @@ namespace Engine
 		constexpr EntityBase& GetParent() const noexcept { return *m_parentRef; }
 	};
 
-	/**
-	 * @brief Root is a special, static entity that only has children
-	 */
+	/** Root is a special, static entity that only has children */
 	class Root: public EntityBase
 	{
 	public:

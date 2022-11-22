@@ -4,14 +4,10 @@ struct GLFWwindow;
 
 namespace Engine
 {
-	/**
-	 * @brief The callback function used for mouse and scroll movement
-	 */
+	/** The callback function used for mouse and scroll movement */
 	using CallbackFunc = void(*)(double, double);
 
-	/**
-	 * @brief Pure static class for handling inputs
-	 */
+	/** Pure static class for handling inputs */
 	class Input
 	{
 		friend class Application;
@@ -182,8 +178,7 @@ namespace Engine
 			double pOffsetY) noexcept;
 		#pragma endregion
 
-		/**
-		 * @brief Initialise input with GLFW
+		/** Initialise input with GLFW
 		 * @param pWindowRef The active window
 		 * @return [bool] Success
 		 */

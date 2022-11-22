@@ -1,9 +1,5 @@
-/**
- * @file main.cpp
- * @author SlenderFox
- * @date 2022-11-19
- * @copyright Copyright (c) 2022
- * @brief Following: https://learnopengl.com/
+/** Entry point of the project
+ * @note Following: https://learnopengl.com/
  * @note Disable console through:
  * [Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)]
  * @note Resolutions:
@@ -11,7 +7,7 @@
  * 1280, 720
  * 1600, 900
  * 1920, 1080
- * @ref Refer to Notes.md to see TODO and notes
+ * @note Refer to Notes.md to see TODO and notes
  */
 
 #include "Project.hpp"

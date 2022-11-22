@@ -51,6 +51,7 @@ namespace Engine
 		}
 	};
 
+	/** An object used to store and convert colour information */
 	class Colour
 	{
 	public:

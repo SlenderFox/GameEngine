@@ -1,10 +1,3 @@
-/**
- * @file Mesh.hpp
- * @author SlenderFox
- * @date 2022-11-22
- * @copyright Copyright (c) 2022
- * @brief A mesh is a collection of vertices used to draw shapes
- */
 #pragma once
 #include "Shader.hpp"
 #include <memory>
