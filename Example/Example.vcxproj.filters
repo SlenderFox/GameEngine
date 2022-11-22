@@ -19,9 +19,6 @@
     <None Include="assets\shaders\default.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Project.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
