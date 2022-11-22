@@ -171,45 +171,49 @@ namespace Engine
 		}
 	}
 
-	void Renderer::ModifyAllSpotlightAngles(const float pValue) noexcept
+	void Renderer::ModifyAllSpotlights(const bool pIsAngle, const float pValue) noexcept
 	{
-		uint8_t numSpotLights = 0;
-		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
+		for (uint8_t i = 0, count = 0; i < (uint8_t)s_lights.get()->size(); ++i)
 		{
-			if (GetLightAt(i)->GetType() == LightType::Spot)
+			Light* currentlLight = GetLightAt(i);
+
+			// We only want to modify the spotlights, ignore the others
+			if (currentlLight->GetType() != LightType::Spot) continue;
+
+			string numLights = std::to_string(count);
+			float limit = pIsAngle ? 90.0f : 1.0f;
+			float newValue = pIsAngle ? currentlLight->GetAngleRaw() : currentlLight->GetBlurRaw();
+			newValue += pValue;
+
+			if (newValue <= limit && newValue >= 0.0f)
 			{
-				Light* currentlLight = GetLightAt(i);
-				float newValue = currentlLight->GetAngleRaw() + pValue;
-				string numLights = std::to_string(numSpotLights);
-				if (newValue <= 90.0f && newValue >= 0.0f)
-				{
+				// Update the value in the light
+				if (pIsAngle)
 					currentlLight->SetAngle(newValue);
-					for (uint8_t j = 0; j < s_models.get()->size(); ++j)
-						GetModelAt(j)->m_shader->SetFloat("u_spotLights[" + numLights + "].cutoff", currentlLight->GetAngle());
-				}
-				++numSpotLights;
-			}
-		}
-	}
-	// TODO: Optimise these ↑↓
-	void Renderer::ModifyAllSpotlightBlurs(const float pValue) noexcept
-	{
-		uint8_t numSpotLights = 0;
-		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
-		{
-			if (GetLightAt(i)->GetType() == LightType::Spot)
-			{
-				Light* currentlLight = GetLightAt(i);
-				float newValue = currentlLight->GetBlurRaw() + pValue;
-				string numLights = std::to_string(numSpotLights);
-				if (newValue <= 1.0f && newValue > 0.0f)
-				{
+				else
 					currentlLight->SetBlur(newValue);
-					for (uint8_t j = 0; j < s_models.get()->size(); ++j)
-						GetModelAt(j)->m_shader->SetFloat("u_spotLights[" + numLights + "].blur", currentlLight->GetBlur());
+
+				// Update the shaders on all the models
+				for (uint8_t j = 0; j < s_models.get()->size(); ++j)
+				{
+					if (pIsAngle)
+					{
+						GetModelAt(j)->m_shader->SetFloat(
+							"u_spotLights[" + numLights + "].cutoff",
+							currentlLight->GetAngle()
+						);
+					}
+					else
+					{
+						GetModelAt(j)->m_shader->SetFloat(
+							"u_spotLights[" + numLights + "].blur",
+							currentlLight->GetBlur()
+						);
+					}
 				}
-				++numSpotLights;
 			}
+			// Only incremented for a spotlight
+			++count;
 		}
 	}
 
@@ -225,7 +229,6 @@ namespace Engine
 			return nullptr;
 
 		id = (uint8_t)currentAmount;
-		// Doesn't like paths being const refs
 		s_models.get()->push_back(make_unique<Model>(pModelPath, pShaderPath, s_camera, pLoadTextures));
 		return GetModelAt(id);
 	}

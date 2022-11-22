@@ -39,8 +39,13 @@ namespace Engine
 		static void Terminate() noexcept;
 
 		static void LoadLightsIntoShader(const Shader* pShader) noexcept;
-		static void ModifyAllSpotlightAngles(const float pValue) noexcept;
-		static void ModifyAllSpotlightBlurs(const float pValue) noexcept;
+		/**
+		 * @brief Modifies either the angle or blur of all spotlights by a value.
+		 * @note Limits to max and min possible values.
+		 * @param pIsAngle True to modify the angle, false to modify the blur of the spotlight
+		 * @param pValue The amount to modify it by
+		 */
+		static void ModifyAllSpotlights(const bool pIsAngle, const float pValue) noexcept;
 
 		static Model* AddNewModel(
 			uint8_t& id,

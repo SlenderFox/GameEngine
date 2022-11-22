@@ -214,14 +214,14 @@ void Project::ProcessInput() noexcept
 
 	// Spotlight cone
 	if (Input::CheckKeyState(Input::Key::Key_T, Input::State::Press))
-		Renderer::ModifyAllSpotlightAngles(0.05f);
+		Renderer::ModifyAllSpotlights(true, 0.05f);
 	if (Input::CheckKeyState(Input::Key::Key_G, Input::State::Press))
-		Renderer::ModifyAllSpotlightAngles(-0.05f);
+		Renderer::ModifyAllSpotlights(true, -0.05f);
 	// Spotlight blur
 	if (Input::CheckKeyState(Input::Key::Key_Y, Input::State::Press))
-		Renderer::ModifyAllSpotlightBlurs(-0.005f);
+		Renderer::ModifyAllSpotlights(false, -0.005f);
 	if (Input::CheckKeyState(Input::Key::Key_H, Input::State::Press))
-		Renderer::ModifyAllSpotlightBlurs(0.005f);
+		Renderer::ModifyAllSpotlights(false, 0.005f);
 
 	vec3 translation = vec3();
 	float moveSpeed = 4;
