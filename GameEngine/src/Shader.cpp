@@ -32,11 +32,12 @@ namespace Engine
 		glUseProgram(m_idProgram);
 	}
 
+	// TODO: Allow this to be public and called to load a new shader in
 	void Shader::Load(string pShaderPath)
 	{
 		m_shaderPath = pShaderPath;
-		LoadShader(ShaderType::VERTEX);
-		LoadShader(ShaderType::FRAGMENT);
+		LoadShader(ShaderType::Vertex);
+		LoadShader(ShaderType::Fragment);
 		CreateShaderProgram();
 	}
 
@@ -136,7 +137,7 @@ return;}";
 		bool m_usingFallback = false;
 		string codeString;
 
-		if (pType == ShaderType::PROGRAM)
+		if (pType == ShaderType::Program)
 		{
 			Debug::Send(
 				"ERROR::SHADER::LOADING_INCORRECT_SHADER_TYPE",
@@ -253,7 +254,7 @@ return;}";
 		// Creates a shader object and assigns to an id
 		switch (pType)
 		{
-		case ShaderType::PROGRAM:
+		case ShaderType::Program:
 			Debug::Send(
 				"ERROR::SHADER::ATTEMPTING_TO_COMPILE_PROGRAM",
 				Debug::Type::Note,
@@ -262,10 +263,10 @@ return;}";
 				true
 			);
 			exit(2);
-		case ShaderType::VERTEX:
+		case ShaderType::Vertex:
 			*pId = glCreateShader(GL_VERTEX_SHADER);
 			break;
-		case ShaderType::FRAGMENT:
+		case ShaderType::Fragment:
 			*pId = glCreateShader(GL_FRAGMENT_SHADER);
 			break;
 		default:
@@ -296,7 +297,7 @@ return;}";
 		glAttachShader(m_idProgram, m_idFragment);
 		glLinkProgram(m_idProgram);
 		// Performs error checking on the shader program
-		if (!CheckForErrors(&m_idProgram, ShaderType::PROGRAM)) exit(2);
+		if (!CheckForErrors(&m_idProgram, ShaderType::Program)) exit(2);
 		// We no longer need the vertex and fragment shaders
 		glDeleteShader(m_idVertex);
 		glDeleteShader(m_idFragment);
@@ -311,7 +312,7 @@ return;}";
 		int32_t success;
 		char infoLog[512];
 
-		if (pType == ShaderType::PROGRAM)
+		if (pType == ShaderType::Program)
 		{
 			// Retrieves the compile status of the given shader by id
 			glGetProgramiv(*pShaderID, GL_LINK_STATUS, &success);
@@ -354,13 +355,6 @@ return;}";
 			}
 		}
 		return true;
-	}
-
-	template<typename T>
-	T Shader::GetType(const ShaderType pType, T ifVertex, T ifFragment) const
-	{
-		if (pType == ShaderType::PROGRAM) exit(2);
-		return (pType == ShaderType::VERTEX ? ifVertex : ifFragment);
 	}
 
 	#pragma region Setters

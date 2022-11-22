@@ -4,16 +4,17 @@
 
 namespace Engine
 {
-	enum class ShaderType: uint8_t
-	{
-		PROGRAM,
-		VERTEX,
-		FRAGMENT
-	};
-
 	class Shader
 	{
 	private:
+		/** Used for selecting which shader to use for functions */
+		enum class ShaderType: uint8_t
+		{
+			Program,
+			Vertex,
+			Fragment
+		};
+
 		bool m_shaderLoaded = false;
 		uint32_t m_idProgram, m_idVertex, m_idFragment;
 		std::string m_shaderPath;	// The file path of the shaders
@@ -23,8 +24,20 @@ namespace Engine
 		bool CompileShader(uint32_t* pId, ShaderType pType, const char* pCode);
 		void CreateShaderProgram();
 		bool CheckForErrors(const uint32_t* pShaderID, const ShaderType pType) noexcept;
+		/** Select between two outputs based on the shadertype input
+		 * @tparam T Arbitrary type allows this function to select for many different types
+		 * @param pType The input shader type, must be either Vertex or Fragment
+		 * @param ifVertex The output if the type is Vertex
+		 * @param ifFragment The output if the type is Fragment
+		 * @return [T] One of the two given params
+		 * @exception Will fail if given ShaderType::Program
+		 */
 		template<typename T>
-		T GetType(const ShaderType pType, T ifVertex, T ifFragment) const;
+		T GetType(const ShaderType pType, T ifVertex, T ifFragment) const
+		{
+			assert(pType != ShaderType::Program && "Incorrect shadertype passed");
+			return (pType == ShaderType::Vertex ? ifVertex : ifFragment);
+		}
 
 	public:
 		Shader(const std::string* pShaderPath = nullptr);
@@ -34,7 +47,6 @@ namespace Engine
 		bool IsLoaded() const noexcept { return m_shaderLoaded; }
 
 		#pragma region Setters
-		// Utility uniform functions
 		void SetBool	(const std::string pName, const bool		pValue) const noexcept;
 		void SetInt		(const std::string pName, const int32_t	pValue) const noexcept;
 		void SetUint	(const std::string pName, const uint32_t	pValue) const noexcept;
