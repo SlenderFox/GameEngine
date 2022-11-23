@@ -28,8 +28,7 @@ namespace Engine
 		~Light() {}
 
 		#pragma region Setters
-		/**
-		 * @brief Wrapper function that passes to SetForward
+		/** Wrapper function that passes to SetForward
 		 * @param pDirection Value to be set
 		 */
 		void SetDirection (const glm::vec3 pDirection)	noexcept { Transform::SetForward(pDirection); }
@@ -44,8 +43,7 @@ namespace Engine
 		#pragma region Getters
 		float GetAngle() const noexcept;
 		float GetBlur() const noexcept;
-		/**
-		 * @brief Wrapper function to GetForward
+		/** Wrapper function to GetForward
 		 * @return [constexpr glm::vec4] The forward direction
 		 */
 		glm::vec4	GetDirection()	const noexcept { return Transform::GetForward(); }
