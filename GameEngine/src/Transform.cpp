@@ -10,34 +10,6 @@ using glm::cross;
 
 namespace Engine
 {
-	#pragma region Constructors
-	Transform::Transform(): m_transform(mat4(1)) {}
-
-	Transform::Transform(const mat4 pValue): m_transform(pValue) {}
-
-	Transform::Transform(Transform const& pOther)
-	{
-		m_transform = pOther.GetTransform();
-	}
-
-	Transform& Transform::operator=(Transform const& pOther)
-	{
-		Transform* newObj = new Transform(pOther.GetTransform());
-		return *newObj;
-	}
-
-	Transform::Transform(Transform&& pOther) noexcept
-	{
-		m_transform = pOther.GetTransform();
-	}
-
-	Transform& Transform::operator=(Transform&& pOther) noexcept
-	{
-		Transform* newObj = new Transform(pOther.GetTransform());
-		return *newObj;
-	}
-	#pragma endregion
-
 	#pragma region Setters
 	void Transform::SetPosition(const vec3 pValue) noexcept
 	{

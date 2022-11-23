@@ -212,6 +212,27 @@ namespace Engine
 		constexpr Colour(float inR, float inG, float inB): m_RGB(glm::vec3(inR, inG, inB)) {}
 		constexpr Colour(glm::vec3 inColour): m_RGB(inColour) {}
 		~Colour() = default;
+
+		// Copy, takes lvalue
+		constexpr Colour(Colour const& pOther)
+		{
+			m_RGB = pOther.m_RGB;
+		}
+		constexpr Colour& operator=(Colour const& pOther)
+		{
+			this->m_RGB = pOther.m_RGB;
+			return *this;
+		}
+		// Move, take rvalue
+		constexpr Colour(Colour&& pOther) noexcept
+		{
+			m_RGB = std::move(pOther.m_RGB);
+		}
+		constexpr Colour& operator=(Colour&& pOther) noexcept
+		{
+			this->m_RGB = std::move(pOther.m_RGB);
+			return *this;
+		}
 		#pragma endregion
 
 		#pragma region Operators
