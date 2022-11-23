@@ -1,4 +1,4 @@
-/**
+/*
  * Bibliography:
  * https://en.wikipedia.org/wiki/HSL_and_HSV#HSV_to_RGB
  * https://www.rapidtables.com/web/color/RGB_Color.html
