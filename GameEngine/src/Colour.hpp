@@ -1,196 +1,255 @@
+/**
+ * Bibliography:
+ * https://en.wikipedia.org/wiki/HSL_and_HSV#HSV_to_RGB
+ * https://www.rapidtables.com/web/color/RGB_Color.html
+ * https://cs.stackexchange.com/questions/64549/convert-hsv-to-rgb-colors
+ * https://www.codespeedy.com/hsv-to-rgb-in-cpp/
+ */
+
 #pragma once
 #include "Model.hpp"
+#if !__has_include("glm/glm.hpp")
+	#include "glm/glm.hpp"
+#endif
 
 namespace Engine
 {
-	struct rgb255
-	{
-		uint8_t r;
-		uint8_t g;
-		uint8_t b;
-
-		rgb255(): r(0), g(0), b(0) {}
-
-		rgb255(uint8_t pR, uint8_t pG, uint8_t pB)
-		: r(pR), g(pG), b(pB) {}
-
-		rgb255(const glm::vec3 pValue)
-		{
-			r = (uint8_t)glm::max(pValue.r, 0.0f);
-			g = (uint8_t)glm::max(pValue.g, 0.0f);
-			b = (uint8_t)glm::max(pValue.b, 0.0f);
-		}
-
-		constexpr operator glm::vec3() const noexcept
-		{
-			return glm::vec3(r, g, b);
-		}
-	};
-
-	struct hsv
-	{
-		uint16_t hue;
-		float saturation;
-		float value;
-
-		hsv(): hue(0), saturation(0), value(0) {}
-
-		hsv(uint16_t pHue, float pSaturation, float pValue)
-		: hue(pHue), saturation(pSaturation), value(pValue) {}
-
-		hsv(const glm::vec3 pValue)
-		{
-			hue = (uint16_t)glm::max(pValue.x, 0.0f);
-			saturation = glm::clamp(pValue.y, 0.0f, 1.0f);
-			value = glm::clamp(pValue.z, 0.0f, 1.0f);
-		}
-
-		constexpr operator glm::vec3() const noexcept
-		{
-			return glm::vec3((float)hue, saturation, value);
-		}
-	};
-
-	/** An object used to store and convert colour information */
+	/** An object used to store and convert colour information
+	 * @note Filled to the brim with constexpr to try and calculate as much as possible at compile time
+	*/
 	class Colour
 	{
-	public:
-		_NODISCARD_MSG("Engine::Colour::RGBtoHSV(const glm::vec3)")
-		/** (Preferred overload) Converts colour data from RGB to HSV
-		 * @param pRGB 0-1 Red, 0-1 Green, 0-1 Blue
-		 * @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
-		 */
-		static hsv RGBtoHSV(const glm::vec3 pRGB) noexcept;
-		_NODISCARD_MSG("Engine::Colour::RGBtoHSV(const rgb255)")
-		/** (Alternate overload) Converts colour data from RGB to HSV
-		 * @param pRGB 0-255 Red, 0-255 Green, 0-255 Blue
-		 * @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
-		 */
-		static hsv RGBtoHSV(const rgb255 pRGB) noexcept;
-		_NODISCARD_MSG("Engine::Colour::HSVtoRGB(const hsv)")
-		/** (Preferred overload) Converts colour data from HSV to RGB
-		 * @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
-		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
-		 */
-		static glm::vec3 HSVtoRGB(const hsv pHSV) noexcept;
-		_NODISCARD_MSG("Engine::Colour::HSVtoRGB(const glm::vec3)")
-		/** (Alternate overload) Converts colour data from HSV to RGB
-		 * @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
-		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
-		 */
-		static glm::vec3 HSVtoRGB(const glm::vec3 pHSV) noexcept;
-
-		_NODISCARD_MSG("Engine::Colour::CreateWithRGB(const glm::vec3)")
-		/** (Preferred overload) Create a Colour object from RGB
-		 * @param pRGB 0-1 Red, 0-1 Green, 0-1 Blue
-		 * @return [Colour] A Colour object
-		 */
-		static Colour CreateWithRGB(const glm::vec3 pRGB) noexcept;
-		_NODISCARD_MSG("Engine::Colour::CreateWithRGB(const rgb255)")
-		/** (Alternate overload) Create a Colour object from RGB
-		 * @param pRGB 0-255 Red, 0-255 Green, 0-255 Blue
-		 * @return [Colour] A Colour object
-		 */
-		static Colour CreateWithRGB(const rgb255 pRGB) noexcept;
-		_NODISCARD_MSG("Engine::Colour::CreateWithHSV(const hsv)")
-		/** (Preferred overload) Create a Colour object from HSV
-		 * @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
-		 * @return [Colour] A Colour object
-		 */
-		static Colour CreateWithHSV(const hsv pHSV) noexcept;
-		_NODISCARD_MSG("Engine::Colour::CreateWithHSV(const glm::vec3)")
-		/** (Alternate overload) Create a Colour object from HSV
-		 * @param pHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
-		 * @return [Colour] A Colour object
-		 */
-		static Colour CreateWithHSV(const glm::vec3 pHSV) noexcept;
-
-		#pragma region Presets
-		static inline Colour Black() noexcept;
-		static inline Colour White() noexcept;
-		static inline Colour Silver() noexcept;
-		static inline Colour Grey() noexcept;
-		static inline Colour DarkGrey() noexcept;
-		static inline Colour Red() noexcept;
-		static inline Colour Lime() noexcept;
-		static inline Colour Blue() noexcept;
-		static inline Colour Yellow() noexcept;
-		static inline Colour Cyan() noexcept;
-		static inline Colour Magenta() noexcept;
-		static inline Colour Maroon() noexcept;
-		static inline Colour Green() noexcept;
-		static inline Colour Navy() noexcept;
-		static inline Colour Olive() noexcept;
-		static inline Colour Teal() noexcept;
-		static inline Colour Purple() noexcept;
-		#pragma endregion
-
-	private:
 		glm::vec3 m_RGB = glm::vec3(0);	// Colour data stored as 0-1 for easy conversion
 
-		// Object must be created using a static function
-		Colour() = default;
-		Colour(glm::vec3 pColour): m_RGB(pColour) {}
+		/** My own fmod function to have constexpr*/
+		_NODISCARD static constexpr
+		float fmod(float x, float y)
+		{
+			// Error handling
+			if (x == 0.0f && y != 0.0f) return 0.0f;
+			assert(x != INFINITY || x != -INFINITY);
+			assert(y != 0);
+			if (y == INFINITY || y == -INFINITY) return x;
+
+			// Truncate the division
+			int32_t n = (int32_t)(x / y);
+			return x - n * y;
+		}
 
 	public:
-		~Colour() = default;
+		#pragma region Conversion
+		/** Converts colour data from RGB to HSV
+		 * @param inR Input red
+		 * @param inG Input green
+		 * @param inB Input blue
+		 * @param outH Output hue
+		 * @param outS Output saturation
+		 * @param outV Output value
+		 */
+		_NODISCARD static constexpr
+		void RGBtoHSV(
+			float inR,
+			float inG,
+			float inB,
+			uint16_t& outH,
+			float& outS,
+			float& outV
+		) noexcept
+		{
+			// Sanitise inputs
+			inR = glm::clamp(inR, 0.0f, 1.0f);
+			inG = glm::clamp(inG, 0.0f, 1.0f);
+			inB = glm::clamp(inB, 0.0f, 1.0f);
+			// Initialise variables
+			float Cmax = glm::max(inR, glm::max(inG, inB));
+			float Cmin = glm::min(inR, glm::min(inG, inB));
+			float delta = Cmax - Cmin;
+			// Hue
+			if (delta == 0)
+				outH = 0;
+			else if (Cmax == inR)
+				outH = (uint16_t)(60.0f * (((inG - inB) / delta) + 360.0f)) % 360;
+			else if (Cmax == inG)
+				outH = (uint16_t)(60.0f * (((inB - inR) / delta) + 120.0f)) % 360;
+			else if (Cmax == inB)
+				outH = (uint16_t)(60.0f * (((inR - inG) / delta) + 240.0f)) % 360;
+			// Saturation
+			if (Cmax == 0)
+				outS = 0;
+			else
+				outS = delta / Cmax;
+			// Value
+			outV = Cmax;
+		}
 
-		_NODISCARD_MSG("Engine::Colour::RGBvec3()")
+		/** Converts colour data from RGB to HSV
+		 * @param inRGB 0-1 Red, 0-1 Green, 0-1 Blue
+		 * @return [glm::vec3] 0-360 Hue, 0-1 Saturation, 0-1 Value
+		 */
+		_NODISCARD static constexpr
+		glm::vec3 RGBtoHSV(glm::vec3 inRGB) noexcept
+		{
+			uint16_t hue = 0;
+			float saturation = 0;
+			float value = 0;
+			RGBtoHSV(inRGB.r, inRGB.g, inRGB.b, hue, saturation, value);
+			return { hue, saturation, value };
+		}
+
+		/** Converts colour data from HSV to RGB
+		 * @param inH Input hue
+		 * @param inS Input saturation
+		 * @param inV Input value
+		 * @param outR Output red
+		 * @param outG Output green
+		 * @param outB Output blue
+		 */
+		_NODISCARD static constexpr
+		void HSVtoRGB(
+			uint16_t inH,
+			float inS,
+			float inV,
+			float& outR,
+			float& outG,
+			float& outB
+		) noexcept
+		{
+			// Sanitise inputs
+			inH = inH % 360;
+			inS = glm::clamp(inS, 0.0f, 1.0f);
+			inV = glm::clamp(inV, 0.0f, 1.0f);
+			// Initialise variables
+			glm::vec3 result;
+			float chroma = inV * inS;
+			float min = inV - chroma;
+			float two = 2.0f;
+			float hueMod = fmod((float)inH / 60, 2.0f);
+			float x = chroma * (1 - glm::abs(hueMod - 1));
+			// Find a point along the three bottom faces of the RGB cube (??)
+			short intHue = inH / 60;
+			switch (intHue)
+			{
+			case 0:
+				result = {chroma, x, 0};
+				break;
+			case 1:
+				result = {x, chroma, 0};
+				break;
+			case 2:
+				result = {0, chroma, x};
+				break;
+			case 3:
+				result = {0, x, chroma};
+				break;
+			case 4:
+				result = {x, 0, chroma};
+				break;
+			case 5:
+				result = {chroma, 0, x};
+				break;
+			default:
+				result = {0, 0, 0};
+				break;
+			}
+			result += min;
+
+			// Not a big fan of doing it this way but it makes the above cleaner and simpler
+			outR = result.r;
+			outB = result.b;
+			outG = result.g;
+		}
+
+		/** Converts colour data from HSV to RGB
+		 * @param inHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
+		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
+		 */
+		_NODISCARD static constexpr
+		glm::vec3 HSVtoRGB(const glm::vec3 inHSV) noexcept
+		{
+			// Don't want a negative number
+			uint16_t hue = (uint16_t)glm::max(inHSV.r, 0.0f);
+			glm::vec3 result = glm::vec3();
+			HSVtoRGB(hue, inHSV.y, inHSV.z, result.r, result.g, result.b);
+			return result;
+		}
+		#pragma endregion
+
+		#pragma region Presets
+		static constexpr Colour Black()		noexcept { return Colour(0.0f); }
+		static constexpr Colour White()		noexcept { return Colour(1.0f); }
+		static constexpr Colour Silver()		noexcept { return Colour(0.75f,	0.75f,	0.75f	); }
+		static constexpr Colour Grey()		noexcept { return Colour(0.5f,	0.5f,		0.5f	); }
+		static constexpr Colour DarkGrey()	noexcept { return Colour(0.25f,	0.25f,	0.25f	); }
+		static constexpr Colour Red()			noexcept { return Colour(1.0f,	0.0f,		0.0f	); }
+		static constexpr Colour Lime()		noexcept { return Colour(0.0f,	1.0f,		0.0f	); }
+		static constexpr Colour Blue()		noexcept { return Colour(0.0f,	0.0f,		1.0f	); }
+		static constexpr Colour Yellow()		noexcept { return Colour(1.0f,	1.0f,		0.0f	); }
+		static constexpr Colour Cyan()		noexcept { return Colour(0.0f,	1.0f,		1.0f	); }
+		static constexpr Colour Magenta()	noexcept { return Colour(1.0f,	0.0f,		1.0f	); }
+		static constexpr Colour Maroon()		noexcept { return Colour(0.5f,	0.0f,		0.0f	); }
+		static constexpr Colour Green()		noexcept { return Colour(0.0f,	0.5f,		0.0f	); }
+		static constexpr Colour Navy()		noexcept { return Colour(0.0f,	0.0f,		0.5f	); }
+		static constexpr Colour Olive()		noexcept { return Colour(0.5f,	0.5f,		0.0f	); }
+		static constexpr Colour Teal()		noexcept { return Colour(0.0f,	0.5f,		0.5f	); }
+		static constexpr Colour Purple()		noexcept { return Colour(0.5f,	0.0f,		0.5f	); }
+		#pragma endregion
+
 		/** Get the colour as RGB stored in a vec3
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		 */
-		constexpr glm::vec3 RGBvec3() const noexcept { return m_RGB; }
-		_NODISCARD_MSG("Engine::Colour::RGB255()")
-		/** Get the colour as RGB stored in a custom structure
-		 * @return [rgb255] 0-255 Red, 0-255 Green, 0-255 Blue
-		 */
-		rgb255 RGB255() const noexcept;
-		_NODISCARD_MSG("Engine::Colour::HSVvec3()")
+		_NODISCARD constexpr
+		glm::vec3 RGBvec3() const noexcept { return m_RGB; }
+
 		/** Get the colour as HSV stored in a vec3
 		 * @return [glm::vec3] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 */
-		glm::vec3 HSVvec3() const noexcept;
-		_NODISCARD_MSG("Engine::Colour::HSV()")
-		/** Get the colour as HSV stored in a custom structure
-		 * @return [hsv] 0-360 Hue, 0-1 Saturation, 0-1 Value
-		 */
-		hsv HSV() const noexcept;
+		_NODISCARD constexpr
+		glm::vec3 HSVvec3() const noexcept { return RGBtoHSV(m_RGB); }
+
+		#pragma region Constructors
+		constexpr Colour() {}
+		constexpr Colour(float inGreyscale): m_RGB(glm::vec3(inGreyscale)) {}
+		constexpr Colour(float inR, float inG, float inB): m_RGB(glm::vec3(inR, inG, inB)) {}
+		constexpr Colour(glm::vec3 inColour): m_RGB(inColour) {}
+		~Colour() = default;
+		#pragma endregion
 
 		#pragma region Operators
 		operator glm::vec3() const { return m_RGB; }
 
-		#define COL_OP_CONST_FLOAT(OPERAND) Colour operator OPERAND(float const& pOther) const noexcept;
-		#define COL_OP_CONST_COL(OPERAND) Colour operator OPERAND(Colour const& pOther) const noexcept;
-		#define COL_OP_CONST_VEC3(OPERAND) Colour operator OPERAND(glm::vec3 const& pOther) const noexcept;
-		#define COL_OP_FLOAT(OPERAND) Colour& operator OPERAND(float const& pOther) noexcept;
-		#define COL_OP_COL(OPERAND) Colour& operator OPERAND(Colour const& pOther) noexcept;
-		#define COL_OP_VEC3(OPERAND) Colour& operator OPERAND(glm::vec3 const& pOther) noexcept;
+		#define COL_OP_CONST_FLOAT(OPERAND) constexpr Colour operator OPERAND(float const& pOther) const noexcept\
+		{ return Colour(m_RGB OPERAND pOther); }
+		#define COL_OP_CONST_COL(OPERAND) constexpr Colour operator OPERAND(Colour const& pOther) const noexcept\
+		{ return Colour(m_RGB OPERAND pOther.m_RGB); }
+		#define COL_OP_CONST_VEC3(OPERAND) Colour operator OPERAND(glm::vec3 const& pOther) const noexcept\
+		{ return Colour(m_RGB OPERAND pOther); }
+		#define COL_OP_FLOAT(OPERAND) constexpr Colour& operator OPERAND(float const& pOther) noexcept\
+		{ m_RGB OPERAND pOther; return *this; }
+		#define COL_OP_COL(OPERAND) constexpr Colour& operator OPERAND(Colour const& pOther) noexcept\
+		{ m_RGB OPERAND pOther.m_RGB; return *this; }
+		#define COL_OP_VEC3(OPERAND) constexpr Colour& operator OPERAND(glm::vec3 const& pOther) noexcept\
+		{ m_RGB OPERAND pOther; return *this; }
 
 		COL_OP_CONST_FLOAT(+)
 		COL_OP_CONST_FLOAT(-)
 		COL_OP_CONST_FLOAT(*)
 		COL_OP_CONST_FLOAT(/)
-
 		COL_OP_CONST_COL(+)
 		COL_OP_CONST_COL(-)
 		COL_OP_CONST_COL(*)
 		COL_OP_CONST_COL(/)
-
 		COL_OP_CONST_VEC3(+)
 		COL_OP_CONST_VEC3(-)
 		COL_OP_CONST_VEC3(*)
 		COL_OP_CONST_VEC3(/)
-
 		COL_OP_FLOAT(+=)
 		COL_OP_FLOAT(-=)
 		COL_OP_FLOAT(*=)
 		COL_OP_FLOAT(/=)
-
 		COL_OP_COL(+=)
 		COL_OP_COL(-=)
 		COL_OP_COL(*=)
 		COL_OP_COL(/=)
-
 		COL_OP_VEC3(+=)
 		COL_OP_VEC3(-=)
 		COL_OP_VEC3(*=)

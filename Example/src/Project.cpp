@@ -13,8 +13,7 @@ using glm::transpose;
 using glm::inverse;
 using glm::rotate;
 using glm::radians;
-using Engine::Renderer;
-using Engine::Input;
+using namespace Engine;
 #pragma endregion
 
 /** Entry point of the project
@@ -78,10 +77,10 @@ void Project::ScrollCallback(double pOffsetX, double pOffsetY) noexcept
 
 Project::Project()
 {
-	m_lightRefs = vector<Engine::Light*>();
-	m_cubes = vector<Engine::Entity*>();
+	m_lightRefs = vector<Light*>();
+	m_cubes = vector<Entity*>();
 
-	object_backpack = new Engine::Entity();
+	object_backpack = new Entity();
 }
 
 Project::~Project()
@@ -130,13 +129,13 @@ void Project::LateUpdate() {}
 
 void Project::CreateScene()
 {
-	Engine::Model* model = nullptr;
-	Engine::Shader* shader = nullptr;
+	Model* model = nullptr;
+	Shader* shader = nullptr;
 
 	// Place 9 cubes behind
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
-		Engine::Entity* cube = Engine::Entity::CreateWithModel(
+		Entity* cube = Entity::CreateWithModel(
 			"assets/models/cube/cube.obj", "assets/shaders/default", model, shader
 		);
 		cube->Translate(m_cubePositions[i]);
@@ -145,7 +144,7 @@ void Project::CreateScene()
 	}
 
 	// Create a backpack in the centre
-	Engine::Entity* backpack = Engine::Entity::CreateWithModel(
+	Entity* backpack = Entity::CreateWithModel(
 		"assets/models/backpack/backpack.obj", "assets/shaders/default", model, shader
 	);
 	backpack->Translate(vec3(0.0f, 0.0f, 0.9f));
@@ -162,13 +161,13 @@ void Project::CreateLights()
 
 	// Creates lights
 	uint8_t ID;
-	Engine::Light* light;
+	Light* light;
 	if (directional)
 	{
 		light = Renderer::AddNewLight(
-			ID, Engine::LightType::Directional, Engine::Colour::CreateWithHSV(
-				Engine::hsv(0, 0.0f, 0.6f)
-			)
+			ID,
+			LightType::Directional,
+			Colour(Colour::HSVtoRGB({0, 0.0f, 0.6f}))
 		);
 		light->SetDirection(vec3(0, -1, 0));
 		Renderer::SetClearColour(
@@ -178,18 +177,18 @@ void Project::CreateLights()
 	if (point)
 	{
 		light = Renderer::AddNewLight(
-			ID, Engine::LightType::Point, Engine::Colour::CreateWithHSV(
-				Engine::hsv(220, 0.6f, 1.0f)
-			)
+			ID,
+			LightType::Point,
+			Colour(Colour::HSVtoRGB({220, 0.6f, 1.0f}))
 		);
 		light->SetPosition(vec4(-4, 2, -2, 1));
 	}
 	if (spot)
 	{
 		light = Renderer::AddNewLight(
-			ID, Engine::LightType::Spot, Engine::Colour::CreateWithHSV(
-				Engine::hsv(97, 0.17f, 1.0f)
-			)
+			ID,
+			LightType::Spot,
+			Colour(Colour::HSVtoRGB({97, 0.17f, 1.0f}))
 		);
 		light->SetPosition(vec4(2.0f, 2.5f, 6.0f, 1));
 		light->SetDirection(vec3(-0.3f, -0.4f, -1));
@@ -200,19 +199,19 @@ void Project::CreateLights()
 	// Don't bother if there are no lights
 	if (Renderer::LightCount() == 0) return;
 
-	Engine::Model* model = nullptr;
-	Engine::Shader* shader = nullptr;
+	Model* model = nullptr;
+	Shader* shader = nullptr;
 
 	// Gives them physical form
 	for (uint8_t i = 0; i < Renderer::LightCount(); ++i)
 	{
 		light = Renderer::GetLightAt(i);
 
-		if (light->GetType() == Engine::LightType::Point
-		 || light->GetType() == Engine::LightType::Spot)
+		if (light->GetType() == LightType::Point
+		 || light->GetType() == LightType::Spot)
 		{
 			light->LoadModel("assets/models/cube/cube.obj", "assets/shaders/default", model, shader, false);
-			light->SetScale(vec3(0.2f, 0.2f, (light->GetType() == Engine::LightType::Spot) ? 0.4f : 0.2f));
+			light->SetScale(vec3(0.2f, 0.2f, (light->GetType() == LightType::Spot) ? 0.4f : 0.2f));
 			light->SentTint(light->GetColour());
 			light->RenderOnlyColour(true);
 			m_lightRefs.push_back(light);
