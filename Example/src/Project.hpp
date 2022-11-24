@@ -11,26 +11,18 @@ class Project: public Engine::Application
 	 * @param pDeltaY The vertical position change since last call
 	 */
 	static void MouseCallback(double pDeltaX, double pDeltaY) noexcept;
+
 	/** Static function to use as a callback for scroll input
 	 * @param pOffsetX The horizontal position change since last call
 	 * @param pOffsetY The vertical position change since last call
 	 */
 	static void ScrollCallback(double pOffsetX, double pOffsetY) noexcept;
 
-private:
-	static constexpr uint8_t s_numCubes = 9U;
+	static constexpr
+	uint8_t s_numCubes = 9U;
 
-	const glm::vec3 m_cubePositions[s_numCubes] = {
-		glm::vec3( 2.0f,  5.0f, -15.0f),
-		glm::vec3(-1.5f, -2.2f,  -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3( 2.4f, -0.4f,  -3.5f),
-		glm::vec3(-1.7f,  3.0f,  -7.5f),
-		glm::vec3( 1.3f, -2.0f,  -2.5f),
-		glm::vec3( 1.5f,  2.0f,  -2.5f),
-		glm::vec3( 1.5f,  0.2f,  -1.5f),
-		glm::vec3(-1.3f,  1.0f,  -1.5f)
-	};
+	static const
+	glm::vec3 s_cubePositions[s_numCubes];
 
 	std::vector<Engine::Light*> m_lightRefs;
 	std::vector<Engine::Entity*> m_cubes;

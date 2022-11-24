@@ -42,7 +42,7 @@ namespace Engine
 		// Prevents potential memory leak
 		if (s_application)
 		{
-			Terminate();
+			s_application->Terminate();
 			delete s_application;
 		}
 

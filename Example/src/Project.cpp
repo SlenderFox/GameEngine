@@ -47,6 +47,17 @@ int main()
 
 double Project::s_camYaw = 90.0;
 double Project::s_camPitch = 0.0;
+const vec3 Project::s_cubePositions[Project::s_numCubes] = {
+	glm::vec3( 2.0f,  5.0f, -15.0f),
+	glm::vec3(-1.5f, -2.2f,  -2.5f),
+	glm::vec3(-3.8f, -2.0f, -12.3f),
+	glm::vec3( 2.4f, -0.4f,  -3.5f),
+	glm::vec3(-1.7f,  3.0f,  -7.5f),
+	glm::vec3( 1.3f, -2.0f,  -2.5f),
+	glm::vec3( 1.5f,  2.0f,  -2.5f),
+	glm::vec3( 1.5f,  0.2f,  -1.5f),
+	glm::vec3(-1.3f,  1.0f,  -1.5f)
+};
 
 void Project::MouseCallback(double pDeltaX, double pDeltaY) noexcept
 {
@@ -138,7 +149,7 @@ void Project::CreateScene()
 		Entity* cube = Entity::CreateWithModel(
 			"assets/models/cube/cube.obj", "assets/shaders/default", model, shader
 		);
-		cube->Translate(m_cubePositions[i]);
+		cube->Translate(s_cubePositions[i]);
 		cube->SetScale(vec3(0.6f));
 		m_cubes.push_back(cube);
 	}

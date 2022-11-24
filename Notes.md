@@ -8,6 +8,7 @@ Notes:
 - https://www.glfw.org/docs/latest/input_guide.html
 - `git rm -rf --cached .` `git add .`
 - https://github.com/irisengine/iris
+- Look into: https://stackoverflow.com/questions/9321/how-do-you-create-a-static-class-in-c
 ___
 Todo:
 - [x] Add all source files as notes
