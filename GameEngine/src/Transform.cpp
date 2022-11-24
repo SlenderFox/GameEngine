@@ -10,6 +10,36 @@ using glm::cross;
 
 namespace Engine
 {
+	#pragma region Constructors
+	Transform::Transform(): m_transform(glm::mat4(1)){}
+
+	Transform::Transform(const glm::mat4 pValue): m_transform(pValue) {}
+
+	// Copy, takes lvalue
+	Transform::Transform(Transform const& pOther)
+	{
+		m_transform = pOther.m_transform;
+	}
+
+	Transform& Transform::operator=(Transform const& pOther)
+	{
+		this->m_transform = pOther.m_transform;
+		return *this;
+	}
+
+	// Move, take rvalue
+	Transform::Transform(Transform&& pOther) noexcept
+	{
+		m_transform = std::move(pOther.m_transform);
+	}
+
+	Transform& Transform::operator=(Transform&& pOther) noexcept
+	{
+		this->m_transform = std::move(pOther.m_transform);
+		return *this;
+	}
+	#pragma endregion
+
 	#pragma region Setters
 	void Transform::SetPosition(const vec3 pValue) noexcept
 	{
