@@ -68,3 +68,6 @@ Todo:
 - [ ] Update Texture
 	- [ ] Overload equality operator for Texture
 	- [ ] Update how unloading and cleanup is done
+- [ ] Update Shader
+	- [ ] Allow a new shader to be loaded in the same object
+	- [ ] Make LoadShader() clearer to read

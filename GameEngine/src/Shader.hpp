@@ -4,10 +4,11 @@
 
 namespace Engine
 {
-	class Shader
+	/** A shader is used to render the given vertex and texture information to the screen */
+	struct Shader
 	{
 	private:
-		/** Used for selecting which shader to use for functions */
+		/** Used for selecting which part of the shader to use for functions */
 		enum class ShaderType: uint8_t
 		{
 			Program,
@@ -17,45 +18,67 @@ namespace Engine
 
 		bool m_shaderLoaded = false;
 		uint32_t m_idProgram, m_idVertex, m_idFragment;
-		std::string m_shaderPath;	// The file path of the shaders
+		std::string m_shaderPath;	// The file inath of the shaders
 
-		void Load(std::string pShaderPath);
-		void LoadShader(const ShaderType pType);
-		bool CompileShader(uint32_t* pId, ShaderType pType, const char* pCode);
-		void CreateShaderProgram();
-		bool CheckForErrors(const uint32_t* pShaderID, const ShaderType pType) noexcept;
+		inline void LoadShader(const ShaderType inType);
+
+		inline bool CompileShader(
+			uint32_t* inId,
+			ShaderType inType,
+			const char* inCode
+		) noexcept;
+
+		inline void CreateShaderProgram() noexcept;
+
+		_NODISCARD inline
+		bool CheckForErrors(
+			const uint32_t* inShaderID,
+			const ShaderType inType
+		) const noexcept;
+
 		/** Select between two outputs based on the shadertype input
 		 * @tparam T Arbitrary type allows this function to select for many different types
-		 * @param pType The input shader type, must be either Vertex or Fragment
-		 * @param ifVertex The output if the type is Vertex
-		 * @param ifFragment The output if the type is Fragment
+		 * @param inType The input shader type, must be either Vertex or Fragment
+		 * @param inVertex The output if the type is Vertex
+		 * @param inFragment The output if the type is Fragment
 		 * @return [T] One of the two given params
-		 * @exception Will fail if given ShaderType::Program
+		 * @note Will assert that inType is not ShaderType::Program
 		 */
-		template<typename T>
-		T GetType(const ShaderType pType, T ifVertex, T ifFragment) const
-		{
-			assert(pType != ShaderType::Program && "Incorrect shadertype passed");
-			return (pType == ShaderType::Vertex ? ifVertex : ifFragment);
-		}
+		template<typename T> _NODISCARD inline
+		T ByType(
+			const ShaderType inType,
+			T inVertex,
+			T inFragment
+		) const noexcept;
 
 	public:
-		Shader(const std::string* pShaderPath = nullptr);
+		Shader(const std::string* inShaderPath = nullptr);
 		~Shader();
 
+		/** Deletes the currently used shader program */
+		void Destroy() noexcept;
+		/** Given a path, will load and compile a shader
+		 * @param inShaderPath The relative path of the vertex and fragment shader and their name
+		 * @note The vertex and fragment shaders must have the same name,
+		 * the path does no require the extension
+		 */
+		void Load(const std::string* inShaderPath = nullptr);
+		/** Makes this shader the active shader */
 		void Use() const noexcept;
-		bool IsLoaded() const noexcept { return m_shaderLoaded; }
+
+		_NODISCARD constexpr
+		bool IsLoaded() const noexcept;
 
 		#pragma region Setters
-		void SetBool	(const std::string pName, const bool		pValue) const noexcept;
-		void SetInt		(const std::string pName, const int32_t	pValue) const noexcept;
-		void SetUint	(const std::string pName, const uint32_t	pValue) const noexcept;
-		void SetFloat	(const std::string pName, const float		pValue) const noexcept;
-		void SetVec2	(const std::string pName, const glm::vec2 pValue) const noexcept;
-		void SetVec3	(const std::string pName, const glm::vec3 pValue) const noexcept;
-		void SetVec4	(const std::string pName, const glm::vec4 pValue) const noexcept;
-		void SetMat3	(const std::string pName, const glm::mat3 pValue) const noexcept;
-		void SetMat4	(const std::string pName, const glm::mat4 pValue) const noexcept;
+		void SetBool  (const std::string inName, const bool      inValue) const noexcept;
+		void SetInt   (const std::string inName, const int32_t   inValue) const noexcept;
+		void SetUint  (const std::string inName, const uint32_t  inValue) const noexcept;
+		void SetFloat (const std::string inName, const float     inValue) const noexcept;
+		void SetVec2  (const std::string inName, const glm::vec2 inValue) const noexcept;
+		void SetVec3  (const std::string inName, const glm::vec3 inValue) const noexcept;
+		void SetVec4  (const std::string inName, const glm::vec4 inValue) const noexcept;
+		void SetMat3  (const std::string inName, const glm::mat3 inValue) const noexcept;
+		void SetMat4  (const std::string inName, const glm::mat4 inValue) const noexcept;
 		#pragma endregion
 	};
 }
