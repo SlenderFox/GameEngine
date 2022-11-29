@@ -21,7 +21,8 @@ namespace Engine
 		const string* pModelPath,
 		const string* pShaderPath,
 		Camera* pCamera,
-		const bool pLoadTextures)
+		const bool pLoadTextures
+	) noexcept
 		: m_cameraRef(pCamera)
 		, m_loadTextures(pLoadTextures)
 	{
@@ -61,13 +62,12 @@ namespace Engine
 			m_shader->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
 			m_shader->SetVec3("u_viewPos", (vec3)m_cameraRef->GetPosition());
 		}
+
 		for (uint16_t i = 0; i < m_meshes->size(); ++i)
-		{
-			GetMeshAt(i)->Draw();
-		}
+		{ GetMeshAt(i)->Draw(); }
 	}
 
-	void Model::LoadModel(const string* pPath)
+	inline void Model::LoadModel(const string* pPath) noexcept
 	{
 		Debug::Send(
 			"Loading model \"" + *pPath + "\"",
@@ -102,9 +102,10 @@ namespace Engine
 		ProcessNode(scene->mRootNode, scene);
 	}
 
-	void Model::ProcessNode(
+	inline void Model::ProcessNode(
 		const aiNode* pNode,
-		const aiScene* pScene) noexcept
+		const aiScene* pScene
+	) noexcept
 	{
 		// Process all the node's meshes (if any)
 		for (uint32_t i = 0; i < pNode->mNumMeshes; ++i)
@@ -119,9 +120,10 @@ namespace Engine
 		}
 	}
 
-	unique_ptr<Mesh> Model::ProcessMesh(
+	inline unique_ptr<Mesh> Model::ProcessMesh(
 		const aiMesh* pMesh,
-		const aiScene* pScene) noexcept
+		const aiScene* pScene
+	) noexcept
 	{
 		vector<Vertex> vertices;
 		vector<uint32_t> indices;
@@ -185,10 +187,11 @@ namespace Engine
 		return make_unique<Mesh>(&vertices, &indices);
 	}
 
-	vector<Texture*> Model::LoadMaterialTextures(
+	inline vector<Texture*> Model::LoadMaterialTextures(
 		const aiMaterial* pMat,
 		const aiTextureType pType,
-		const Texture::TexType pTexType) noexcept
+		const Texture::TexType pTexType
+	) const noexcept
 	{
 		// Textures from this specific node being output
 		vector<Texture*> texturesOut;
@@ -246,7 +249,7 @@ namespace Engine
 		return texturesOut;
 	}
 
-	void Model::LoadTexturesToShader() const noexcept
+	inline void Model::LoadTexturesToShader() const noexcept
 	{
 		uint8_t diffuseNr = 0;
 		uint8_t specularNr = 0;
@@ -265,6 +268,8 @@ namespace Engine
 				name = "texture_specular";
 				number = std::to_string(specularNr++);
 				break;
+			default:
+				return;
 			}
 
 			string location = "u_material." + name + number;
@@ -283,6 +288,15 @@ namespace Engine
 			);
 		}
 	}
+
+	constexpr void Model::SetCameraRef(Camera* pCamera) noexcept
+	{ m_cameraRef = pCamera; }
+
+	constexpr void Model::SetShaderRef(Shader* pShader) noexcept
+	{ m_shader = pShader; }
+
+	Shader* Model::GetShaderRef() const noexcept
+	{ return m_shader; }
 
 	Mesh* Model::GetMeshAt(const uint16_t pPos) const  noexcept
 	{

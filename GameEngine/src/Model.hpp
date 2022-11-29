@@ -11,7 +11,7 @@ enum aiTextureType: int;
 
 namespace Engine
 {
-	class Model
+	struct Model
 	{
 		friend class Renderer;
 	private:
@@ -24,33 +24,44 @@ namespace Engine
 		Shader* m_shader;
 		Camera* m_cameraRef;
 
-		void LoadModel(const std::string* pPath);
-		void ProcessNode(
+		inline void LoadModel(const std::string* pPath) noexcept;
+
+		inline void ProcessNode(
 			const aiNode* pNode,
-			const aiScene* pScene) noexcept;
+			const aiScene* pScene
+		) noexcept;
+
+		_NODISCARD inline
 		std::unique_ptr<Mesh> ProcessMesh(
 			const aiMesh* pMesh,
-			const aiScene* pScene) noexcept;
+			const aiScene* pScene
+		) noexcept;
+
+		_NODISCARD inline
 		std::vector<Texture*> LoadMaterialTextures(
 			const aiMaterial* pMat,
 			const aiTextureType pType,
-			const Texture::TexType pTexType) noexcept;
-		void LoadTexturesToShader() const noexcept;
+			const Texture::TexType pTexType
+		) const noexcept;
+
+		inline void LoadTexturesToShader() const noexcept;
 
 	public:
 		Model(
 			const std::string* pModelPath,
 			const std::string* pShaderPath,
 			Camera* pCamera = nullptr,
-			const bool pLoadTextures = true);
+			const bool pLoadTextures = true
+		) noexcept;
+
 		~Model();
 
 		void Draw(const Camera* pCamera = nullptr) const noexcept;
 
-		constexpr void SetCameraRef(Camera* pCamera) noexcept { m_cameraRef = pCamera; }
-		constexpr void SetShaderRef(Shader* pShader) noexcept { m_shader = pShader; }
+		constexpr void SetCameraRef(Camera* pCamera) noexcept;
+		constexpr void SetShaderRef(Shader* pShader) noexcept;
 
-		constexpr Shader* GetShaderRef() const noexcept { return m_shader; }
-		Mesh* GetMeshAt(const uint16_t pPos) const noexcept;
+		_NODISCARD Shader* GetShaderRef() const noexcept;
+		_NODISCARD Mesh* GetMeshAt(const uint16_t pPos) const noexcept;
 	};
 }
