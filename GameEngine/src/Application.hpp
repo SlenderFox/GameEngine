@@ -21,10 +21,9 @@ namespace Engine
 		static Application* s_application;
 		// Memory is managed by glfw
 		static GLFWwindow* s_windowRef;
-
 		// Whether glad has loaded or not
 		static bool s_gladLoaded;
-
+		// Is the application fullscreen or not
 		static bool s_fullscreen;
 		// The width and height of the window, should only be modified through SetDimensions()
 		static uint16_t s_winWidth, s_winHeight;
@@ -36,8 +35,9 @@ namespace Engine
 		static double s_currentTime, s_prevTime, s_deltaTime;
 		// Timers used for calling fixed update and displaying fps
 		static double s_fixedTimer, s_frameTimer;
-
+		// The title of the window
 		static std::string s_title;
+		// The error code returned by main
 		static ExitCode s_exitCode;
 
 		#pragma region Constructors
@@ -60,29 +60,42 @@ namespace Engine
 		static void ProcessInput() noexcept;
 
 		static void FramebufferSizeCallback(
-			GLFWwindow* pWindow,
-			const int pWidth,
-			const int pHeight) noexcept;
+			GLFWwindow* inWindow,
+			const int inWidth,
+			const int inHeight
+		) noexcept;
 
 	public:
 		// Should evaluate to 0.01666666666666666
-		static constexpr double s_fixedDeltaTime = 1.0 / 60.0;
+		static constexpr
+		double s_fixedDeltaTime = 1.0 / 60.0;
 
-		static Application* GetApplication() noexcept { return s_application; }
-		static const bool GladLoaded() noexcept;	// No definition to allow forward declaration
+		_NODISCARD static
+		Application* GetApplication() noexcept;
+
+		_NODISCARD static const
+		bool GladLoaded() noexcept;	// No definition to allow forward declaration
+
 		static void Quit() noexcept;
 
-		static ExitCode Run();
-		static void SetDimensions(const uint16_t pWidth, const uint16_t pHeight) noexcept;
-		static void SetTitle(const std::string pTitle) noexcept;
-		static void SetFullscreen(const bool pFullscreen) noexcept;
+		_NODISCARD static
+		ExitCode Run();
 
-		static double GetTime() noexcept { return s_currentTime; }
-		static double GetDeltaTime() noexcept { return s_deltaTime; }
+		static void SetDimensions(
+			const uint16_t inWidth,
+			const uint16_t inHeight
+		) noexcept;
+		static void SetTitle(const std::string inTitle) noexcept;
+		static void SetFullscreen(const bool inFullscreen) noexcept;
+
+		_NODISCARD static
+		double GetTime() noexcept;
+		_NODISCARD static
+		double GetDeltaTime() noexcept;
 
 	protected:
-		Application();
-		virtual ~Application() {}
+		Application() noexcept;
+		virtual ~Application() noexcept {}
 
 		/** Called once at the start of runtime
 		 * @return [bool] False will terminate application

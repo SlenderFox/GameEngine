@@ -37,7 +37,20 @@ namespace Engine
 	Application::ExitCode Application::s_exitCode = Application::ExitCode::Okay;
 	#pragma endregion
 
-	Application::Application()
+	Application* Application::GetApplication() noexcept
+	{ return s_application; }
+
+	const bool Application::GladLoaded() noexcept
+	{
+		return s_gladLoaded;
+	}
+
+	void Application::Quit() noexcept
+	{
+		glfwSetWindowShouldClose(Application::s_windowRef, true);
+	}
+
+	Application::Application() noexcept
 	{
 		// Prevents potential memory leak
 		if (s_application)
@@ -48,16 +61,6 @@ namespace Engine
 
 		// Applies the static reference
 		s_application = this;
-	}
-
-	const bool Application::GladLoaded() noexcept
-	{
-		return s_gladLoaded;
-	}
-
-	void Application::Quit() noexcept
-	{
-		glfwSetWindowShouldClose(Application::s_windowRef, true);
 	}
 
 	void Application::Terminate() noexcept
@@ -229,27 +232,30 @@ namespace Engine
 		return false;
 	}
 
-	void Application::SetDimensions(const uint16_t pWidth, const uint16_t pHeight) noexcept
+	void Application::SetDimensions(
+		const uint16_t inWidth,
+		const uint16_t inHeight
+	) noexcept
 	{
-		s_winWidth = pWidth;
-		s_winHeight = pHeight;
+		s_winWidth = inWidth;
+		s_winHeight = inHeight;
 
-		if (Renderer::s_camera && pWidth > 0 && pHeight > 0)
+		if (Renderer::s_camera && inWidth > 0 && inHeight > 0)
 			UpdateCamera();
 
 		//Debug::Send(string("Dimensions set to " + to_string(s_winWidth) + ", " + to_string(s_winHeight)));
 	}
 
-	void Application::SetTitle(const string pTitle) noexcept
+	void Application::SetTitle(const string inTitle) noexcept
 	{
-		s_title = pTitle;
+		s_title = inTitle;
 		//Debug::Send("Title set to \"" + s_title + "\"");
 	}
 
-	void Application::SetFullscreen(const bool pFullscreen) noexcept
+	void Application::SetFullscreen(const bool inFullscreen) noexcept
 	{
-		s_fullscreen = pFullscreen;
-		//Debug::Send("Fullscreen set to " + string(pFullscreen ? "true" : "false"));
+		s_fullscreen = inFullscreen;
+		//Debug::Send("Fullscreen set to " + string(inFullscreen ? "true" : "false"));
 	}
 
 	void Application::UpdateFrameTimeData() noexcept
@@ -321,11 +327,18 @@ namespace Engine
 	}
 
 	void Application::FramebufferSizeCallback(
-		GLFWwindow* pWindow,
-		const int pWidth,
-		const int pHeight) noexcept
+		GLFWwindow* inWindow,
+		const int inWidth,
+		const int inHeight
+	) noexcept
 	{
-		SetDimensions((const uint16_t)pWidth, (const uint16_t)pHeight);
-		Renderer::SetResolution(pWidth, pHeight);
+		SetDimensions((const uint16_t)inWidth, (const uint16_t)inHeight);
+		Renderer::SetResolution(inWidth, inHeight);
 	}
+
+	double Application::GetTime() noexcept
+	{ return s_currentTime; }
+
+	double Application::GetDeltaTime() noexcept
+	{ return s_deltaTime; }
 }
