@@ -207,32 +207,26 @@ namespace Engine
 		glm::vec3 HSVvec3() const noexcept { return RGBtoHSV(m_RGB); }
 
 		#pragma region Constructors
-		constexpr Colour() {}
-		constexpr Colour(float inGreyscale): m_RGB(glm::vec3(inGreyscale)) {}
-		constexpr Colour(float inR, float inG, float inB): m_RGB(glm::vec3(inR, inG, inB)) {}
-		constexpr Colour(glm::vec3 inColour): m_RGB(inColour) {}
+		constexpr Colour() noexcept {}
+		constexpr Colour(float inGreyscale) noexcept: m_RGB(glm::vec3(inGreyscale)) {}
+		constexpr Colour(float inR, float inG, float inB) noexcept: m_RGB(glm::vec3(inR, inG, inB)) {}
+		constexpr Colour(glm::vec3 inColour) noexcept: m_RGB(inColour) {}
+
 		~Colour() = default;
 
 		// Copy, takes lvalue
 		constexpr Colour(Colour const& pOther)
-		{
-			m_RGB = pOther.m_RGB;
-		}
+		{ m_RGB = pOther.m_RGB; }
+
 		constexpr Colour& operator=(Colour const& pOther)
-		{
-			this->m_RGB = pOther.m_RGB;
-			return *this;
-		}
+		{ this->m_RGB = pOther.m_RGB; return *this; }
+
 		// Move, take rvalue
 		constexpr Colour(Colour&& pOther) noexcept
-		{
-			m_RGB = std::move(pOther.m_RGB);
-		}
+		{ m_RGB = std::move(pOther.m_RGB); }
+
 		constexpr Colour& operator=(Colour&& pOther) noexcept
-		{
-			this->m_RGB = std::move(pOther.m_RGB);
-			return *this;
-		}
+		{ this->m_RGB = std::move(pOther.m_RGB); return *this; }
 		#pragma endregion
 
 		#pragma region Operators
@@ -240,14 +234,19 @@ namespace Engine
 
 		#define COL_OP_CONST_FLOAT(OPERAND) constexpr Colour operator OPERAND(float const& pOther) const noexcept\
 		{ return Colour(m_RGB OPERAND pOther); }
+
 		#define COL_OP_CONST_COL(OPERAND) constexpr Colour operator OPERAND(Colour const& pOther) const noexcept\
 		{ return Colour(m_RGB OPERAND pOther.m_RGB); }
+
 		#define COL_OP_CONST_VEC3(OPERAND) Colour operator OPERAND(glm::vec3 const& pOther) const noexcept\
 		{ return Colour(m_RGB OPERAND pOther); }
+
 		#define COL_OP_FLOAT(OPERAND) constexpr Colour& operator OPERAND(float const& pOther) noexcept\
 		{ m_RGB OPERAND pOther; return *this; }
+
 		#define COL_OP_COL(OPERAND) constexpr Colour& operator OPERAND(Colour const& pOther) noexcept\
 		{ m_RGB OPERAND pOther.m_RGB; return *this; }
+
 		#define COL_OP_VEC3(OPERAND) constexpr Colour& operator OPERAND(glm::vec3 const& pOther) noexcept\
 		{ m_RGB OPERAND pOther; return *this; }
 
