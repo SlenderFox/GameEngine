@@ -16,79 +16,85 @@ using glm::inverse;
 namespace Engine
 {
 	#pragma region Constructors
-	Camera::Camera(float pAspectRatio)
+	Camera::Camera(float inAspectRatio) noexcept
 	{
 		mat4 id = mat4(1.0f);
-		SetAspectRatio(pAspectRatio);
+		SetAspectRatio(inAspectRatio);
 		SetTransform(&id);
 		SetFovH(75.0f);
 	}
 
 	Camera::Camera(
-		float pAspectRatio,
-		float pFovH)
+		float inAspectRatio,
+		float inFovH
+	) noexcept
 	{
 		mat4 id = mat4(1.0f);
-		SetAspectRatio(pAspectRatio);
+		SetAspectRatio(inAspectRatio);
 		SetTransform(&id);
-		SetFovH(pFovH);
+		SetFovH(inFovH);
 	}
 
 	Camera::Camera(
-		float pAspectRatio,
-		mat4 pTransform)
+		float inAspectRatio,
+		mat4 inTransform
+	) noexcept
 	{
-		SetAspectRatio(pAspectRatio);
-		SetTransform(&pTransform);
+		SetAspectRatio(inAspectRatio);
+		SetTransform(&inTransform);
 		SetFovH(75.0f);
 	}
 
 	Camera::Camera(
-		float pAspectRatio,
-		float pFovH,
-		mat4 pTransform)
+		float inAspectRatio,
+		float inFovH,
+		mat4 inTransform
+	) noexcept
 	{
-		SetAspectRatio(pAspectRatio);
-		SetTransform(&pTransform);
-		SetFovH(pFovH);
+		SetAspectRatio(inAspectRatio);
+		SetTransform(&inTransform);
+		SetFovH(inFovH);
 	}
 
 	Camera::Camera(
-		float pAspectRatio,
-		vec3 pFrom,
-		vec3 pTo,
-		vec3 pUp)
+		float inAspectRatio,
+		vec3 inFrom,
+		vec3 inTo,
+		vec3 inUp
+	) noexcept
 	{
-		SetAspectRatio(pAspectRatio);
-		LookAt(pFrom, pTo, pUp);
+		SetAspectRatio(inAspectRatio);
+		LookAt(inFrom, inTo, inUp);
 		SetFovH(75.0f);
 	}
 
 	Camera::Camera(
-		float pAspectRatio,
-		float pFovH,
-		vec3 pFrom,
-		vec3 pTo,
-		vec3 pUp)
+		float inAspectRatio,
+		float inFovH,
+		vec3 inFrom,
+		vec3 inTo,
+		vec3 inUp
+	) noexcept
 	{
-		SetAspectRatio(pAspectRatio);
-		LookAt(pFrom, pTo, pUp);
-		SetFovH(pFovH);
+		SetAspectRatio(inAspectRatio);
+		LookAt(inFrom, inTo, inUp);
+		SetFovH(inFovH);
 	}
 	#pragma endregion
 
 	void Camera::LookAt(
-		vec3 pFrom,
-		vec3 pTo,
-		vec3 pUp)
+		vec3 inFrom,
+		vec3 inTo,
+		vec3 inUp
+	) noexcept
 	{
-		m_view = glm::lookAt(pFrom, pTo, pUp);
+		m_view = glm::lookAt(inFrom, inTo, inUp);
 		SetView(&m_view);
 	}
 
-	void Camera::ModifyFovH(float pValue) noexcept
+	void Camera::ModifyFovH(float inValue) noexcept
 	{
-		m_fovH += pValue;
+		m_fovH += inValue;
 		if (m_fovH > 120.0f)
 			m_fovH = 120.0f;
 		else if (m_fovH < 1.0f)
@@ -96,9 +102,9 @@ namespace Engine
 		UpdateFovV();
 	}
 
-	void Camera::ModifyFovV(float pValue) noexcept
+	void Camera::ModifyFovV(float inValue) noexcept
 	{
-		m_fovV += pValue;
+		m_fovV += inValue;
 		if (m_fovV > 120.0f)
 			m_fovV = 120.0f;
 		else if (m_fovV < 1.0f)
@@ -119,48 +125,55 @@ namespace Engine
 	}
 
 	#pragma region Setters
-	void Camera::SetTransform(const mat4* pValue) noexcept
+	void Camera::SetTransform(const mat4* inValue) noexcept
 	{
-		Transform::SetTransform(pValue);
+		Transform::SetTransform(inValue);
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::SetView(mat4* pValue) noexcept
+	void Camera::SetView(mat4* inValue) noexcept
 	{
-		m_view = *pValue;
+		m_view = *inValue;
 		mat4 inv = inverse(m_view);
 		Transform::SetTransform(&inv);
 	}
 
-	void Camera::SetProjection(float pFovV) noexcept
+	void Camera::SetProjection(float inFovV) noexcept
 	{
-		m_projection = perspective(radians(pFovV), m_aspectRatio, 0.1f, 500.0f);
+		m_projection = perspective(radians(inFovV), m_aspectRatio, 0.1f, 500.0f);
 	}
 
-	void Camera::SetPosition(vec3 pValue) noexcept
+	constexpr void Camera::SetProjection(glm::mat4* inValue) noexcept
+	{ m_projection = *inValue; }
+
+	constexpr void Camera::SetAspectRatio(float inAspectRatio) noexcept
+	{ m_aspectRatio = inAspectRatio; }
+
+	void Camera::SetPosition(vec3 inValue) noexcept
 	{
-		Transform::SetPosition(pValue);
+		Transform::SetPosition(inValue);
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::Translate(vec3 pValue) noexcept
+	void Camera::Translate(vec3 inValue) noexcept
 	{
-		Transform::Translate(pValue);
+		Transform::Translate(inValue);
 		m_view = inverse(GetTransform());
 	}
 
 	void Camera::SetAxes(
 		vec3 pRight,
-		vec3 pUp,
-		vec3 pForward) noexcept
+		vec3 inUp,
+		vec3 pForward
+	) noexcept
 	{
-		Transform::SetAxes(pRight, pUp, pForward);
+		Transform::SetAxes(pRight, inUp, pForward);
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::SetFovH(float pFovH) noexcept
+	void Camera::SetFovH(float inFovH) noexcept
 	{
-		m_fovH = pFovH;
+		m_fovH = inFovH;
 		if (m_fovH > 120.0f)
 			m_fovH = 120.0f;
 		else if (m_fovH < 1.0f)
@@ -168,9 +181,9 @@ namespace Engine
 		UpdateFovV();
 	}
 
-	void Camera::SetFovV(float pFovV) noexcept
+	void Camera::SetFovV(float inFovV) noexcept
 	{
-		m_fovV = pFovV;
+		m_fovV = inFovV;
 		if (m_fovV > 120.0f)
 			m_fovV = 120.0f;
 		else if (m_fovV < 1.0f)
@@ -180,7 +193,11 @@ namespace Engine
 	#pragma endregion
 
 	mat4 Camera::GetWorldToCameraMatrix() const noexcept
-	{
-		return m_projection * m_view;
-	}
+	{ return m_projection * m_view; }
+
+	constexpr glm::mat4 Camera::GetView() const noexcept
+	{ return m_view; }
+
+	constexpr glm::mat4 Camera::GetProjection() const noexcept
+	{ return m_projection; }
 }

@@ -6,69 +6,82 @@ namespace Engine
 	class Camera: public Transform
 	{
 	private:
-		float m_fovH = 0, m_fovV = 0;	// The field of view of the camera in degrees, horizontal & vertical
+		// The field of view of the camera in degrees, horizontal & vertical
+		float m_fovH = 0, m_fovV = 0;
 		float m_aspectRatio = 0;
 		glm::mat4 m_view;
 		glm::mat4 m_projection;
 
 	public:
 		#pragma region Constructors
-		Camera(float pAspectRatio);
+		Camera(float inAspectRatio) noexcept;
 		Camera(
-			float pAspectRatio,
-			float pFovH);
+			float inAspectRatio,
+			float inFovH
+		) noexcept;
 		Camera(
-			float pAspectRatio,
-			glm::mat4 pTransform);
+			float inAspectRatio,
+			glm::mat4 inTransform
+		) noexcept;
 		Camera(
-			float pAspectRatio,
-			float pFovH,
-			glm::mat4 pTransform);
+			float inAspectRatio,
+			float inFovH,
+			glm::mat4 inTransform
+		) noexcept;
 		Camera(
-			float pAspectRatio,
-			glm::vec3 pFrom,
-			glm::vec3 pTo,
-			glm::vec3 pUp = { 0, 1, 0 });
+			float inAspectRatio,
+			glm::vec3 inFrom,
+			glm::vec3 inTo,
+			glm::vec3 inUp = { 0, 1, 0 }
+		) noexcept;
 		Camera(
-			float pAspectRatio,
-			float pFovH,
-			glm::vec3 pFrom,
-			glm::vec3 pTo,
-			glm::vec3 pUp = { 0, 1, 0 });
+			float inAspectRatio,
+			float inFovH,
+			glm::vec3 inFrom,
+			glm::vec3 inTo,
+			glm::vec3 inUp = { 0, 1, 0 }
+		) noexcept;
 		#pragma endregion
 
 		void LookAt(
-			glm::vec3 pFrom,
-			glm::vec3 pTo,
-			glm::vec3 pUp = { 0, 1, 0 });
+			glm::vec3 inFrom,
+			glm::vec3 inTo,
+			glm::vec3 inUp = { 0, 1, 0 }
+		) noexcept;
 
-		void ModifyFovH(float pValue) noexcept;
-		void ModifyFovV(float pValue) noexcept;
+		void ModifyFovH(float inValue) noexcept;
+		void ModifyFovV(float inValue) noexcept;
 		void UpdateFovH() noexcept;
 		void UpdateFovV() noexcept;
 
 		#pragma region Setters
-		void SetTransform(const glm::mat4* pValue) noexcept override;
-		void SetView(glm::mat4* pValue) noexcept;
-		void SetProjection(float pFovV) noexcept;
-		constexpr void SetProjection(glm::mat4* pValue) noexcept { m_projection = *pValue; }
-		constexpr void SetAspectRatio(float pAspectRatio) noexcept { m_aspectRatio = pAspectRatio; }
+		void SetTransform(const glm::mat4* inValue) noexcept override;
+		void SetView(glm::mat4* inValue) noexcept;
+		void SetProjection(float inFovV) noexcept;
 
-		void SetPosition(glm::vec3 pValue) noexcept override;
-		void Translate(glm::vec3 pValue) noexcept override;
+		constexpr void SetProjection(glm::mat4* inValue) noexcept;
+		constexpr void SetAspectRatio(float inAspectRatio) noexcept;
+
+		void SetPosition(glm::vec3 inValue) noexcept override;
+		void Translate(glm::vec3 inValue) noexcept override;
 		void SetAxes(
-			glm::vec3 pRight,
-			glm::vec3 pUp,
-			glm::vec3 pForward) noexcept override;
+			glm::vec3 inRight,
+			glm::vec3 inUp,
+			glm::vec3 inForward
+		) noexcept override;
 
-		void SetFovH(float pFovH) noexcept;
-		void SetFovV(float pFovV) noexcept;
+		void SetFovH(float inFovH) noexcept;
+		void SetFovV(float inFovV) noexcept;
 		#pragma endregion
 
 		#pragma region Getters
-		glm::mat4 GetWorldToCameraMatrix() const noexcept;
-		constexpr glm::mat4 GetView() const noexcept { return m_view; }
-		constexpr glm::mat4 GetProjection() const noexcept { return m_projection; }
+		_NODISCARD glm::mat4 GetWorldToCameraMatrix() const noexcept;
+
+		_NODISCARD constexpr
+		glm::mat4 GetView() const noexcept;
+
+		_NODISCARD constexpr
+		glm::mat4 GetProjection() const noexcept;
 		#pragma endregion
 	};
 }
