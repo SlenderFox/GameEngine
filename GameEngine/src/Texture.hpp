@@ -4,6 +4,7 @@
 
 namespace Engine
 {
+	/** The texture object stores a reference to a texture on the gpu */
 	struct Texture
 	{
 		enum class TexType: uint8_t
@@ -12,25 +13,35 @@ namespace Engine
 			Specular
 		};
 
-		static std::vector<Texture*> s_loadedTextures;	// Memory handled by renderer
-
-		static void UnloadAll() noexcept;
-		static int32_t LoadTextureFromFile(const std::string* pPath) noexcept;
-		constexpr static uint32_t GetNumTex() noexcept { return s_textureCount; }
-
-		Texture(std::string pPath, TexType pType = TexType::Diffuse);
-		//void Destroy();
-
-		constexpr uint32_t GetId() const noexcept { return m_id; }
-		constexpr TexType GetType() const noexcept { return m_type; }
-		constexpr std::string GetFile() const noexcept { return m_file; }
-
 	private:
-		static uint32_t s_textureIds[32];	// List of all texture ids
-		static uint32_t s_textureCount;		// How many textures have been loaded
+		// List of all texture ids
+		static uint32_t s_textureIds[32];
+		// How many textures have been loaded
+		static uint32_t s_textureCount;
 
-		uint32_t m_id = 0;
+		int32_t m_id = 0;
 		TexType m_type = TexType::Diffuse;
 		std::string m_file;
+
+	public:
+		// Memory handled by renderer
+		static std::vector<Texture*> s_loadedTextures;
+
+		static void UnloadAll() noexcept;
+		static int32_t LoadTextureFromFile(const std::string* inPath) noexcept;
+
+		constexpr static
+		uint32_t GetTexCount() noexcept;
+
+		Texture(
+			std::string inPath,
+			TexType inType = TexType::Diffuse
+		) noexcept;
+
+		//void Destroy();
+
+		_NODISCARD int32_t GetId() const noexcept;
+		_NODISCARD TexType GetType() const noexcept;
+		_NODISCARD std::string GetFile() const noexcept;
 	};
 }

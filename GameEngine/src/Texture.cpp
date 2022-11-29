@@ -12,7 +12,7 @@ using std::vector;
 namespace Engine
 {
 	// Forward declaration
-	class Application { public: static const bool GladLoaded() noexcept; };
+	class Application { public: _NODISCARD static const bool GladLoaded() noexcept; };
 
 	// Static
 
@@ -23,13 +23,13 @@ namespace Engine
 	void Texture::UnloadAll() noexcept
 	{
 		if (Application::GladLoaded())
-			glDeleteTextures(s_textureCount, s_textureIds);
+		{ glDeleteTextures(s_textureCount, s_textureIds); }
 	}
 
-	int32_t Texture::LoadTextureFromFile(const string* pPath) noexcept
+	int32_t Texture::LoadTextureFromFile(const string* inPath) noexcept
 	{
 		Debug::Send(
-			"Loading texture " + std::to_string(s_textureCount) + ": \"" + *pPath + "\"...",
+			"Loading texture " + std::to_string(s_textureCount) + ": \"" + *inPath + "\"...",
 			Debug::Type::Process,
 			Debug::Impact::Large,
 			Debug::Stage::Mid,
@@ -53,7 +53,7 @@ namespace Engine
 		stbi_set_flip_vertically_on_load(true);
 
 		int texWidth = 0, texHeight = 0, numComponents = 0;
-		unsigned char* imageData = stbi_load(pPath->c_str(), &texWidth, &texHeight, &numComponents, 0);
+		unsigned char* imageData = stbi_load(inPath->c_str(), &texWidth, &texHeight, &numComponents, 0);
 		if (imageData)
 		{
 			float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -120,15 +120,19 @@ namespace Engine
 		}
 	}
 
+	constexpr uint32_t Texture::GetTexCount() noexcept
+	{ return s_textureCount; }
+
 	// Member
 
 	Texture::Texture(
-		string pPath,
-		TexType pType)
-		: m_file(pPath)
-		, m_type(pType)
+		string inPath,
+		TexType inType
+	) noexcept
+		: m_file(inPath)
+		, m_type(inType)
 	{
-		m_id = LoadTextureFromFile(&pPath);
+		m_id = LoadTextureFromFile(&m_file);
 	}
 
 	//void Texture::Destroy()
@@ -136,4 +140,13 @@ namespace Engine
 	//	// This is currently bad as it leaves a gap in the loaded textures
 	//	glDeleteTextures(1, &s_textureIds[m_id]);
 	//}
+
+	int32_t Texture::GetId() const noexcept
+	{ return m_id; }
+
+	Texture::TexType Texture::GetType() const noexcept
+	{ return m_type; }
+
+	std::string Texture::GetFile() const noexcept
+	{ return m_file; }
 }
