@@ -18,19 +18,19 @@ using std::make_unique;
 namespace Engine
 {
 	Model::Model(
-		const string* pModelPath,
-		const string* pShaderPath,
-		Camera* pCamera,
+		const string* inModelPath,
+		const string* inShaderPath,
+		Camera* inCamera,
 		const bool pLoadTextures
 	) noexcept
-		: m_cameraRef(pCamera)
+		: m_cameraRef(inCamera)
 		, m_loadTextures(pLoadTextures)
 	{
 		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
 		m_textures = vector<Texture*>();
 
-		LoadModel(pModelPath);
-		m_shader = new Shader(pShaderPath);
+		LoadModel(inModelPath);
+		m_shader = new Shader(inShaderPath);
 		if (m_loadTextures) LoadTexturesToShader();
 
 		Debug::Send(
@@ -48,13 +48,13 @@ namespace Engine
 		m_meshes.release();
 	}
 
-	void Model::Draw(const Camera* pCamera) const noexcept
+	void Model::Draw(const Camera* inCamera) const noexcept
 	{
 		m_shader->Use();
-		if (pCamera)
+		if (inCamera)
 		{
-			m_shader->SetMat4("u_camera", pCamera->GetWorldToCameraMatrix());
-			m_shader->SetVec3("u_viewPos", (vec3)pCamera->GetPosition());
+			m_shader->SetMat4("u_camera", inCamera->GetWorldToCameraMatrix());
+			m_shader->SetVec3("u_viewPos", (vec3)inCamera->GetPosition());
 		}
 		else
 		{
@@ -67,10 +67,10 @@ namespace Engine
 		{ GetMeshAt(i)->Draw(); }
 	}
 
-	inline void Model::LoadModel(const string* pPath) noexcept
+	inline void Model::LoadModel(const string* inPath) noexcept
 	{
 		Debug::Send(
-			"Loading model \"" + *pPath + "\"",
+			"Loading model \"" + *inPath + "\"",
 			Debug::Type::Process,
 			Debug::Impact::Large,
 			Debug::Stage::Begin
@@ -86,7 +86,7 @@ namespace Engine
 		}
 
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(*pPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene* scene = importer.ReadFile(*inPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -98,59 +98,59 @@ namespace Engine
 			);
 			return;
 		}
-		m_directory = (*pPath).substr(0, (*pPath).find_last_of('/'));
+		m_directory = (*inPath).substr(0, (*inPath).find_last_of('/'));
 		ProcessNode(scene->mRootNode, scene);
 	}
 
 	inline void Model::ProcessNode(
-		const aiNode* pNode,
-		const aiScene* pScene
+		const aiNode* inNode,
+		const aiScene* inScene
 	) noexcept
 	{
 		// Process all the node's meshes (if any)
-		for (uint32_t i = 0; i < pNode->mNumMeshes; ++i)
+		for (uint32_t i = 0; i < inNode->mNumMeshes; ++i)
 		{
-			aiMesh* mesh = pScene->mMeshes[pNode->mMeshes[i]];
-			m_meshes.get()->push_back(ProcessMesh(mesh, pScene));
+			aiMesh* mesh = inScene->mMeshes[inNode->mMeshes[i]];
+			m_meshes.get()->push_back(ProcessMesh(mesh, inScene));
 		}
 		// Then do the same for each of it's children
-		for (uint32_t i = 0; i < pNode->mNumChildren; ++i)
+		for (uint32_t i = 0; i < inNode->mNumChildren; ++i)
 		{
-			ProcessNode(pNode->mChildren[i], pScene);
+			ProcessNode(inNode->mChildren[i], inScene);
 		}
 	}
 
 	inline unique_ptr<Mesh> Model::ProcessMesh(
-		const aiMesh* pMesh,
-		const aiScene* pScene
+		const aiMesh* inMesh,
+		const aiScene* inScene
 	) noexcept
 	{
 		vector<Vertex> vertices;
 		vector<uint32_t> indices;
 		// Process vertex positions, normals, and texture coordinates
-		for (uint32_t i = 0; i < pMesh->mNumVertices; ++i)
+		for (uint32_t i = 0; i < inMesh->mNumVertices; ++i)
 		{
 			Vertex vertex;
 			vec3 vector;
 			// Position
-			vector.x = pMesh->mVertices[i].x;
-			vector.y = pMesh->mVertices[i].y;
-			vector.z = pMesh->mVertices[i].z;
+			vector.x = inMesh->mVertices[i].x;
+			vector.y = inMesh->mVertices[i].y;
+			vector.z = inMesh->mVertices[i].z;
 			vertex.position = vector;
 			// Normal
-			if (pMesh->HasNormals())
+			if (inMesh->HasNormals())
 			{
-				vector.x = pMesh->mNormals[i].x;
-				vector.y = pMesh->mNormals[i].y;
-				vector.z = pMesh->mNormals[i].z;
+				vector.x = inMesh->mNormals[i].x;
+				vector.y = inMesh->mNormals[i].y;
+				vector.z = inMesh->mNormals[i].z;
 				vertex.normal = vector;
 			}
 			// TexCoords
-			if (pMesh->mTextureCoords[0])	// Does the mesh have texture coords
+			if (inMesh->mTextureCoords[0])	// Does the mesh have texture coords
 			{
 				vec2 vec;
-				vec.x = pMesh->mTextureCoords[0][i].x;
-				vec.y = pMesh->mTextureCoords[0][i].y;
+				vec.x = inMesh->mTextureCoords[0][i].x;
+				vec.y = inMesh->mTextureCoords[0][i].y;
 				vertex.texCoords = vec;
 			}
 			else
@@ -159,17 +159,17 @@ namespace Engine
 			vertices.push_back(vertex);
 		}
 		// Process indices
-		for (uint32_t i = 0; i < pMesh->mNumFaces; ++i)
+		for (uint32_t i = 0; i < inMesh->mNumFaces; ++i)
 		{
-			aiFace face = pMesh->mFaces[i];
+			aiFace face = inMesh->mFaces[i];
 			for (uint32_t j = 0; j < face.mNumIndices; ++j)
 				indices.push_back(face.mIndices[j]);
 		}
 
 		// Process material
-		if (m_loadTextures && pMesh->mMaterialIndex >= 0U)
+		if (m_loadTextures && inMesh->mMaterialIndex >= 0U)
 		{
-			aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
+			aiMaterial* material = inScene->mMaterials[inMesh->mMaterialIndex];
 			vector<Texture*> diffuseMaps = LoadMaterialTextures(
 				material,
 				aiTextureType_DIFFUSE,
@@ -188,17 +188,17 @@ namespace Engine
 	}
 
 	inline vector<Texture*> Model::LoadMaterialTextures(
-		const aiMaterial* pMat,
-		const aiTextureType pType,
-		const Texture::TexType pTexType
+		const aiMaterial* inMat,
+		const aiTextureType inType,
+		const Texture::TexType inTexType
 	) const noexcept
 	{
 		// Textures from this specific node being output
 		vector<Texture*> texturesOut;
-		for (uint32_t i = 0; i < pMat->GetTextureCount(pType); ++i)
+		for (uint32_t i = 0; i < inMat->GetTextureCount(inType); ++i)
 		{
 			aiString file;
-			pMat->GetTexture(pType, i, &file);
+			inMat->GetTexture(inType, i, &file);
 			bool loadTexture = true;
 			string path = (m_directory + '/' + file.C_Str());
 
@@ -241,7 +241,7 @@ namespace Engine
 			// If texture has not been loaded before, load it for the first time
 			if (loadTexture)
 			{
-				Texture* tex = new Texture(path, pTexType);
+				Texture* tex = new Texture(path, inTexType);
 				texturesOut.push_back(tex);
 				Texture::s_loadedTextures.push_back(tex);
 			}
@@ -289,26 +289,26 @@ namespace Engine
 		}
 	}
 
-	constexpr void Model::SetCameraRef(Camera* pCamera) noexcept
-	{ m_cameraRef = pCamera; }
+	constexpr void Model::SetCameraRef(Camera* inCamera) noexcept
+	{ m_cameraRef = inCamera; }
 
-	constexpr void Model::SetShaderRef(Shader* pShader) noexcept
-	{ m_shader = pShader; }
+	constexpr void Model::SetShaderRef(Shader* inShader) noexcept
+	{ m_shader = inShader; }
 
 	Shader* Model::GetShaderRef() const noexcept
 	{ return m_shader; }
 
-	Mesh* Model::GetMeshAt(const uint16_t pPos) const  noexcept
+	Mesh* Model::GetMeshAt(const uint16_t inPos) const  noexcept
 	{
 		if (!m_meshes.get())
 			return nullptr;
 
-		if (pPos > m_meshes.get()->size() - 1)
+		if (inPos > m_meshes.get()->size() - 1)
 		{
 			Debug::Send("Attempting to access mesh outside array size");
 			return nullptr;
 		}
 
-		return (*m_meshes.get())[pPos].get();
+		return (*m_meshes.get())[inPos].get();
 	}
 }
