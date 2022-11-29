@@ -14,7 +14,7 @@ Todo:
 - [x] Add all source files as notes
 	- [x] Construct inheritance graph
 - [x] Make light models
-- [x] Move lights into unique pointer [[vector]]
+- [x] Move lights into unique pointer vector
 	- [x] Functionalise loading light data into shader
 - [x] Fix textures loaded with model only using the first texture location
 - [x] Stop texture loading into shader repeating
@@ -27,7 +27,7 @@ Todo:
 	- [x] Add bool for model loading to include textures/one in shaders to ignore texture
 	- [x] Add colour option in default shader
 - [x] Test colour conversions
-	- [x] Comment [[Colour.hpp]]
+	- [x] Comment Colour
 - [x] Remove depreciated code from Mesh
 - [x] Convert lights into a derivation of Entity
 - [x] Upgrade debug logging
@@ -41,22 +41,22 @@ Todo:
 - [x] Fix ascii printing incorrectly as UTF
 - [x] Add imgui
 - [x] Formatting with 120 max width
-- [x] Try upgrade ([[Colour.hpp]]/[[Colour.cpp]]) with macros
+- [x] Try upgrade Colour with macros
 - [x] Try out reworking entire project on the premise of static engine
 - [x] Make more functions pass by reference
-- [x] Update ([[Debug.hpp]]/[[Debug.cpp]]) to be used without \_DEBUG enabled
+- [x] Update Debug to be used without \_DEBUG enabled
 - [ ] Alt releases cursor
-- [ ] Make ([[Debug.hpp]]/[[Debug.cpp]]) use imgui
+- [ ] Make Debug use imgui
 	- [ ] Can open an "event" then post whatever info to it and finally close it
-- [ ] Overhaul lights ([[Light.hpp]]/[[Light.cpp]])
-	- [ ] Have each light type in it's own [[vector]]
+- [ ] Overhaul lights
+	- [ ] Have each light type in it's own vector
 	- [ ] Limit lights to the same as in the shader
 	- [ ] Overhaul how lights are rendered in the shader
 		- [ ] Min and max clipped brightness
 			- [ ] Iris, instant brightness response
 			- [ ] Retina, slower brightness response
 - [ ] Overload entity copy constructor to load model better
-- [ ] Fully utilise the input class ([[Input.hpp]]/[[Input.cpp]])
+- [ ] Fully utilise the input class Input
 	- [x] Basic key checking
 	- [ ] Key state tracking
 	- [ ] Key callbacks
@@ -65,3 +65,6 @@ Todo:
 	- [ ] ~~Allow callbacks to pass member functions~~
 - [ ] Update destroying a single texture to allow for a new one to replace it
 - [ ] Create a new project for unit tests, use constexpr asserts
+- [ ] Update Texture
+	- [ ] Overload equality operator for Texture
+	- [ ] Update how unloading and cleanup is done
