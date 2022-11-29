@@ -51,7 +51,7 @@ namespace Engine
 	constexpr bool Shader::IsLoaded() const noexcept
 	{ return m_shaderLoaded; }
 
-	void Shader::LoadShader(const ShaderType inType)
+	inline void Shader::LoadShader(const ShaderType inType)
 	{
 		#pragma region Fallback code
 		 static const char* vertexFallback = "#version 330 core\n\
