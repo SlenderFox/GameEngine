@@ -22,7 +22,7 @@ namespace Engine
 	const float Renderer::s_ambience = 0.15f;
 	#pragma endregion
 
-	bool Renderer::Init(const float pAspect) noexcept
+	bool Renderer::Init(const float inAspect) noexcept
 	{
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);
@@ -31,7 +31,7 @@ namespace Engine
 		//SetClearColour(Colour::CreateWithRGB(vec3(0.1f)));
 
 		// Initialise camera
-		s_camera = new Camera(pAspect, 75.0f);
+		s_camera = new Camera(inAspect, 75.0f);
 		s_camera->SetPosition({ 0.0f, 0.0f, 6.0f });
 
 		// Initialise arrays
@@ -75,9 +75,9 @@ namespace Engine
 		}
 	}
 
-	void Renderer::LoadLightsIntoShader(const Shader* pShader) noexcept
+	void Renderer::LoadLightsIntoShader(const Shader* inShader) noexcept
 	{
-		pShader->SetFloat("u_material.shininess", 32.0f);
+		inShader->SetFloat("u_material.shininess", 32.0f);
 		uint8_t numDirLights = 0;
 		uint8_t numPointLights = 0;
 		uint8_t numSpotLights = 0;
@@ -90,77 +90,77 @@ namespace Engine
 			{
 			case LightType::Directional:
 				lightCount = std::to_string(numDirLights);
-				pShader->SetVec3(
+				inShader->SetVec3(
 					"u_dirLights[" + lightCount + "].colour.ambient",
 					(vec3)currentLight->GetColour() * s_ambience
 				);
-				pShader->SetVec3(
+				inShader->SetVec3(
 					"u_dirLights[" + lightCount + "].colour.diffuse",
 					currentLight->GetColour()
 				);
-				pShader->SetVec3(
+				inShader->SetVec3(
 					"u_dirLights[" + lightCount + "].colour.specular",
 					currentLight->GetColour()
 				);
-				pShader->SetVec4(
+				inShader->SetVec4(
 					"u_dirLights[" + lightCount + "].direction",
 					currentLight->GetDirection()
 				);
 				++numDirLights; break;
 			case LightType::Point:
 				lightCount = std::to_string(numPointLights);
-				pShader->SetVec3(
+				inShader->SetVec3(
 					"u_pointLights[" + lightCount + "].colour.diffuse",
 					currentLight->GetColour()
 				);
-				pShader->SetVec3(
+				inShader->SetVec3(
 					"u_pointLights[" + lightCount + "].colour.specular",
 					currentLight->GetColour()
 				);
-				pShader->SetVec4(
+				inShader->SetVec4(
 					"u_pointLights[" + lightCount + "].position",
 					currentLight->GetPosition()
 				);
-				pShader->SetFloat(
+				inShader->SetFloat(
 					"u_pointLights[" + lightCount + "].linear",
 					currentLight->GetLinear()
 				);
-				pShader->SetFloat(
+				inShader->SetFloat(
 					"u_pointLights[" + lightCount + "].quadratic",
 					currentLight->GetQuadratic()
 				);
 				++numPointLights; break;
 			case LightType::Spot:
 				lightCount = std::to_string(numSpotLights);
-				pShader->SetVec3(
+				inShader->SetVec3(
 					"u_spotLights[" + lightCount + "].colour.diffuse",
 					currentLight->GetColour()
 				);
-				pShader->SetVec3(
+				inShader->SetVec3(
 					"u_spotLights[" + lightCount + "].colour.specular",
 					currentLight->GetColour()
 				);
-				pShader->SetVec4(
+				inShader->SetVec4(
 					"u_spotLights[" + lightCount + "].position",
 					currentLight->GetPosition()
 				);
-				pShader->SetVec4(
+				inShader->SetVec4(
 					"u_spotLights[" + lightCount + "].direction",
 					currentLight->GetDirection()
 				);
-				pShader->SetFloat(
+				inShader->SetFloat(
 					"u_spotLights[" + lightCount + "].linear",
 					currentLight->GetLinear()
 				);
-				pShader->SetFloat(
+				inShader->SetFloat(
 					"u_spotLights[" + lightCount + "].quadratic",
 					currentLight->GetQuadratic()
 				);
-				pShader->SetFloat(
+				inShader->SetFloat(
 					"u_spotLights[" + lightCount + "].cutoff",
 					currentLight->GetAngle()
 				);
-				pShader->SetFloat(
+				inShader->SetFloat(
 					"u_spotLights[" + lightCount + "].blur",
 					currentLight->GetBlur()
 				);
@@ -171,7 +171,10 @@ namespace Engine
 		}
 	}
 
-	void Renderer::ModifyAllSpotlights(const bool pIsAngle, const float pValue) noexcept
+	void Renderer::ModifyAllSpotlights(
+		const bool inIsAngle,
+		const float inValue
+	) noexcept
 	{
 		for (uint8_t i = 0, count = 0; i < (uint8_t)s_lights.get()->size(); ++i)
 		{
@@ -181,14 +184,14 @@ namespace Engine
 			if (currentlLight->GetType() != LightType::Spot) continue;
 
 			string numLights = std::to_string(count);
-			float limit = pIsAngle ? 90.0f : 1.0f;
-			float newValue = pIsAngle ? currentlLight->GetAngleRaw() : currentlLight->GetBlurRaw();
-			newValue += pValue;
+			float limit = inIsAngle ? 90.0f : 1.0f;
+			float newValue = inIsAngle ? currentlLight->GetAngleRaw() : currentlLight->GetBlurRaw();
+			newValue += inValue;
 
 			if (newValue <= limit && newValue >= 0.0f)
 			{
 				// Update the value in the light
-				if (pIsAngle)
+				if (inIsAngle)
 					currentlLight->SetAngle(newValue);
 				else
 					currentlLight->SetBlur(newValue);
@@ -196,7 +199,7 @@ namespace Engine
 				// Update the shaders on all the models
 				for (uint8_t j = 0; j < s_models.get()->size(); ++j)
 				{
-					if (pIsAngle)
+					if (inIsAngle)
 					{
 						GetModelAt(j)->m_shader->SetFloat(
 							"u_spotLights[" + numLights + "].cutoff",
@@ -218,50 +221,53 @@ namespace Engine
 	}
 
 	Model* Renderer::AddNewModel(
-		uint8_t& id,
-		const string* pModelPath,
-		const string* pShaderPath,
-		const bool pLoadTextures) noexcept
+		uint8_t& outId,
+		const string* inModelPath,
+		const string* inShaderPath,
+		const bool inLoadTextures) noexcept
 	{
 		// Caps at 255
 		size_t currentAmount = s_models.get()->size();
 		if (currentAmount > 255)
 			return nullptr;
 
-		id = (uint8_t)currentAmount;
-		s_models.get()->push_back(make_unique<Model>(pModelPath, pShaderPath, s_camera, pLoadTextures));
-		return GetModelAt(id);
+		outId = (uint8_t)currentAmount;
+		s_models.get()->push_back(make_unique<Model>(inModelPath, inShaderPath, s_camera, inLoadTextures));
+		return GetModelAt(outId);
 	}
 
 	Light* Renderer::AddNewLight(
-		uint8_t& id,
-		const LightType pType,
-		const Colour pColour) noexcept
+		uint8_t& outId,
+		const LightType inType,
+		const Colour inColour) noexcept
 	{
 		// Caps at 255
 		size_t currentAmount = s_lights.get()->size();
 		if (currentAmount > 255)
 			return nullptr;
 
-		id = (uint8_t)currentAmount;
-		s_lights.get()->push_back(make_unique<Light>(pType, pColour));
-		return GetLightAt(id);
+		outId = (uint8_t)currentAmount;
+		s_lights.get()->push_back(make_unique<Light>(inType, inColour));
+		return GetLightAt(outId);
 	}
 
-	void Renderer::SetClearColour(const Colour pColour) noexcept
+	void Renderer::SetClearColour(const Colour inColour) noexcept
 	{
-		vec3 col = pColour.RGBvec3();
+		vec3 col = inColour.RGBvec3();
 		glClearColor(col.r, col.g, col.b, 1.0f);
 	}
 
-	void Renderer::SetRenderMode(const Mode pMode) noexcept
+	void Renderer::SetRenderMode(const Mode inMode) noexcept
 	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + (int)pMode);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + (int)inMode);
 	}
 
-	void Renderer::SetResolution(const size_t pWidth, const size_t pHeight) noexcept
+	void Renderer::SetResolution(
+		const size_t inWidth,
+		const size_t inHeight
+	) noexcept
 	{
-		glViewport(0, 0, (GLsizei)pWidth, (GLsizei)pHeight);
+		glViewport(0, 0, (GLsizei)inWidth, (GLsizei)inHeight);
 	}
 
 	uint8_t Renderer::ModelCount() noexcept
@@ -274,7 +280,7 @@ namespace Engine
 		return (uint8_t)s_lights.get()->size();
 	}
 
-	Model* Renderer::GetModelAt(const uint8_t pPos) noexcept
+	Model* Renderer::GetModelAt(const uint8_t inPos) noexcept
 	{
 		if (!s_models.get())
 		{
@@ -282,16 +288,16 @@ namespace Engine
 			return nullptr;
 		}
 
-		if (pPos > s_models.get()->size() - 1)
+		if (inPos > s_models.get()->size() - 1)
 		{
 			Debug::Send("Attempting to access model outside array size");
 			return nullptr;
 		}
 
-		return (*s_models.get())[pPos].get();
+		return (*s_models.get())[inPos].get();
 	}
 
-	Light* Renderer::GetLightAt(const uint8_t pPos) noexcept
+	Light* Renderer::GetLightAt(const uint8_t inPos) noexcept
 	{
 		if (!s_lights.get())
 		{
@@ -299,12 +305,15 @@ namespace Engine
 			return nullptr;
 		}
 
-		if (pPos > s_lights.get()->size() - 1)
+		if (inPos > s_lights.get()->size() - 1)
 		{
 			Debug::Send("Attempting to access light outside array size");
 			return nullptr;
 		}
 
-		return (*s_lights.get())[pPos].get();
+		return (*s_lights.get())[inPos].get();
 	}
+
+	Camera* Renderer::GetCamera() noexcept
+	{ return s_camera; }
 }

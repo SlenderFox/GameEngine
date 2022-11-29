@@ -7,6 +7,7 @@ namespace Engine
 	{
 		friend class Application;
 
+	private:
 		static Camera* s_camera;
 
 		static std::unique_ptr<std::vector<std::unique_ptr<Model>>> s_models;
@@ -23,7 +24,7 @@ namespace Engine
 		Renderer& operator=(Renderer&&) = delete;
 		#pragma endregion
 
-		static bool Init(const float pAspect) noexcept;
+		static bool Init(const float inAspect) noexcept;
 		static void Draw() noexcept;
 
 	public:
@@ -38,33 +39,45 @@ namespace Engine
 
 		static void Terminate() noexcept;
 
-		static void LoadLightsIntoShader(const Shader* pShader) noexcept;
-		/** Modifies either the angle or blur of all spotlights by a value.
-		 * @note Limits to max and min possible values.
+		static void LoadLightsIntoShader(const Shader* inShader) noexcept;
+		/** Modifies either the angle or blur of all spotlights by a value
+		 * @note Max value is 90 for angle, 1 for blur, min for both is 0
 		 * @param pIsAngle True to modify the angle, false to modify the blur of the spotlight
 		 * @param pValue The amount to modify it by
 		 */
-		static void ModifyAllSpotlights(const bool pIsAngle, const float pValue) noexcept;
+		static void ModifyAllSpotlights(
+			const bool inIsAngle,
+			const float inValue
+		) noexcept;
 
 		static Model* AddNewModel(
-			uint8_t& id,
-			const std::string* pModelPath,
-			const std::string* pShaderPath,
-			const bool pLoadTextures = true) noexcept;
+			uint8_t& outId,
+			const std::string* inModelPath,
+			const std::string* inShaderPath,
+			const bool inLoadTextures = true) noexcept;
+
 		static Light* AddNewLight(
-			uint8_t& id,
-			const LightType pType,
-			const Colour pColour = Colour::White()) noexcept;
+			uint8_t& outId,
+			const LightType inType,
+			const Colour inColour = Colour::White()) noexcept;
 
-		static void SetClearColour(const Colour pColour) noexcept;
-		static void SetRenderMode(const Mode pMode = Mode::Fill) noexcept;
-		static void SetResolution(const size_t pWidth, const size_t pHeight) noexcept;
+		static void SetClearColour(const Colour inColour) noexcept;
+		static void SetRenderMode(const Mode inMode = Mode::Fill) noexcept;
+		static void SetResolution(
+			const size_t inWidth,
+			const size_t inHeight
+		) noexcept;
 
-		static uint8_t ModelCount() noexcept;
-		static uint8_t LightCount() noexcept;
-		static Model* GetModelAt(const uint8_t pPos) noexcept;
-		static Light* GetLightAt(const uint8_t pPos) noexcept;
+		_NODISCARD static
+		uint8_t ModelCount() noexcept;
+		_NODISCARD static
+		uint8_t LightCount() noexcept;
+		_NODISCARD static
+		Model* GetModelAt(const uint8_t inPos) noexcept;
+		_NODISCARD static
+		Light* GetLightAt(const uint8_t inPos) noexcept;
 
-		static constexpr Camera* GetCamera() noexcept { return s_camera; }
+		_NODISCARD static
+		Camera* GetCamera() noexcept;
 	};
 }

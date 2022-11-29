@@ -27,6 +27,7 @@ namespace Engine
 	class Entity: public EntityBase
 	{
 		friend struct EntityLoader;
+
 	public:
 		_NODISCARD static
 		Entity* CreateWithModel(
