@@ -12,7 +12,7 @@ using std::make_unique;
 namespace Engine
 {
 	// Forward declaration
-	class Application { public: static const bool GladLoaded() noexcept; };
+	class Application { public: _NODISCARD static const bool GladLoaded() noexcept; };
 
 	//Static
 
@@ -56,20 +56,13 @@ namespace Engine
 
 	//Member
 
-	Mesh::Mesh()
-	{
-		m_vertices = make_unique<vector<Vertex>>(GenerateVertices());
-		m_indices = make_unique<vector<uint32_t>>(GenerateIndices());
-
-		SetupMesh();
-	}
-
 	Mesh::Mesh(
 		const std::vector<Vertex>* pVertices,
-		const std::vector<uint32_t>* pIndices)
+		const std::vector<uint32_t>* pIndices
+	) noexcept
 	{
-		m_vertices = make_unique<vector<Vertex>>(*pVertices);
-		m_indices = make_unique<vector<uint32_t>>(*pIndices);
+		m_vertices = make_unique<vector<Vertex>>(pVertices ? *pVertices : GenerateVertices());
+		m_indices = make_unique<vector<uint32_t>>(pIndices ? *pIndices : GenerateIndices());
 		SetupMesh();
 	}
 
@@ -94,7 +87,12 @@ namespace Engine
 	void Mesh::Draw() const noexcept
 	{
 		glBindVertexArray(*m_idVAO);
-		glDrawElements(GL_TRIANGLES, (GLsizei)m_indices.get()->size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(
+			GL_TRIANGLES,
+			(GLsizei)m_indices.get()->size(),
+			GL_UNSIGNED_INT,
+			0
+		);
 		glBindVertexArray(0);
 	}
 
@@ -158,4 +156,13 @@ namespace Engine
 		// Unbinds the GL_ELEMENT_ARRAY_BUFFER
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
+
+	uint32_t* Mesh::GetVAO() const noexcept
+	{ return m_idVAO; }
+
+	uint32_t* Mesh::GetVBO() const noexcept
+	{ return m_idVBO; }
+
+	uint32_t* Mesh::GetEBO() const noexcept
+	{ return m_idEBO; }
 }

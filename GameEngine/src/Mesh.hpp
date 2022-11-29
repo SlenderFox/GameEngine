@@ -16,7 +16,8 @@ namespace Engine
 		/** Hard coded vertices for a cube
 		 * @deprecated No longer used since Model class
 		 */
-		static constexpr float s_cubeVerticesArr[288] = {
+		static constexpr
+		float s_cubeVerticesArr[288] = {
 			// Positions				// Normals				  // Texture coords
 		   -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 0.0f,
 		    0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    1.0f, 0.0f,
@@ -64,7 +65,8 @@ namespace Engine
 		/** Hard coded indices for a cube
 		 * @deprecated No longer used since Model class
 		 */
-		static constexpr uint32_t s_indicesArr[36] = {
+		static constexpr
+		uint32_t s_indicesArr[36] = {
 			0U,	1U,	2U,	3U,	4U,	5U,	// Face 1
 			6U, 	7U,	8U,	9U,	10U,	11U,	// Face 2
 			12U,	13U,	14U,	15U,	16U,	17U,	// Face 3
@@ -83,41 +85,39 @@ namespace Engine
 		void SetupMesh() const noexcept;
 
 	public:
-		_NODISCARD_MSG("Engine::Mesh::GenerateVertices()")
 		/** Takes the vertices array and places it in a vector
 		 * @deprecated No longer used since Model class
 		 * @return [std::vector<Vertex>] The vertex vector
 		 */
-		static constexpr std::vector<Vertex> GenerateVertices() noexcept;
-		_NODISCARD_MSG("Engine::Mesh::GenerateIndices()")
+		_NODISCARD static constexpr
+		std::vector<Vertex> GenerateVertices() noexcept;
+
 		/** Takes the indices array and places it in a vector
 		 * @deprecated No longer used since Model class
 		 * @return [std::vector<uint32_t>] The indices vector
 		 */
-		static constexpr std::vector<uint32_t> GenerateIndices() noexcept;
+		_NODISCARD static constexpr
+		std::vector<uint32_t> GenerateIndices() noexcept;
 
-		Mesh();
 		Mesh(
-			const std::vector<Vertex>* pVertices,
-			const std::vector<uint32_t>* pIndices);
+			const std::vector<Vertex>* pVertices = nullptr,
+			const std::vector<uint32_t>* pIndices = nullptr
+		) noexcept;
 		~Mesh();
 
 		void Draw() const noexcept;
 
-		_NODISCARD_MSG("Engine::Mesh::GetVAO()")
 		/** Get the id for the vertex attribute object
 		 * @return [uint32_t*] The id of the vertex attribute object
 		 */
-		uint32_t* GetVAO() const noexcept { return m_idVAO; }
-		_NODISCARD_MSG("Engine::Mesh::GetVBO()")
+		_NODISCARD uint32_t* GetVAO() const noexcept;
 		/** Get the id for the vertex buffer object
 		 * @return [uint32_t*] The id of the vertex buffer object
 		 */
-		uint32_t* GetVBO() const noexcept { return m_idVBO; }
-		_NODISCARD_MSG("Engine::Mesh::GetEBO()")
+		_NODISCARD uint32_t* GetVBO() const noexcept;
 		/** Get the id for the element buffer object
 		 * @return [uint32_t*] The id of the element buffer object
 		 */
-		uint32_t* GetEBO() const noexcept { return m_idEBO; }
+		_NODISCARD uint32_t* GetEBO() const noexcept;
 	};
 }
