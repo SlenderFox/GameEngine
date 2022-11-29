@@ -59,13 +59,13 @@ const vec3 Project::s_cubePositions[Project::s_numCubes] = {
 	glm::vec3(-1.3f,  1.0f,  -1.5f)
 };
 
-void Project::MouseCallback(double pDeltaX, double pDeltaY) noexcept
+void Project::MouseCallback(double inDeltaX, double inDeltaY) noexcept
 {
 	const double sens = 0.05f;
-	pDeltaX *= sens;
-	pDeltaY *= sens;
-	s_camYaw += pDeltaX;
-	s_camPitch += pDeltaY;
+	inDeltaX *= sens;
+	inDeltaY *= sens;
+	s_camYaw += inDeltaX;
+	s_camPitch += inDeltaY;
 	if (s_camPitch > 89.0f)
 		s_camPitch = 89.0f;
 	else if (s_camPitch < -89.0f)
@@ -79,9 +79,9 @@ void Project::MouseCallback(double pDeltaX, double pDeltaY) noexcept
 	Renderer::GetCamera()->SetForward(forward);
 }
 
-void Project::ScrollCallback(double pOffsetX, double pOffsetY) noexcept
+void Project::ScrollCallback(double inOffsetX, double inOffsetY) noexcept
 {
-	Renderer::GetCamera()->ModifyFovH((float)pOffsetY * -3.0f);
+	Renderer::GetCamera()->ModifyFovH((float)inOffsetY * -3.0f);
 }
 
 // Member

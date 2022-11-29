@@ -7,16 +7,16 @@ class Project: public Engine::Application
 	static double s_camYaw, s_camPitch;
 
 	/** Static function to use as a callback for mouse input
-	 * @param pDeltaX The horizontal position change since last call
-	 * @param pDeltaY The vertical position change since last call
+	 * @param inDeltaX The horizontal position change since last call
+	 * @param inDeltaY The vertical position change since last call
 	 */
-	static void MouseCallback(double pDeltaX, double pDeltaY) noexcept;
+	static void MouseCallback(double inDeltaX, double inDeltaY) noexcept;
 
 	/** Static function to use as a callback for scroll input
-	 * @param pOffsetX The horizontal position change since last call
-	 * @param pOffsetY The vertical position change since last call
+	 * @param inOffsetX The horizontal position change since last call
+	 * @param inOffsetY The vertical position change since last call
 	 */
-	static void ScrollCallback(double pOffsetX, double pOffsetY) noexcept;
+	static void ScrollCallback(double inOffsetX, double inOffsetY) noexcept;
 
 	static constexpr
 	uint8_t s_numCubes = 9U;
