@@ -8,68 +8,32 @@ namespace Engine
 		glm::mat4 m_transform;
 
 	public:
-		#pragma region Constructors
-		Transform();
-
-		Transform(const glm::mat4 pValue);
-
-		virtual ~Transform() {}
-
+		Transform() noexcept;
+		Transform(const glm::mat4 inValue) noexcept;
+		virtual ~Transform() = default;
 		// Copy, takes lvalue
-		Transform(Transform const& pOther);
-
-		Transform& operator=(Transform const& pOther);
-
+		Transform(Transform const& inOther) noexcept;
+		Transform& operator=(Transform const& inOther) noexcept;
 		// Move, take rvalue
-		Transform(Transform&& pOther) noexcept;
+		Transform(Transform&& inOther) noexcept;
+		Transform& operator=(Transform&& inOther) noexcept;
 
-		Transform& operator=(Transform&& pOther) noexcept;
-		#pragma endregion
+		virtual void SetTransform(const glm::mat4* inValue) noexcept;
+		virtual void SetPosition(const glm::vec3 inValue) noexcept;
+		virtual void Translate(const glm::vec3 inValue) noexcept;
+		virtual void SetAxes(
+			const glm::vec3 inRight,
+			const glm::vec3 inUp,
+			const glm::vec3 inForward
+		) noexcept;
+		virtual void SetRight(const glm::vec3 inRight) noexcept;
+		virtual void SetUp(const glm::vec3 inUp) noexcept;
+		virtual void SetForward(const glm::vec3 inForward) noexcept;
 
-		#pragma region Setters
-		virtual constexpr
-		void SetTransform(const glm::mat4* pValue) noexcept
-		{ m_transform = *pValue; }
-
-		virtual
-		void SetPosition(const glm::vec3 pValue) noexcept;
-
-		virtual
-		void Translate(const glm::vec3 pValue) noexcept;
-
-		virtual
-		void SetAxes(
-			const glm::vec3 pRight,
-			const glm::vec3 pUp,
-			const glm::vec3 pForward) noexcept;
-
-		virtual
-		void SetRight(const glm::vec3 pRight) noexcept;
-
-		virtual
-		void SetUp(const glm::vec3 pUp) noexcept;
-
-		virtual
-		void SetForward(const glm::vec3 pForward) noexcept;
-		#pragma endregion
-
-		#pragma region Getters
-		_NODISCARD constexpr
-		glm::mat4 GetTransform() const noexcept
-		{ return m_transform; }
-
-		_NODISCARD constexpr
-		glm::vec4 GetPosition() const noexcept
-		{ return m_transform[3]; }
-
-		_NODISCARD
-		glm::vec4 GetRight() const noexcept;
-
-		_NODISCARD
-		glm::vec4 GetUp() const noexcept;
-
-		_NODISCARD
-		glm::vec4 GetForward() const noexcept;
-		#pragma endregion
+		_NODISCARD glm::mat4 GetTransform() const noexcept;
+		_NODISCARD glm::vec4 GetPosition() const noexcept;
+		_NODISCARD glm::vec4 GetRight() const noexcept;
+		_NODISCARD glm::vec4 GetUp() const noexcept;
+		_NODISCARD glm::vec4 GetForward() const noexcept;
 	};
 }
