@@ -18,26 +18,23 @@ namespace Engine
 	// Blame https://stackoverflow.com/a/40937193/15035125 for this
 	struct EntityLoader
 	{
-		static void BackgroundLoadModel(
+		static inline
+		void BackgroundLoadModel(
 			string* pModelPath,
 			string* pShaderPath,
 			Entity* pEntity,
-			const bool pLoadTextures = true) noexcept
+			const bool pLoadTextures = true
+		) noexcept
 		{
 			uint8_t ID;
 			pEntity->m_modelRef = Renderer::AddNewModel(ID, pModelPath, pShaderPath, pLoadTextures);
 			Renderer::LoadLightsIntoShader(pEntity->m_modelRef->GetShaderRef());
-			pEntity->m_modelRef->GetShaderRef()->SetMat4("u_model", pEntity->GetTransform());
-			pEntity->m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel",
-				(mat3)transpose(inverse(pEntity->GetTransform())));
 			pEntity->UpdateModel();
 		}
 	};
 
 	void EntityBase::AddChild(Entity* pChild) noexcept
-	{
-		m_childrenRef.push_back(pChild);
-	}
+	{ m_childrenRef.push_back(pChild); }
 
 	void EntityBase::RemoveChild(const Entity* pChild) noexcept
 	{
@@ -51,6 +48,9 @@ namespace Engine
 		}
 	}
 
+	constexpr std::vector<Entity*>EntityBase::GetChildren() const noexcept
+	{ return m_childrenRef; }
+
 	// Static
 
 	Entity* Entity::CreateWithModel(
@@ -58,7 +58,8 @@ namespace Engine
 		string pShaderPath,
 		Model*& pModelOut,
 		Shader*& pShaderOut,
-		const bool pLoadTextures) noexcept
+		const bool pLoadTextures
+	) noexcept
 	{
 		Entity* result = new Entity();
 		EntityLoader::BackgroundLoadModel(&pModelPath, &pShaderPath, result, pLoadTextures);
@@ -70,22 +71,19 @@ namespace Engine
 	// Member
 
 	Entity::Entity()
-	{
-		m_childrenRef = vector<Entity*>();
-		SetParent(Root::GetRoot());
-	}
+	: m_parentRef(Root::GetRoot())
+	{ }
 
 	Entity::Entity(EntityBase* pParent)
-	{
-		m_childrenRef = vector<Entity*>();
-		SetParent(pParent);
-	}
+	: m_parentRef(pParent)
+	{ }
 
 	void Entity::UpdateModel() const noexcept
 	{
 		if (!m_modelRef) return;
 		m_modelRef->GetShaderRef()->SetMat4("u_model", GetTransform());
-		m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel", (mat3)transpose(inverse(GetTransform())));
+		m_modelRef->GetShaderRef()->SetMat3("u_transposeInverseOfModel",
+			(mat3)transpose(inverse(GetTransform())));
 	}
 
 	void Entity::LoadModel(
@@ -93,7 +91,8 @@ namespace Engine
 		string pShaderPath,
 		Model*& pModelOut,
 		Shader*& pShaderOut,
-		const bool pLoadTextures) noexcept
+		const bool pLoadTextures
+	) noexcept
 	{
 		// Currently this does nothing about the previous model and shader
 		// but does not cause a memory leak as they are managed by Renderer
@@ -123,7 +122,7 @@ namespace Engine
 
 	void Entity::SetParent(EntityBase* pParent) noexcept
 	{
-		// This may change to not changing anything
+		// Look into the potential for this to return without changing anything
 		if (!pParent)
 		{
 			m_parentRef = nullptr;
@@ -131,8 +130,7 @@ namespace Engine
 		}
 
 		// Remove from previous parents children
-		if (m_parentRef)
-			m_parentRef->RemoveChild(this);
+		if (m_parentRef) { m_parentRef->RemoveChild(this); }
 
 		// Assign new parent and join it's children
 		m_parentRef = pParent;
@@ -140,18 +138,15 @@ namespace Engine
 	}
 
 	void Entity::RenderOnlyColour(const bool pState) noexcept
-	{
-		m_modelRef->GetShaderRef()->SetBool("u_justColour", pState);
-	}
+	{ m_modelRef->GetShaderRef()->SetBool("u_justColour", pState); }
 
 	void Entity::SetScale(const vec3 pValue) noexcept
-	{
-		m_modelRef->GetShaderRef()->SetVec3("u_scale", pValue);
-	}
+	{ m_modelRef->GetShaderRef()->SetVec3("u_scale", pValue); }
 
 	void Entity::SentTint(const Colour pCol) noexcept
-	{
-		m_modelRef->GetShaderRef()->SetVec3("u_colour", pCol.RGBvec3());
-	}
+	{ m_modelRef->GetShaderRef()->SetVec3("u_colour", pCol.RGBvec3()); }
 	#pragma endregion
+
+	constexpr EntityBase& Entity::GetParent() const noexcept
+	{ return *m_parentRef; }
 }

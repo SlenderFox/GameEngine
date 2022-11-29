@@ -71,3 +71,6 @@ Todo:
 - [ ] Update Shader
 	- [ ] Allow a new shader to be loaded in the same object
 	- [ ] Make LoadShader() clearer to read
+- [ ] Update Entity
+	- [ ] Just use the regular constructor
+	- [ ] Try to do something about the previous model when loading a new one
