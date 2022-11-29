@@ -74,3 +74,4 @@ Todo:
 - [ ] Update Entity
 	- [ ] Just use the regular constructor
 	- [ ] Try to do something about the previous model when loading a new one
+- [ ] Move LightType into the Light class
