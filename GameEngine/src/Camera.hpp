@@ -55,11 +55,11 @@ namespace Engine
 		void UpdateFovV() noexcept;
 
 		#pragma region Setters
-		void SetTransform(const glm::mat4* inValue) noexcept override;
-		void SetView(glm::mat4* inValue) noexcept;
+		void SetTransform(const glm::mat4 *inValue) noexcept override;
+		void SetView(glm::mat4 *inValue) noexcept;
 		void SetProjection(float inFovV) noexcept;
 
-		constexpr void SetProjection(glm::mat4* inValue) noexcept;
+		constexpr void SetProjection(glm::mat4 *inValue) noexcept;
 		constexpr void SetAspectRatio(float inAspectRatio) noexcept;
 
 		void SetPosition(glm::vec3 inValue) noexcept override;

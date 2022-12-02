@@ -26,7 +26,7 @@ class Project: public Engine::Application
 
 	std::vector<Engine::Light*> m_lightRefs;
 	std::vector<Engine::Entity*> m_cubes;
-	Engine::Entity* object_backpack;
+	Engine::Entity *object_backpack;
 
 	/** Loads entities in to create the scene */
 	void CreateScene();

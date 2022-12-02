@@ -40,9 +40,9 @@ namespace Engine
 			End = 8
 		};
 
-		static const wchar_t* s_prefixes[12];
+		static const wchar_t *s_prefixes[12];
 
-		static void Init(GLFWwindow* pWindow) noexcept;
+		static void Init(GLFWwindow *pWindow) noexcept;
 		static void Terminate() noexcept;
 		static void Draw() noexcept;
 
@@ -52,7 +52,7 @@ namespace Engine
 			const bool pEndline = true) noexcept;
 		static void Send(
 			const std::string pMsg,
-			const wchar_t* pPrefix,
+			const wchar_t *pPrefix,
 			const bool pNewline = false,
 			const bool pEndline = true) noexcept;
 		static void Send(

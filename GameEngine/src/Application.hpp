@@ -18,9 +18,9 @@ namespace Engine
 		};
 
 		// Static reference to the application
-		static Application* s_application;
+		static Application *s_application;
 		// Memory is managed by glfw
-		static GLFWwindow* s_windowRef;
+		static GLFWwindow *s_windowRef;
 		// Whether glad has loaded or not
 		static bool s_gladLoaded;
 		// Is the application fullscreen or not
@@ -43,9 +43,9 @@ namespace Engine
 		#pragma region Constructors
 		// Delete copy/move so extra instances can't be created/moved.
 		Application(Application const&) = delete;
-		Application& operator=(Application const&) = delete;
+		Application &operator=(Application const&) = delete;
 		Application(Application&&) = delete;
-		Application& operator=(Application&&) = delete;
+		Application &operator=(Application&&) = delete;
 		#pragma endregion
 
 		static void Terminate() noexcept;
@@ -60,7 +60,7 @@ namespace Engine
 		static void ProcessInput() noexcept;
 
 		static void FramebufferSizeCallback(
-			GLFWwindow* inWindow,
+			GLFWwindow *inWindow,
 			const int inWidth,
 			const int inHeight
 		) noexcept;
@@ -71,7 +71,7 @@ namespace Engine
 		double s_fixedDeltaTime = 1.0 / 60.0;
 
 		_NODISCARD static
-		Application* GetApplication() noexcept;
+		Application *GetApplication() noexcept;
 
 		_NODISCARD static const
 		bool GladLoaded() noexcept;	// No definition to allow forward declaration

@@ -57,8 +57,8 @@ namespace Engine
 	//Member
 
 	Mesh::Mesh(
-		const std::vector<Vertex>* pVertices,
-		const std::vector<uint32_t>* pIndices
+		const std::vector<Vertex> *pVertices,
+		const std::vector<uint32_t> *pIndices
 	) noexcept
 	{
 		m_vertices = make_unique<vector<Vertex>>(pVertices ? *pVertices : GenerateVertices());
@@ -157,12 +157,12 @@ namespace Engine
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
-	uint32_t* Mesh::GetVAO() const noexcept
+	uint32_t *Mesh::GetVAO() const noexcept
 	{ return m_idVAO; }
 
-	uint32_t* Mesh::GetVBO() const noexcept
+	uint32_t *Mesh::GetVBO() const noexcept
 	{ return m_idVBO; }
 
-	uint32_t* Mesh::GetEBO() const noexcept
+	uint32_t *Mesh::GetEBO() const noexcept
 	{ return m_idEBO; }
 }

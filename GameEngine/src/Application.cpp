@@ -19,8 +19,8 @@ using glm::normalize;
 namespace Engine
 {
 	#pragma region Variables
-	Application* Application::s_application = nullptr;
-	GLFWwindow* Application::s_windowRef = nullptr;
+	Application *Application::s_application = nullptr;
+	GLFWwindow *Application::s_windowRef = nullptr;
 	bool Application::s_gladLoaded = false,
 		Application::s_fullscreen = false;
 	uint16_t Application::s_winWidth = 320U,
@@ -37,7 +37,7 @@ namespace Engine
 	Application::ExitCode Application::s_exitCode = Application::ExitCode::Okay;
 	#pragma endregion
 
-	Application* Application::GetApplication() noexcept
+	Application *Application::GetApplication() noexcept
 	{ return s_application; }
 
 	const bool Application::GladLoaded() noexcept
@@ -178,16 +178,16 @@ namespace Engine
 
 		// glfw window creation
 		int monCount = 0;
-		GLFWmonitor** monitors = glfwGetMonitors(&monCount);
-		GLFWmonitor* primMon = monitors[0];
-		const GLFWvidmode* vid = glfwGetVideoMode(primMon);
+		GLFWmonitor **monitors = glfwGetMonitors(&monCount);
+		GLFWmonitor *primMon = monitors[0];
+		const GLFWvidmode *vid = glfwGetVideoMode(primMon);
 
 		glfwWindowHint(GLFW_RED_BITS, vid->redBits);
 		glfwWindowHint(GLFW_GREEN_BITS, vid->greenBits);
 		glfwWindowHint(GLFW_BLUE_BITS, vid->blueBits);
 		glfwWindowHint(GLFW_REFRESH_RATE, vid->refreshRate);
 
-		GLFWmonitor* mon = s_fullscreen ? primMon : nullptr;
+		GLFWmonitor *mon = s_fullscreen ? primMon : nullptr;
 		//int wid = s_winWidth, hei = s_winHeight;
 
 		s_windowRef = glfwCreateWindow(s_winWidth, s_winHeight, s_title.c_str(), mon, nullptr);
@@ -305,10 +305,10 @@ namespace Engine
 		//if (Input::GetKey(Input::Key::Key_F11, Input::State::Press))
 		//{
 		//	s_fullscreen = true;
-		//	GLFWmonitor* primMon = glfwGetPrimaryMonitor();
+		//	GLFWmonitor *primMon = glfwGetPrimaryMonitor();
 		//	int xp, yp;
 		//	glfwGetMonitorPos(primMon, &xp, &yp);
-		//	const GLFWvidmode* vid = glfwGetVideoMode(primMon);
+		//	const GLFWvidmode *vid = glfwGetVideoMode(primMon);
 		//	glfwSetWindowMonitor(s_windowRef, primMon, xp, yp, vid->width, vid->height, vid->refreshRate);
 		//}
 		//
@@ -327,7 +327,7 @@ namespace Engine
 	}
 
 	void Application::FramebufferSizeCallback(
-		GLFWwindow* inWindow,
+		GLFWwindow *inWindow,
 		const int inWidth,
 		const int inHeight
 	) noexcept

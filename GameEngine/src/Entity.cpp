@@ -20,9 +20,9 @@ namespace Engine
 	{
 		static inline
 		void BackgroundLoadModel(
-			string* pModelPath,
-			string* pShaderPath,
-			Entity* pEntity,
+			string *pModelPath,
+			string *pShaderPath,
+			Entity *pEntity,
 			const bool pLoadTextures = true
 		) noexcept
 		{
@@ -33,10 +33,10 @@ namespace Engine
 		}
 	};
 
-	void EntityBase::AddChild(Entity* pChild) noexcept
+	void EntityBase::AddChild(Entity *pChild) noexcept
 	{ m_childrenRef.push_back(pChild); }
 
-	void EntityBase::RemoveChild(const Entity* pChild) noexcept
+	void EntityBase::RemoveChild(const Entity *pChild) noexcept
 	{
 		for (auto it = m_childrenRef.begin(); it != m_childrenRef.end(); ++it)
 		{
@@ -53,15 +53,15 @@ namespace Engine
 
 	// Static
 
-	Entity* Entity::CreateWithModel(
+	Entity *Entity::CreateWithModel(
 		string pModelPath,
 		string pShaderPath,
-		Model*& pModelOut,
-		Shader*& pShaderOut,
+		Model *&pModelOut,
+		Shader *&pShaderOut,
 		const bool pLoadTextures
 	) noexcept
 	{
-		Entity* result = new Entity();
+		Entity *result = new Entity();
 		EntityLoader::BackgroundLoadModel(&pModelPath, &pShaderPath, result, pLoadTextures);
 		pModelOut = result->m_modelRef;
 		pShaderOut = result->m_modelRef->GetShaderRef();
@@ -74,7 +74,7 @@ namespace Engine
 	: m_parentRef(Root::GetRoot())
 	{ }
 
-	Entity::Entity(EntityBase* pParent)
+	Entity::Entity(EntityBase *pParent)
 	: m_parentRef(pParent)
 	{ }
 
@@ -89,8 +89,8 @@ namespace Engine
 	void Entity::LoadModel(
 		string pModelPath,
 		string pShaderPath,
-		Model*& pModelOut,
-		Shader*& pShaderOut,
+		Model *&pModelOut,
+		Shader *&pShaderOut,
 		const bool pLoadTextures
 	) noexcept
 	{
@@ -102,7 +102,7 @@ namespace Engine
 	}
 
 	#pragma region Setters
-	void Entity::SetTransform(const mat4* pValue) noexcept
+	void Entity::SetTransform(const mat4 *pValue) noexcept
 	{
 		Transform::SetTransform(pValue);
 		UpdateModel();
@@ -120,7 +120,7 @@ namespace Engine
 		UpdateModel();
 	}
 
-	void Entity::SetParent(EntityBase* pParent) noexcept
+	void Entity::SetParent(EntityBase *pParent) noexcept
 	{
 		// Look into the potential for this to return without changing anything
 		if (!pParent)
@@ -147,6 +147,6 @@ namespace Engine
 	{ m_modelRef->GetShaderRef()->SetVec3("u_colour", pCol.RGBvec3()); }
 	#pragma endregion
 
-	constexpr EntityBase& Entity::GetParent() const noexcept
+	constexpr EntityBase &Entity::GetParent() const noexcept
 	{ return *m_parentRef; }
 }

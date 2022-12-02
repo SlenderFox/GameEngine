@@ -16,7 +16,7 @@ using std::unique_ptr;
 namespace Engine
 {
 	#pragma region Variables
-	Camera* Renderer::s_camera = nullptr;
+	Camera *Renderer::s_camera = nullptr;
 	unique_ptr<vector<unique_ptr<Model>>> Renderer::s_models = nullptr;
 	unique_ptr<vector<unique_ptr<Light>>> Renderer::s_lights = nullptr;
 	const float Renderer::s_ambience = 0.15f;
@@ -75,7 +75,7 @@ namespace Engine
 		}
 	}
 
-	void Renderer::LoadLightsIntoShader(const Shader* inShader) noexcept
+	void Renderer::LoadLightsIntoShader(const Shader *inShader) noexcept
 	{
 		inShader->SetFloat("u_material.shininess", 32.0f);
 		uint8_t numDirLights = 0;
@@ -85,7 +85,7 @@ namespace Engine
 
 		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
 		{
-			Light* currentLight = GetLightAt(i);
+			Light *currentLight = GetLightAt(i);
 			switch (currentLight->GetType())
 			{
 			case LightType::Directional:
@@ -178,7 +178,7 @@ namespace Engine
 	{
 		for (uint8_t i = 0, count = 0; i < (uint8_t)s_lights.get()->size(); ++i)
 		{
-			Light* currentlLight = GetLightAt(i);
+			Light *currentlLight = GetLightAt(i);
 
 			// We only want to modify the spotlights, ignore the others
 			if (currentlLight->GetType() != LightType::Spot) continue;
@@ -220,10 +220,10 @@ namespace Engine
 		}
 	}
 
-	Model* Renderer::AddNewModel(
-		uint8_t& outId,
-		const string* inModelPath,
-		const string* inShaderPath,
+	Model *Renderer::AddNewModel(
+		uint8_t &outId,
+		const string *inModelPath,
+		const string *inShaderPath,
 		const bool inLoadTextures) noexcept
 	{
 		// Caps at 255
@@ -236,8 +236,8 @@ namespace Engine
 		return GetModelAt(outId);
 	}
 
-	Light* Renderer::AddNewLight(
-		uint8_t& outId,
+	Light *Renderer::AddNewLight(
+		uint8_t &outId,
 		const LightType inType,
 		const Colour inColour) noexcept
 	{
@@ -280,7 +280,7 @@ namespace Engine
 		return (uint8_t)s_lights.get()->size();
 	}
 
-	Model* Renderer::GetModelAt(const uint8_t inPos) noexcept
+	Model *Renderer::GetModelAt(const uint8_t inPos) noexcept
 	{
 		if (!s_models.get())
 		{
@@ -297,7 +297,7 @@ namespace Engine
 		return (*s_models.get())[inPos].get();
 	}
 
-	Light* Renderer::GetLightAt(const uint8_t inPos) noexcept
+	Light *Renderer::GetLightAt(const uint8_t inPos) noexcept
 	{
 		if (!s_lights.get())
 		{
@@ -314,6 +314,6 @@ namespace Engine
 		return (*s_lights.get())[inPos].get();
 	}
 
-	Camera* Renderer::GetCamera() noexcept
+	Camera *Renderer::GetCamera() noexcept
 	{ return s_camera; }
 }

@@ -125,13 +125,13 @@ namespace Engine
 	}
 
 	#pragma region Setters
-	void Camera::SetTransform(const mat4* inValue) noexcept
+	void Camera::SetTransform(const mat4 *inValue) noexcept
 	{
 		Transform::SetTransform(inValue);
 		m_view = inverse(GetTransform());
 	}
 
-	void Camera::SetView(mat4* inValue) noexcept
+	void Camera::SetView(mat4 *inValue) noexcept
 	{
 		m_view = *inValue;
 		mat4 inv = inverse(m_view);
@@ -143,7 +143,7 @@ namespace Engine
 		m_projection = perspective(radians(inFovV), m_aspectRatio, 0.1f, 500.0f);
 	}
 
-	constexpr void Camera::SetProjection(glm::mat4* inValue) noexcept
+	constexpr void Camera::SetProjection(glm::mat4 *inValue) noexcept
 	{ m_projection = *inValue; }
 
 	constexpr void Camera::SetAspectRatio(float inAspectRatio) noexcept

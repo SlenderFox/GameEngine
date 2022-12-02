@@ -12,13 +12,13 @@ namespace Engine
 		Transform(const glm::mat4 inValue) noexcept;
 		virtual ~Transform() = default;
 		// Copy, takes lvalue
-		Transform(Transform const& inOther) noexcept;
-		Transform& operator=(Transform const& inOther) noexcept;
+		Transform(Transform const &inOther) noexcept;
+		Transform &operator=(Transform const &inOther) noexcept;
 		// Move, take rvalue
 		Transform(Transform&& inOther) noexcept;
-		Transform& operator=(Transform&& inOther) noexcept;
+		Transform &operator=(Transform&& inOther) noexcept;
 
-		virtual void SetTransform(const glm::mat4* inValue) noexcept;
+		virtual void SetTransform(const glm::mat4 *inValue) noexcept;
 		virtual void SetPosition(const glm::vec3 inValue) noexcept;
 		virtual void Translate(const glm::vec3 inValue) noexcept;
 		virtual void SetAxes(

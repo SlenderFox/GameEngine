@@ -18,9 +18,9 @@ using std::make_unique;
 namespace Engine
 {
 	Model::Model(
-		const string* inModelPath,
-		const string* inShaderPath,
-		Camera* inCamera,
+		const string *inModelPath,
+		const string *inShaderPath,
+		Camera *inCamera,
 		const bool pLoadTextures
 	) noexcept
 		: m_cameraRef(inCamera)
@@ -48,7 +48,7 @@ namespace Engine
 		m_meshes.release();
 	}
 
-	void Model::Draw(const Camera* inCamera) const noexcept
+	void Model::Draw(const Camera *inCamera) const noexcept
 	{
 		m_shader->Use();
 		if (inCamera)
@@ -67,7 +67,7 @@ namespace Engine
 		{ GetMeshAt(i)->Draw(); }
 	}
 
-	inline void Model::LoadModel(const string* inPath) noexcept
+	inline void Model::LoadModel(const string *inPath) noexcept
 	{
 		Debug::Send(
 			"Loading model \"" + *inPath + "\"",
@@ -86,7 +86,7 @@ namespace Engine
 		}
 
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(*inPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene *scene = importer.ReadFile(*inPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -103,14 +103,14 @@ namespace Engine
 	}
 
 	inline void Model::ProcessNode(
-		const aiNode* inNode,
-		const aiScene* inScene
+		const aiNode *inNode,
+		const aiScene *inScene
 	) noexcept
 	{
 		// Process all the node's meshes (if any)
 		for (uint32_t i = 0; i < inNode->mNumMeshes; ++i)
 		{
-			aiMesh* mesh = inScene->mMeshes[inNode->mMeshes[i]];
+			aiMesh *mesh = inScene->mMeshes[inNode->mMeshes[i]];
 			m_meshes.get()->push_back(ProcessMesh(mesh, inScene));
 		}
 		// Then do the same for each of it's children
@@ -121,8 +121,8 @@ namespace Engine
 	}
 
 	inline unique_ptr<Mesh> Model::ProcessMesh(
-		const aiMesh* inMesh,
-		const aiScene* inScene
+		const aiMesh *inMesh,
+		const aiScene *inScene
 	) noexcept
 	{
 		vector<Vertex> vertices;
@@ -169,7 +169,7 @@ namespace Engine
 		// Process material
 		if (m_loadTextures && inMesh->mMaterialIndex >= 0U)
 		{
-			aiMaterial* material = inScene->mMaterials[inMesh->mMaterialIndex];
+			aiMaterial *material = inScene->mMaterials[inMesh->mMaterialIndex];
 			vector<Texture*> diffuseMaps = LoadMaterialTextures(
 				material,
 				aiTextureType_DIFFUSE,
@@ -188,7 +188,7 @@ namespace Engine
 	}
 
 	inline vector<Texture*> Model::LoadMaterialTextures(
-		const aiMaterial* inMat,
+		const aiMaterial *inMat,
 		const aiTextureType inType,
 		const Texture::TexType inTexType
 	) const noexcept
@@ -241,7 +241,7 @@ namespace Engine
 			// If texture has not been loaded before, load it for the first time
 			if (loadTexture)
 			{
-				Texture* tex = new Texture(path, inTexType);
+				Texture *tex = new Texture(path, inTexType);
 				texturesOut.push_back(tex);
 				Texture::s_loadedTextures.push_back(tex);
 			}
@@ -289,16 +289,16 @@ namespace Engine
 		}
 	}
 
-	constexpr void Model::SetCameraRef(Camera* inCamera) noexcept
+	constexpr void Model::SetCameraRef(Camera *inCamera) noexcept
 	{ m_cameraRef = inCamera; }
 
-	constexpr void Model::SetShaderRef(Shader* inShader) noexcept
+	constexpr void Model::SetShaderRef(Shader *inShader) noexcept
 	{ m_shader = inShader; }
 
-	Shader* Model::GetShaderRef() const noexcept
+	Shader *Model::GetShaderRef() const noexcept
 	{ return m_shader; }
 
-	Mesh* Model::GetMeshAt(const uint16_t inPos) const  noexcept
+	Mesh *Model::GetMeshAt(const uint16_t inPos) const  noexcept
 	{
 		if (!m_meshes.get())
 			return nullptr;

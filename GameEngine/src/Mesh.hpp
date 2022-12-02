@@ -75,9 +75,9 @@ namespace Engine
 			30U,	31U,	32U,	33U,	34U,	35U	// Face 6
 		};
 
-		uint32_t* m_idVAO = new uint32_t(0U);	// The id for the vertex attribute object
-		uint32_t* m_idVBO = new uint32_t(0U);	// The id for the vertex buffer object
-		uint32_t* m_idEBO = new uint32_t(0U);	// The id for the element buffer object
+		uint32_t *m_idVAO = new uint32_t(0U);	// The id for the vertex attribute object
+		uint32_t *m_idVBO = new uint32_t(0U);	// The id for the vertex buffer object
+		uint32_t *m_idEBO = new uint32_t(0U);	// The id for the element buffer object
 
 		std::unique_ptr<std::vector<Vertex>> m_vertices = nullptr;
 		std::unique_ptr<std::vector<unsigned int>> m_indices = nullptr;
@@ -100,8 +100,8 @@ namespace Engine
 		std::vector<uint32_t> GenerateIndices() noexcept;
 
 		Mesh(
-			const std::vector<Vertex>* pVertices = nullptr,
-			const std::vector<uint32_t>* pIndices = nullptr
+			const std::vector<Vertex> *pVertices = nullptr,
+			const std::vector<uint32_t> *pIndices = nullptr
 		) noexcept;
 		~Mesh();
 
@@ -110,14 +110,14 @@ namespace Engine
 		/** Get the id for the vertex attribute object
 		 * @return [uint32_t*] The id of the vertex attribute object
 		 */
-		_NODISCARD uint32_t* GetVAO() const noexcept;
+		_NODISCARD uint32_t *GetVAO() const noexcept;
 		/** Get the id for the vertex buffer object
 		 * @return [uint32_t*] The id of the vertex buffer object
 		 */
-		_NODISCARD uint32_t* GetVBO() const noexcept;
+		_NODISCARD uint32_t *GetVBO() const noexcept;
 		/** Get the id for the element buffer object
 		 * @return [uint32_t*] The id of the element buffer object
 		 */
-		_NODISCARD uint32_t* GetEBO() const noexcept;
+		_NODISCARD uint32_t *GetEBO() const noexcept;
 	};
 }

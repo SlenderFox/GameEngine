@@ -19,20 +19,20 @@ namespace Engine
 	{}
 
 	// Copy, takes lvalue
-	Transform::Transform(Transform const& inOther) noexcept
+	Transform::Transform(Transform const &inOther) noexcept
 	{ m_transform = inOther.m_transform; }
 
-	Transform& Transform::operator=(Transform const& inOther) noexcept
+	Transform &Transform::operator=(Transform const &inOther) noexcept
 	{ this->m_transform = inOther.m_transform; return *this; }
 
 	// Move, take rvalue
 	Transform::Transform(Transform&& inOther) noexcept
 	{ m_transform = std::move(inOther.m_transform); }
 
-	Transform& Transform::operator=(Transform&& inOther) noexcept
+	Transform &Transform::operator=(Transform&& inOther) noexcept
 	{ this->m_transform = std::move(inOther.m_transform); return *this; }
 
-	void Transform::SetTransform(const glm::mat4* inValue) noexcept
+	void Transform::SetTransform(const glm::mat4 *inValue) noexcept
 	{ m_transform = *inValue; }
 
 	void Transform::SetPosition(const vec3 inValue) noexcept

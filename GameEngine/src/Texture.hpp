@@ -28,7 +28,7 @@ namespace Engine
 		static std::vector<Texture*> s_loadedTextures;
 
 		static void UnloadAll() noexcept;
-		static int32_t LoadTextureFromFile(const std::string* inPath) noexcept;
+		static int32_t LoadTextureFromFile(const std::string *inPath) noexcept;
 
 		constexpr static
 		uint32_t GetTexCount() noexcept;

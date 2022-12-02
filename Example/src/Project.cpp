@@ -29,7 +29,7 @@ using namespace Engine;
  */
 int main()
 {
-	Project* app = new Project();
+	Project *app = new Project();
 	#ifdef _DEBUG
 		app->SetDimensions(1030, 650);
 		app->SetTitle("Application (DEBUG)");
@@ -140,13 +140,13 @@ void Project::LateUpdate() {}
 
 void Project::CreateScene()
 {
-	Model* model = nullptr;
-	Shader* shader = nullptr;
+	Model *model = nullptr;
+	Shader *shader = nullptr;
 
 	// Place 9 cubes behind
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
-		Entity* cube = Entity::CreateWithModel(
+		Entity *cube = Entity::CreateWithModel(
 			"assets/models/cube/cube.obj", "assets/shaders/default", model, shader
 		);
 		cube->Translate(s_cubePositions[i]);
@@ -155,7 +155,7 @@ void Project::CreateScene()
 	}
 
 	// Create a backpack in the centre
-	Entity* backpack = Entity::CreateWithModel(
+	Entity *backpack = Entity::CreateWithModel(
 		"assets/models/backpack/backpack.obj", "assets/shaders/default", model, shader
 	);
 	backpack->Translate(vec3(0.0f, 0.0f, 0.9f));
@@ -172,7 +172,7 @@ void Project::CreateLights()
 
 	// Creates lights
 	uint8_t ID;
-	Light* light;
+	Light *light;
 	if (directional)
 	{
 		light = Renderer::AddNewLight(
@@ -210,8 +210,8 @@ void Project::CreateLights()
 	// Don't bother if there are no lights
 	if (Renderer::LightCount() == 0) return;
 
-	Model* model = nullptr;
-	Shader* shader = nullptr;
+	Model *model = nullptr;
+	Shader *shader = nullptr;
 
 	// Gives them physical form
 	for (uint8_t i = 0; i < Renderer::LightCount(); ++i)

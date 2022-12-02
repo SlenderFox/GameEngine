@@ -12,7 +12,7 @@ namespace Engine
 	{
 		friend class Application;
 		// Does not need to be memory managed
-		static GLFWwindow* s_windowRef;
+		static GLFWwindow *s_windowRef;
 
 		static CallbackFunc s_mouseCallbackFun;
 		static CallbackFunc s_scrollCallbackFun;
@@ -25,9 +25,9 @@ namespace Engine
 		~Input() = delete;
 		// Delete copy/move so extra instances can't be created/moved.
 		Input(Input const&) = delete;
-		Input& operator=(Input const&) = delete;
+		Input &operator=(Input const&) = delete;
 		Input(Input&&) = delete;
-		Input& operator=(Input&&) = delete;
+		Input &operator=(Input&&) = delete;
 		#pragma endregion
 
 	public:
@@ -163,17 +163,17 @@ namespace Engine
 		};
 
 		static void Key_callback(
-			GLFWwindow* pWindow,
+			GLFWwindow *pWindow,
 			int pKey,
 			int pScancode,
 			int pAction,
 			int pMods) noexcept;
 		static void Mouse_callback(
-			GLFWwindow* pWindow,
+			GLFWwindow *pWindow,
 			double pPosX,
 			double pPosY) noexcept;
 		static void Scroll_callback(
-			GLFWwindow* pWindow,
+			GLFWwindow *pWindow,
 			double pOffsetX,
 			double pOffsetY) noexcept;
 		#pragma endregion
@@ -182,7 +182,7 @@ namespace Engine
 		 * @param pWindowRef The active window
 		 * @return [bool] Success
 		 */
-		static bool Init(GLFWwindow* pWindowRef) noexcept;
+		static bool Init(GLFWwindow *pWindowRef) noexcept;
 		static void Process() noexcept;
 		static bool CheckKeyState(const Key pKey, const State pState) noexcept;
 

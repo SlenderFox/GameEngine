@@ -17,7 +17,7 @@ using std::string;
 
 namespace Engine
 {
-	const wchar_t* Debug::s_prefixes[12] = {
+	const wchar_t *Debug::s_prefixes[12] = {
 		L"\u250C",
 		L"\u252C",
 		L"\u2552",
@@ -32,7 +32,7 @@ namespace Engine
 		L"\u2567",
 	};
 
-	void Debug::Init(GLFWwindow* pWindow) noexcept
+	void Debug::Init(GLFWwindow *pWindow) noexcept
 	{
 		// Allows utf16 output to console
 		_setmode(_fileno(stdout), _O_U16TEXT);
@@ -84,7 +84,7 @@ namespace Engine
 
 	void Debug::Send(
 		const string pMsg,
-		const wchar_t* pPrefix,
+		const wchar_t *pPrefix,
 		const bool pNewline,
 		const bool pEndline) noexcept
 	{

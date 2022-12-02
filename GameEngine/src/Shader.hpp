@@ -23,16 +23,16 @@ namespace Engine
 		inline void LoadShader(const ShaderType inType);
 
 		inline bool CompileShader(
-			uint32_t* inId,
+			uint32_t *inId,
 			ShaderType inType,
-			const char* inCode
+			const char *inCode
 		) noexcept;
 
 		inline void CreateShaderProgram() noexcept;
 
 		_NODISCARD inline
 		bool CheckForErrors(
-			const uint32_t* inShaderID,
+			const uint32_t *inShaderID,
 			const ShaderType inType
 		) const noexcept;
 
@@ -52,7 +52,7 @@ namespace Engine
 		) const noexcept;
 
 	public:
-		Shader(const std::string* inShaderPath = nullptr);
+		Shader(const std::string *inShaderPath = nullptr);
 		~Shader();
 
 		/** Deletes the currently used shader program */
@@ -62,7 +62,7 @@ namespace Engine
 		 * @note The vertex and fragment shaders must have the same name,
 		 * the path does no require the extension
 		 */
-		void Load(const std::string* inShaderPath = nullptr);
+		void Load(const std::string *inShaderPath = nullptr);
 		/** Makes this shader the active shader */
 		void Use() const noexcept;
 
