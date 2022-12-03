@@ -23,18 +23,7 @@ namespace engine
 
 		/** My own fmod function to have constexpr*/
 		_NODISCARD static constexpr
-		float fmod(float x, float y)
-		{
-			// Error handling
-			if (x == 0.0f && y != 0.0f) return 0.0f;
-			assert(x != INFINITY || x != -INFINITY);
-			assert(y != 0);
-			if (y == INFINITY || y == -INFINITY) return x;
-
-			// Truncate the division
-			int32_t n = (int32_t)(x / y);
-			return x - n * y;
-		}
+		float fmod(float x, float y) noexcept;
 
 	public:
 		#pragma region Conversion
@@ -54,47 +43,14 @@ namespace engine
 			uint16_t &outH,
 			float &outS,
 			float &outV
-		) noexcept
-		{
-			// Sanitise inputs
-			inR = glm::clamp(inR, 0.0f, 1.0f);
-			inG = glm::clamp(inG, 0.0f, 1.0f);
-			inB = glm::clamp(inB, 0.0f, 1.0f);
-			// Initialise variables
-			float Cmax = glm::max(inR, glm::max(inG, inB));
-			float Cmin = glm::min(inR, glm::min(inG, inB));
-			float delta = Cmax - Cmin;
-			// Hue
-			if (delta == 0)
-				outH = 0;
-			else if (Cmax == inR)
-				outH = (uint16_t)(60.0f * (((inG - inB) / delta) + 360.0f)) % 360;
-			else if (Cmax == inG)
-				outH = (uint16_t)(60.0f * (((inB - inR) / delta) + 120.0f)) % 360;
-			else if (Cmax == inB)
-				outH = (uint16_t)(60.0f * (((inR - inG) / delta) + 240.0f)) % 360;
-			// Saturation
-			if (Cmax == 0)
-				outS = 0;
-			else
-				outS = delta / Cmax;
-			// Value
-			outV = Cmax;
-		}
+		) noexcept;
 
 		/** Converts colour data from RGB to HSV
 		 * @param inRGB 0-1 Red, 0-1 Green, 0-1 Blue
 		 * @return [glm::vec3] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 */
 		_NODISCARD static constexpr
-		glm::vec3 rgbToHsv(glm::vec3 inRGB) noexcept
-		{
-			uint16_t hue = 0;
-			float saturation = 0;
-			float value = 0;
-			rgbToHsv(inRGB.r, inRGB.g, inRGB.b, hue, saturation, value);
-			return { hue, saturation, value };
-		}
+		glm::vec3 rgbToHsv(glm::vec3 inRGB) noexcept;
 
 		/** Converts colour data from HSV to RGB
 		 * @param inH Input hue
@@ -112,168 +68,98 @@ namespace engine
 			float &outR,
 			float &outG,
 			float &outB
-		) noexcept
-		{
-			// Sanitise inputs
-			inH = inH % 360;
-			inS = glm::clamp(inS, 0.0f, 1.0f);
-			inV = glm::clamp(inV, 0.0f, 1.0f);
-			// Initialise variables
-			glm::vec3 result;
-			float chroma = inV * inS;
-			float min = inV - chroma;
-			float two = 2.0f;
-			float hueMod = fmod((float)inH / 60, 2.0f);
-			float x = chroma * (1 - glm::abs(hueMod - 1));
-			// Find a point along the three bottom faces of the RGB cube (??)
-			short intHue = inH / 60;
-			switch (intHue)
-			{
-			case 0:
-				result = {chroma, x, 0};
-				break;
-			case 1:
-				result = {x, chroma, 0};
-				break;
-			case 2:
-				result = {0, chroma, x};
-				break;
-			case 3:
-				result = {0, x, chroma};
-				break;
-			case 4:
-				result = {x, 0, chroma};
-				break;
-			case 5:
-				result = {chroma, 0, x};
-				break;
-			default:
-				result = {0, 0, 0};
-				break;
-			}
-			result += min;
-
-			// Not a big fan of doing it this way but it makes the above cleaner and simpler
-			outR = result.r;
-			outB = result.b;
-			outG = result.g;
-		}
+		) noexcept;
 
 		/** Converts colour data from HSV to RGB
 		 * @param inHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		 */
-		_NODISCARD static constexpr
-		glm::vec3 hsvToRgb(const glm::vec3 inHSV) noexcept
-		{
-			// Don't want a negative number
-			uint16_t hue = (uint16_t)glm::max(inHSV.r, 0.0f);
-			glm::vec3 result = glm::vec3();
-			hsvToRgb(hue, inHSV.y, inHSV.z, result.r, result.g, result.b);
-			return result;
-		}
+		_NODISCARD static
+		glm::vec3 hsvToRgb(const glm::vec3 inHSV) noexcept;
 		#pragma endregion
 
 		#pragma region Presets
-		static constexpr colour black()		noexcept { return colour(0.0f); }
-		static constexpr colour white()		noexcept { return colour(1.0f); }
-		static constexpr colour silver()		noexcept { return colour(0.75f,	0.75f,	0.75f	); }
-		static constexpr colour grey()		noexcept { return colour(0.5f,	0.5f,		0.5f	); }
-		static constexpr colour darkGrey()	noexcept { return colour(0.25f,	0.25f,	0.25f	); }
-		static constexpr colour red()			noexcept { return colour(1.0f,	0.0f,		0.0f	); }
-		static constexpr colour lime()		noexcept { return colour(0.0f,	1.0f,		0.0f	); }
-		static constexpr colour blue()		noexcept { return colour(0.0f,	0.0f,		1.0f	); }
-		static constexpr colour yellow()		noexcept { return colour(1.0f,	1.0f,		0.0f	); }
-		static constexpr colour cyan()		noexcept { return colour(0.0f,	1.0f,		1.0f	); }
-		static constexpr colour magenta()	noexcept { return colour(1.0f,	0.0f,		1.0f	); }
-		static constexpr colour maroon()		noexcept { return colour(0.5f,	0.0f,		0.0f	); }
-		static constexpr colour green()		noexcept { return colour(0.0f,	0.5f,		0.0f	); }
-		static constexpr colour navy()		noexcept { return colour(0.0f,	0.0f,		0.5f	); }
-		static constexpr colour olive()		noexcept { return colour(0.5f,	0.5f,		0.0f	); }
-		static constexpr colour teal()		noexcept { return colour(0.0f,	0.5f,		0.5f	); }
-		static constexpr colour purple()		noexcept { return colour(0.5f,	0.0f,		0.5f	); }
+		static constexpr colour black() noexcept;
+		static constexpr colour white() noexcept;
+		static constexpr colour silver() noexcept;
+		static constexpr colour grey() noexcept;
+		static constexpr colour darkGrey() noexcept;
+		static constexpr colour red() noexcept;
+		static constexpr colour lime() noexcept;
+		static constexpr colour blue() noexcept;
+		static constexpr colour yellow() noexcept;
+		static constexpr colour cyan() noexcept;
+		static constexpr colour magenta() noexcept;
+		static constexpr colour maroon() noexcept;
+		static constexpr colour green() noexcept;
+		static constexpr colour navy() noexcept;
+		static constexpr colour olive() noexcept;
+		static constexpr colour teal() noexcept;
+		static constexpr colour purple() noexcept;
 		#pragma endregion
 
 		/** Get the colour as RGB stored in a vec3
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		 */
-		_NODISCARD constexpr
-		glm::vec3 rgb() const noexcept { return m_RGB; }
+		_NODISCARD
+		glm::vec3 rgb() const noexcept;
 
 		/** Get the colour as HSV stored in a vec3
 		 * @return [glm::vec3] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 */
 		_NODISCARD constexpr
-		glm::vec3 hsv() const noexcept { return rgbToHsv(m_RGB); }
+		glm::vec3 hsv() const noexcept;
 
 		#pragma region Constructors
-		constexpr colour() noexcept {}
-		constexpr colour(float inGreyscale) noexcept: m_RGB(glm::vec3(inGreyscale)) {}
-		constexpr colour(float inR, float inG, float inB) noexcept: m_RGB(glm::vec3(inR, inG, inB)) {}
-		constexpr colour(glm::vec3 inColour) noexcept: m_RGB(inColour) {}
+		constexpr colour() noexcept;
+		constexpr colour(float inGreyscale) noexcept;
+		constexpr colour(float inR, float inG, float inB) noexcept;
+		constexpr colour(glm::vec3 inColour) noexcept;
 
 		~colour() = default;
 
 		// Copy, takes lvalue
-		constexpr colour(colour const &pOther)
-		{ m_RGB = pOther.m_RGB; }
-
-		constexpr colour &operator=(colour const &pOther)
-		{ this->m_RGB = pOther.m_RGB; return *this; }
-
+		colour(const colour &pOther);
+		colour &operator=(const colour &pOther);
 		// Move, take rvalue
-		constexpr colour(colour&& pOther) noexcept
-		{ m_RGB = std::move(pOther.m_RGB); }
-
-		constexpr colour &operator=(colour&& pOther) noexcept
-		{ this->m_RGB = std::move(pOther.m_RGB); return *this; }
+		constexpr colour(colour&& pOther) noexcept;
+		constexpr colour &operator=(colour&& pOther) noexcept;
 		#pragma endregion
 
 		#pragma region Operators
-		operator glm::vec3() const { return m_RGB; }
+		operator glm::vec3() const;
 
-		#define COL_OP_CONST_FLOAT(OPERAND) constexpr colour operator OPERAND(float const &pOther) const noexcept\
-		{ return colour(m_RGB OPERAND pOther); }
+		#define COL_OP_CONST_FLOAT_DEC(OPERAND) colour operator OPERAND(const float&) const noexcept;
+		#define COL_OP_CONST_COL_DEC(OPERAND) constexpr colour operator OPERAND(const colour&) const noexcept;
+		#define COL_OP_CONST_VEC3_DEC(OPERAND) colour operator OPERAND(const glm::vec3&) const noexcept;
+		#define COL_OP_FLOAT_DEC(OPERAND) constexpr colour &operator OPERAND(const float&) noexcept;
+		#define COL_OP_COL_DEC(OPERAND) constexpr colour &operator OPERAND(const colour&) noexcept;
+		#define COL_OP_VEC3_DEC(OPERAND) constexpr colour &operator OPERAND(const glm::vec3&) noexcept;
 
-		#define COL_OP_CONST_COL(OPERAND) constexpr colour operator OPERAND(colour const &pOther) const noexcept\
-		{ return colour(m_RGB OPERAND pOther.m_RGB); }
-
-		#define COL_OP_CONST_VEC3(OPERAND) colour operator OPERAND(glm::vec3 const &pOther) const noexcept\
-		{ return colour(m_RGB OPERAND pOther); }
-
-		#define COL_OP_FLOAT(OPERAND) constexpr colour &operator OPERAND(float const &pOther) noexcept\
-		{ m_RGB OPERAND pOther; return *this; }
-
-		#define COL_OP_COL(OPERAND) constexpr colour &operator OPERAND(colour const &pOther) noexcept\
-		{ m_RGB OPERAND pOther.m_RGB; return *this; }
-
-		#define COL_OP_VEC3(OPERAND) constexpr colour &operator OPERAND(glm::vec3 const &pOther) noexcept\
-		{ m_RGB OPERAND pOther; return *this; }
-
-		COL_OP_CONST_FLOAT(+)
-		COL_OP_CONST_FLOAT(-)
-		COL_OP_CONST_FLOAT(*)
-		COL_OP_CONST_FLOAT(/)
-		COL_OP_CONST_COL(+)
-		COL_OP_CONST_COL(-)
-		COL_OP_CONST_COL(*)
-		COL_OP_CONST_COL(/)
-		COL_OP_CONST_VEC3(+)
-		COL_OP_CONST_VEC3(-)
-		COL_OP_CONST_VEC3(*)
-		COL_OP_CONST_VEC3(/)
-		COL_OP_FLOAT(+=)
-		COL_OP_FLOAT(-=)
-		COL_OP_FLOAT(*=)
-		COL_OP_FLOAT(/=)
-		COL_OP_COL(+=)
-		COL_OP_COL(-=)
-		COL_OP_COL(*=)
-		COL_OP_COL(/=)
-		COL_OP_VEC3(+=)
-		COL_OP_VEC3(-=)
-		COL_OP_VEC3(*=)
-		COL_OP_VEC3(/=)
+		COL_OP_CONST_FLOAT_DEC(+)
+		COL_OP_CONST_FLOAT_DEC(-)
+		COL_OP_CONST_FLOAT_DEC(*)
+		COL_OP_CONST_FLOAT_DEC(/)
+		COL_OP_CONST_COL_DEC(+)
+		COL_OP_CONST_COL_DEC(-)
+		COL_OP_CONST_COL_DEC(*)
+		COL_OP_CONST_COL_DEC(/)
+		COL_OP_CONST_VEC3_DEC(+)
+		COL_OP_CONST_VEC3_DEC(-)
+		COL_OP_CONST_VEC3_DEC(*)
+		COL_OP_CONST_VEC3_DEC(/)
+		COL_OP_FLOAT_DEC(+=)
+		COL_OP_FLOAT_DEC(-=)
+		COL_OP_FLOAT_DEC(*=)
+		COL_OP_FLOAT_DEC(/=)
+		COL_OP_COL_DEC(+=)
+		COL_OP_COL_DEC(-=)
+		COL_OP_COL_DEC(*=)
+		COL_OP_COL_DEC(/=)
+		COL_OP_VEC3_DEC(+=)
+		COL_OP_VEC3_DEC(-=)
+		COL_OP_VEC3_DEC(*=)
+		COL_OP_VEC3_DEC(/=)
 		#pragma endregion
 	};
 }
