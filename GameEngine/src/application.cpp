@@ -110,7 +110,7 @@ namespace engine
 				renderer::draw();
 
 				//Updates imgui
-				debug::draw();
+				//debug::draw();
 
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(s_windowRef);

@@ -1,17 +1,3 @@
-/* -----Prefixes:
- * 00: Begin-Small-Note   : ┌ \xDA 218 \u250C
- * 01: Begin-Small-Process: ┬ \xC2 194 \u252C
- * 02: Begin-Large-Note   : ╒ \xD5 213 \u2552
- * 03: Begin-Large-Process: ╤ \xD1 209 \u2564
- * 04: Mid  -Small-Note   : ├ \xC3 195 \u251C
- * 05: Mid  -Small-Process: ┼ \xC5 197 \u253C
- * 06: Mid  -Large-Note   : ╞ \xC6 198 \u255E
- * 07: Mid  -Large-Process: ╪ \xD8 216 \u256A
- * 08: End  -Small-Note   : └ \xC0 192 \u2514
- * 09: End  -Small-Process: ┴ \xC1 193 \u2534
- * 10: End  -Large-Note   : ╘ \xD4 212 \u2558
- * 11: End  -Large-Process: ╧ \xCF 207 \u2567
- */
 #pragma once
 #include <string>
 
@@ -19,7 +5,7 @@ struct GLFWwindow;
 
 namespace engine
 {
-	struct debug
+	namespace debug
 	{
 		enum class type: uint8_t
 		{
@@ -40,29 +26,30 @@ namespace engine
 			End = 8
 		};
 
-		static const wchar_t *s_prefixes[12];
+		void init(GLFWwindow *pWindow) noexcept;
+		void terminate() noexcept;
+		void draw() noexcept;
 
-		static void init(GLFWwindow *pWindow) noexcept;
-		static void terminate() noexcept;
-		static void draw() noexcept;
-
-		static void send(
+		void send(
 			const std::string pMsg,
 			const bool pNewline = false,
-			const bool pEndline = true) noexcept;
-		static void send(
+			const bool pEndline = true
+		) noexcept;
+		void send(
 			const std::string pMsg,
 			const wchar_t *pPrefix,
 			const bool pNewline = false,
-			const bool pEndline = true) noexcept;
-		static void send(
+			const bool pEndline = true
+		) noexcept;
+		void send(
 			const std::string pMsg,
 			const type pType,
 			const impact pImpact,
 			const stage pStage,
 			const bool pNewline = false,
-			const bool pEndline = true) noexcept;
+			const bool pEndline = true
+		) noexcept;
 
-		static void newLine() noexcept;
+		void newLine() noexcept;
 	};
 }
