@@ -19,12 +19,12 @@
     <None Include="assets\shaders\default.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Project.cpp">
+    <ClCompile Include="src\project.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Project.hpp">
+    <ClInclude Include="src\project.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

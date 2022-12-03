@@ -222,10 +222,10 @@ copy assimp-vc142-mt.dll "$(OutDir)"</Command>
     <None Include="assets\shaders\default.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Project.cpp" />
+    <ClCompile Include="src\project.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Project.hpp" />
+    <ClInclude Include="src\project.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
