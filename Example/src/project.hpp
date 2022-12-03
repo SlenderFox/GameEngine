@@ -1,8 +1,8 @@
 #pragma once
-#include "Application.hpp"
+#include "application.hpp"
 
 /** Example project */
-class Project: public Engine::Application
+class Project: public engine::application
 {
 	static double s_camYaw, s_camPitch;
 
@@ -24,9 +24,9 @@ class Project: public Engine::Application
 	static const
 	glm::vec3 s_cubePositions[s_numCubes];
 
-	std::vector<Engine::Light*> m_lightRefs;
-	std::vector<Engine::Entity*> m_cubes;
-	Engine::Entity *object_backpack;
+	std::vector<engine::light*> m_lightRefs;
+	std::vector<engine::entity*> m_cubes;
+	engine::entity *object_backpack;
 
 	/** Loads entities in to create the scene */
 	void CreateScene();
@@ -34,7 +34,7 @@ class Project: public Engine::Application
 	void CreateLights();
 
 	/** Crappy way to check input each frame */
-	void ProcessInput() noexcept;
+	void processInput() noexcept;
 
 public:
 	Project();
@@ -43,13 +43,13 @@ public:
 	/** Called once at the start of runtime
 	 * @return [bool] False will terminate application
 	 */
-	bool Startup() override;
+	bool startup() override;
 	/** Called when the application shuts down */
-	void Shutdown() override;
+	void shutdown() override;
 	/** Called once at the start of every frame */
-	void Update() override;
+	void update() override;
 	/** Called 60 times per second, after Update */
-	void FixedUpdate() override;
-	/** Called once per frame, after FixedUpdate but still before rendering */
-	void LateUpdate() override;
+	void fixedUpdate() override;
+	/** Called once per frame, after fixedUpdate but still before rendering */
+	void fateUpdate() override;
 };

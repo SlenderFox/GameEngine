@@ -1,57 +1,57 @@
 #pragma region
-#include "Shader.hpp"
+#include "shader.hpp"
 #include "glad/glad.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <fstream>
 #include <sstream>
-#include "Debug.hpp"
+#include "debug.hpp"
 
 using std::string;
 using std::stringstream;
 using std::ifstream;
 #pragma endregion
 
-namespace Engine
+namespace engine
 {
 	// Forward declaration
-	class Application { public: _NODISCARD static const bool GladLoaded() noexcept; };
+	class application { public: _NODISCARD static const bool gladLoaded() noexcept; };
 
-	Shader::Shader(const string *inShaderPath)
-	{ Load(inShaderPath); }
+	shader::shader(const string *inShaderPath)
+	{ load(inShaderPath); }
 
-	Shader::~Shader()
-	{ Destroy(); }
+	shader::~shader()
+	{ destroy(); }
 
-	void Shader::Destroy() noexcept
+	void shader::destroy() noexcept
 	{
-		if (m_shaderLoaded && Application::GladLoaded())
+		if (m_shaderLoaded && application::gladLoaded())
 		{
 			glDeleteProgram(m_idProgram);
 			m_shaderLoaded = false;
 		}
 	}
 
-	void Shader::Load(const std::string *inShaderPath)
+	void shader::load(const std::string *inShaderPath)
 	{
 		if (m_shaderLoaded)
 		{
-			Debug::Send("ERROR::SHADER::ATTEMPTING_TO_LOAD_NEW_SHADER_WITHOUT_DELETING_OLD_ONE");
+			debug::send("ERROR::SHADER::ATTEMPTING_TO_LOAD_NEW_SHADER_WITHOUT_DELETING_OLD_ONE");
 			return;
 		}
 		// If no path is given, will use fallback shader
 		m_shaderPath = inShaderPath ? *inShaderPath : "";
-		LoadShader(ShaderType::Vertex);
-		LoadShader(ShaderType::Fragment);
-		CreateShaderProgram();
+		loadShader(shaderType::vertex);
+		loadShader(shaderType::fragment);
+		createShaderProgram();
 	}
 
-	void Shader::Use() const noexcept
+	void shader::use() const noexcept
 	{ glUseProgram(m_idProgram); }
 
-	constexpr bool Shader::IsLoaded() const noexcept
+	constexpr bool shader::isLoaded() const noexcept
 	{ return m_shaderLoaded; }
 
-	inline void Shader::LoadShader(const ShaderType inType)
+	inline void shader::loadShader(const shaderType inType)
 	{
 		#pragma region Fallback code
 		 static const char *vertexFallback = "#version 330 core\n\
@@ -147,23 +147,23 @@ return;}";
 		bool m_usingFallback = false;
 		string codeString;
 
-		if (inType == ShaderType::Program)
+		if (inType == shaderType::program)
 		{
-			Debug::Send(
+			debug::send(
 				"ERROR::SHADER::LOADING_INCORRECT_SHADER_TYPE",
-				Debug::Type::Note,
-				Debug::Impact::Large,
-				Debug::Stage::Mid
+				debug::type::Note,
+				debug::impact::Large,
+				debug::stage::Mid
 			);
 			return;
 		}
 
-		string path = m_shaderPath + ByType(inType, string(".vert"), string(".frag"));
-		Debug::Send(
+		string path = m_shaderPath + byType(inType, string(".vert"), string(".frag"));
+		debug::send(
 			"Compiling shader \"" + path + "\"...",
-			Debug::Type::Process,
-			Debug::Impact::Small,
-			Debug::Stage::Mid,
+			debug::type::Process,
+			debug::impact::Small,
+			debug::stage::Mid,
 			false,
 			false
 		);
@@ -171,7 +171,7 @@ return;}";
 		if (m_shaderPath == "")
 		{
 			m_usingFallback = true;
-			Debug::NewLine();
+			debug::newLine();
 		}
 		else
 		{
@@ -193,13 +193,13 @@ return;}";
 			catch (ifstream::failure e)
 			{
 				string msg = "ERROR::SHADER::"
-					+ ByType(inType, string("VERTEX"), string("FRAGMENT"))
+					+ byType(inType, string("VERTEX"), string("FRAGMENT"))
 					+ "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE";
-				Debug::Send(
+				debug::send(
 					msg,
-					Debug::Type::Note,
-					Debug::Impact::Large,
-					Debug::Stage::Mid,
+					debug::type::Note,
+					debug::impact::Large,
+					debug::stage::Mid,
 					true
 				);
 
@@ -210,8 +210,8 @@ return;}";
 		if (!m_usingFallback)
 		{
 			if (
-				!CompileShader(
-					ByType(inType, &m_idVertex, &m_idFragment),
+				!compileShader(
+					byType(inType, &m_idVertex, &m_idFragment),
 					inType,
 					codeString.c_str()
 				)
@@ -224,31 +224,31 @@ return;}";
 		// Separated to allow bool to potentially change
 		if (m_usingFallback)
 		{
-			Debug::Send(
+			debug::send(
 				"Compiling fallback code...",
-				Debug::Type::Process,
-				Debug::Impact::Small,
-				Debug::Stage::Mid,
+				debug::type::Process,
+				debug::impact::Small,
+				debug::stage::Mid,
 				false,
 				false
 			);
 
 			if (
-				!CompileShader(
-					ByType(inType, &m_idVertex, &m_idFragment),
+				!compileShader(
+					byType(inType, &m_idVertex, &m_idFragment),
 					inType,
-					ByType<const char*&>(inType, vertexFallback, fragmentFallback)
+					byType<const char*&>(inType, vertexFallback, fragmentFallback)
 				)
 			)
 			{
 				string msg = "ERROR::SHADER::"
-					+ ByType(inType, string("VERTEX"), string("FRAGMENT"))
+					+ byType(inType, string("VERTEX"), string("FRAGMENT"))
 					+ "::FALLBACK_CODE_FAILURE";
-				Debug::Send(
+				debug::send(
 					msg,
-					Debug::Type::Note,
-					Debug::Impact::Large,
-					Debug::Stage::Mid,
+					debug::type::Note,
+					debug::impact::Large,
+					debug::stage::Mid,
 					true
 				);
 
@@ -256,32 +256,32 @@ return;}";
 			}
 		}
 
-		Debug::Send("Success!");
+		debug::send("Success!");
 	}
 
-	inline bool Shader::CompileShader(
+	inline bool shader::compileShader(
 		uint32_t *pId,
-		ShaderType inType,
+		shaderType inType,
 		const char *inCode
 	) noexcept
 	{
-		assert(inType != ShaderType::Program && "Incorrect ShaderType passed");
+		assert(inType != shaderType::program && "Incorrect shaderType passed");
 
 		// Creates a shader object and assigns to an id
 		switch (inType)
 		{
-		case ShaderType::Vertex:
+		case shaderType::vertex:
 			*pId = glCreateShader(GL_VERTEX_SHADER);
 			break;
-		case ShaderType::Fragment:
+		case shaderType::fragment:
 			*pId = glCreateShader(GL_FRAGMENT_SHADER);
 			break;
 		default:
-			Debug::Send(
+			debug::send(
 				"ERROR::SHADER::ATTEMPTING_TO_COMPILE_UNKNOWN_SHADER_TYPE",
-				Debug::Type::Note,
-				Debug::Impact::Large,
-				Debug::Stage::Mid,
+				debug::type::Note,
+				debug::impact::Large,
+				debug::stage::Mid,
 				true
 			);
 			return false;
@@ -292,10 +292,10 @@ return;}";
 		// Compiles the shader at run-time
 		glCompileShader(*pId);
 		// Performs error checking on the shader
-		return CheckForErrors(pId, inType);
+		return checkForErrors(pId, inType);
 	}
 
-	inline void Shader::CreateShaderProgram() noexcept
+	inline void shader::createShaderProgram() noexcept
 	{
 		// Creates a shader program object assigned to id, this sets it as the active shader
 		m_idProgram = glCreateProgram();
@@ -304,7 +304,7 @@ return;}";
 		glAttachShader(m_idProgram, m_idFragment);
 		glLinkProgram(m_idProgram);
 		// Performs error checking on the shader program
-		if (!CheckForErrors(&m_idProgram, ShaderType::Program))
+		if (!checkForErrors(&m_idProgram, shaderType::program))
 		{
 			glDeleteProgram(m_idProgram);
 			return;
@@ -317,16 +317,16 @@ return;}";
 		m_shaderLoaded = true;
 	}
 
-	inline bool Shader::CheckForErrors(
+	inline bool shader::checkForErrors(
 		const uint32_t *inShaderID,
-		const ShaderType inType
+		const shaderType inType
 	) const noexcept
 	{
 		// Boolean output as int32
 		int32_t success;
 		char infoLog[512];
 
-		if (inType == ShaderType::Program)
+		if (inType == shaderType::program)
 		{
 			// Retrieves the compile status of the given shader by id
 			glGetProgramiv(*inShaderID, GL_LINK_STATUS, &success);
@@ -334,11 +334,11 @@ return;}";
 			{
 				// In the case of a failure it loads the log and outputs
 				glGetProgramInfoLog(*inShaderID, 512, NULL, infoLog);
-				Debug::Send(
+				debug::send(
 					"ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog),
-					Debug::Type::Note,
-					Debug::Impact::Large,
-					Debug::Stage::Mid,
+					debug::type::Note,
+					debug::impact::Large,
+					debug::stage::Mid,
 					true,
 					false
 				);
@@ -354,14 +354,14 @@ return;}";
 				// In the case of a failure it loads the log and outputs
 				glGetShaderInfoLog(*inShaderID, 512, NULL, infoLog);
 				string msg = "ERROR::SHADER::"
-					+ ByType(inType, string("VERTEX"), string("FRAGMENT"))
+					+ byType(inType, string("VERTEX"), string("FRAGMENT"))
 					+ "::COMPILATION_FAILED:\n"
 					+ string(infoLog);
-				Debug::Send(
+				debug::send(
 					msg,
-					Debug::Type::Note,
-					Debug::Impact::Large,
-					Debug::Stage::Mid,
+					debug::type::Note,
+					debug::impact::Large,
+					debug::stage::Mid,
 					true,
 					false
 				);
@@ -372,18 +372,18 @@ return;}";
 	}
 
 	template<typename T> inline
-	T Shader::ByType(
-		const ShaderType inType,
+	T shader::byType(
+		const shaderType inType,
 		T inVertex,
 		T inFragment
 	) const noexcept
 	{
-		assert(inType != ShaderType::Program && "Incorrect ShaderType passed");
-		return (inType == ShaderType::Vertex ? inVertex : inFragment);
+		assert(inType != shaderType::program && "Incorrect shaderType passed");
+		return (inType == shaderType::vertex ? inVertex : inFragment);
 	}
 
 	#pragma region Setters
-	void Shader::SetBool(string inName, bool inValue) const noexcept
+	void shader::setBool(string inName, bool inValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(
@@ -392,7 +392,7 @@ return;}";
 		);
 	}
 
-	void Shader::SetInt(string inName, int32_t inValue) const noexcept
+	void shader::setInt(string inName, int32_t inValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(glGetUniformLocation(
@@ -401,7 +401,7 @@ return;}";
 		);
 	}
 
-	void Shader::SetUint(string inName, uint32_t inValue) const noexcept
+	void shader::setUint(string inName, uint32_t inValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1ui(
@@ -410,7 +410,7 @@ return;}";
 		);
 	}
 
-	void Shader::SetFloat(string inName, float inValue) const noexcept
+	void shader::setFloat(string inName, float inValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1f(
@@ -419,7 +419,7 @@ return;}";
 		);
 	}
 
-	void Shader::SetVec2(string inName, glm::vec2 inValue) const noexcept
+	void shader::setFloat2(string inName, glm::vec2 inValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform2fv(
@@ -429,7 +429,7 @@ return;}";
 		);
 	}
 
-	void Shader::SetVec3(string inName, glm::vec3 inValue) const noexcept
+	void shader::setFloat3(string inName, glm::vec3 inValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform3fv(
@@ -439,7 +439,7 @@ return;}";
 		);
 	}
 
-	void Shader::SetVec4(string inName, glm::vec4 inValue) const noexcept
+	void shader::setFloat4(string inName, glm::vec4 inValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform4fv(
@@ -449,7 +449,7 @@ return;}";
 		);
 	}
 
-	void Shader::SetMat3(string inName, glm::mat3 inValue) const noexcept
+	void shader::setMat3(string inName, glm::mat3 inValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniformMatrix3fv(
@@ -460,7 +460,7 @@ return;}";
 		);
 	}
 
-	void Shader::SetMat4(string inName, glm::mat4 inValue) const noexcept
+	void shader::setMat4(string inName, glm::mat4 inValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniformMatrix4fv(

@@ -1,22 +1,22 @@
 #pragma warning(disable:4100)
-#include "Input.hpp"
+#include "input.hpp"
 #include "GLFW/glfw3.h"
-#include "Debug.hpp"
+#include "debug.hpp"
 
-namespace Engine
+namespace engine
 {
 	#pragma region Variables
-	GLFWwindow *Input::s_windowRef = nullptr;
-	CallbackFunc Input::s_mouseCallbackFun = nullptr,
-		Input::s_scrollCallbackFun = nullptr;
-	double Input::s_mouseX = 0.0,
-		Input::s_mouseY = 0.0,
-		Input::s_mouseLastX = 0.0,
-		Input::s_mouseLastY = 0.0;
+	GLFWwindow *input::s_windowRef = nullptr;
+	callbackFunc input::s_mouseCallbackFun = nullptr,
+		input::s_scrollCallbackFun = nullptr;
+	double input::s_mouseX = 0.0,
+		input::s_mouseY = 0.0,
+		input::s_mouseLastX = 0.0,
+		input::s_mouseLastY = 0.0;
 	#pragma endregion
 
 	#pragma region Bullshit
-	void Input::Key_callback(
+	void input::key_callback(
 		GLFWwindow *pWindow,
 		int pKey,
 		int pScancode,
@@ -24,10 +24,10 @@ namespace Engine
 		int pMods) noexcept
 	{
 		if (pAction != GLFW_PRESS) return;
-		Engine::Debug::Send(std::to_string(pScancode) + " ", false, false);
+		engine::debug::send(std::to_string(pScancode) + " ", false, false);
 	}
 
-	void Input::Mouse_callback(
+	void input::mouse_callback(
 		GLFWwindow *pWindow,
 		double pPosX,
 		double pPosY) noexcept
@@ -42,7 +42,7 @@ namespace Engine
 			s_mouseCallbackFun(deltaX, deltaY);
 	}
 
-	void Input::Scroll_callback(
+	void input::scroll_callback(
 		GLFWwindow *pWindow,
 		double pOffsetX,
 		double pOffsetY) noexcept
@@ -52,7 +52,7 @@ namespace Engine
 	}
 	#pragma endregion
 
-	bool Input::Init(GLFWwindow *pWindowRef) noexcept
+	bool input::init(GLFWwindow *pWindowRef) noexcept
 	{
 		s_windowRef = pWindowRef;
 
@@ -64,19 +64,19 @@ namespace Engine
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(s_windowRef, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
-		glfwSetKeyCallback(s_windowRef, Key_callback);
-		glfwSetCursorPosCallback(s_windowRef, Mouse_callback);
-		glfwSetScrollCallback(s_windowRef, Scroll_callback);
+		glfwSetKeyCallback(s_windowRef, key_callback);
+		glfwSetCursorPosCallback(s_windowRef, mouse_callback);
+		glfwSetScrollCallback(s_windowRef, scroll_callback);
 
 		return true;
 	}
 
-	void Input::Process() noexcept
+	void input::process() noexcept
 	{
 		// TODO
 	}
 
-	bool Input::CheckKeyState(const Key pKey, const State pState) noexcept
+	bool input::checkKeyState(const key pKey, const state pState) noexcept
 	{
 		return (int)pState == glfwGetKey(s_windowRef, (int)pKey);
 	}

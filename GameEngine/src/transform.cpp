@@ -1,5 +1,5 @@
 #pragma region
-#include "Transform.hpp"
+#include "transform.hpp"
 
 using glm::vec3;
 using glm::vec4;
@@ -8,48 +8,48 @@ using glm::normalize;
 using glm::cross;
 #pragma endregion
 
-namespace Engine
+namespace engine
 {
-	Transform::Transform() noexcept
+	transform::transform() noexcept
 	: m_transform(glm::mat4(1))
 	{}
 
-	Transform::Transform(const glm::mat4 inValue) noexcept
+	transform::transform(const glm::mat4 inValue) noexcept
 	: m_transform(inValue)
 	{}
 
 	// Copy, takes lvalue
-	Transform::Transform(Transform const &inOther) noexcept
+	transform::transform(transform const &inOther) noexcept
 	{ m_transform = inOther.m_transform; }
 
-	Transform &Transform::operator=(Transform const &inOther) noexcept
+	transform &transform::operator=(transform const &inOther) noexcept
 	{ this->m_transform = inOther.m_transform; return *this; }
 
 	// Move, take rvalue
-	Transform::Transform(Transform&& inOther) noexcept
+	transform::transform(transform&& inOther) noexcept
 	{ m_transform = std::move(inOther.m_transform); }
 
-	Transform &Transform::operator=(Transform&& inOther) noexcept
+	transform &transform::operator=(transform&& inOther) noexcept
 	{ this->m_transform = std::move(inOther.m_transform); return *this; }
 
-	void Transform::SetTransform(const glm::mat4 *inValue) noexcept
+	void transform::setTransform(const glm::mat4 *inValue) noexcept
 	{ m_transform = *inValue; }
 
-	void Transform::SetPosition(const vec3 inValue) noexcept
+	void transform::setPosition(const vec3 inValue) noexcept
 	{
 		m_transform[3][0] = inValue.x;
 		m_transform[3][1] = inValue.y;
 		m_transform[3][2] = inValue.z;
 	}
 
-	void Transform::Translate(const vec3 inValue) noexcept
+	void transform::translate(const vec3 inValue) noexcept
 	{
 		m_transform[3][0] += inValue.x;
 		m_transform[3][1] += inValue.y;
 		m_transform[3][2] += inValue.z;
 	}
 
-	void Transform::SetAxes(
+	void transform::setAxes(
 		const vec3 inRight,
 		const vec3 inUp,
 		const vec3 inForward
@@ -60,41 +60,41 @@ namespace Engine
 		m_transform[2] = vec4(normalize(inForward), 0);
 	}
 
-	void Transform::SetRight(const vec3 inRight) noexcept
+	void transform::setRight(const vec3 inRight) noexcept
 	{
 		vec3 forward = cross(inRight, vec3(0, 1, 0));
 		vec3 up = cross(inRight, forward);
-		SetAxes(inRight, up, forward);
+		setAxes(inRight, up, forward);
 	}
 
-	void Transform::SetUp(const vec3 inUp) noexcept
+	void transform::setUp(const vec3 inUp) noexcept
 	{
 		vec3 right = cross(inUp, vec3(0, 0, 1));
 		vec3 forward = cross(inUp, right);
-		SetAxes(right, inUp, forward);
+		setAxes(right, inUp, forward);
 	}
 
-	void Transform::SetForward(const vec3 inForward) noexcept
+	void transform::setForward(const vec3 inForward) noexcept
 	{
 		vec3 right = cross(vec3(0, 1, 0), inForward);
 		vec3 up = cross(inForward, right);
-		SetAxes(right, up, inForward);
+		setAxes(right, up, inForward);
 	}
 
-	glm::mat4 Transform::GetTransform() const noexcept
+	glm::mat4 transform::getTransform() const noexcept
 	{ return m_transform; }
 
-	glm::vec4 Transform::GetPosition() const noexcept
+	glm::vec4 transform::getPosition() const noexcept
 	{ return m_transform[3]; }
 
-	vec4 Transform::GetRight() const noexcept
+	vec4 transform::getRight() const noexcept
 	// The transform is horizontally reversed
 	{ return -m_transform[0]; }
 
-	vec4 Transform::GetUp() const noexcept
+	vec4 transform::getUp() const noexcept
 	{ return m_transform[1]; }
 
-	vec4 Transform::GetForward() const noexcept
+	vec4 transform::getForward() const noexcept
 	// The transform is horizontally reversed
 	{ return -m_transform[2]; }
 }

@@ -1,49 +1,49 @@
 #pragma region
-#include "Texture.hpp"
+#include "texture.hpp"
 #include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
-#include "Debug.hpp"
+#include "debug.hpp"
 
 using std::string;
 using std::vector;
 #pragma endregion
 
-namespace Engine
+namespace engine
 {
 	// Forward declaration
-	class Application { public: _NODISCARD static const bool GladLoaded() noexcept; };
+	class application { public: _NODISCARD static const bool gladLoaded() noexcept; };
 
 	// Static
 
-	uint32_t Texture::s_textureIds[32];
-	uint32_t Texture::s_textureCount = 0;
-	vector<Texture*> Texture::s_loadedTextures = vector<Texture*>();
+	uint32_t texture::s_textureIds[32];
+	uint32_t texture::s_textureCount = 0;
+	vector<texture*> texture::s_loadedTextures = vector<texture*>();
 
-	void Texture::UnloadAll() noexcept
+	void texture::unloadAll() noexcept
 	{
-		if (Application::GladLoaded())
+		if (application::gladLoaded())
 		{ glDeleteTextures(s_textureCount, s_textureIds); }
 	}
 
-	int32_t Texture::LoadTextureFromFile(const string *inPath) noexcept
+	int32_t texture::loadTextureFromFile(const string *inPath) noexcept
 	{
-		Debug::Send(
+		debug::send(
 			"Loading texture " + std::to_string(s_textureCount) + ": \"" + *inPath + "\"...",
-			Debug::Type::Process,
-			Debug::Impact::Large,
-			Debug::Stage::Mid,
+			debug::type::Process,
+			debug::impact::Large,
+			debug::stage::Mid,
 			false,
 			false
 		);
 
 		if (s_textureCount > 31)
 		{
-			Debug::Send(
+			debug::send(
 				"Failed to load texture: Exceeded max texture count (max = 32)",
-				Debug::Type::Note,
-				Debug::Impact::Large,
-				Debug::Stage::Mid,
+				debug::type::Note,
+				debug::impact::Large,
+				debug::stage::Mid,
 				true
 			);
 			return -1;
@@ -76,11 +76,11 @@ namespace Engine
 			case 3: format = GL_RGB; break;
 			case 4: format = GL_RGBA; break;
 			default:
-				Debug::Send(
+				debug::send(
 					"Failed to load texture: Too many components",
-					Debug::Type::Note,
-					Debug::Impact::Large,
-					Debug::Stage::Mid,
+					debug::type::Note,
+					debug::impact::Large,
+					debug::stage::Mid,
 					true
 				);
 				return -1;
@@ -102,51 +102,51 @@ namespace Engine
 			// Frees the image memory
 			stbi_image_free(imageData);
 
-			Debug::Send("Success!");
+			debug::send("Success!");
 
 			// Returns the id before incrementing for the next texture
 			return s_textureCount++;
 		}
 		else
 		{
-			Debug::Send(
+			debug::send(
 				"Failed to load texture: No file found",
-				Debug::Type::Note,
-				Debug::Impact::Large,
-				Debug::Stage::Mid,
+				debug::type::Note,
+				debug::impact::Large,
+				debug::stage::Mid,
 				true
 			);
 			return -1;
 		}
 	}
 
-	constexpr uint32_t Texture::GetTexCount() noexcept
+	constexpr uint32_t texture::getTexCount() noexcept
 	{ return s_textureCount; }
 
 	// Member
 
-	Texture::Texture(
+	texture::texture(
 		string inPath,
-		TexType inType
+		texType inType
 	) noexcept
 		: m_file(inPath)
 		, m_type(inType)
 	{
-		m_id = LoadTextureFromFile(&m_file);
+		m_id = loadTextureFromFile(&m_file);
 	}
 
-	//void Texture::Destroy()
+	//void texture::destroy()
 	//{
 	//	// This is currently bad as it leaves a gap in the loaded textures
 	//	glDeleteTextures(1, &s_textureIds[m_id]);
 	//}
 
-	int32_t Texture::GetId() const noexcept
+	int32_t texture::getId() const noexcept
 	{ return m_id; }
 
-	Texture::TexType Texture::GetType() const noexcept
+	texture::texType texture::getType() const noexcept
 	{ return m_type; }
 
-	std::string Texture::GetFile() const noexcept
+	std::string texture::getFile() const noexcept
 	{ return m_file; }
 }

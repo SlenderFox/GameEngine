@@ -1,8 +1,8 @@
 #pragma region
 #pragma warning(disable:4100)
 #define WIN32_LEAN_AND_MEAN
-#include "Application.hpp"
-#include "Debug.hpp"
+#include "application.hpp"
+#include "debug.hpp"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/gtc/matrix_transform.hpp"
@@ -16,46 +16,46 @@ using glm::radians;
 using glm::normalize;
 #pragma endregion
 
-namespace Engine
+namespace engine
 {
 	#pragma region Variables
-	Application *Application::s_application = nullptr;
-	GLFWwindow *Application::s_windowRef = nullptr;
-	bool Application::s_gladLoaded = false,
-		Application::s_fullscreen = false;
-	uint16_t Application::s_winWidth = 320U,
-		Application::s_winHeight = 180U,
-		Application::s_fps = 0U,
-		Application::s_perSecondFrameCount = 0U;
-	uint64_t Application::s_totalFrames = 0U;
-	double Application::s_currentTime = 0.0,
-		Application::s_prevTime = 0.0,
-		Application::s_deltaTime = 0.0,
-		Application::s_fixedTimer = 0.0,
-		Application::s_frameTimer = 0.0;
-	string Application::s_title = "Application";
-	Application::ExitCode Application::s_exitCode = Application::ExitCode::Okay;
+	application *application::s_application = nullptr;
+	GLFWwindow *application::s_windowRef = nullptr;
+	bool application::s_gladLoaded = false,
+		application::s_fullscreen = false;
+	uint16_t application::s_winWidth = 320U,
+		application::s_winHeight = 180U,
+		application::s_fps = 0U,
+		application::s_perSecondFrameCount = 0U;
+	uint64_t application::s_totalFrames = 0U;
+	double application::s_currentTime = 0.0,
+		application::s_prevTime = 0.0,
+		application::s_deltaTime = 0.0,
+		application::s_fixedTimer = 0.0,
+		application::s_frameTimer = 0.0;
+	string application::s_title = "Application";
+	application::exitCode application::s_exitCode = application::exitCode::okay;
 	#pragma endregion
 
-	Application *Application::GetApplication() noexcept
+	application *application::getApplication() noexcept
 	{ return s_application; }
 
-	const bool Application::GladLoaded() noexcept
+	const bool application::gladLoaded() noexcept
 	{
 		return s_gladLoaded;
 	}
 
-	void Application::Quit() noexcept
+	void application::quit() noexcept
 	{
-		glfwSetWindowShouldClose(Application::s_windowRef, true);
+		glfwSetWindowShouldClose(application::s_windowRef, true);
 	}
 
-	Application::Application() noexcept
+	application::application() noexcept
 	{
 		// Prevents potential memory leak
 		if (s_application)
 		{
-			s_application->Terminate();
+			s_application->terminate();
 			delete s_application;
 		}
 
@@ -63,18 +63,18 @@ namespace Engine
 		s_application = this;
 	}
 
-	void Application::Terminate() noexcept
+	void application::terminate() noexcept
 	{
-		GetApplication()->Shutdown();
-		Debug::Terminate();
+		getApplication()->shutdown();
+		debug::terminate();
 		glfwTerminate();
-		Renderer::Terminate();
-		delete Root::GetRoot();
+		renderer::terminate();
+		delete root::getRoot();
 	}
 
-	Application::ExitCode Application::Run()
+	application::exitCode application::run()
 	{
-		if (Init())
+		if (init())
 		{
 			// Preloads currentTime with an earlier time to prevent first frame weirdness
 			s_currentTime = glfwGetTime() - s_fixedDeltaTime;
@@ -82,20 +82,20 @@ namespace Engine
 			// Render loop
 			while (!(bool)glfwWindowShouldClose(s_windowRef))
 			{
-				UpdateFrameTimeData();
+				updateFrameTimeData();
 
 				// Input
 				glfwPollEvents();
-				ProcessInput();
-				Input::Process();
+				processInput();
+				input::process();
 
-				GetApplication()->Update();
+				getApplication()->update();
 
 				// Calls fixed update 60 times per second
 				if (s_fixedTimer >= s_fixedDeltaTime)
 				{
 					s_fixedTimer -= s_fixedDeltaTime;
-					GetApplication()->FixedUpdate();
+					getApplication()->fixedUpdate();
 				}
 
 				// Skip drawing if minimised, restricts fps to 15
@@ -105,69 +105,69 @@ namespace Engine
 					continue;
 				}
 
-				GetApplication()->LateUpdate();
+				getApplication()->fateUpdate();
 
-				Renderer::Draw();
+				renderer::draw();
 
 				//Updates imgui
-				Debug::Draw();
+				debug::draw();
 
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(s_windowRef);
 			}
 		}
 
-		Terminate();
+		terminate();
 		return s_exitCode;
 	}
 
-	bool Application::Init()
+	bool application::init()
 	{
 		auto startTime = std::chrono::high_resolution_clock::now();
 
-		if (!SetupGLFW()) return false;	// Sets own exit code
+		if (!setupGLFW()) return false;	// Sets own exit code
 
-		if (!SetupGlad())
+		if (!setupGlad())
 		{
-			s_exitCode = ExitCode::Fail_Glad;
+			s_exitCode = exitCode::fail_Glad;
 			return false;
 		}
 
 		// Has to be initialised after glfw and glad
-		Debug::Init(s_windowRef);
+		debug::init(s_windowRef);
 
-		if (!Renderer::Init((float)s_winWidth / (float)s_winHeight))
+		if (!renderer::init((float)s_winWidth / (float)s_winHeight))
 		{
-			s_exitCode = ExitCode::Fail_Renderer;
+			s_exitCode = exitCode::fail_Renderer;
 			return false;
 		}
 
-		if (!Input::Init(s_windowRef))
+		if (!input::init(s_windowRef))
 		{
-			s_exitCode = ExitCode::Fail_Input;
+			s_exitCode = exitCode::fail_Input;
 			return false;
 		}
 
-		if (!GetApplication()->Startup())
+		if (!getApplication()->startup())
 		{
-			s_exitCode = ExitCode::Fail_Startup;
+			s_exitCode = exitCode::fail_Startup;
 			return false;
 		}
 
 		// Calculates the time it took to start up
 		auto endTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTime = endTime - startTime;
-		Debug::Send("Started in " + to_string(elapsedTime.count()) + " seconds");
+		debug::send("Started in " + to_string(elapsedTime.count()) + " seconds");
 
 		return true;
 	}
 
-	bool Application::SetupGLFW()
+	bool application::setupGLFW()
 	{
 		// glfw: initialise and configure
 		if (!glfwInit())
 		{
-			s_exitCode = ExitCode::Fail_GLFW_Init;
+			s_exitCode = exitCode::fail_GLFW_Init;
 			return false;
 		}
 
@@ -194,7 +194,7 @@ namespace Engine
 
 		if (!s_windowRef)
 		{
-			s_exitCode = ExitCode::Fail_GLFW_Window;
+			s_exitCode = exitCode::fail_GLFW_Window;
 			return false;
 		}
 
@@ -218,12 +218,12 @@ namespace Engine
 			#endif
 		}
 
-		glfwSetFramebufferSizeCallback(s_windowRef, FramebufferSizeCallback);
+		glfwSetFramebufferSizeCallback(s_windowRef, framebufferSizeCallback);
 
 		return true;
 	}
 
-	bool Application::SetupGlad()
+	bool application::setupGlad()
 	{
 		// glad: load all OpenGL function pointers
 		if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -232,7 +232,7 @@ namespace Engine
 		return false;
 	}
 
-	void Application::SetDimensions(
+	void application::setDimensions(
 		const uint16_t inWidth,
 		const uint16_t inHeight
 	) noexcept
@@ -240,25 +240,25 @@ namespace Engine
 		s_winWidth = inWidth;
 		s_winHeight = inHeight;
 
-		if (Renderer::s_camera && inWidth > 0 && inHeight > 0)
-			UpdateCamera();
+		if (renderer::s_camera && inWidth > 0 && inHeight > 0)
+			updateCamera();
 
-		//Debug::Send(string("Dimensions set to " + to_string(s_winWidth) + ", " + to_string(s_winHeight)));
+		//Debug::send(string("Dimensions set to " + to_string(s_winWidth) + ", " + to_string(s_winHeight)));
 	}
 
-	void Application::SetTitle(const string inTitle) noexcept
+	void application::setTitle(const string inTitle) noexcept
 	{
 		s_title = inTitle;
-		//Debug::Send("Title set to \"" + s_title + "\"");
+		//Debug::send("Title set to \"" + s_title + "\"");
 	}
 
-	void Application::SetFullscreen(const bool inFullscreen) noexcept
+	void application::setFullscreen(const bool inFullscreen) noexcept
 	{
 		s_fullscreen = inFullscreen;
-		//Debug::Send("Fullscreen set to " + string(inFullscreen ? "true" : "false"));
+		//Debug::send("Fullscreen set to " + string(inFullscreen ? "true" : "false"));
 	}
 
-	void Application::UpdateFrameTimeData() noexcept
+	void application::updateFrameTimeData() noexcept
 	{
 		s_prevTime = s_currentTime;
 		s_currentTime = glfwGetTime();
@@ -275,17 +275,17 @@ namespace Engine
 			s_frameTimer -= secondsPerUpdate;
 			s_fps = (uint16_t)((double)s_perSecondFrameCount / secondsPerUpdate);
 			s_perSecondFrameCount = 0U;
-			UpdateTitle();
+			updateTitle();
 		}
 	}
 
-	void Application::UpdateCamera() noexcept
+	void application::updateCamera() noexcept
 	{
-		Renderer::s_camera->SetAspectRatio((float)s_winWidth / (float)s_winHeight);
-		Renderer::s_camera->UpdateFovV();
+		renderer::s_camera->setAspectRatio((float)s_winWidth / (float)s_winHeight);
+		renderer::s_camera->updateFovV();
 	}
 
-	void Application::UpdateTitle() noexcept
+	void application::updateTitle() noexcept
 	{
 		string title = {
 			s_title
@@ -299,7 +299,7 @@ namespace Engine
 		glfwSetWindowTitle(s_windowRef, title.c_str());
 	}
 
-	void Application::ProcessInput() noexcept
+	void application::processInput() noexcept
 	{
 		// TODO: Proper fullscreen toggle
 		//if (Input::GetKey(Input::Key::Key_F11, Input::State::Press))
@@ -323,22 +323,22 @@ namespace Engine
 		//}
 
 		// End application
-		if (Input::CheckKeyState(Input::Key::Key_End, Input::State::Press)) Quit();
+		if (input::checkKeyState(input::key::Key_End, input::state::Press)) quit();
 	}
 
-	void Application::FramebufferSizeCallback(
+	void application::framebufferSizeCallback(
 		GLFWwindow *inWindow,
 		const int inWidth,
 		const int inHeight
 	) noexcept
 	{
-		SetDimensions((const uint16_t)inWidth, (const uint16_t)inHeight);
-		Renderer::SetResolution(inWidth, inHeight);
+		setDimensions((const uint16_t)inWidth, (const uint16_t)inHeight);
+		renderer::setResolution(inWidth, inHeight);
 	}
 
-	double Application::GetTime() noexcept
+	double application::getTime() noexcept
 	{ return s_currentTime; }
 
-	double Application::GetDeltaTime() noexcept
+	double application::getDeltaTime() noexcept
 	{ return s_deltaTime; }
 }

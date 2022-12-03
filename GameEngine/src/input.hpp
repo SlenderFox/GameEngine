@@ -2,44 +2,44 @@
 
 struct GLFWwindow;
 
-namespace Engine
+namespace engine
 {
 	/** The callback function used for mouse and scroll movement */
-	using CallbackFunc = void(*)(double, double);
+	using callbackFunc = void(*)(double, double);
 
 	/** Pure static class for handling inputs */
-	class Input
+	class input
 	{
-		friend class Application;
+		friend class application;
 		// Does not need to be memory managed
 		static GLFWwindow *s_windowRef;
 
-		static CallbackFunc s_mouseCallbackFun;
-		static CallbackFunc s_scrollCallbackFun;
+		static callbackFunc s_mouseCallbackFun;
+		static callbackFunc s_scrollCallbackFun;
 
 		static double s_mouseX, s_mouseY, s_mouseLastX, s_mouseLastY;
 
 		#pragma region Constructors
 		// Pure static class
-		Input() = delete;
-		~Input() = delete;
+		input() = delete;
+		~input() = delete;
 		// Delete copy/move so extra instances can't be created/moved.
-		Input(Input const&) = delete;
-		Input &operator=(Input const&) = delete;
-		Input(Input&&) = delete;
-		Input &operator=(Input&&) = delete;
+		input(input const&) = delete;
+		input &operator=(input const&) = delete;
+		input(input&&) = delete;
+		input &operator=(input&&) = delete;
 		#pragma endregion
 
 	public:
 		#pragma region Bullshit
-		enum class State: unsigned char
+		enum class state: unsigned char
 		{
 			Release,
 			Press,
 			Repeat
 		};
 
-		enum class Key: short
+		enum class key: short
 		{
 			Key_Unknown					= -1,
 			Key_Space					= 32,
@@ -162,17 +162,17 @@ namespace Engine
 			Key_Menu						= 348
 		};
 
-		static void Key_callback(
+		static void key_callback(
 			GLFWwindow *pWindow,
 			int pKey,
 			int pScancode,
 			int pAction,
 			int pMods) noexcept;
-		static void Mouse_callback(
+		static void mouse_callback(
 			GLFWwindow *pWindow,
 			double pPosX,
 			double pPosY) noexcept;
-		static void Scroll_callback(
+		static void scroll_callback(
 			GLFWwindow *pWindow,
 			double pOffsetX,
 			double pOffsetY) noexcept;
@@ -182,13 +182,13 @@ namespace Engine
 		 * @param pWindowRef The active window
 		 * @return [bool] Success
 		 */
-		static bool Init(GLFWwindow *pWindowRef) noexcept;
-		static void Process() noexcept;
-		static bool CheckKeyState(const Key pKey, const State pState) noexcept;
+		static bool init(GLFWwindow *pWindowRef) noexcept;
+		static void process() noexcept;
+		static bool checkKeyState(const key pKey, const state pState) noexcept;
 
-		static inline void AddMouseCallback(CallbackFunc pCallback) noexcept
+		static inline void addMouseCallback(callbackFunc pCallback) noexcept
 		{ s_mouseCallbackFun = pCallback; }
-		static inline void AddSrollCallback(CallbackFunc pCallback) noexcept
+		static inline void addSrollCallback(callbackFunc pCallback) noexcept
 		{ s_scrollCallbackFun = pCallback; }
 	};
 }

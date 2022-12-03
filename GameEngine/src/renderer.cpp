@@ -1,8 +1,8 @@
 #pragma region
-#include "Renderer.hpp"
+#include "renderer.hpp"
 #include "glad/glad.h"
 #include "glm/gtc/matrix_transform.hpp"
-#include "Debug.hpp"
+#include "debug.hpp"
 
 using glm::vec3;
 using glm::mat3;
@@ -13,35 +13,35 @@ using std::make_unique;
 using std::unique_ptr;
 #pragma endregion
 
-namespace Engine
+namespace engine
 {
 	#pragma region Variables
-	Camera *Renderer::s_camera = nullptr;
-	unique_ptr<vector<unique_ptr<Model>>> Renderer::s_models = nullptr;
-	unique_ptr<vector<unique_ptr<Light>>> Renderer::s_lights = nullptr;
-	const float Renderer::s_ambience = 0.15f;
+	camera *renderer::s_camera = nullptr;
+	unique_ptr<vector<unique_ptr<model>>> renderer::s_models = nullptr;
+	unique_ptr<vector<unique_ptr<light>>> renderer::s_lights = nullptr;
+	const float renderer::s_ambience = 0.15f;
 	#pragma endregion
 
-	bool Renderer::Init(const float inAspect) noexcept
+	bool renderer::init(const float inAspect) noexcept
 	{
 		// Enables the use of the depth buffer
 		glEnable(GL_DEPTH_TEST);
 		//glEnable(GL_STENCIL_TEST);
 
-		//SetClearColour(Colour::CreateWithRGB(vec3(0.1f)));
+		//setClearColour(colour::CreateWithRGB(vec3(0.1f)));
 
 		// Initialise camera
-		s_camera = new Camera(inAspect, 75.0f);
-		s_camera->SetPosition({ 0.0f, 0.0f, 6.0f });
+		s_camera = new camera(inAspect, 75.0f);
+		s_camera->setPosition({ 0.0f, 0.0f, 6.0f });
 
 		// Initialise arrays
-		s_models = make_unique<vector<unique_ptr<Model>>>();
-		s_lights = make_unique<vector<unique_ptr<Light>>>();
+		s_models = make_unique<vector<unique_ptr<model>>>();
+		s_lights = make_unique<vector<unique_ptr<light>>>();
 
 		return true;
 	}
 
-	void Renderer::Terminate() noexcept
+	void renderer::terminate() noexcept
 	{
 		if (s_models)
 		{
@@ -51,19 +51,19 @@ namespace Engine
 		}
 
 		// Destroy all textures
-		for (size_t i = 0; i < Texture::s_loadedTextures.size(); ++i)
+		for (size_t i = 0; i < texture::s_loadedTextures.size(); ++i)
 		{
 			// For safety
-			if (Texture::s_loadedTextures.at(i))
-				delete Texture::s_loadedTextures.at(i);
+			if (texture::s_loadedTextures.at(i))
+				delete texture::s_loadedTextures.at(i);
 		}
 		// Unload all textures from memory once finished
-		Texture::UnloadAll();
+		texture::unloadAll();
 
 		delete s_camera;
 	}
 
-	void Renderer::Draw() noexcept
+	void renderer::draw() noexcept
 	{
 		// Clears to background colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -71,13 +71,13 @@ namespace Engine
 		if (s_models.get()->size() > 0)
 		{
 			for (uint8_t i = 0; i < s_models.get()->size(); ++i)
-				GetModelAt(i)->Draw();
+				getModelAt(i)->draw();
 		}
 	}
 
-	void Renderer::LoadLightsIntoShader(const Shader *inShader) noexcept
+	void renderer::loadLightsIntoShader(const shader *inShader) noexcept
 	{
-		inShader->SetFloat("u_material.shininess", 32.0f);
+		inShader->setFloat("u_material.shininess", 32.0f);
 		uint8_t numDirLights = 0;
 		uint8_t numPointLights = 0;
 		uint8_t numSpotLights = 0;
@@ -85,132 +85,132 @@ namespace Engine
 
 		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
 		{
-			Light *currentLight = GetLightAt(i);
-			switch (currentLight->GetType())
+			light *currentLight = getLightAt(i);
+			switch (currentLight->getType())
 			{
-			case LightType::Directional:
+			case lightType::Directional:
 				lightCount = std::to_string(numDirLights);
-				inShader->SetVec3(
+				inShader->setFloat3(
 					"u_dirLights[" + lightCount + "].colour.ambient",
-					(vec3)currentLight->GetColour() * s_ambience
+					(vec3)currentLight->getColour() * s_ambience
 				);
-				inShader->SetVec3(
+				inShader->setFloat3(
 					"u_dirLights[" + lightCount + "].colour.diffuse",
-					currentLight->GetColour()
+					currentLight->getColour()
 				);
-				inShader->SetVec3(
+				inShader->setFloat3(
 					"u_dirLights[" + lightCount + "].colour.specular",
-					currentLight->GetColour()
+					currentLight->getColour()
 				);
-				inShader->SetVec4(
+				inShader->setFloat4(
 					"u_dirLights[" + lightCount + "].direction",
-					currentLight->GetDirection()
+					currentLight->getDirection()
 				);
 				++numDirLights; break;
-			case LightType::Point:
+			case lightType::Point:
 				lightCount = std::to_string(numPointLights);
-				inShader->SetVec3(
+				inShader->setFloat3(
 					"u_pointLights[" + lightCount + "].colour.diffuse",
-					currentLight->GetColour()
+					currentLight->getColour()
 				);
-				inShader->SetVec3(
+				inShader->setFloat3(
 					"u_pointLights[" + lightCount + "].colour.specular",
-					currentLight->GetColour()
+					currentLight->getColour()
 				);
-				inShader->SetVec4(
+				inShader->setFloat4(
 					"u_pointLights[" + lightCount + "].position",
-					currentLight->GetPosition()
+					currentLight->getPosition()
 				);
-				inShader->SetFloat(
+				inShader->setFloat(
 					"u_pointLights[" + lightCount + "].linear",
-					currentLight->GetLinear()
+					currentLight->getLinear()
 				);
-				inShader->SetFloat(
+				inShader->setFloat(
 					"u_pointLights[" + lightCount + "].quadratic",
-					currentLight->GetQuadratic()
+					currentLight->getQuadratic()
 				);
 				++numPointLights; break;
-			case LightType::Spot:
+			case lightType::Spot:
 				lightCount = std::to_string(numSpotLights);
-				inShader->SetVec3(
+				inShader->setFloat3(
 					"u_spotLights[" + lightCount + "].colour.diffuse",
-					currentLight->GetColour()
+					currentLight->getColour()
 				);
-				inShader->SetVec3(
+				inShader->setFloat3(
 					"u_spotLights[" + lightCount + "].colour.specular",
-					currentLight->GetColour()
+					currentLight->getColour()
 				);
-				inShader->SetVec4(
+				inShader->setFloat4(
 					"u_spotLights[" + lightCount + "].position",
-					currentLight->GetPosition()
+					currentLight->getPosition()
 				);
-				inShader->SetVec4(
+				inShader->setFloat4(
 					"u_spotLights[" + lightCount + "].direction",
-					currentLight->GetDirection()
+					currentLight->getDirection()
 				);
-				inShader->SetFloat(
+				inShader->setFloat(
 					"u_spotLights[" + lightCount + "].linear",
-					currentLight->GetLinear()
+					currentLight->getLinear()
 				);
-				inShader->SetFloat(
+				inShader->setFloat(
 					"u_spotLights[" + lightCount + "].quadratic",
-					currentLight->GetQuadratic()
+					currentLight->getQuadratic()
 				);
-				inShader->SetFloat(
+				inShader->setFloat(
 					"u_spotLights[" + lightCount + "].cutoff",
-					currentLight->GetAngle()
+					currentLight->getAngle()
 				);
-				inShader->SetFloat(
+				inShader->setFloat(
 					"u_spotLights[" + lightCount + "].blur",
-					currentLight->GetBlur()
+					currentLight->getBlur()
 				);
 				++numSpotLights; break;
 			default:
-				Debug::Send("Incorrect light type"); return;
+				debug::send("Incorrect light type"); return;
 			}
 		}
 	}
 
-	void Renderer::ModifyAllSpotlights(
+	void renderer::modifyAllSpotlights(
 		const bool inIsAngle,
 		const float inValue
 	) noexcept
 	{
 		for (uint8_t i = 0, count = 0; i < (uint8_t)s_lights.get()->size(); ++i)
 		{
-			Light *currentlLight = GetLightAt(i);
+			light *currentlLight = getLightAt(i);
 
 			// We only want to modify the spotlights, ignore the others
-			if (currentlLight->GetType() != LightType::Spot) continue;
+			if (currentlLight->getType() != lightType::Spot) continue;
 
 			string numLights = std::to_string(count);
 			float limit = inIsAngle ? 90.0f : 1.0f;
-			float newValue = inIsAngle ? currentlLight->GetAngleRaw() : currentlLight->GetBlurRaw();
+			float newValue = inIsAngle ? currentlLight->getAngleRaw() : currentlLight->getBlurRaw();
 			newValue += inValue;
 
 			if (newValue <= limit && newValue >= 0.0f)
 			{
 				// Update the value in the light
 				if (inIsAngle)
-					currentlLight->SetAngle(newValue);
+					currentlLight->setAngle(newValue);
 				else
-					currentlLight->SetBlur(newValue);
+					currentlLight->setBlur(newValue);
 
 				// Update the shaders on all the models
 				for (uint8_t j = 0; j < s_models.get()->size(); ++j)
 				{
 					if (inIsAngle)
 					{
-						GetModelAt(j)->m_shader->SetFloat(
+						getModelAt(j)->m_shader->setFloat(
 							"u_spotLights[" + numLights + "].cutoff",
-							currentlLight->GetAngle()
+							currentlLight->getAngle()
 						);
 					}
 					else
 					{
-						GetModelAt(j)->m_shader->SetFloat(
+						getModelAt(j)->m_shader->setFloat(
 							"u_spotLights[" + numLights + "].blur",
-							currentlLight->GetBlur()
+							currentlLight->getBlur()
 						);
 					}
 				}
@@ -220,7 +220,7 @@ namespace Engine
 		}
 	}
 
-	Model *Renderer::AddNewModel(
+	model *renderer::addNewModel(
 		uint8_t &outId,
 		const string *inModelPath,
 		const string *inShaderPath,
@@ -232,14 +232,14 @@ namespace Engine
 			return nullptr;
 
 		outId = (uint8_t)currentAmount;
-		s_models.get()->push_back(make_unique<Model>(inModelPath, inShaderPath, s_camera, inLoadTextures));
-		return GetModelAt(outId);
+		s_models.get()->push_back(make_unique<model>(inModelPath, inShaderPath, s_camera, inLoadTextures));
+		return getModelAt(outId);
 	}
 
-	Light *Renderer::AddNewLight(
+	light *renderer::addNewLight(
 		uint8_t &outId,
-		const LightType inType,
-		const Colour inColour) noexcept
+		const lightType inType,
+		const colour inColour) noexcept
 	{
 		// Caps at 255
 		size_t currentAmount = s_lights.get()->size();
@@ -247,22 +247,22 @@ namespace Engine
 			return nullptr;
 
 		outId = (uint8_t)currentAmount;
-		s_lights.get()->push_back(make_unique<Light>(inType, inColour));
-		return GetLightAt(outId);
+		s_lights.get()->push_back(make_unique<light>(inType, inColour));
+		return getLightAt(outId);
 	}
 
-	void Renderer::SetClearColour(const Colour inColour) noexcept
+	void renderer::setClearColour(const colour inColour) noexcept
 	{
-		vec3 col = inColour.RGBvec3();
+		vec3 col = inColour.rgb();
 		glClearColor(col.r, col.g, col.b, 1.0f);
 	}
 
-	void Renderer::SetRenderMode(const Mode inMode) noexcept
+	void renderer::setRenderMode(const Mode inMode) noexcept
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + (int)inMode);
 	}
 
-	void Renderer::SetResolution(
+	void renderer::setResolution(
 		const size_t inWidth,
 		const size_t inHeight
 	) noexcept
@@ -270,50 +270,50 @@ namespace Engine
 		glViewport(0, 0, (GLsizei)inWidth, (GLsizei)inHeight);
 	}
 
-	uint8_t Renderer::ModelCount() noexcept
+	uint8_t renderer::modelCount() noexcept
 	{
 		return (uint8_t)s_models.get()->size();
 	}
 
-	uint8_t Renderer::LightCount() noexcept
+	uint8_t renderer::lightCount() noexcept
 	{
 		return (uint8_t)s_lights.get()->size();
 	}
 
-	Model *Renderer::GetModelAt(const uint8_t inPos) noexcept
+	model *renderer::getModelAt(const uint8_t inPos) noexcept
 	{
 		if (!s_models.get())
 		{
-			Debug::Send("No model vector found");
+			debug::send("No model vector found");
 			return nullptr;
 		}
 
 		if (inPos > s_models.get()->size() - 1)
 		{
-			Debug::Send("Attempting to access model outside array size");
+			debug::send("Attempting to access model outside array size");
 			return nullptr;
 		}
 
 		return (*s_models.get())[inPos].get();
 	}
 
-	Light *Renderer::GetLightAt(const uint8_t inPos) noexcept
+	light *renderer::getLightAt(const uint8_t inPos) noexcept
 	{
 		if (!s_lights.get())
 		{
-			Debug::Send("No light vector found");
+			debug::send("No light vector found");
 			return nullptr;
 		}
 
 		if (inPos > s_lights.get()->size() - 1)
 		{
-			Debug::Send("Attempting to access light outside array size");
+			debug::send("Attempting to access light outside array size");
 			return nullptr;
 		}
 
 		return (*s_lights.get())[inPos].get();
 	}
 
-	Camera *Renderer::GetCamera() noexcept
+	camera *renderer::getCamera() noexcept
 	{ return s_camera; }
 }

@@ -17,23 +17,23 @@
 
 struct GLFWwindow;
 
-namespace Engine
+namespace engine
 {
-	struct Debug
+	struct debug
 	{
-		enum class Type: uint8_t
+		enum class type: uint8_t
 		{
 			Note = 0,
 			Process = 1
 		};
 
-		enum class Impact: uint8_t
+		enum class impact: uint8_t
 		{
 			Small = 0,
 			Large = 2
 		};
 
-		enum class Stage: uint8_t
+		enum class stage: uint8_t
 		{
 			Begin = 0,
 			Mid = 4,
@@ -42,27 +42,27 @@ namespace Engine
 
 		static const wchar_t *s_prefixes[12];
 
-		static void Init(GLFWwindow *pWindow) noexcept;
-		static void Terminate() noexcept;
-		static void Draw() noexcept;
+		static void init(GLFWwindow *pWindow) noexcept;
+		static void terminate() noexcept;
+		static void draw() noexcept;
 
-		static void Send(
+		static void send(
 			const std::string pMsg,
 			const bool pNewline = false,
 			const bool pEndline = true) noexcept;
-		static void Send(
+		static void send(
 			const std::string pMsg,
 			const wchar_t *pPrefix,
 			const bool pNewline = false,
 			const bool pEndline = true) noexcept;
-		static void Send(
+		static void send(
 			const std::string pMsg,
-			const Type pType,
-			const Impact pImpact,
-			const Stage pStage,
+			const type pType,
+			const impact pImpact,
+			const stage pStage,
 			const bool pNewline = false,
 			const bool pEndline = true) noexcept;
 
-		static void NewLine() noexcept;
+		static void newLine() noexcept;
 	};
 }

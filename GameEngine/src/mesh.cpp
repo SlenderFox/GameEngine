@@ -1,5 +1,5 @@
 #pragma region
-#include "Mesh.hpp"
+#include "mesh.hpp"
 #include "glad/glad.h"
 #include <assert.h>
 
@@ -9,21 +9,21 @@ using std::unique_ptr;
 using std::make_unique;
 #pragma endregion
 
-namespace Engine
+namespace engine
 {
 	// Forward declaration
-	class Application { public: _NODISCARD static const bool GladLoaded() noexcept; };
+	class application { public: _NODISCARD static const bool gladLoaded() noexcept; };
 
 	//Static
 
-	constexpr vector<Vertex> Mesh::GenerateVertices() noexcept
+	constexpr vector<vertex> mesh::generateVertices() noexcept
 	{
-		vector<Vertex> verts = vector<Vertex>();
+		vector<vertex> verts = vector<vertex>();
 
 		// Makes cube with pos, normal, and texcoord
 		for (uint8_t i = 0; i < 36; ++i)
 		{
-			Vertex vert;
+			vertex vert;
 			for (uint8_t j = 0; j < 8; ++j)
 			{
 				switch (j)
@@ -44,7 +44,7 @@ namespace Engine
 		return verts;
 	}
 
-	constexpr vector<uint32_t> Mesh::GenerateIndices() noexcept
+	constexpr vector<uint32_t> mesh::generateIndices() noexcept
 	{
 		vector<uint32_t> inds = vector<uint32_t>();
 
@@ -56,19 +56,19 @@ namespace Engine
 
 	//Member
 
-	Mesh::Mesh(
-		const std::vector<Vertex> *pVertices,
+	mesh::mesh(
+		const std::vector<vertex> *pVertices,
 		const std::vector<uint32_t> *pIndices
 	) noexcept
 	{
-		m_vertices = make_unique<vector<Vertex>>(pVertices ? *pVertices : GenerateVertices());
-		m_indices = make_unique<vector<uint32_t>>(pIndices ? *pIndices : GenerateIndices());
-		SetupMesh();
+		m_vertices = make_unique<vector<vertex>>(pVertices ? *pVertices : generateVertices());
+		m_indices = make_unique<vector<uint32_t>>(pIndices ? *pIndices : generateIndices());
+		setupMesh();
 	}
 
-	Mesh::~Mesh()
+	mesh::~mesh()
 	{
-		if (Application::GladLoaded())
+		if (application::gladLoaded())
 		{
 			glDeleteVertexArrays(1, m_idVAO);
 			glDeleteBuffers(1, m_idVBO);
@@ -84,7 +84,7 @@ namespace Engine
 		delete m_idEBO;
 	}
 
-	void Mesh::Draw() const noexcept
+	void mesh::draw() const noexcept
 	{
 		glBindVertexArray(*m_idVAO);
 		glDrawElements(
@@ -96,7 +96,7 @@ namespace Engine
 		glBindVertexArray(0);
 	}
 
-	void Mesh::SetupMesh() const noexcept
+	void mesh::setupMesh() const noexcept
 	{
 		// Creates and assigns to an id the Vertex Array Object, Vertex Buffer Object, and Element Buffer Object
 		// Arguments are number of objects to generate, and an array of uints to have the ids stored in
@@ -112,7 +112,7 @@ namespace Engine
 		// Loads the vertices to the VBO
 		glBufferData(
 			GL_ARRAY_BUFFER,
-			(GLsizei)m_vertices.get()->size() * sizeof(Vertex),
+			(GLsizei)m_vertices.get()->size() * sizeof(vertex),
 			&(*m_vertices.get())[0],	// Returns the zeroth element in the vector
 			GL_STATIC_DRAW
 		);
@@ -141,13 +141,13 @@ namespace Engine
 		*/
 		// Position attribute
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)0);
 		// Normal attribute
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, normal));
 		// Texcoord attribute
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, texCoords));
 
 		// Unbinds the vertex array
 		glBindVertexArray(0);
@@ -157,12 +157,12 @@ namespace Engine
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
-	uint32_t *Mesh::GetVAO() const noexcept
+	uint32_t *mesh::getVAO() const noexcept
 	{ return m_idVAO; }
 
-	uint32_t *Mesh::GetVBO() const noexcept
+	uint32_t *mesh::getVBO() const noexcept
 	{ return m_idVBO; }
 
-	uint32_t *Mesh::GetEBO() const noexcept
+	uint32_t *mesh::getEBO() const noexcept
 	{ return m_idEBO; }
 }

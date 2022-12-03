@@ -1,5 +1,5 @@
 #pragma region
-#include "Debug.hpp"
+#include "debug.hpp"
 #include <io.h>
 #include <fcntl.h>
 #include "../imgui/imgui.h"
@@ -15,9 +15,9 @@
 using std::string;
 #pragma endregion
 
-namespace Engine
+namespace engine
 {
-	const wchar_t *Debug::s_prefixes[12] = {
+	const wchar_t *debug::s_prefixes[12] = {
 		L"\u250C",
 		L"\u252C",
 		L"\u2552",
@@ -32,7 +32,7 @@ namespace Engine
 		L"\u2567",
 	};
 
-	void Debug::Init(GLFWwindow *pWindow) noexcept
+	void debug::init(GLFWwindow *pWindow) noexcept
 	{
 		// Allows utf16 output to console
 		_setmode(_fileno(stdout), _O_U16TEXT);
@@ -45,7 +45,7 @@ namespace Engine
 		ImGui::GetIO().DisplaySize.y = 650.0f;
 	}
 
-	void Debug::Terminate() noexcept
+	void debug::terminate() noexcept
 	{
 		// End imgui
 		if (ImGui::GetCurrentContext() != NULL)
@@ -56,7 +56,7 @@ namespace Engine
 		}
 	}
 
-	void Debug::Draw() noexcept
+	void debug::draw() noexcept
 	{
 		// Start a new imgui frame
 		ImGui_ImplOpenGL3_NewFrame();
@@ -70,7 +70,7 @@ namespace Engine
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void Debug::Send(
+	void debug::send(
 		const string pMsg,
 		const bool pNewline,
 		const bool pEndline) noexcept
@@ -82,7 +82,7 @@ namespace Engine
 		#endif
 	}
 
-	void Debug::Send(
+	void debug::send(
 		const string pMsg,
 		const wchar_t *pPrefix,
 		const bool pNewline,
@@ -95,19 +95,19 @@ namespace Engine
 		#endif
 	}
 
-	void Debug::Send(
+	void debug::send(
 		const string pMsg,
-		const Type pType,
-		const Impact pImpact,
-		const Stage pStage,
+		const type pType,
+		const impact pImpact,
+		const stage pStage,
 		const bool pNewline,
 		const bool pEndline) noexcept
 	{
 		uint8_t pre = (uint8_t)pType + (uint8_t)pImpact + (uint8_t)pStage;
-		Send(pMsg, s_prefixes[pre], pNewline, pEndline);
+		send(pMsg, s_prefixes[pre], pNewline, pEndline);
 	}
 
-	void Debug::NewLine() noexcept
+	void debug::newLine() noexcept
 	{
 		#ifdef _DEBUG
 			wcout << endl;

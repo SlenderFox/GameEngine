@@ -1,11 +1,11 @@
 #pragma region
-#include "Model.hpp"
+#include "model.hpp"
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "assert.h"
-#include "Debug.hpp"
+#include "debug.hpp"
 
 using glm::vec2;
 using glm::vec3;
@@ -15,73 +15,73 @@ using std::unique_ptr;
 using std::make_unique;
 #pragma endregion
 
-namespace Engine
+namespace engine
 {
-	Model::Model(
+	model::model(
 		const string *inModelPath,
 		const string *inShaderPath,
-		Camera *inCamera,
+		camera *inCamera,
 		const bool pLoadTextures
 	) noexcept
 		: m_cameraRef(inCamera)
 		, m_loadTextures(pLoadTextures)
 	{
-		m_meshes = make_unique<vector<unique_ptr<Mesh>>>();
-		m_textures = vector<Texture*>();
+		m_meshes = make_unique<vector<unique_ptr<mesh>>>();
+		m_textures = vector<texture*>();
 
-		LoadModel(inModelPath);
-		m_shader = new Shader(inShaderPath);
-		if (m_loadTextures) LoadTexturesToShader();
+		loadModel(inModelPath);
+		m_shader = new shader(inShaderPath);
+		if (m_loadTextures) loadTexturesToShader();
 
-		Debug::Send(
+		debug::send(
 			"Done!",
-			Debug::Type::Note,
-			Debug::Impact::Small,
-			Debug::Stage::End
+			debug::type::Note,
+			debug::impact::Small,
+			debug::stage::End
 		);
 	}
 
-	Model::~Model()
+	model::~model()
 	{
 		delete m_shader;
 		m_meshes.get()->clear();
 		m_meshes.release();
 	}
 
-	void Model::Draw(const Camera *inCamera) const noexcept
+	void model::draw(const camera *inCamera) const noexcept
 	{
-		m_shader->Use();
+		m_shader->use();
 		if (inCamera)
 		{
-			m_shader->SetMat4("u_camera", inCamera->GetWorldToCameraMatrix());
-			m_shader->SetVec3("u_viewPos", (vec3)inCamera->GetPosition());
+			m_shader->setMat4("u_camera", inCamera->getWorldToCameraMatrix());
+			m_shader->setFloat3("u_viewPos", (vec3)inCamera->getPosition());
 		}
 		else
 		{
 			assert(m_cameraRef);
-			m_shader->SetMat4("u_camera", m_cameraRef->GetWorldToCameraMatrix());
-			m_shader->SetVec3("u_viewPos", (vec3)m_cameraRef->GetPosition());
+			m_shader->setMat4("u_camera", m_cameraRef->getWorldToCameraMatrix());
+			m_shader->setFloat3("u_viewPos", (vec3)m_cameraRef->getPosition());
 		}
 
 		for (uint16_t i = 0; i < m_meshes->size(); ++i)
-		{ GetMeshAt(i)->Draw(); }
+		{ getMeshAt(i)->draw(); }
 	}
 
-	inline void Model::LoadModel(const string *inPath) noexcept
+	inline void model::loadModel(const string *inPath) noexcept
 	{
-		Debug::Send(
+		debug::send(
 			"Loading model \"" + *inPath + "\"",
-			Debug::Type::Process,
-			Debug::Impact::Large,
-			Debug::Stage::Begin
+			debug::type::Process,
+			debug::impact::Large,
+			debug::stage::Begin
 		);
 		if (!m_loadTextures)
 		{
-			Debug::Send(
+			debug::send(
 				"Ignoring textures",
-				Debug::Type::Note,
-				Debug::Impact::Small,
-				Debug::Stage::Mid
+				debug::type::Note,
+				debug::impact::Small,
+				debug::stage::Mid
 			);
 		}
 
@@ -90,19 +90,19 @@ namespace Engine
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			Debug::Send(
+			debug::send(
 				"ERROR::ASSIMP::" + string(importer.GetErrorString()),
-				Debug::Type::Note,
-				Debug::Impact::Large,
-				Debug::Stage::Mid
+				debug::type::Note,
+				debug::impact::Large,
+				debug::stage::Mid
 			);
 			return;
 		}
 		m_directory = (*inPath).substr(0, (*inPath).find_last_of('/'));
-		ProcessNode(scene->mRootNode, scene);
+		processNode(scene->mRootNode, scene);
 	}
 
-	inline void Model::ProcessNode(
+	inline void model::processNode(
 		const aiNode *inNode,
 		const aiScene *inScene
 	) noexcept
@@ -111,26 +111,26 @@ namespace Engine
 		for (uint32_t i = 0; i < inNode->mNumMeshes; ++i)
 		{
 			aiMesh *mesh = inScene->mMeshes[inNode->mMeshes[i]];
-			m_meshes.get()->push_back(ProcessMesh(mesh, inScene));
+			m_meshes.get()->push_back(processMesh(mesh, inScene));
 		}
 		// Then do the same for each of it's children
 		for (uint32_t i = 0; i < inNode->mNumChildren; ++i)
 		{
-			ProcessNode(inNode->mChildren[i], inScene);
+			processNode(inNode->mChildren[i], inScene);
 		}
 	}
 
-	inline unique_ptr<Mesh> Model::ProcessMesh(
+	inline unique_ptr<mesh> model::processMesh(
 		const aiMesh *inMesh,
 		const aiScene *inScene
 	) noexcept
 	{
-		vector<Vertex> vertices;
+		vector<vertex> vertices;
 		vector<uint32_t> indices;
 		// Process vertex positions, normals, and texture coordinates
 		for (uint32_t i = 0; i < inMesh->mNumVertices; ++i)
 		{
-			Vertex vertex;
+			vertex vertex;
 			vec3 vector;
 			// Position
 			vector.x = inMesh->mVertices[i].x;
@@ -170,31 +170,31 @@ namespace Engine
 		if (m_loadTextures && inMesh->mMaterialIndex >= 0U)
 		{
 			aiMaterial *material = inScene->mMaterials[inMesh->mMaterialIndex];
-			vector<Texture*> diffuseMaps = LoadMaterialTextures(
+			vector<texture*> diffuseMaps = loadMaterialTextures(
 				material,
 				aiTextureType_DIFFUSE,
-				Texture::TexType::Diffuse
+				texture::texType::diffuse
 			);
 			m_textures.insert(m_textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-			vector<Texture*> specularMaps = LoadMaterialTextures(
+			vector<texture*> specularMaps = loadMaterialTextures(
 				material,
 				aiTextureType_SPECULAR,
-				Texture::TexType::Specular
+				texture::texType::specular
 			);
 			m_textures.insert(m_textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 
-		return make_unique<Mesh>(&vertices, &indices);
+		return make_unique<mesh>(&vertices, &indices);
 	}
 
-	inline vector<Texture*> Model::LoadMaterialTextures(
+	inline vector<texture*> model::loadMaterialTextures(
 		const aiMaterial *inMat,
 		const aiTextureType inType,
-		const Texture::TexType inTexType
+		const texture::texType inTexType
 	) const noexcept
 	{
 		// Textures from this specific node being output
-		vector<Texture*> texturesOut;
+		vector<texture*> texturesOut;
 		for (uint32_t i = 0; i < inMat->GetTextureCount(inType); ++i)
 		{
 			aiString file;
@@ -203,15 +203,15 @@ namespace Engine
 			string path = (m_directory + '/' + file.C_Str());
 
 			// First we check if the texture has already been loaded into memory
-			for (size_t j = 0; j < Texture::s_loadedTextures.size(); ++j)
+			for (size_t j = 0; j < texture::s_loadedTextures.size(); ++j)
 			{
-				if (Texture::s_loadedTextures[j]->GetFile() != path) continue;
+				if (texture::s_loadedTextures[j]->getFile() != path) continue;
 
 				// If the texture has already been loaded into memory we check if it has been loaded into this model
 				bool reuseTexture = true;
 				for (size_t k = 0; k < m_textures.size(); ++k)
 				{
-					if (m_textures[k]->GetFile() == path)
+					if (m_textures[k]->getFile() == path)
 					{
 						reuseTexture = false;
 						break;
@@ -221,16 +221,16 @@ namespace Engine
 				if (reuseTexture)
 				{
 					string msg = "Reusing texture "
-						+ std::to_string(Texture::s_loadedTextures[j]->GetId())
+						+ std::to_string(texture::s_loadedTextures[j]->getId())
 						+ ": "
-						+ Texture::s_loadedTextures[j]->GetFile().data();
-					Debug::Send(
+						+ texture::s_loadedTextures[j]->getFile().data();
+					debug::send(
 						msg,
-						Debug::Type::Note,
-						Debug::Impact::Small,
-						Debug::Stage::Mid
+						debug::type::Note,
+						debug::impact::Small,
+						debug::stage::Mid
 					);
-					texturesOut.push_back(Texture::s_loadedTextures[j]);
+					texturesOut.push_back(texture::s_loadedTextures[j]);
 				}
 
 				// Texture has already been loaded
@@ -241,15 +241,15 @@ namespace Engine
 			// If texture has not been loaded before, load it for the first time
 			if (loadTexture)
 			{
-				Texture *tex = new Texture(path, inTexType);
+				texture *tex = new texture(path, inTexType);
 				texturesOut.push_back(tex);
-				Texture::s_loadedTextures.push_back(tex);
+				texture::s_loadedTextures.push_back(tex);
 			}
 		}
 		return texturesOut;
 	}
 
-	inline void Model::LoadTexturesToShader() const noexcept
+	inline void model::loadTexturesToShader() const noexcept
 	{
 		uint8_t diffuseNr = 0;
 		uint8_t specularNr = 0;
@@ -258,13 +258,13 @@ namespace Engine
 			// Retrieve texture number (the N in diffuse_textureN)
 			string name;
 			string number;
-			switch (m_textures[i]->GetType())
+			switch (m_textures[i]->getType())
 			{
-			case Texture::TexType::Diffuse:
+			case texture::texType::diffuse:
 				name = "texture_diffuse";
 				number = std::to_string(diffuseNr++);
 				break;
-			case Texture::TexType::Specular:
+			case texture::texType::specular:
 				name = "texture_specular";
 				number = std::to_string(specularNr++);
 				break;
@@ -273,39 +273,39 @@ namespace Engine
 			}
 
 			string location = "u_material." + name + number;
-			m_shader->SetInt(location.c_str(), (int32_t)m_textures[i]->GetId());
+			m_shader->setInt(location.c_str(), (int32_t)m_textures[i]->getId());
 			string msg = {
 				"Setting "
 				+ location
 				+ " to "
-				+ std::to_string(m_textures[i]->GetId())
+				+ std::to_string(m_textures[i]->getId())
 			};
-			Debug::Send(
+			debug::send(
 				msg,
-				Debug::Type::Note,
-				Debug::Impact::Small,
-				Debug::Stage::Mid
+				debug::type::Note,
+				debug::impact::Small,
+				debug::stage::Mid
 			);
 		}
 	}
 
-	constexpr void Model::SetCameraRef(Camera *inCamera) noexcept
+	constexpr void model::setCameraRef(camera *inCamera) noexcept
 	{ m_cameraRef = inCamera; }
 
-	constexpr void Model::SetShaderRef(Shader *inShader) noexcept
+	constexpr void model::setShaderRef(shader *inShader) noexcept
 	{ m_shader = inShader; }
 
-	Shader *Model::GetShaderRef() const noexcept
+	shader *model::getShaderRef() const noexcept
 	{ return m_shader; }
 
-	Mesh *Model::GetMeshAt(const uint16_t inPos) const  noexcept
+	mesh *model::getMeshAt(const uint16_t inPos) const  noexcept
 	{
 		if (!m_meshes.get())
 			return nullptr;
 
 		if (inPos > m_meshes.get()->size() - 1)
 		{
-			Debug::Send("Attempting to access mesh outside array size");
+			debug::send("Attempting to access mesh outside array size");
 			return nullptr;
 		}
 
