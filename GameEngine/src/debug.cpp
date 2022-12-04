@@ -7,6 +7,7 @@
 #include "../imgui/imgui_impl_opengl3.h"
 
 #ifdef _DEBUG
+#include "winclude.hpp"
 # include <iostream>
  using std::wcout;
  using std::endl;
@@ -132,5 +133,13 @@ namespace engine
 				wcout << endl;
 			#endif
 		}
+
+		#ifdef _DEBUG
+			void MoveConsole(const uint16_t inWidth) noexcept
+			{
+				// Moves the console to the right and resizes
+				MoveWindow(GetConsoleWindow(), inWidth - 3, 0, 900, 1040, TRUE);
+			}
+		#endif
 	}
 }

@@ -1,13 +1,13 @@
 #pragma region
 #pragma warning(disable:4100)
-#define WIN32_LEAN_AND_MEAN
 #include "application.hpp"
 #include "debug.hpp"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/gtc/matrix_transform.hpp"
-#include <Windows.h>	// Needed for Sleep()
 #include <chrono>
+#include "winclude.hpp"
+//#include <thread>
 
 using std::string;
 using std::to_string;
@@ -101,6 +101,9 @@ namespace engine
 				// Skip drawing if minimised, restricts fps to 15
 				if ((bool)glfwGetWindowAttrib(s_windowRef, GLFW_ICONIFIED))
 				{
+					// TODO: Figure out why sleeping the thread freezes when unminimised
+					//using namespace std::chrono_literals;
+					//std::this_thread::sleep_for(66ms);
 					Sleep(66UL);
 					continue;
 				}
@@ -209,8 +212,7 @@ namespace engine
 			#ifdef _DEBUG
 				// Moves the window to the left of the monitor
 				glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_winHeight) * 0.5f));
-				// Moves the console to the right and resizes
-				MoveWindow(GetConsoleWindow(), s_winWidth - 3, 0, 900, 1040, TRUE);
+				debug::MoveConsole(s_winWidth);
 			#else
 				// Moves the window to the center of the workarea
 				glfwSetWindowPos(s_windowRef, (int)((monWidth - s_winWidth) * 0.5f),

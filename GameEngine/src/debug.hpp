@@ -51,5 +51,9 @@ namespace engine
 		) noexcept;
 
 		void newLine() noexcept;
+
+		#ifdef _DEBUG
+			void MoveConsole(const uint16_t inWidth) noexcept;
+		#endif
 	};
 }
