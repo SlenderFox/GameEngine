@@ -63,6 +63,7 @@
     <ClInclude Include="src\shader.hpp" />
     <ClInclude Include="src\texture.hpp" />
     <ClInclude Include="src\transform.hpp" />
+    <ClInclude Include="src\winclude.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
