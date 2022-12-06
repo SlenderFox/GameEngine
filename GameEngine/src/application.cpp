@@ -102,8 +102,7 @@ namespace engine
 				if ((bool)glfwGetWindowAttrib(s_windowRef, GLFW_ICONIFIED))
 				{
 					// TODO: Figure out why sleeping the thread freezes when unminimised
-					//using namespace std::chrono_literals;
-					//std::this_thread::sleep_for(66ms);
+					//std::this_thread::sleep_for(std::chrono::milliseconds(66));
 					Sleep(66UL);
 					continue;
 				}
