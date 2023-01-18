@@ -1,5 +1,4 @@
 #pragma region
-#pragma warning(disable:4100)
 #include "project.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 

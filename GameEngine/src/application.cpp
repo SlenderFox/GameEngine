@@ -1,5 +1,4 @@
 #pragma region
-#pragma warning(disable:4100)
 #include "application.hpp"
 #include "debug.hpp"
 #include "glad/glad.h"
