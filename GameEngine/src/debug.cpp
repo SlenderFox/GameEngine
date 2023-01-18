@@ -134,7 +134,7 @@ namespace engine
 			#endif
 		}
 
-		#ifdef _DEBUG
+		#if defined(_DEBUG) && defined(__WINDOWS__)
 			void MoveConsole(const uint16_t inWidth) noexcept
 			{
 				// Moves the console to the right and resizes
