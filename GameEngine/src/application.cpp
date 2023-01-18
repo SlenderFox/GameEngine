@@ -5,7 +5,6 @@
 #include "GLFW/glfw3.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <chrono>
-#include "winclude.hpp"
 //#include <thread>
 
 using std::string;
@@ -102,7 +101,13 @@ namespace engine
 				{
 					// TODO: Figure out why sleeping the thread freezes when unminimised
 					//std::this_thread::sleep_for(std::chrono::milliseconds(66));
-					Sleep(66UL);
+
+					// Waste time
+					double waster = 0.2893652150526226374;
+					while (glfwGetTime() < s_currentTime + 0.06666666666666666)
+					{
+						waster /= waster;
+					}
 					continue;
 				}
 
