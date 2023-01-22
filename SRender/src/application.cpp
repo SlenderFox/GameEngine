@@ -14,7 +14,7 @@ using glm::radians;
 using glm::normalize;
 #pragma endregion
 
-namespace engine
+namespace srender
 {
 	#pragma region Variables
 	application *application::s_application = nullptr;

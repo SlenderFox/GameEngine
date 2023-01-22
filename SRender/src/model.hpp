@@ -9,7 +9,7 @@ struct aiMaterial;
 enum aiTextureType: int;
 #pragma endregion
 
-namespace engine
+namespace srender
 {
 	struct model
 	{

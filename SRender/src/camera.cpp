@@ -13,7 +13,7 @@ using glm::degrees;
 using glm::inverse;
 #pragma endregion
 
-namespace engine
+namespace srender
 {
 	#pragma region Constructors
 	camera::camera(float inAspectRatio) noexcept

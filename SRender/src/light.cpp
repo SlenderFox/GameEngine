@@ -8,7 +8,7 @@ using glm::sin;
 using glm::radians;
 #pragma endregion
 
-namespace engine
+namespace srender
 {
 	light::light(
 		const lightType inType,

@@ -1,4 +1,4 @@
-# GameEngine
+# SRender
 Built by loosely following https://learnopengl.com/
 
 ### Libraries used:

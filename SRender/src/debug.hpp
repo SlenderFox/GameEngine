@@ -3,7 +3,7 @@
 
 struct GLFWwindow;
 
-namespace engine
+namespace srender
 {
 	namespace debug
 	{

@@ -2,7 +2,7 @@
 
 using glm::vec3;
 
-namespace engine
+namespace srender
 {
 	constexpr float colour::fmod(float x, float y) noexcept
 	{

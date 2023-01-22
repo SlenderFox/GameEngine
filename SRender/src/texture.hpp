@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-namespace engine
+namespace srender
 {
 	/** The texture object stores a reference to a texture on the gpu */
 	struct texture

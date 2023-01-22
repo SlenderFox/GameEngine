@@ -1,7 +1,7 @@
 #pragma once
 #include "entity.hpp"
 
-namespace engine
+namespace srender
 {
 	enum class lightType: uint8_t
 	{

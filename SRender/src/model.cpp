@@ -15,7 +15,7 @@ using std::unique_ptr;
 using std::make_unique;
 #pragma endregion
 
-namespace engine
+namespace srender
 {
 	model::model(
 		const string *inModelPath,

@@ -9,7 +9,7 @@ using std::unique_ptr;
 using std::make_unique;
 #pragma endregion
 
-namespace engine
+namespace srender
 {
 	// Forward declaration
 	class application { public: _NODISCARD static const bool gladLoaded() noexcept; };

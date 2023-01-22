@@ -2,7 +2,7 @@
 #include "shader.hpp"
 #include <memory>
 
-namespace engine
+namespace srender
 {
 	struct vertex {
 		glm::vec3 position;

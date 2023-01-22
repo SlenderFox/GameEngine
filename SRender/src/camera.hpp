@@ -1,7 +1,7 @@
 #pragma once
 #include "transform.hpp"
 
-namespace engine
+namespace srender
 {
 	class camera: public transform
 	{

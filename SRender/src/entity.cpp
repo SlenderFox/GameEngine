@@ -13,7 +13,7 @@ using glm::transpose;
 using glm::inverse;
 #pragma endregion
 
-namespace engine
+namespace srender
 {
 	// Blame https://stackoverflow.com/a/40937193/15035125 for this
 	struct entityLoader

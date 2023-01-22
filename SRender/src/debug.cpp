@@ -16,7 +16,7 @@
 using std::string;
 #pragma endregion
 
-namespace engine
+namespace srender
 {
 	namespace debug
 	{

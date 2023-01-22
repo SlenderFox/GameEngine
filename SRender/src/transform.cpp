@@ -8,7 +8,7 @@ using glm::normalize;
 using glm::cross;
 #pragma endregion
 
-namespace engine
+namespace srender
 {
 	transform::transform() noexcept
 	: m_transform(glm::mat4(1))

@@ -9,7 +9,7 @@ using std::string;
 using std::vector;
 #pragma endregion
 
-namespace engine
+namespace srender
 {
 	// Forward declaration
 	class application { public: _NODISCARD static const bool gladLoaded() noexcept; };

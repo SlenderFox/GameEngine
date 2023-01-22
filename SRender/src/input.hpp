@@ -2,7 +2,7 @@
 
 struct GLFWwindow;
 
-namespace engine
+namespace srender
 {
 	/** The callback function used for mouse and scroll movement */
 	using callbackFunc = void(*)(double, double);

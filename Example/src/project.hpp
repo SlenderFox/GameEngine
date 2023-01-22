@@ -2,7 +2,7 @@
 #include "application.hpp"
 
 /** Example project */
-class Project: public engine::application
+class Project: public srender::application
 {
 	static double s_camYaw, s_camPitch;
 
@@ -24,9 +24,9 @@ class Project: public engine::application
 	static const
 	glm::vec3 s_cubePositions[s_numCubes];
 
-	std::vector<engine::light*> m_lightRefs;
-	std::vector<engine::entity*> m_cubes;
-	engine::entity *object_backpack;
+	std::vector<srender::light*> m_lightRefs;
+	std::vector<srender::entity*> m_cubes;
+	srender::entity *object_backpack;
 
 	/** Loads entities in to create the scene */
 	void CreateScene();

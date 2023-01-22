@@ -1,7 +1,7 @@
 #pragma once
 #include "colour.hpp"
 
-namespace engine
+namespace srender
 {
 	class entity;
 

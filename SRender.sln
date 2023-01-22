@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{9BB7398B-8F84-44D0-BE31-BE03C6C54F25}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SRender", "SRender\SRender.vcxproj", "{9BB7398B-8F84-44D0-BE31-BE03C6C54F25}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example", "Example\Example.vcxproj", "{5461AF31-2B57-4D60-9369-372EBB20ED29}"
 	ProjectSection(ProjectDependencies) = postProject

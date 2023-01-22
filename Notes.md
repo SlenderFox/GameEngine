@@ -1,5 +1,5 @@
-Repo: https://github.com/SlenderFox/OpenGL-Engine  
-Following: https://learnopengl.com  
+Repo: https://github.com/SlenderFox/SRender
+Following: https://learnopengl.com
 Currently at: https://learnopengl.com/Advanced-OpenGL/Depth-testing
 ___
 Notes:

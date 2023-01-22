@@ -12,7 +12,7 @@ using glm::transpose;
 using glm::inverse;
 using glm::rotate;
 using glm::radians;
-using namespace engine;
+using namespace srender;
 #pragma endregion
 
 /** Entry point of the project
@@ -31,10 +31,10 @@ int main()
 	Project *app = new Project();
 	#ifdef _DEBUG
 		app->setDimensions(1030, 650);
-		app->setTitle("Application (DEBUG)");
+		app->setTitle("SRender (DEBUG)");
 	#else
 		app->setDimensions(1600, 900);
-		app->setTitle("Application (RELEASE)");
+		app->setTitle("SRender (RELEASE)");
 	#endif
 	app->setFullscreen(false);
 	int code = (int)app->run();

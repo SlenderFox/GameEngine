@@ -12,7 +12,7 @@
 	#include "glm/glm.hpp"
 #endif
 
-namespace engine
+namespace srender
 {
 	/** An object used to store and convert colour information
 	 * @note Filled to the brim with constexpr to try and calculate as much as possible at compile time

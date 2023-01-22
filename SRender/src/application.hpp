@@ -2,7 +2,7 @@
 #include "renderer.hpp"
 #include "input.hpp"
 
-namespace engine
+namespace srender
 {
 	class application
 	{

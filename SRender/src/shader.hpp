@@ -2,7 +2,7 @@
 #include "camera.hpp"
 #include "texture.hpp"
 
-namespace engine
+namespace srender
 {
 	/** A shader is used to render the given vertex and texture information to the screen */
 	struct shader

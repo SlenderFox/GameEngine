@@ -1,7 +1,7 @@
 #pragma once
 #include "light.hpp"
 
-namespace engine
+namespace srender
 {
 	class renderer
 	{

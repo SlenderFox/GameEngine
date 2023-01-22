@@ -13,7 +13,7 @@ using std::make_unique;
 using std::unique_ptr;
 #pragma endregion
 
-namespace engine
+namespace srender
 {
 	#pragma region Variables
 	camera *renderer::s_camera = nullptr;
