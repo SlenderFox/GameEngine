@@ -13,7 +13,6 @@ namespace srender
 		glm::mat4 m_projection;
 
 	public:
-		#pragma region Constructors
 		camera(float inAspectRatio) noexcept;
 		camera(
 			float inAspectRatio,
@@ -41,7 +40,6 @@ namespace srender
 			glm::vec3 inTo,
 			glm::vec3 inUp = { 0, 1, 0 }
 		) noexcept;
-		#pragma endregion
 
 		void lookAt(
 			glm::vec3 inFrom,
@@ -54,7 +52,6 @@ namespace srender
 		void updateFovH() noexcept;
 		void updateFovV() noexcept;
 
-		#pragma region Setters
 		void setTransform(const glm::mat4 *inValue) noexcept override;
 		void setView(glm::mat4 *inValue) noexcept;
 		void setProjection(float inFovV) noexcept;
@@ -72,9 +69,7 @@ namespace srender
 
 		void setFovH(float inFovH) noexcept;
 		void setFovV(float inFovV) noexcept;
-		#pragma endregion
 
-		#pragma region Getters
 		_NODISCARD glm::mat4 getWorldToCameraMatrix() const noexcept;
 
 		_NODISCARD constexpr
@@ -82,6 +77,5 @@ namespace srender
 
 		_NODISCARD constexpr
 		glm::mat4 getProjection() const noexcept;
-		#pragma endregion
-	};
+			};
 }

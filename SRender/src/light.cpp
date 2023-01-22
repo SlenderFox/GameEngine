@@ -1,4 +1,3 @@
-#pragma region
 #include "light.hpp"
 #include <math.h>
 
@@ -6,7 +5,6 @@ using glm::mat4;
 using glm::cos;
 using glm::sin;
 using glm::radians;
-#pragma endregion
 
 namespace srender
 {

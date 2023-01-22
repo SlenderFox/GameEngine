@@ -26,7 +26,6 @@ namespace srender
 		float fmod(float x, float y) noexcept;
 
 	public:
-		#pragma region Conversion
 		/** Converts colour data from RGB to HSV
 		 * @param inR Input red
 		 * @param inG Input green
@@ -76,9 +75,7 @@ namespace srender
 		 */
 		_NODISCARD static
 		glm::vec3 hsvToRgb(const glm::vec3 inHSV) noexcept;
-		#pragma endregion
 
-		#pragma region Presets
 		static constexpr colour black() noexcept;
 		static constexpr colour white() noexcept;
 		static constexpr colour silver() noexcept;
@@ -96,7 +93,6 @@ namespace srender
 		static constexpr colour olive() noexcept;
 		static constexpr colour teal() noexcept;
 		static constexpr colour purple() noexcept;
-		#pragma endregion
 
 		/** Get the colour as RGB stored in a vec3
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
@@ -110,7 +106,6 @@ namespace srender
 		_NODISCARD constexpr
 		glm::vec3 hsv() const noexcept;
 
-		#pragma region Constructors
 		constexpr colour() noexcept;
 		constexpr colour(float inGreyscale) noexcept;
 		constexpr colour(float inR, float inG, float inB) noexcept;
@@ -124,9 +119,7 @@ namespace srender
 		// Move, take rvalue
 		constexpr colour(colour&& pOther) noexcept;
 		constexpr colour &operator=(colour&& pOther) noexcept;
-		#pragma endregion
 
-		#pragma region Operators
 		operator glm::vec3() const;
 
 		#define COL_OP_CONST_FLOAT_DEC(OPERAND) colour operator OPERAND(const float&) const noexcept;
@@ -160,6 +153,5 @@ namespace srender
 		COL_OP_VEC3_DEC(-=)
 		COL_OP_VEC3_DEC(*=)
 		COL_OP_VEC3_DEC(/=)
-		#pragma endregion
-	};
+			};
 }

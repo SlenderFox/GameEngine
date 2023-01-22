@@ -19,7 +19,6 @@ namespace srender
 
 		static double s_mouseX, s_mouseY, s_mouseLastX, s_mouseLastY;
 
-		#pragma region Constructors
 		// Pure static class
 		input() = delete;
 		~input() = delete;
@@ -28,10 +27,8 @@ namespace srender
 		input &operator=(input const&) = delete;
 		input(input&&) = delete;
 		input &operator=(input&&) = delete;
-		#pragma endregion
 
 	public:
-		#pragma region Bullshit
 		enum class state: unsigned char
 		{
 			Release,
@@ -176,7 +173,6 @@ namespace srender
 			GLFWwindow *pWindow,
 			double pOffsetX,
 			double pOffsetY) noexcept;
-		#pragma endregion
 
 		/** Initialise input with GLFW
 		 * @param pWindowRef The active window

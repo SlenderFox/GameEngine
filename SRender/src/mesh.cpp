@@ -1,4 +1,3 @@
-#pragma region
 #include "mesh.hpp"
 #include "glad/glad.h"
 #include <assert.h>
@@ -7,7 +6,6 @@ using std::string;
 using std::vector;
 using std::unique_ptr;
 using std::make_unique;
-#pragma endregion
 
 namespace srender
 {

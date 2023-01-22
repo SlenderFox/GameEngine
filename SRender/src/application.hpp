@@ -40,13 +40,11 @@ namespace srender
 		// The error code returned by main
 		static exitCode s_exitCode;
 
-		#pragma region Constructors
 		// Delete copy/move so extra instances can't be created/moved.
 		application(application const&) = delete;
 		application &operator=(application const&) = delete;
 		application(application&&) = delete;
 		application &operator=(application&&) = delete;
-		#pragma endregion
 
 		static void terminate() noexcept;
 

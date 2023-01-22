@@ -1,4 +1,3 @@
-#pragma region
 #include "transform.hpp"
 
 using glm::vec3;
@@ -6,7 +5,6 @@ using glm::vec4;
 using glm::mat4;
 using glm::normalize;
 using glm::cross;
-#pragma endregion
 
 namespace srender
 {

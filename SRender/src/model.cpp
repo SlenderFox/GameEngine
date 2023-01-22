@@ -1,4 +1,3 @@
-#pragma region
 #include "model.hpp"
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
@@ -13,7 +12,6 @@ using std::string;
 using std::vector;
 using std::unique_ptr;
 using std::make_unique;
-#pragma endregion
 
 namespace srender
 {

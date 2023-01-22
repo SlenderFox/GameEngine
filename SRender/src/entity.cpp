@@ -1,4 +1,3 @@
-#pragma region
 //#include "entity.hpp"	// Included upstream by renderer.hpp
 #include "renderer.hpp"
 
@@ -11,7 +10,6 @@ using std::vector;
 using std::make_unique;
 using glm::transpose;
 using glm::inverse;
-#pragma endregion
 
 namespace srender
 {
@@ -101,7 +99,6 @@ namespace srender
 		pShaderOut = m_modelRef->getShaderRef();
 	}
 
-	#pragma region Setters
 	void entity::setTransform(const mat4 *pValue) noexcept
 	{
 		transform::setTransform(pValue);
@@ -145,7 +142,6 @@ namespace srender
 
 	void entity::sentTint(const colour pCol) noexcept
 	{ m_modelRef->getShaderRef()->setFloat3("u_colour", pCol.rgb()); }
-	#pragma endregion
 
 	constexpr entityBase &entity::getParent() const noexcept
 	{ return *m_parentRef; }

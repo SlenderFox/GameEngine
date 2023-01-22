@@ -4,7 +4,6 @@
 
 namespace srender
 {
-	#pragma region Variables
 	GLFWwindow *input::s_windowRef = nullptr;
 	callbackFunc input::s_mouseCallbackFun = nullptr,
 		input::s_scrollCallbackFun = nullptr;
@@ -12,9 +11,7 @@ namespace srender
 		input::s_mouseY = 0.0,
 		input::s_mouseLastX = 0.0,
 		input::s_mouseLastY = 0.0;
-	#pragma endregion
 
-	#pragma region Bullshit
 	void input::key_callback(
 		GLFWwindow *pWindow,
 		int pKey,
@@ -49,7 +46,6 @@ namespace srender
 		if (s_scrollCallbackFun)
 			s_scrollCallbackFun(pOffsetX, pOffsetY);
 	}
-	#pragma endregion
 
 	bool input::init(GLFWwindow *pWindowRef) noexcept
 	{

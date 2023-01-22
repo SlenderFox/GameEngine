@@ -1,4 +1,3 @@
-#pragma region
 #include "texture.hpp"
 #include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
@@ -7,7 +6,6 @@
 
 using std::string;
 using std::vector;
-#pragma endregion
 
 namespace srender
 {

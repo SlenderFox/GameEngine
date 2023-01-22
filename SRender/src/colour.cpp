@@ -17,7 +17,6 @@ namespace srender
 		return x - n * y;
 	}
 
-	#pragma region Conversion
 	constexpr void colour::rgbToHsv(
 		float inR,
 		float inG,
@@ -124,9 +123,7 @@ namespace srender
 		hsvToRgb(hue, inHSV.y, inHSV.z, result.r, result.g, result.b);
 		return result;
 	}
-	#pragma endregion
 
-	#pragma region Presets
 	constexpr colour black()    noexcept { return colour(0.0f); }
 	constexpr colour white()    noexcept { return colour(1.0f); }
 	constexpr colour silver()   noexcept { return colour(0.75f, 0.75f, 0.75f ); }
@@ -144,7 +141,6 @@ namespace srender
 	constexpr colour olive()    noexcept { return colour(0.5f,  0.5f,  0.0f  ); }
 	constexpr colour teal()     noexcept { return colour(0.0f,  0.5f,  0.5f  ); }
 	constexpr colour purple()   noexcept { return colour(0.5f,  0.0f,  0.5f  ); }
-	#pragma endregion
 
 	vec3 colour::rgb() const noexcept
 	{ return m_RGB; }
@@ -152,7 +148,6 @@ namespace srender
 	constexpr vec3 colour::hsv() const noexcept
 	{ return rgbToHsv(m_RGB); }
 
-	#pragma region Constructors
 	constexpr colour::colour() noexcept
 	{}
 
@@ -179,9 +174,7 @@ namespace srender
 
 	constexpr colour &colour::operator=(colour&& pOther) noexcept
 	{ this->m_RGB = std::move(pOther.m_RGB); return *this; }
-	#pragma endregion
 
-	#pragma region Operators
 	colour::operator glm::vec3() const { return m_RGB; }
 
 	#define COL_OP_CONST_FLOAT_DEF(OPERAND) \
@@ -232,5 +225,4 @@ namespace srender
 	COL_OP_VEC3_DEF(-=)
 	COL_OP_VEC3_DEF(*=)
 	COL_OP_VEC3_DEF(/=)
-	#pragma endregion
-}
+	}

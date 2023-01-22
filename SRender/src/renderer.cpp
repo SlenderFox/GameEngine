@@ -1,4 +1,3 @@
-#pragma region
 #include "renderer.hpp"
 #include "glad/glad.h"
 #include "glm/gtc/matrix_transform.hpp"
@@ -11,16 +10,13 @@ using std::string;
 using std::vector;
 using std::make_unique;
 using std::unique_ptr;
-#pragma endregion
 
 namespace srender
 {
-	#pragma region Variables
 	camera *renderer::s_camera = nullptr;
 	unique_ptr<vector<unique_ptr<model>>> renderer::s_models = nullptr;
 	unique_ptr<vector<unique_ptr<light>>> renderer::s_lights = nullptr;
 	const float renderer::s_ambience = 0.15f;
-	#pragma endregion
 
 	bool renderer::init(const float inAspect) noexcept
 	{

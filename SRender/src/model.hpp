@@ -1,4 +1,3 @@
-#pragma region
 #pragma once
 #include "mesh.hpp"
 
@@ -7,7 +6,6 @@ struct aiMesh;
 struct aiScene;
 struct aiMaterial;
 enum aiTextureType: int;
-#pragma endregion
 
 namespace srender
 {

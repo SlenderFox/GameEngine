@@ -28,7 +28,6 @@ namespace srender
 		) noexcept;
 		~light() = default;
 
-		#pragma region Setters
 		/** Wrapper function that passes to setForward
 		 * @param pDirection Value to be set
 		 */
@@ -39,9 +38,7 @@ namespace srender
 		void setQuadratic (float inValue) noexcept;
 		void setAngle (float inValue) noexcept; // In degrees
 		void setBlur (float inValue) noexcept;  // In degrees
-		#pragma endregion
 
-		#pragma region Getters
 		_NODISCARD float getAngle() const noexcept;
 		_NODISCARD float getBlur() const noexcept;
 		/** Wrapper function to getForward
@@ -54,6 +51,5 @@ namespace srender
 		_NODISCARD float getQuadratic() const noexcept;
 		_NODISCARD float getAngleRaw() const noexcept;
 		_NODISCARD float getBlurRaw() const noexcept;
-		#pragma endregion
-	};
+			};
 }

@@ -1,4 +1,3 @@
-#pragma region
 #include "project.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -13,7 +12,6 @@ using glm::inverse;
 using glm::rotate;
 using glm::radians;
 using namespace srender;
-#pragma endregion
 
 /** Entry point of the project
  * @note Following: https://learnopengl.com/
