@@ -1,4 +1,3 @@
-#pragma region
 #include "debug.hpp"
 #include <io.h>
 #include <fcntl.h>
@@ -14,7 +13,6 @@
 #endif
 
 using std::string;
-#pragma endregion
 
 namespace srender
 {

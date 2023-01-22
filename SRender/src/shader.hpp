@@ -69,7 +69,6 @@ namespace srender
 		_NODISCARD constexpr
 		bool isLoaded() const noexcept;
 
-		#pragma region Setters
 		void setBool   (const std::string inName, const bool      inValue) const noexcept;
 		void setInt    (const std::string inName, const int32_t   inValue) const noexcept;
 		void setUint   (const std::string inName, const uint32_t  inValue) const noexcept;
@@ -79,6 +78,5 @@ namespace srender
 		void setFloat4 (const std::string inName, const glm::vec4 inValue) const noexcept;
 		void setMat3   (const std::string inName, const glm::mat3 inValue) const noexcept;
 		void setMat4   (const std::string inName, const glm::mat4 inValue) const noexcept;
-		#pragma endregion
-	};
+			};
 }

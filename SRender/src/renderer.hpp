@@ -13,7 +13,6 @@ namespace srender
 		static std::unique_ptr<std::vector<std::unique_ptr<model>>> s_models;
 		static std::unique_ptr<std::vector<std::unique_ptr<light>>> s_lights;
 
-		#pragma region Constructors
 		// Pure static class
 		renderer() = delete;
 		~renderer() = delete;
@@ -22,7 +21,6 @@ namespace srender
 		renderer &operator=(renderer const&) = delete;
 		renderer(renderer&&) = delete;
 		renderer &operator=(renderer&&) = delete;
-		#pragma endregion
 
 		static bool init(const float inAspect) noexcept;
 		static void draw() noexcept;

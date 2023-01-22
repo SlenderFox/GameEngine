@@ -1,4 +1,3 @@
-#pragma region
 #include "application.hpp"
 #include "debug.hpp"
 #include "glad/glad.h"
@@ -12,11 +11,9 @@ using std::to_string;
 using glm::vec3;
 using glm::radians;
 using glm::normalize;
-#pragma endregion
 
 namespace srender
 {
-	#pragma region Variables
 	application *application::s_application = nullptr;
 	GLFWwindow *application::s_windowRef = nullptr;
 	bool application::s_gladLoaded = false,
@@ -33,7 +30,6 @@ namespace srender
 		application::s_frameTimer = 0.0;
 	string application::s_title = "Application";
 	application::exitCode application::s_exitCode = application::exitCode::okay;
-	#pragma endregion
 
 	application *application::getApplication() noexcept
 	{ return s_application; }

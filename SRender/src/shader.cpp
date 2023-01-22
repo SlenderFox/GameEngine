@@ -1,4 +1,3 @@
-#pragma region
 #include "shader.hpp"
 #include "glad/glad.h"
 #include <glm/gtc/type_ptr.hpp>
@@ -9,7 +8,6 @@
 using std::string;
 using std::stringstream;
 using std::ifstream;
-#pragma endregion
 
 namespace srender
 {
@@ -53,7 +51,6 @@ namespace srender
 
 	inline void shader::loadShader(const shaderType inType)
 	{
-		#pragma region Fallback code
 		 static const char *vertexFallback = "#version 330 core\n\
 layout(location=0)in vec3 aPos;\
 layout(location=1)in vec3 aNormal;\
@@ -142,7 +139,6 @@ for(int i=0;i<NR_SPOT_LIGHTS;++i)result+=CalculateSpotLight(u_spotLights[i]);\
 if(u_justColour) FragCol=vec4(u_colour,1);\
 else FragCol=vec4(result*u_colour,1);\
 return;}";
-		#pragma endregion
 
 		bool m_usingFallback = false;
 		string codeString;
@@ -382,7 +378,6 @@ return;}";
 		return (inType == shaderType::vertex ? inVertex : inFragment);
 	}
 
-	#pragma region Setters
 	void shader::setBool(string inName, bool inValue) const noexcept
 	{
 		glUseProgram(m_idProgram);
@@ -470,5 +465,4 @@ return;}";
 			&inValue[0][0]
 		);
 	}
-	#pragma endregion
-}
+	}

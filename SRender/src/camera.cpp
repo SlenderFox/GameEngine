@@ -1,4 +1,3 @@
-#pragma region
 #include "camera.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -11,11 +10,9 @@ using glm::tan;
 using glm::perspective;
 using glm::degrees;
 using glm::inverse;
-#pragma endregion
 
 namespace srender
 {
-	#pragma region Constructors
 	camera::camera(float inAspectRatio) noexcept
 	{
 		mat4 id = mat4(1.0f);
@@ -80,7 +77,6 @@ namespace srender
 		lookAt(inFrom, inTo, inUp);
 		setFovH(inFovH);
 	}
-	#pragma endregion
 
 	void camera::lookAt(
 		vec3 inFrom,
@@ -124,7 +120,6 @@ namespace srender
 		setProjection(m_fovV);
 	}
 
-	#pragma region Setters
 	void camera::setTransform(const mat4 *inValue) noexcept
 	{
 		transform::setTransform(inValue);
@@ -190,7 +185,6 @@ namespace srender
 			m_fovV = 1.0f;
 		updateFovH();
 	}
-	#pragma endregion
 
 	mat4 camera::getWorldToCameraMatrix() const noexcept
 	{ return m_projection * m_view; }

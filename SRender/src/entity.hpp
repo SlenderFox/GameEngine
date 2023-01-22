@@ -57,7 +57,6 @@ namespace srender
 			const bool inLoadTextures = true
 		) noexcept;
 
-		#pragma region Setters
 		void setTransform(const glm::mat4 *inValue) noexcept override;
 		void setPosition(const glm::vec3 inValue) noexcept override;
 		void translate(const glm::vec3 inValue) noexcept override;
@@ -66,7 +65,6 @@ namespace srender
 		void renderOnlyColour(const bool inState) noexcept;
 		void setScale(const glm::vec3 inValue) noexcept;
 		void sentTint(const colour inCol) noexcept;
-		#pragma endregion
 
 		_NODISCARD constexpr
 		entityBase &getParent() const noexcept;
@@ -82,7 +80,6 @@ namespace srender
 			return s_root;
 		}
 
-		#pragma region Constructors
 		~root() = default;
 
 	private:
@@ -92,6 +89,5 @@ namespace srender
 		root &operator=(root const&) = delete;
 		root(root&&) = delete;
 		root &operator=(root&&) = delete;
-		#pragma endregion
-	};
+			};
 }
