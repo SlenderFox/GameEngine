@@ -1,5 +1,10 @@
-NAME:=stocktrader
-CFLAGS:=-std=c17 -Wall
+# Current issues
+# Compiling source is SRender/src/*.cpp or *.hpp
+# Compiling imgui is SRender/imgui/*.cpp or *.h
+# Resulting file is libsrender.a
+
+NAME:=libsrender.a
+CFLAGS:=-std=c++20 -Wall
 SRC:=src
 OBJ:=temp
 BIN:=build
@@ -54,9 +59,9 @@ ifneq (,$(filter releasew,$(MAKECMDGOALS)))
 	LIBS:=$(LIBSW)
 endif
 
-HEADERS:=$(wildcard $(SRC)/*.h)
-SOURCES:=$(wildcard $(SRC)/*.c)
-OBJECTS:=$(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(SOURCES))
+HEADERS:=$(wildcard $(SRC)/*.hpp)
+SOURCES:=$(wildcard $(SRC)/*.cpp)
+OBJECTS:=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.o,$(SOURCES))
 
 .PHONY: makefile all clean build debug release debugw releasew
 
@@ -74,10 +79,10 @@ clean:
 
 # Link the object files into the binary file
 $(BIN)/$(NAME): $(OBJECTS)
-	$(C) $(CFLAGS) $(OBJECTS) -o $@ $(LIBPATH) $(LIBS)
+	ar rcs $(BIN)/$(NAME) $(OBJECTS)
 
 # Compile any object files that need to be updated
-$(OBJ)/%.o:: $(SRC)/%.c $(HEADERS)
+$(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
 	$(C) $(CFLAGS) -c $< -o $@ $(INCPATH) $(LIBS)
 
 build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
