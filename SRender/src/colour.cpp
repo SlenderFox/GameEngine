@@ -7,9 +7,9 @@ namespace srender
 	constexpr float colour::fmod(float x, float y) noexcept
 	{
 		// Error handling
-		if (x == 0.0f && y != 0.0f) return 0.0f;
+		assert(y != 0.0f);
 		assert(x != INFINITY || x != -INFINITY);
-		assert(y != 0);
+		if (x == 0.0f) return 0.0f;
 		if (y == INFINITY || y == -INFINITY) return x;
 
 		// Truncate the division
