@@ -1,15 +1,17 @@
 #include "debug.hpp"
-#include <io.h>
-#include <fcntl.h>
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
 
 #ifdef _DEBUG
-#include "winclude.hpp"
-# include <iostream>
- using std::wcout;
- using std::endl;
+	#include "winclude.hpp"
+	#ifdef __WINDOWS__
+		#include <io.h>
+		#include <fcntl.h>
+	#endif
+	#include <iostream>
+	using std::wcout;
+	using std::endl;
 #endif
 
 using std::string;
@@ -49,8 +51,10 @@ namespace srender
 
 		void init(GLFWwindow *pWindow) noexcept
 		{
-			// Allows utf16 output to console
-			_setmode(_fileno(stdout), _O_U16TEXT);
+			#if defined(_DEBUG) && defined(__WINDOWS__)
+				// Allows utf16 output to console
+				_setmode(_fileno(stdout), _O_U16TEXT);
+			#endif
 
 			ImGui::CreateContext();
 			ImGui::StyleColorsDark();
