@@ -19,7 +19,7 @@ namespace srender
 		void addChild(entity *inChild) noexcept;
 		void removeChild(const entity *inChild) noexcept;
 
-		_NODISCARD constexpr
+		[[nodiscard]] constexpr
 		std::vector<entity*> getChildren() const noexcept;
 	};
 
@@ -29,7 +29,7 @@ namespace srender
 		friend struct entityLoader;
 
 	public:
-		_NODISCARD static
+		[[nodiscard]] static
 		entity *createWithModel(
 			std::string pModelPath,
 			std::string pShaderPath,
@@ -66,7 +66,7 @@ namespace srender
 		void setScale(const glm::vec3 inValue) noexcept;
 		void sentTint(const colour inCol) noexcept;
 
-		_NODISCARD constexpr
+		[[nodiscard]] constexpr
 		entityBase &getParent() const noexcept;
 	};
 

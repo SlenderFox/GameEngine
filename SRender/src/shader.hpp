@@ -30,7 +30,7 @@ namespace srender
 
 		inline void createShaderProgram() noexcept;
 
-		_NODISCARD inline
+		[[nodiscard]] inline
 		bool checkForErrors(
 			const uint32_t *inShaderID,
 			const shaderType inType
@@ -44,7 +44,7 @@ namespace srender
 		 * @return [T] One of the two given params
 		 * @note Will assert that inType is not shaderType::program
 		 */
-		template<typename T> _NODISCARD inline
+		template<typename T> [[nodiscard]] inline
 		T byType(
 			const shaderType inType,
 			T inVertex,
@@ -66,7 +66,7 @@ namespace srender
 		/** Makes this shader the active shader */
 		void use() const noexcept;
 
-		_NODISCARD constexpr
+		[[nodiscard]] constexpr
 		bool isLoaded() const noexcept;
 
 		void setBool   (const std::string inName, const bool      inValue) const noexcept;

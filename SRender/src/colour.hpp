@@ -22,7 +22,7 @@ namespace srender
 		glm::vec3 m_RGB = glm::vec3(0);	// Colour data stored as 0-1 for easy conversion
 
 		/** My own fmod function to have constexpr*/
-		_NODISCARD static constexpr
+		[[nodiscard]] static constexpr
 		float fmod(float x, float y) noexcept;
 
 	public:
@@ -34,7 +34,7 @@ namespace srender
 		 * @param outS Output saturation
 		 * @param outV Output value
 		 */
-		_NODISCARD static constexpr
+		[[nodiscard]] static constexpr
 		void rgbToHsv(
 			float inR,
 			float inG,
@@ -48,7 +48,7 @@ namespace srender
 		 * @param inRGB 0-1 Red, 0-1 Green, 0-1 Blue
 		 * @return [glm::vec3] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 */
-		_NODISCARD static constexpr
+		[[nodiscard]] static constexpr
 		glm::vec3 rgbToHsv(glm::vec3 inRGB) noexcept;
 
 		/** Converts colour data from HSV to RGB
@@ -59,7 +59,7 @@ namespace srender
 		 * @param outG Output green
 		 * @param outB Output blue
 		 */
-		_NODISCARD static constexpr
+		[[nodiscard]] static constexpr
 		void hsvToRgb(
 			uint16_t inH,
 			float inS,
@@ -73,7 +73,7 @@ namespace srender
 		 * @param inHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		 */
-		_NODISCARD static
+		[[nodiscard]] static
 		glm::vec3 hsvToRgb(const glm::vec3 inHSV) noexcept;
 
 		static constexpr colour black() noexcept;
@@ -97,13 +97,13 @@ namespace srender
 		/** Get the colour as RGB stored in a vec3
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		 */
-		_NODISCARD
+		[[nodiscard]]
 		glm::vec3 rgb() const noexcept;
 
 		/** Get the colour as HSV stored in a vec3
 		 * @return [glm::vec3] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 */
-		_NODISCARD constexpr
+		[[nodiscard]] constexpr
 		glm::vec3 hsv() const noexcept;
 
 		constexpr colour() noexcept;

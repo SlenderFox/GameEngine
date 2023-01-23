@@ -68,15 +68,15 @@ namespace srender
 		static constexpr
 		double s_fixedDeltaTime = 1.0 / 60.0;
 
-		_NODISCARD static
+		[[nodiscard]] static
 		application *getApplication() noexcept;
 
-		_NODISCARD static const
+		[[nodiscard]] static const
 		bool gladLoaded() noexcept;	// No definition to allow forward declaration
 
 		static void quit() noexcept;
 
-		_NODISCARD static
+		[[nodiscard]] static
 		exitCode run();
 
 		static void setDimensions(
@@ -86,9 +86,9 @@ namespace srender
 		static void setTitle(const std::string inTitle) noexcept;
 		static void setFullscreen(const bool inFullscreen) noexcept;
 
-		_NODISCARD static
+		[[nodiscard]] static
 		double getTime() noexcept;
-		_NODISCARD static
+		[[nodiscard]] static
 		double getDeltaTime() noexcept;
 
 	protected:
