@@ -51,7 +51,7 @@ namespace srender
 
 	inline void shader::loadShader(const shaderType inType)
 	{
-		 static const char *vertexFallback = "#version 330 core\n\
+		static const char *vertexFallback = "#version 330 core\n\
 layout(location=0)in vec3 aPos;\
 layout(location=1)in vec3 aNormal;\
 layout(location=2)in vec2 aTexCoords;\
@@ -68,7 +68,7 @@ TexCoords=aTexCoords;\
 Normal=u_transposeInverseOfModel*aNormal;\
 FragPos=vec3(vertModel);\
 gl_Position=u_camera*vertModel;}";
-		 static const char *fragmentFallback = "#version 330 core\n\
+		static const char *fragmentFallback = "#version 330 core\n\
 #define normalise normalize\n\
 const int NR_DIR_LIGHTS=3;\
 const int NR_POINT_LIGHTS=30;\
