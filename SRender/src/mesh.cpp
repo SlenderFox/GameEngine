@@ -14,7 +14,7 @@ namespace srender
 
 	//Static
 
-	constexpr vector<vertex> mesh::generateVertices() noexcept
+	vector<vertex> mesh::generateVertices() noexcept
 	{
 		vector<vertex> verts = vector<vertex>();
 
@@ -42,7 +42,7 @@ namespace srender
 		return verts;
 	}
 
-	constexpr vector<uint32_t> mesh::generateIndices() noexcept
+	vector<uint32_t> mesh::generateIndices() noexcept
 	{
 		vector<uint32_t> inds = vector<uint32_t>();
 
