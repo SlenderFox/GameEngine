@@ -98,14 +98,14 @@ namespace srender
 		/** Called once at the start of runtime
 		 * @return [bool] False will terminate application
 		 */
-		virtual bool startup() = NULL;
+		virtual bool startup() = 0;
 		/** Called when the application shuts down */
-		virtual void shutdown() = NULL;
+		virtual void shutdown() = 0;
 		/** Called once at the start of every frame */
-		virtual void update() = NULL;
+		virtual void update() = 0;
 		/** Called 60 times per second, after Update */
-		virtual void fixedUpdate() = NULL;
+		virtual void fixedUpdate() = 0;
 		/** Called once per frame, after fixedUpdate but still before rendering */
-		virtual void fateUpdate() = NULL;
+		virtual void fateUpdate() = 0;
 	};
 }
