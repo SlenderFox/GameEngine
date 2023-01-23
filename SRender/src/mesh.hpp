@@ -89,14 +89,14 @@ namespace srender
 		 * @deprecated No longer used since Model class
 		 * @return [std::vector<Vertex>] The vertex vector
 		 */
-		[[nodiscard]] static constexpr
+		[[nodiscard]] static
 		std::vector<vertex> generateVertices() noexcept;
 
 		/** Takes the indices array and places it in a vector
 		 * @deprecated No longer used since Model class
 		 * @return [std::vector<uint32_t>] The indices vector
 		 */
-		[[nodiscard]] static constexpr
+		[[nodiscard]] static
 		std::vector<uint32_t> generateIndices() noexcept;
 
 		mesh(
