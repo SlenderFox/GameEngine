@@ -66,16 +66,16 @@ namespace srender
 			const size_t inHeight
 		) noexcept;
 
-		_NODISCARD static
+		[[nodiscard]] static
 		uint8_t modelCount() noexcept;
-		_NODISCARD static
+		[[nodiscard]] static
 		uint8_t lightCount() noexcept;
-		_NODISCARD static
+		[[nodiscard]] static
 		model *getModelAt(const uint8_t inPos) noexcept;
-		_NODISCARD static
+		[[nodiscard]] static
 		light *getLightAt(const uint8_t inPos) noexcept;
 
-		_NODISCARD static
+		[[nodiscard]] static
 		camera *getCamera() noexcept;
 	};
 }

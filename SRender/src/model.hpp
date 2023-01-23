@@ -29,13 +29,13 @@ namespace srender
 			const aiScene *inScene
 		) noexcept;
 
-		_NODISCARD inline
+		[[nodiscard]] inline
 		std::unique_ptr<mesh> processMesh(
 			const aiMesh *inMesh,
 			const aiScene *inScene
 		) noexcept;
 
-		_NODISCARD inline
+		[[nodiscard]] inline
 		std::vector<texture*> loadMaterialTextures(
 			const aiMaterial *inMat,
 			const aiTextureType inType,
@@ -59,7 +59,7 @@ namespace srender
 		constexpr void setCameraRef(camera *inCamera) noexcept;
 		constexpr void setShaderRef(shader *inShader) noexcept;
 
-		_NODISCARD shader *getShaderRef() const noexcept;
-		_NODISCARD mesh *getMeshAt(const uint16_t inPos) const noexcept;
+		[[nodiscard]] shader *getShaderRef() const noexcept;
+		[[nodiscard]] mesh *getMeshAt(const uint16_t inPos) const noexcept;
 	};
 }

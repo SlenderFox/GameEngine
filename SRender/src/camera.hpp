@@ -70,12 +70,12 @@ namespace srender
 		void setFovH(float inFovH) noexcept;
 		void setFovV(float inFovV) noexcept;
 
-		_NODISCARD glm::mat4 getWorldToCameraMatrix() const noexcept;
+		[[nodiscard]] glm::mat4 getWorldToCameraMatrix() const noexcept;
 
-		_NODISCARD constexpr
+		[[nodiscard]] constexpr
 		glm::mat4 getView() const noexcept;
 
-		_NODISCARD constexpr
+		[[nodiscard]] constexpr
 		glm::mat4 getProjection() const noexcept;
 			};
 }

@@ -40,8 +40,8 @@ namespace srender
 
 		//void destroy();
 
-		_NODISCARD int32_t getId() const noexcept;
-		_NODISCARD texType getType() const noexcept;
-		_NODISCARD std::string getFile() const noexcept;
+		[[nodiscard]] int32_t getId() const noexcept;
+		[[nodiscard]] texType getType() const noexcept;
+		[[nodiscard]] std::string getFile() const noexcept;
 	};
 }

@@ -30,10 +30,10 @@ namespace srender
 		virtual void setUp(const glm::vec3 inUp) noexcept;
 		virtual void setForward(const glm::vec3 inForward) noexcept;
 
-		_NODISCARD glm::mat4 getTransform() const noexcept;
-		_NODISCARD glm::vec4 getPosition() const noexcept;
-		_NODISCARD glm::vec4 getRight() const noexcept;
-		_NODISCARD glm::vec4 getUp() const noexcept;
-		_NODISCARD glm::vec4 getForward() const noexcept;
+		[[nodiscard]] glm::mat4 getTransform() const noexcept;
+		[[nodiscard]] glm::vec4 getPosition() const noexcept;
+		[[nodiscard]] glm::vec4 getRight() const noexcept;
+		[[nodiscard]] glm::vec4 getUp() const noexcept;
+		[[nodiscard]] glm::vec4 getForward() const noexcept;
 	};
 }
