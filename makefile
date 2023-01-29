@@ -87,8 +87,8 @@ $(BIN)/$(NAME): $(OBJECTS)
 $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
 	$(C) $(CFLAGS) -c $< -o $@ $(INCPATH)
 
-build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
-#build: $(BIN)/$(NAME)
+#build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
+build: $(BIN)/$(NAME)
 
 debug: build
 release: build
