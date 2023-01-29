@@ -118,7 +118,7 @@ namespace srender
 		}
 	}
 
-	constexpr uint32_t texture::getTexCount() noexcept
+	uint32_t texture::getTexCount() noexcept
 	{ return s_textureCount; }
 
 	// Member
