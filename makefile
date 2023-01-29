@@ -18,13 +18,13 @@ WINDOWS:=windows
 C:=gcc
 INCPATH:=-Ilinking/include/
 LIBPATH:=-Llinking/lib
-LIBS:=-lassimp-vc142-mt.lib -lglad-Release.lib -lglfw3.lib
+LIBS:=-lassimp -lglad -lglfw3
 
 # For compiling windows builds on linux
 CW:=x86_64-w64-mingw32-gcc
 INCPATHW:=-Ilinking/include/
 LIBPATHW:=-Llinking/lib
-LIBSW:=-lassimp-vc142-mt.lib -lglad-Release.lib -lglfw3.lib
+LIBSW:=-lassimp -lglad -lglfw3
 
 # Dumb way to get variables specific to target
 ifneq (,$(filter debug,$(MAKECMDGOALS)))
@@ -85,7 +85,7 @@ $(BIN)/$(NAME): $(OBJECTS)
 
 # Compile any object files that need to be updated
 $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
-	$(C) $(CFLAGS) -c $< -o $@ $(INCPATH) $(LIBPATH) $(LIBS)
+	$(C) $(CFLAGS) -c $< -o $@ $(INCPATH)
 
 build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
 
