@@ -30,8 +30,7 @@ namespace srender
 		static void unloadAll() noexcept;
 		static int32_t loadTextureFromFile(const std::string *inPath) noexcept;
 
-		constexpr static
-		uint32_t getTexCount() noexcept;
+		static uint32_t getTexCount() noexcept;
 
 		texture(
 			std::string inPath,
