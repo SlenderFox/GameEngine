@@ -85,9 +85,10 @@ $(BIN)/$(NAME): $(OBJECTS)
 
 # Compile any object files that need to be updated
 $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
-	$(C) $(CFLAGS) -c $< -o $@ $(INCPATH) $(LIBPATH) $(LIBS)
+	$(C) $(CFLAGS) -c $< -o $@ $(INCPATH)
 
 build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
+#build: $(BIN)/$(NAME)
 
 debug: build
 release: build
