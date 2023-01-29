@@ -5,7 +5,7 @@ struct aiNode;
 struct aiMesh;
 struct aiScene;
 struct aiMaterial;
-enum aiTextureType: int;
+enum aiTextureType;
 
 namespace srender
 {
