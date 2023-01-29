@@ -1,7 +1,8 @@
 # Current issues
-# Compiling source is SRender/src/*.cpp or *.hpp
-# Compiling imgui is SRender/imgui/*.cpp or *.h
-# Resulting file is libsrender.a
+# libraries need to also be compiled with gcc
+# Libraries need to be compiles for the platform
+
+# gcc -std=c++20 -Wall Example/src/project.cpp -o build/debug/srender -ISRender/src -Ilinking/include -Lbuild/debug -lsrender -Llinking/lib -lassimp -lglad -lglfw3
 
 NAME:=libsrender.a
 CFLAGS:=-std=c++20 -Wall
@@ -18,13 +19,13 @@ WINDOWS:=windows
 C:=gcc
 INCPATH:=-Ilinking/include/
 LIBPATH:=-Llinking/lib
-LIBS:=-lassimp.lib -lglade.lib -lglfw3.lib
+LIBS:=-lassimp.lib -lglad.lib -lglfw3.lib
 
 # For compiling windows builds on linux
 CW:=x86_64-w64-mingw32-gcc
 INCPATHW:=-Ilinking/include/
 LIBPATHW:=-Llinking/lib
-LIBSW:=-lassimp.lib -lglade.lib -lglfw3.lib
+LIBSW:=-lassimp.lib -lglad.lib -lglfw3.lib
 
 # Dumb way to get variables specific to target
 ifneq (,$(filter debug,$(MAKECMDGOALS)))
