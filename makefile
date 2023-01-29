@@ -18,13 +18,13 @@ WINDOWS:=windows
 C:=gcc
 INCPATH:=-Ilinking/include/
 LIBPATH:=-Llinking/lib
-LIBS:=-lassimp-vc142-mt.lib -lglad-Release.lib -lglfw3.lib
+LIBS:=-lassimp.lib -lglade.lib -lglfw3.lib
 
 # For compiling windows builds on linux
 CW:=x86_64-w64-mingw32-gcc
 INCPATHW:=-Ilinking/include/
 LIBPATHW:=-Llinking/lib
-LIBSW:=-lassimp-vc142-mt.lib -lglad-Release.lib -lglfw3.lib
+LIBSW:=-lassimp.lib -lglade.lib -lglfw3.lib
 
 # Dumb way to get variables specific to target
 ifneq (,$(filter debug,$(MAKECMDGOALS)))
