@@ -1,11 +1,8 @@
 #pragma once
 #include "mesh.hpp"
-
-struct aiNode;
-struct aiMesh;
-struct aiScene;
-struct aiMaterial;
-enum aiTextureType;
+#include "assimp/material.h"
+#include "assimp/scene.h"
+#include "assimp/mesh.h"
 
 namespace srender
 {
