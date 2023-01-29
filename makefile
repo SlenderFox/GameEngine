@@ -5,7 +5,9 @@
 
 NAME:=libsrender.a
 CFLAGS:=-std=c++20 -Wall
-SRC:=src
+
+SRC:=SRender/src
+
 OBJ:=temp
 BIN:=build
 DEBUG:=debug
@@ -14,15 +16,15 @@ WINDOWS:=windows
 
 # For native comiling
 C:=gcc
-INCPATH:=
-LIBPATH:=
-LIBS:=
+INCPATH:=-Ilinking/include/
+LIBPATH:=-Llinking/lib
+LIBS:=-lassimp-vc142-mt.lib -lglad-Release.lib -lglfw3.lib
 
 # For compiling windows builds on linux
 CW:=x86_64-w64-mingw32-gcc
-INCPATHW:=
-LIBPATHW:=
-LIBSW:=
+INCPATHW:=-Ilinking/include/
+LIBPATHW:=-Llinking/lib
+LIBSW:=-lassimp-vc142-mt.lib -lglad-Release.lib -lglfw3.lib
 
 # Dumb way to get variables specific to target
 ifneq (,$(filter debug,$(MAKECMDGOALS)))
@@ -59,7 +61,7 @@ ifneq (,$(filter releasew,$(MAKECMDGOALS)))
 	LIBS:=$(LIBSW)
 endif
 
-HEADERS:=$(wildcard $(SRC)/*.hpp)
+HEADERS:=$(wildcard $(SRC)/*.hpp) $(wildcard $(IMGUI)/*.h)
 SOURCES:=$(wildcard $(SRC)/*.cpp)
 OBJECTS:=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.o,$(SOURCES))
 
@@ -77,13 +79,13 @@ clean:
 # Make any needed directories (bad)
 %/: ; mkdir -p $@
 
-# Link the object files into the binary file
+# Archive the file into a proper library
 $(BIN)/$(NAME): $(OBJECTS)
 	ar rcs $(BIN)/$(NAME) $(OBJECTS)
 
 # Compile any object files that need to be updated
 $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
-	$(C) $(CFLAGS) -c $< -o $@ $(INCPATH) $(LIBS)
+	$(C) $(CFLAGS) -c $< -o $@ $(INCPATH) $(LIBPATH) $(LIBS)
 
 build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
 
