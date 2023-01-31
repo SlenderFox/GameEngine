@@ -225,4 +225,4 @@ namespace srender
 	COL_OP_VEC3_DEF(-=)
 	COL_OP_VEC3_DEF(*=)
 	COL_OP_VEC3_DEF(/=)
-	}
+}

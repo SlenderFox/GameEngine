@@ -51,5 +51,5 @@ namespace srender
 		[[nodiscard]] float getQuadratic() const noexcept;
 		[[nodiscard]] float getAngleRaw() const noexcept;
 		[[nodiscard]] float getBlurRaw() const noexcept;
-			};
+	};
 }

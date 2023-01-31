@@ -89,5 +89,5 @@ namespace srender
 		root &operator=(root const&) = delete;
 		root(root&&) = delete;
 		root &operator=(root&&) = delete;
-			};
+	};
 }
