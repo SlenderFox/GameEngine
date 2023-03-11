@@ -14,7 +14,7 @@ RELEASE:=release
 # For native comiling
 CC:=g++
 INCPATH:=-Ilinking/include/
-LIBS:=/lib/libglfw.so.3.3 /lib/libglib-2.0.so
+LIBS:=/lib/libglfw.so.3.3 /lib/libglib-2.0.so /lib/libassimp.so
 
 # For compiling windows builds on linux
 #CW:=x86_64-w64-mingw32-gcc
@@ -36,7 +36,7 @@ HEADERS:=$(wildcard $(SRC)/*.hpp)
 SOURCES:=$(wildcard $(SRC)/*.cpp)
 OBJECTS:=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.o,$(SOURCES))
 
-.PHONY: makefile help clear clean build debug release
+.PHONY: makefile help clear clean build debug release example
 
 # Default target simply tells you how to correctly use this makefile
 .DEFAULT_GOAL:=help
@@ -65,6 +65,11 @@ build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
 
 debug: build
 release: build
+
+build/debug/example: build/debug/$(NAME)
+	$(CC) -std=c++20 -Wall $(DEBUGFLAGS) Example/src/project.cpp -o $@ -ISRender/ $(INCPATH)
+
+example: build/debug/example
 
 # Making directories as needed
 $(BIN)/: ; mkdir -p $@
