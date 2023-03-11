@@ -1,21 +1,18 @@
-# Current issues
-# libraries need to also be compiled with gcc
-# Libraries need to be compiles for the platform
-
-# gcc -std=c++20 -Wall Example/src/project.cpp -o build/debug/srender -ISRender/src -Ilinking/include -Lbuild/debug -lsrender -Llinking/lib -lassimp -lglad -lglfw3
+# MAKEFILE
 
 NAME:=libsrender.a
-CFLAGS:=-std=c++20 -Wall
+CPPFLAGS:=-std=c++20 -Wall
+DEBUGFLAGS:=-O1 -DDEBUG
+RELEASEFLAGS:=-O3 -DNDEBUG
 
 SRC:=SRender
-
 OBJ:=temp
 BIN:=build
 DEBUG:=debug
 RELEASE:=release
 
 # For native comiling
-C:=g++
+CC:=g++
 INCPATH:=-Ilinking/include/
 LIBS:=/lib/libglfw.so.3.3 /lib/libglib-2.0.so
 
@@ -24,13 +21,13 @@ LIBS:=/lib/libglfw.so.3.3 /lib/libglib-2.0.so
 
 # Dumb way to get variables specific to target
 ifneq (,$(filter debug,$(MAKECMDGOALS)))
-	CFLAGS:=$(CFLAGS) -O1 -DDEBUG
+	CPPFLAGS:=$(CPPFLAGS) $(DEBUGFLAGS)
 	OBJ:=$(OBJ)/$(DEBUG)
 	BIN:=$(BIN)/$(DEBUG)
 endif
 
 ifneq (,$(filter release,$(MAKECMDGOALS)))
-	CFLAGS:=$(CFLAGS) -O3 -DNDEBUG
+	CPPFLAGS:=$(CPPFLAGS) $(RELEASEFLAGS)
 	OBJ:=$(OBJ)/$(RELEASE)
 	BIN:=$(BIN)/$(RELEASE)
 endif
@@ -39,19 +36,18 @@ HEADERS:=$(wildcard $(SRC)/*.hpp)
 SOURCES:=$(wildcard $(SRC)/*.cpp)
 OBJECTS:=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.o,$(SOURCES))
 
-.PHONY: makefile all clean build debug release
+.PHONY: makefile help clear clean build debug release
 
 # Default target simply tells you how to correctly use this makefile
-.DEFAULT_GOAL:=all
-all:
-	@printf "debug, release, clean\n"
+.DEFAULT_GOAL:=help
+help:
+	@printf "clear: Remove bin files\nclean: Remove temp files\ndebug: Make a debug build\nrelease: Make a release build\n"
+
+clear:
+	rm -rf $(BIN)/
 
 clean:
 	rm -rf $(OBJ)/
-	rm -rf $(BIN)/
-
-# Make any needed directories (bad)
-%/: ; mkdir -p $@
 
 # Archive the file into a proper library
 $(BIN)/$(NAME): $(OBJECTS) $(OBJ)/glad.o
@@ -59,13 +55,17 @@ $(BIN)/$(NAME): $(OBJECTS) $(OBJ)/glad.o
 
 # Compile any object files that need to be updated
 $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
-	$(C) $(CFLAGS) -c $< -o $@ $(INCPATH)
+	$(CC) $(CPPFLAGS) -c $< -o $@ $(INCPATH)
 
 # Compile glad
 $(OBJ)/glad.o:: $(SRC)/glad.c $(HEADERS)
-	$(C) -std=c17 -Wall -O3 -DNDEBUG -c $< -o $@ $(INCPATH)
+	$(CC) -std=c++20 $(RELEASEFLAGS) -c $< -o $@ $(INCPATH)
 
 build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
 
 debug: build
 release: build
+
+# Making directories as needed
+$(BIN)/: ; mkdir -p $@
+$(OBJ)/: ; mkdir -p $@
