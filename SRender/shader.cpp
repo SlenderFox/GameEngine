@@ -186,7 +186,7 @@ return;}";
 				// Convert stream into string
 				codeString = codeStream.str();
 			}
-			catch (ifstream::failure e)
+			catch (ifstream::failure &e)
 			{
 				string msg = "ERROR::SHADER::"
 					+ byType(inType, string("VERTEX"), string("FRAGMENT"))

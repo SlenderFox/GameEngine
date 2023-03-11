@@ -20,8 +20,8 @@ namespace srender
 		static uint32_t s_textureCount;
 
 		int32_t m_id = 0;
-		texType m_type = texType::diffuse;
 		std::string m_file;
+		texType m_type = texType::diffuse;
 
 	public:
 		// Memory handled by renderer

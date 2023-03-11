@@ -78,7 +78,6 @@ namespace srender
 		vec3 result;
 		float chroma = inV * inS;
 		float min = inV - chroma;
-		float two = 2.0f;
 		float hueMod = fmod((float)inH / 60, 2.0f);
 		float x = chroma * (1 - glm::abs(hueMod - 1));
 		// Find a point along the three bottom faces of the RGB cube (??)
@@ -123,24 +122,6 @@ namespace srender
 		hsvToRgb(hue, inHSV.y, inHSV.z, result.r, result.g, result.b);
 		return result;
 	}
-
-	constexpr colour black()    noexcept { return colour(0.0f); }
-	constexpr colour white()    noexcept { return colour(1.0f); }
-	constexpr colour silver()   noexcept { return colour(0.75f, 0.75f, 0.75f ); }
-	constexpr colour grey()     noexcept { return colour(0.5f,  0.5f,  0.5f  ); }
-	constexpr colour darkGrey() noexcept { return colour(0.25f, 0.25f, 0.25f ); }
-	constexpr colour red()      noexcept { return colour(1.0f,  0.0f,  0.0f  ); }
-	constexpr colour lime()     noexcept { return colour(0.0f,  1.0f,  0.0f  ); }
-	constexpr colour blue()     noexcept { return colour(0.0f,  0.0f,  1.0f  ); }
-	constexpr colour yellow()   noexcept { return colour(1.0f,  1.0f,  0.0f  ); }
-	constexpr colour cyan()     noexcept { return colour(0.0f,  1.0f,  1.0f  ); }
-	constexpr colour magenta()  noexcept { return colour(1.0f,  0.0f,  1.0f  ); }
-	constexpr colour maroon()   noexcept { return colour(0.5f,  0.0f,  0.0f  ); }
-	constexpr colour green()    noexcept { return colour(0.0f,  0.5f,  0.0f  ); }
-	constexpr colour navy()     noexcept { return colour(0.0f,  0.0f,  0.5f  ); }
-	constexpr colour olive()    noexcept { return colour(0.5f,  0.5f,  0.0f  ); }
-	constexpr colour teal()     noexcept { return colour(0.0f,  0.5f,  0.5f  ); }
-	constexpr colour purple()   noexcept { return colour(0.5f,  0.0f,  0.5f  ); }
 
 	vec3 colour::rgb() const noexcept
 	{ return m_RGB; }

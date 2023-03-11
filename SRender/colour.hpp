@@ -76,23 +76,23 @@ namespace srender
 		[[nodiscard]] static
 		glm::vec3 hsvToRgb(const glm::vec3 inHSV) noexcept;
 
-		static constexpr colour black() noexcept;
-		static constexpr colour white() noexcept;
-		static constexpr colour silver() noexcept;
-		static constexpr colour grey() noexcept;
-		static constexpr colour darkGrey() noexcept;
-		static constexpr colour red() noexcept;
-		static constexpr colour lime() noexcept;
-		static constexpr colour blue() noexcept;
-		static constexpr colour yellow() noexcept;
-		static constexpr colour cyan() noexcept;
-		static constexpr colour magenta() noexcept;
-		static constexpr colour maroon() noexcept;
-		static constexpr colour green() noexcept;
-		static constexpr colour navy() noexcept;
-		static constexpr colour olive() noexcept;
-		static constexpr colour teal() noexcept;
-		static constexpr colour purple() noexcept;
+		static constexpr colour black()    noexcept { return colour(0.0f); }
+		static constexpr colour white()    noexcept { return colour(1.0f); }
+		static constexpr colour silver()   noexcept { return colour(0.75f, 0.75f, 0.75f ); }
+		static constexpr colour grey()     noexcept { return colour(0.5f,  0.5f,  0.5f  ); }
+		static constexpr colour darkGrey() noexcept { return colour(0.25f, 0.25f, 0.25f ); }
+		static constexpr colour red()      noexcept { return colour(1.0f,  0.0f,  0.0f  ); }
+		static constexpr colour lime()     noexcept { return colour(0.0f,  1.0f,  0.0f  ); }
+		static constexpr colour blue()     noexcept { return colour(0.0f,  0.0f,  1.0f  ); }
+		static constexpr colour yellow()   noexcept { return colour(1.0f,  1.0f,  0.0f  ); }
+		static constexpr colour cyan()     noexcept { return colour(0.0f,  1.0f,  1.0f  ); }
+		static constexpr colour magenta()  noexcept { return colour(1.0f,  0.0f,  1.0f  ); }
+		static constexpr colour maroon()   noexcept { return colour(0.5f,  0.0f,  0.0f  ); }
+		static constexpr colour green()    noexcept { return colour(0.0f,  0.5f,  0.0f  ); }
+		static constexpr colour navy()     noexcept { return colour(0.0f,  0.0f,  0.5f  ); }
+		static constexpr colour olive()    noexcept { return colour(0.5f,  0.5f,  0.0f  ); }
+		static constexpr colour teal()     noexcept { return colour(0.0f,  0.5f,  0.5f  ); }
+		static constexpr colour purple()   noexcept { return colour(0.5f,  0.0f,  0.5f  ); }
 
 		/** Get the colour as RGB stored in a vec3
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
