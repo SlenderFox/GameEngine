@@ -78,5 +78,5 @@ namespace srender
 		void setFloat4 (const std::string inName, const glm::vec4 inValue) const noexcept;
 		void setMat3   (const std::string inName, const glm::mat3 inValue) const noexcept;
 		void setMat4   (const std::string inName, const glm::mat4 inValue) const noexcept;
-			};
+	};
 }

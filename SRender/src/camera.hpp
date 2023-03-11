@@ -77,5 +77,5 @@ namespace srender
 
 		[[nodiscard]] constexpr
 		glm::mat4 getProjection() const noexcept;
-			};
+	};
 }
