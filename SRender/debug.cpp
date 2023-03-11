@@ -1,7 +1,4 @@
 #include "debug.hpp"
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
 
 #ifdef _DEBUG
 	#include "winclude.hpp"
@@ -49,44 +46,12 @@ namespace srender
 			L"\u2567",
 		};
 
-		void init(GLFWwindow *pWindow) noexcept
+		void init() noexcept
 		{
 			#if defined(_DEBUG) && defined(__WINDOWS__)
 				// Allows utf16 output to console
 				_setmode(_fileno(stdout), _O_U16TEXT);
 			#endif
-
-			ImGui::CreateContext();
-			ImGui::StyleColorsDark();
-			ImGui_ImplGlfw_InitForOpenGL(pWindow, false);
-			ImGui_ImplOpenGL3_Init("#version 330");
-			ImGui::GetIO().DisplaySize.x = 1030.0f;
-			ImGui::GetIO().DisplaySize.y = 650.0f;
-		}
-
-		void terminate() noexcept
-		{
-			// End imgui
-			if (ImGui::GetCurrentContext() != NULL)
-			{
-				ImGui_ImplOpenGL3_Shutdown();
-				ImGui_ImplGlfw_Shutdown();
-				ImGui::DestroyContext();
-			}
-		}
-
-		void draw() noexcept
-		{
-			// Start a new imgui frame
-			ImGui_ImplOpenGL3_NewFrame();
-			ImGui_ImplGlfw_NewFrame();
-			ImGui::NewFrame();
-
-			//ImGui::ShowDemoWindow();
-
-			// Finish and draw the frane
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		}
 
 		void send(

@@ -60,7 +60,6 @@ namespace srender
 	void application::terminate() noexcept
 	{
 		getApplication()->shutdown();
-		debug::terminate();
 		glfwTerminate();
 		renderer::terminate();
 		delete root::getRoot();
@@ -111,9 +110,6 @@ namespace srender
 
 				renderer::draw();
 
-				//Updates imgui
-				//debug::draw();
-
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(s_windowRef);
 			}
@@ -136,7 +132,7 @@ namespace srender
 		}
 
 		// Has to be initialised after glfw and glad
-		debug::init(s_windowRef);
+		debug::init();
 
 		if (!renderer::init((float)s_winWidth / (float)s_winHeight))
 		{

@@ -26,9 +26,7 @@ namespace srender
 			End = 8
 		};
 
-		void init(GLFWwindow *pWindow) noexcept;
-		void terminate() noexcept;
-		void draw() noexcept;
+		void init() noexcept;
 
 		void send(
 			const std::string pMsg,
