@@ -34,7 +34,7 @@ namespace srender
 		 * @param outS Output saturation
 		 * @param outV Output value
 		 */
-		[[nodiscard]] static constexpr
+		static constexpr
 		void rgbToHsv(
 			float inR,
 			float inG,
@@ -59,7 +59,7 @@ namespace srender
 		 * @param outG Output green
 		 * @param outB Output blue
 		 */
-		[[nodiscard]] static constexpr
+		static constexpr
 		void hsvToRgb(
 			uint16_t inH,
 			float inS,
