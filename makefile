@@ -59,17 +59,19 @@ $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
 
 # Compile glad
 $(OBJ)/glad.o:: $(SRC)/glad.c $(HEADERS)
-	$(CC) -std=c++20 $(RELEASEFLAGS) -c $< -o $@ $(INCPATH)
+	$(CC) $(CPPFLAGS) -c $< -o $@ $(INCPATH)
 
-build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
+#build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
+build: $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o
+	$(CC) $(CPPFLAGS) -o example $(OBJECTS) $(OBJ)/glad.o $(LIBS)
 
 debug: build
 release: build
 
-build/debug/example: build/debug/$(NAME)
-	$(CC) -std=c++20 -Wall $(DEBUGFLAGS) Example/src/project.cpp -o $@ -ISRender/ $(INCPATH)
+#build/debug/example:
+#	$(CC) -std=c++20 -Wall $(DEBUGFLAGS) Example/src/project.cpp -o $@ -ISRender/ $(INCPATH) $(LIBS) $(OBJECTS)
 
-example: build/debug/example
+#example: build/debug/example
 
 # Making directories as needed
 $(BIN)/: ; mkdir -p $@
