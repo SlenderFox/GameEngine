@@ -56,8 +56,8 @@ namespace srender
 		void setView(glm::mat4 *inValue) noexcept;
 		void setProjection(float inFovV) noexcept;
 
-		constexpr void setProjection(glm::mat4 *inValue) noexcept;
-		constexpr void setAspectRatio(float inAspectRatio) noexcept;
+		void setProjection(glm::mat4 *inValue) noexcept;
+		void setAspectRatio(float inAspectRatio) noexcept;
 
 		void setPosition(glm::vec3 inValue) noexcept override;
 		void translate(glm::vec3 inValue) noexcept override;
