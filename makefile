@@ -7,7 +7,7 @@
 NAME:=libsrender.a
 CFLAGS:=-std=c++20 -Wall
 
-SRC:=SRender/src
+SRC:=SRender
 
 OBJ:=temp
 BIN:=build
@@ -19,7 +19,7 @@ WINDOWS:=windows
 C:=gcc
 INCPATH:=-Ilinking/include/
 LIBPATH:=-Llinking/lib
-LIBS:=
+LIBS:=-lglfw -lglib
 
 # For compiling windows builds on linux
 CW:=x86_64-w64-mingw32-gcc
@@ -62,7 +62,7 @@ ifneq (,$(filter releasew,$(MAKECMDGOALS)))
 	LIBS:=$(LIBSW)
 endif
 
-HEADERS:=$(wildcard $(SRC)/*.hpp) $(wildcard $(IMGUI)/*.h)
+HEADERS:=$(wildcard $(SRC)/*.hpp)
 SOURCES:=$(wildcard $(SRC)/*.cpp)
 OBJECTS:=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.o,$(SOURCES))
 
@@ -88,8 +88,8 @@ $(BIN)/$(NAME): $(OBJECTS)
 $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
 	$(C) $(CFLAGS) -c $< -o $@ $(INCPATH)
 
-#build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
-build: $(BIN)/$(NAME)
+build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
+#build: $(BIN)/$(NAME)
 
 debug: build
 release: build
