@@ -10,14 +10,14 @@ namespace srender
 	{
 		friend class renderer;
 	private:
-		bool m_loadTextures;
-
 		std::unique_ptr<std::vector<std::unique_ptr<mesh>>> m_meshes = nullptr;
 		std::vector<texture*> m_textures;
 		std::string m_directory;
 
 		shader *m_shader;
 		camera *m_cameraRef;
+
+		bool m_loadTextures;
 
 		inline void loadModel(const std::string *inPath) noexcept;
 

@@ -138,10 +138,10 @@ namespace srender
 		m_projection = perspective(radians(inFovV), m_aspectRatio, 0.1f, 500.0f);
 	}
 
-	constexpr void camera::setProjection(glm::mat4 *inValue) noexcept
+	void camera::setProjection(glm::mat4 *inValue) noexcept
 	{ m_projection = *inValue; }
 
-	constexpr void camera::setAspectRatio(float inAspectRatio) noexcept
+	void camera::setAspectRatio(float inAspectRatio) noexcept
 	{ m_aspectRatio = inAspectRatio; }
 
 	void camera::setPosition(vec3 inValue) noexcept
