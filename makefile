@@ -1,9 +1,9 @@
 # MAKEFILE
 
-NAME:=libsrender.a
-CPPFLAGS:=-std=c++20 -Wall
-DEBUGFLAGS:=-O1 -DDEBUG
-RELEASEFLAGS:=-O3 -DNDEBUG
+NAME:=srender
+CXXFLAGS:=-std=c++20 -w
+DFLAGS:=-O1 -DDEBUG
+RFLAGS:=-O3 -DNDEBUG
 
 SRC:=SRender
 OBJ:=temp
@@ -12,7 +12,7 @@ DEBUG:=debug
 RELEASE:=release
 
 # For native comiling
-CC:=g++
+CXX:=g++
 INCPATH:=-Ilinking/include/
 LIBS:=/lib/libglfw.so.3.3 /lib/libglib-2.0.so /lib/libassimp.so
 
@@ -21,13 +21,13 @@ LIBS:=/lib/libglfw.so.3.3 /lib/libglib-2.0.so /lib/libassimp.so
 
 # Dumb way to get variables specific to target
 ifneq (,$(filter debug,$(MAKECMDGOALS)))
-	CPPFLAGS:=$(CPPFLAGS) $(DEBUGFLAGS)
+	CXXFLAGS:=$(CXXFLAGS) $(DFLAGS)
 	OBJ:=$(OBJ)/$(DEBUG)
 	BIN:=$(BIN)/$(DEBUG)
 endif
 
 ifneq (,$(filter release,$(MAKECMDGOALS)))
-	CPPFLAGS:=$(CPPFLAGS) $(RELEASEFLAGS)
+	CXXFLAGS:=$(CXXFLAGS) $(RFLAGS)
 	OBJ:=$(OBJ)/$(RELEASE)
 	BIN:=$(BIN)/$(RELEASE)
 endif
@@ -50,28 +50,23 @@ clean:
 	rm -rf $(OBJ)/
 
 # Archive the file into a proper library
-$(BIN)/$(NAME): $(OBJECTS) $(OBJ)/glad.o
-	ar rcs $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o $(LIBS)
+#$(BIN)/$(NAME): $(OBJECTS) $(OBJ)/glad.o
+#	ar rcs $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o $(LIBS)
 
 # Compile any object files that need to be updated
 $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
-	$(CC) $(CPPFLAGS) -c $< -o $@ $(INCPATH)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCPATH)
 
 # Compile glad
-$(OBJ)/glad.o:: $(SRC)/glad.c $(HEADERS)
-	$(CC) $(CPPFLAGS) -c $< -o $@ $(INCPATH)
+$(OBJ)/glad.o:: linking/include/glad/glad.c linking/include/glad/glad.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCPATH) linking/include/glad/glad.h
 
 #build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
 build: $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o
-	$(CC) $(CPPFLAGS) -o example $(OBJECTS) $(OBJ)/glad.o $(LIBS)
+	$(CXX) $(CXXFLAGS) -o example $(OBJECTS) $(OBJ)/glad.o $(LIBS)
 
 debug: build
 release: build
-
-#build/debug/example:
-#	$(CC) -std=c++20 -Wall $(DEBUGFLAGS) Example/src/project.cpp -o $@ -ISRender/ $(INCPATH) $(LIBS) $(OBJECTS)
-
-#example: build/debug/example
 
 # Making directories as needed
 $(BIN)/: ; mkdir -p $@
