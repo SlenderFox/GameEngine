@@ -211,7 +211,9 @@ namespace srender
 			#ifdef _DEBUG
 				// Moves the window to the left of the monitor
 				glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_winHeight) * 0.5f));
-				debug::MoveConsole(s_winWidth);
+				#ifdef __WINDOWS__
+					debug::MoveConsole(s_winWidth);
+				#endif
 			#else
 				// Moves the window to the center of the workarea
 				glfwSetWindowPos(s_windowRef, (int)((monWidth - s_winWidth) * 0.5f),
