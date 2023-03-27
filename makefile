@@ -2,8 +2,8 @@
 
 NAME:=srender
 CXXFLAGS:=-std=c++20 -Wall
-DFLAGS:=-O1 -DDEBUG
-RFLAGS:=-O3 -DNDEBUG
+DFLAGS:=-O1 -DDEBUG -D_DEBUG
+RFLAGS:=-O3 -DNDEBUG -D_RELEASE
 
 SRC:=SRender
 OBJ:=temp
@@ -61,7 +61,7 @@ $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
 $(OBJ)/glad.o:: linking/include/glad/glad.c linking/include/glad/glad.h
 	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCPATH)
 
-build: $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o
+build: $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o $(BIN)/assets
 	$(CXX) $(CXXFLAGS) -o $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o $(LIBS)
 
 debug: build
@@ -70,3 +70,6 @@ release: build
 # Making directories as needed
 $(BIN)/: ; mkdir -p $@
 $(OBJ)/: ; mkdir -p $@
+
+$(BIN)/assets: Example/assets $(OBJECTS)
+	cp -r Example/assets $(BIN)/assets
