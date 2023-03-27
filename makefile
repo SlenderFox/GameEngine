@@ -61,7 +61,7 @@ $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
 $(OBJ)/glad.o:: linking/include/glad/glad.c linking/include/glad/glad.h
 	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCPATH)
 
-build: $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o $(BIN)/assets
+build: $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o assets/
 	$(CXX) $(CXXFLAGS) -o $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o $(LIBS)
 
 debug: build
@@ -71,5 +71,5 @@ release: build
 $(BIN)/: ; mkdir -p $@
 $(OBJ)/: ; mkdir -p $@
 
-$(BIN)/assets: Example/assets $(OBJECTS)
-	cp -r Example/assets $(BIN)/assets
+assets/: Example/assets $(OBJECTS)
+	cp -r Example/assets assets
