@@ -166,6 +166,10 @@ namespace srender
 		if (!glfwInit())
 		{
 			s_exitCode = exitCode::fail_GLFW_Init;
+			const char *description;
+			int code = glfwGetError(&description);
+			assert(description != nullptr);
+			debug::send("Code: " + std::to_string(code) + "\nDescription: " + description + "\n");
 			return false;
 		}
 
