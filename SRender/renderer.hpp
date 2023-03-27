@@ -10,8 +10,8 @@ namespace srender
 	private:
 		static camera *s_camera;
 
-		static std::unique_ptr<std::vector<std::unique_ptr<model>>> s_models;
-		static std::unique_ptr<std::vector<std::unique_ptr<light>>> s_lights;
+		static std::vector<model*> s_models;
+		static std::vector<light*> s_lights;
 
 		// Pure static class
 		renderer() = delete;

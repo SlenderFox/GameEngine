@@ -10,7 +10,7 @@ namespace srender
 	{
 		friend class renderer;
 	private:
-		std::unique_ptr<std::vector<std::unique_ptr<mesh>>> m_meshes = nullptr;
+		std::vector<mesh*> m_meshes;
 		std::vector<texture*> m_textures;
 		std::string m_directory;
 
@@ -27,7 +27,7 @@ namespace srender
 		) noexcept;
 
 		[[nodiscard]] inline
-		std::unique_ptr<mesh> processMesh(
+		mesh *processMesh(
 			const aiMesh *inMesh,
 			const aiScene *inScene
 		) noexcept;

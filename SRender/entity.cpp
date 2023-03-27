@@ -7,7 +7,6 @@ using glm::vec4;
 using glm::mat3;
 using glm::mat4;
 using std::vector;
-using std::make_unique;
 using glm::transpose;
 using glm::inverse;
 

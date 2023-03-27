@@ -4,8 +4,6 @@
 
 using std::string;
 using std::vector;
-using std::unique_ptr;
-using std::make_unique;
 
 namespace srender
 {
@@ -59,8 +57,8 @@ namespace srender
 		const std::vector<uint32_t> *pIndices
 	) noexcept
 	{
-		m_vertices = make_unique<vector<vertex>>(pVertices ? *pVertices : generateVertices());
-		m_indices = make_unique<vector<uint32_t>>(pIndices ? *pIndices : generateIndices());
+		m_vertices = new vector<vertex>(pVertices ? *pVertices : generateVertices());
+		m_indices = new vector<uint32_t>(pIndices ? *pIndices : generateIndices());
 		setupMesh();
 	}
 
@@ -73,10 +71,8 @@ namespace srender
 			glDeleteBuffers(1, m_idEBO);
 		}
 
-		m_vertices.get()->clear();
-		m_vertices.release();
-		m_indices.get()->clear();
-		m_indices.release();
+		delete m_vertices;
+		delete m_indices;
 		delete m_idVAO;
 		delete m_idVBO;
 		delete m_idEBO;
@@ -87,7 +83,7 @@ namespace srender
 		glBindVertexArray(*m_idVAO);
 		glDrawElements(
 			GL_TRIANGLES,
-			(GLsizei)m_indices.get()->size(),
+			(GLsizei)m_indices->size(),
 			GL_UNSIGNED_INT,
 			0
 		);
@@ -110,8 +106,8 @@ namespace srender
 		// Loads the vertices to the VBO
 		glBufferData(
 			GL_ARRAY_BUFFER,
-			(GLsizei)m_vertices.get()->size() * sizeof(vertex),
-			&(*m_vertices.get())[0],	// Returns the zeroth element in the vector
+			(GLsizei)m_vertices->size() * sizeof(vertex),
+			&(*m_vertices)[0],	// Returns the zeroth element in the vector
 			GL_STATIC_DRAW
 		);
 
@@ -124,8 +120,8 @@ namespace srender
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *m_idEBO);
 		glBufferData(
 			GL_ELEMENT_ARRAY_BUFFER,
-			(GLsizei)m_indices.get()->size() * sizeof(uint32_t),
-			&(*m_indices.get())[0],	// Returns the zeroth element in the vector
+			(GLsizei)m_indices->size() * sizeof(uint32_t),
+			&(*m_indices)[0],	// Returns the zeroth element in the vector
 			GL_STATIC_DRAW
 		);
 

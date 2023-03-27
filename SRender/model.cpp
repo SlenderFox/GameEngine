@@ -10,8 +10,6 @@ using glm::vec2;
 using glm::vec3;
 using std::string;
 using std::vector;
-using std::unique_ptr;
-using std::make_unique;
 
 namespace srender
 {
@@ -24,7 +22,7 @@ namespace srender
 		: m_cameraRef(inCamera)
 		, m_loadTextures(pLoadTextures)
 	{
-		m_meshes = make_unique<vector<unique_ptr<mesh>>>();
+		m_meshes = vector<mesh*>();
 		m_textures = vector<texture*>();
 
 		loadModel(inModelPath);
@@ -41,9 +39,10 @@ namespace srender
 
 	model::~model()
 	{
+		for (unsigned int i = 0; i < m_meshes.size(); ++i)
+		{ delete m_meshes[i]; }
+
 		delete m_shader;
-		m_meshes.get()->clear();
-		m_meshes.release();
 	}
 
 	void model::draw(const camera *inCamera) const noexcept
@@ -61,7 +60,7 @@ namespace srender
 			m_shader->setFloat3("u_viewPos", (vec3)m_cameraRef->getPosition());
 		}
 
-		for (uint16_t i = 0; i < m_meshes->size(); ++i)
+		for (uint16_t i = 0; i < m_meshes.size(); ++i)
 		{ getMeshAt(i)->draw(); }
 	}
 
@@ -109,7 +108,7 @@ namespace srender
 		for (uint32_t i = 0; i < inNode->mNumMeshes; ++i)
 		{
 			aiMesh *mesh = inScene->mMeshes[inNode->mMeshes[i]];
-			m_meshes.get()->push_back(processMesh(mesh, inScene));
+			m_meshes.push_back(processMesh(mesh, inScene));
 		}
 		// Then do the same for each of it's children
 		for (uint32_t i = 0; i < inNode->mNumChildren; ++i)
@@ -118,7 +117,7 @@ namespace srender
 		}
 	}
 
-	inline unique_ptr<mesh> model::processMesh(
+	inline mesh *model::processMesh(
 		const aiMesh *inMesh,
 		const aiScene *inScene
 	) noexcept
@@ -182,7 +181,7 @@ namespace srender
 			m_textures.insert(m_textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 
-		return make_unique<mesh>(&vertices, &indices);
+		return new mesh(&vertices, &indices);
 	}
 
 	inline vector<texture*> model::loadMaterialTextures(
@@ -298,15 +297,12 @@ namespace srender
 
 	mesh *model::getMeshAt(const uint16_t inPos) const  noexcept
 	{
-		if (!m_meshes.get())
-			return nullptr;
-
-		if (inPos > m_meshes.get()->size() - 1)
+		if (inPos > m_meshes.size() - 1)
 		{
 			debug::send("Attempting to access mesh outside array size");
 			return nullptr;
 		}
 
-		return (*m_meshes.get())[inPos].get();
+		return m_meshes[inPos];
 	}
 }

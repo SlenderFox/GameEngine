@@ -60,8 +60,8 @@ namespace srender
 	void application::terminate() noexcept
 	{
 		getApplication()->shutdown();
-		glfwTerminate();
 		renderer::terminate();
+		glfwTerminate();
 		delete root::getRoot();
 	}
 

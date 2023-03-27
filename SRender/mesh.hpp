@@ -1,6 +1,5 @@
 #pragma once
 #include "shader.hpp"
-#include <memory>
 
 namespace srender
 {
@@ -79,8 +78,8 @@ namespace srender
 		uint32_t *m_idVBO = new uint32_t(0U);	// The id for the vertex buffer object
 		uint32_t *m_idEBO = new uint32_t(0U);	// The id for the element buffer object
 
-		std::unique_ptr<std::vector<vertex>> m_vertices = nullptr;
-		std::unique_ptr<std::vector<unsigned int>> m_indices = nullptr;
+		std::vector<vertex> *m_vertices = nullptr;
+		std::vector<unsigned int> *m_indices = nullptr;
 
 		void setupMesh() const noexcept;
 

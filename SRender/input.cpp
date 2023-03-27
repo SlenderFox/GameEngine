@@ -20,7 +20,7 @@ namespace srender
 		int pMods) noexcept
 	{
 		if (pAction != GLFW_PRESS) return;
-		srender::debug::send(std::to_string(pScancode) + " ", false, false);
+		//srender::debug::send(std::to_string(pScancode) + " ", false, false);
 	}
 
 	void input::mouse_callback(

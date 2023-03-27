@@ -8,14 +8,12 @@ using glm::mat3;
 using glm::mat4;
 using std::string;
 using std::vector;
-using std::make_unique;
-using std::unique_ptr;
 
 namespace srender
 {
 	camera *renderer::s_camera = nullptr;
-	unique_ptr<vector<unique_ptr<model>>> renderer::s_models = nullptr;
-	unique_ptr<vector<unique_ptr<light>>> renderer::s_lights = nullptr;
+	vector<model*> renderer::s_models;
+	vector<light*> renderer::s_lights;
 	const float renderer::s_ambience = 0.15f;
 
 	bool renderer::init(const float inAspect) noexcept
@@ -31,20 +29,19 @@ namespace srender
 		s_camera->setPosition({ 0.0f, 0.0f, 6.0f });
 
 		// Initialise arrays
-		s_models = make_unique<vector<unique_ptr<model>>>();
-		s_lights = make_unique<vector<unique_ptr<light>>>();
+		s_models = vector<model*>();
+		s_lights = vector<light*>();
 
 		return true;
 	}
 
 	void renderer::terminate() noexcept
 	{
-		if (s_models)
-		{
-			s_models.get()->clear();
-			// Smart pointer needs to be manually released or it throws an error :|
-			s_models.release();
-		}
+		for (unsigned int i = 0; i < s_models.size(); ++i)
+		{ delete s_models[i]; }
+
+		for (unsigned int i = 0; i < s_lights.size(); ++i)
+		{ delete s_lights[i]; }
 
 		// Destroy all textures
 		for (size_t i = 0; i < texture::s_loadedTextures.size(); ++i)
@@ -53,7 +50,7 @@ namespace srender
 			if (texture::s_loadedTextures.at(i))
 				delete texture::s_loadedTextures.at(i);
 		}
-		// Unload all textures from memory once finished
+		// Unload all textures from gl memory once finished
 		texture::unloadAll();
 
 		delete s_camera;
@@ -64,10 +61,10 @@ namespace srender
 		// Clears to background colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (s_models.get()->size() > 0)
+		if (s_models.size() > 0)
 		{
-			for (uint8_t i = 0; i < s_models.get()->size(); ++i)
-				getModelAt(i)->draw();
+			for (uint8_t i = 0; i < s_models.size(); ++i)
+			{ getModelAt(i)->draw(); }
 		}
 	}
 
@@ -79,7 +76,7 @@ namespace srender
 		uint8_t numSpotLights = 0;
 		string lightCount;
 
-		for (uint8_t i = 0; i < s_lights.get()->size(); ++i)
+		for (uint8_t i = 0; i < s_lights.size(); ++i)
 		{
 			light *currentLight = getLightAt(i);
 			switch (currentLight->getType())
@@ -172,7 +169,7 @@ namespace srender
 		const float inValue
 	) noexcept
 	{
-		for (uint8_t i = 0, count = 0; i < (uint8_t)s_lights.get()->size(); ++i)
+		for (uint8_t i = 0, count = 0; i < (uint8_t)s_lights.size(); ++i)
 		{
 			light *currentlLight = getLightAt(i);
 
@@ -193,7 +190,7 @@ namespace srender
 					currentlLight->setBlur(newValue);
 
 				// Update the shaders on all the models
-				for (uint8_t j = 0; j < s_models.get()->size(); ++j)
+				for (uint8_t j = 0; j < s_models.size(); ++j)
 				{
 					if (inIsAngle)
 					{
@@ -223,12 +220,12 @@ namespace srender
 		const bool inLoadTextures) noexcept
 	{
 		// Caps at 255
-		size_t currentAmount = s_models.get()->size();
+		size_t currentAmount = s_models.size();
 		if (currentAmount > 255)
 			return nullptr;
 
 		outId = (uint8_t)currentAmount;
-		s_models.get()->push_back(make_unique<model>(inModelPath, inShaderPath, s_camera, inLoadTextures));
+		s_models.push_back(new model(inModelPath, inShaderPath, s_camera, inLoadTextures));
 		return getModelAt(outId);
 	}
 
@@ -238,12 +235,12 @@ namespace srender
 		const colour inColour) noexcept
 	{
 		// Caps at 255
-		size_t currentAmount = s_lights.get()->size();
+		size_t currentAmount = s_lights.size();
 		if (currentAmount > 255)
 			return nullptr;
 
 		outId = (uint8_t)currentAmount;
-		s_lights.get()->push_back(make_unique<light>(inType, inColour));
+		s_lights.push_back(new light(inType, inColour));
 		return getLightAt(outId);
 	}
 
@@ -268,46 +265,34 @@ namespace srender
 
 	uint8_t renderer::modelCount() noexcept
 	{
-		return (uint8_t)s_models.get()->size();
+		return (uint8_t)s_models.size();
 	}
 
 	uint8_t renderer::lightCount() noexcept
 	{
-		return (uint8_t)s_lights.get()->size();
+		return (uint8_t)s_lights.size();
 	}
 
 	model *renderer::getModelAt(const uint8_t inPos) noexcept
 	{
-		if (!s_models.get())
-		{
-			debug::send("No model vector found");
-			return nullptr;
-		}
-
-		if (inPos > s_models.get()->size() - 1)
+		if (inPos > s_models.size() - 1)
 		{
 			debug::send("Attempting to access model outside array size");
 			return nullptr;
 		}
 
-		return (*s_models.get())[inPos].get();
+		return s_models[inPos];
 	}
 
 	light *renderer::getLightAt(const uint8_t inPos) noexcept
 	{
-		if (!s_lights.get())
-		{
-			debug::send("No light vector found");
-			return nullptr;
-		}
-
-		if (inPos > s_lights.get()->size() - 1)
+		if (inPos > s_lights.size() - 1)
 		{
 			debug::send("Attempting to access light outside array size");
 			return nullptr;
 		}
 
-		return (*s_lights.get())[inPos].get();
+		return s_lights[inPos];
 	}
 
 	camera *renderer::getCamera() noexcept
