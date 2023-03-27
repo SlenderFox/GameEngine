@@ -129,18 +129,18 @@ namespace srender
 	constexpr vec3 colour::hsv() const noexcept
 	{ return rgbToHsv(m_RGB); }
 
-	constexpr colour::colour() noexcept
+	colour::colour() noexcept
 	{}
 
-	constexpr colour::colour(float inGreyscale) noexcept
+	colour::colour(float inGreyscale) noexcept
 	: m_RGB(vec3(inGreyscale))
 	{}
 
-	constexpr colour::colour(float inR, float inG, float inB) noexcept
+	colour::colour(float inR, float inG, float inB) noexcept
 	: m_RGB(vec3(inR, inG, inB))
 	{}
 
-	constexpr colour::colour(vec3 inColour) noexcept
+	colour::colour(vec3 inColour) noexcept
 	: m_RGB(inColour)
 	{}
 
@@ -163,7 +163,7 @@ namespace srender
 	{ return colour(m_RGB OPERAND pOther); }
 
 	#define COL_OP_CONST_COL_DEF(OPERAND) \
-	constexpr colour colour::operator OPERAND(const colour &pOther) const noexcept\
+	colour colour::operator OPERAND(const colour &pOther) const noexcept\
 	{ return colour(m_RGB OPERAND pOther.m_RGB); }
 
 	#define COL_OP_CONST_VEC3_DEF(OPERAND) \
@@ -171,15 +171,15 @@ namespace srender
 	{ return colour(m_RGB OPERAND pOther); }
 
 	#define COL_OP_FLOAT_DEF(OPERAND) \
-	constexpr colour &colour::operator OPERAND(const float &pOther) noexcept\
+	colour &colour::operator OPERAND(const float &pOther) noexcept\
 	{ m_RGB OPERAND pOther; return *this; }
 
 	#define COL_OP_COL_DEF(OPERAND) \
-	constexpr colour &colour::operator OPERAND(const colour &pOther) noexcept\
+	colour &colour::operator OPERAND(const colour &pOther) noexcept\
 	{ m_RGB OPERAND pOther.m_RGB; return *this; }
 
 	#define COL_OP_VEC3_DEF(OPERAND) \
-	constexpr colour &colour::operator OPERAND(const vec3 &pOther) noexcept\
+	colour &colour::operator OPERAND(const vec3 &pOther) noexcept\
 	{ m_RGB OPERAND pOther; return *this; }
 
 	COL_OP_CONST_FLOAT_DEF(+)

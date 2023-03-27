@@ -76,23 +76,23 @@ namespace srender
 		[[nodiscard]] static
 		glm::vec3 hsvToRgb(const glm::vec3 inHSV) noexcept;
 
-		static constexpr colour black()    noexcept { return colour(0.0f); }
-		static constexpr colour white()    noexcept { return colour(1.0f); }
-		static constexpr colour silver()   noexcept { return colour(0.75f, 0.75f, 0.75f ); }
-		static constexpr colour grey()     noexcept { return colour(0.5f,  0.5f,  0.5f  ); }
-		static constexpr colour darkGrey() noexcept { return colour(0.25f, 0.25f, 0.25f ); }
-		static constexpr colour red()      noexcept { return colour(1.0f,  0.0f,  0.0f  ); }
-		static constexpr colour lime()     noexcept { return colour(0.0f,  1.0f,  0.0f  ); }
-		static constexpr colour blue()     noexcept { return colour(0.0f,  0.0f,  1.0f  ); }
-		static constexpr colour yellow()   noexcept { return colour(1.0f,  1.0f,  0.0f  ); }
-		static constexpr colour cyan()     noexcept { return colour(0.0f,  1.0f,  1.0f  ); }
-		static constexpr colour magenta()  noexcept { return colour(1.0f,  0.0f,  1.0f  ); }
-		static constexpr colour maroon()   noexcept { return colour(0.5f,  0.0f,  0.0f  ); }
-		static constexpr colour green()    noexcept { return colour(0.0f,  0.5f,  0.0f  ); }
-		static constexpr colour navy()     noexcept { return colour(0.0f,  0.0f,  0.5f  ); }
-		static constexpr colour olive()    noexcept { return colour(0.5f,  0.5f,  0.0f  ); }
-		static constexpr colour teal()     noexcept { return colour(0.0f,  0.5f,  0.5f  ); }
-		static constexpr colour purple()   noexcept { return colour(0.5f,  0.0f,  0.5f  ); }
+		static colour black()    noexcept { return colour(0.0f); }
+		static colour white()    noexcept { return colour(1.0f); }
+		static colour silver()   noexcept { return colour(0.75f, 0.75f, 0.75f ); }
+		static colour grey()     noexcept { return colour(0.5f,  0.5f,  0.5f  ); }
+		static colour darkGrey() noexcept { return colour(0.25f, 0.25f, 0.25f ); }
+		static colour red()      noexcept { return colour(1.0f,  0.0f,  0.0f  ); }
+		static colour lime()     noexcept { return colour(0.0f,  1.0f,  0.0f  ); }
+		static colour blue()     noexcept { return colour(0.0f,  0.0f,  1.0f  ); }
+		static colour yellow()   noexcept { return colour(1.0f,  1.0f,  0.0f  ); }
+		static colour cyan()     noexcept { return colour(0.0f,  1.0f,  1.0f  ); }
+		static colour magenta()  noexcept { return colour(1.0f,  0.0f,  1.0f  ); }
+		static colour maroon()   noexcept { return colour(0.5f,  0.0f,  0.0f  ); }
+		static colour green()    noexcept { return colour(0.0f,  0.5f,  0.0f  ); }
+		static colour navy()     noexcept { return colour(0.0f,  0.0f,  0.5f  ); }
+		static colour olive()    noexcept { return colour(0.5f,  0.5f,  0.0f  ); }
+		static colour teal()     noexcept { return colour(0.0f,  0.5f,  0.5f  ); }
+		static colour purple()   noexcept { return colour(0.5f,  0.0f,  0.5f  ); }
 
 		/** Get the colour as RGB stored in a vec3
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
@@ -106,10 +106,10 @@ namespace srender
 		[[nodiscard]] constexpr
 		glm::vec3 hsv() const noexcept;
 
-		constexpr colour() noexcept;
-		constexpr colour(float inGreyscale) noexcept;
-		constexpr colour(float inR, float inG, float inB) noexcept;
-		constexpr colour(glm::vec3 inColour) noexcept;
+		colour() noexcept;
+		colour(float inGreyscale) noexcept;
+		colour(float inR, float inG, float inB) noexcept;
+		colour(glm::vec3 inColour) noexcept;
 
 		~colour() = default;
 
@@ -123,11 +123,11 @@ namespace srender
 		operator glm::vec3() const;
 
 		#define COL_OP_CONST_FLOAT_DEC(OPERAND) colour operator OPERAND(const float&) const noexcept;
-		#define COL_OP_CONST_COL_DEC(OPERAND) constexpr colour operator OPERAND(const colour&) const noexcept;
+		#define COL_OP_CONST_COL_DEC(OPERAND) colour operator OPERAND(const colour&) const noexcept;
 		#define COL_OP_CONST_VEC3_DEC(OPERAND) colour operator OPERAND(const glm::vec3&) const noexcept;
-		#define COL_OP_FLOAT_DEC(OPERAND) constexpr colour &operator OPERAND(const float&) noexcept;
-		#define COL_OP_COL_DEC(OPERAND) constexpr colour &operator OPERAND(const colour&) noexcept;
-		#define COL_OP_VEC3_DEC(OPERAND) constexpr colour &operator OPERAND(const glm::vec3&) noexcept;
+		#define COL_OP_FLOAT_DEC(OPERAND) colour &operator OPERAND(const float&) noexcept;
+		#define COL_OP_COL_DEC(OPERAND) colour &operator OPERAND(const colour&) noexcept;
+		#define COL_OP_VEC3_DEC(OPERAND) colour &operator OPERAND(const glm::vec3&) noexcept;
 
 		COL_OP_CONST_FLOAT_DEC(+)
 		COL_OP_CONST_FLOAT_DEC(-)

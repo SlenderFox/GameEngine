@@ -55,15 +55,14 @@ clean:
 
 # Compile any object files that need to be updated
 $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCPATH)
+	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCPATH)
 
 # Compile glad
 $(OBJ)/glad.o:: linking/include/glad/glad.c linking/include/glad/glad.h
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCPATH) linking/include/glad/glad.h
+	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCPATH)
 
-#build: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME)
 build: $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o
-	$(CXX) $(CXXFLAGS) -o example $(OBJECTS) $(OBJ)/glad.o $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o $(LIBS)
 
 debug: build
 release: build
