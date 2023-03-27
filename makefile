@@ -1,7 +1,7 @@
 # MAKEFILE
 
 NAME:=srender
-CXXFLAGS:=-std=c++20 -w
+CXXFLAGS:=-std=c++20 -Wall
 DFLAGS:=-O1 -DDEBUG
 RFLAGS:=-O3 -DNDEBUG
 
