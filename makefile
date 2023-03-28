@@ -1,6 +1,6 @@
 # MAKEFILE
 
-NAME:=srender
+NAME:=libsrender.a
 CXXFLAGS:=-std=c++20 -Wall
 DFLAGS:=-O1 -DDEBUG -D_DEBUG
 RFLAGS:=-O3 -DNDEBUG -D_RELEASE
@@ -50,9 +50,9 @@ clear:
 clean:
 	rm -rf $(OBJ)/
 
-# Archive the file into a proper library
-#$(BIN)/$(NAME): $(OBJECTS) $(OBJ)/glad.o
-#	ar rcs $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o $(LIBS)
+# Copy assets to build
+$(BIN)/assets/:
+	cp -r Example/assets $(BIN)/assets
 
 # Compile any object files that need to be updated
 $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
@@ -62,13 +62,17 @@ $(OBJ)/%.o:: $(SRC)/%.cpp $(HEADERS)
 $(OBJ)/glad.o:: linking/include/glad/glad.c linking/include/glad/glad.h
 	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCPATH)
 
-build: $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o $(BIN)/assets/
-	$(CXX) $(CXXFLAGS) -o $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o $(LIBS)
+# Archive the file into a proper library
+$(BIN)/$(NAME): $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o
+	ar rcs $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o $(LIBS)
 
-# Copy assets to build
-$(BIN)/assets/:
-	cp -r Example/assets $(BIN)/assets
+#build: $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o $(BIN)/assets/
+#	$(CXX) $(CXXFLAGS) -o $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o $(LIBS)
 
+example: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME) $(BIN)/assets/
+	$(CXX) $(CXXFLAGS) -o $(BIN)/example $(OBJ)/glad.o $(LIBS) $(BIN)/$(NAME)
+
+build: $(BIN)/$(NAME)
 debug: build
 
 # Making directories as needed
