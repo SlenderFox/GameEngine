@@ -37,6 +37,8 @@ namespace srender
 		static double s_fixedTimer, s_frameTimer;
 		// The title of the window
 		static std::string s_title;
+		// The location of the application
+		static std::string s_appLocation;
 		// The error code returned by main
 		static exitCode s_exitCode;
 
@@ -85,11 +87,18 @@ namespace srender
 		) noexcept;
 		static void setTitle(const std::string inTitle) noexcept;
 		static void setFullscreen(const bool inFullscreen) noexcept;
+		/** Sets a string saving the location of the application
+		 * @param inLocation The first argument of main
+		 * @note This function will remove everything after the final slash, so don't bother processing the argument.
+		 */
+		static void setAppLocation(std::string inLocation) noexcept;
 
 		[[nodiscard]] static
 		double getTime() noexcept;
 		[[nodiscard]] static
 		double getDeltaTime() noexcept;
+		[[nodiscard]] static
+		std::string getAppLocation() noexcept;
 
 	protected:
 		application() noexcept;

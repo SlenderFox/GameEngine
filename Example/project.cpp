@@ -24,9 +24,10 @@ using namespace srender;
  * 1920, 1080
  * @note Refer to Notes.md to see TODO and notes
  */
-int main()
+int main(int argc, char *args[])
 {
 	Project *app = new Project();
+	app->setAppLocation(args[0]);
 	#ifdef _DEBUG
 		app->setDimensions(1030, 650);
 		app->setTitle("SRender (DEBUG)");

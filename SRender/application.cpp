@@ -28,7 +28,8 @@ namespace srender
 		application::s_deltaTime = 0.0,
 		application::s_fixedTimer = 0.0,
 		application::s_frameTimer = 0.0;
-	string application::s_title = "Application";
+	string application::s_title = "SRender";
+	string application::s_appLocation = "";
 	application::exitCode application::s_exitCode = application::exitCode::okay;
 
 	application *application::getApplication() noexcept
@@ -252,13 +253,20 @@ namespace srender
 	void application::setTitle(const string inTitle) noexcept
 	{
 		s_title = inTitle;
-		//Debug::send("Title set to \"" + s_title + "\"");
+		//debug::send("Title set to \"" + s_title + "\"");
 	}
 
 	void application::setFullscreen(const bool inFullscreen) noexcept
 	{
 		s_fullscreen = inFullscreen;
-		//Debug::send("Fullscreen set to " + string(inFullscreen ? "true" : "false"));
+		//debug::send("Fullscreen set to " + string(s_fullscreen ? "true" : "false"));
+	}
+
+	void application::setAppLocation(string inLocation) noexcept
+	{
+		size_t last_slash = inLocation.find_last_of("\\/");
+		std::string s_appLocation = inLocation.substr(0, last_slash + 1);
+		//debug::send("App location set to: " + s_appLocation + "\nFrom source: " + inLocation);
 	}
 
 	void application::updateFrameTimeData() noexcept
@@ -344,4 +352,7 @@ namespace srender
 
 	double application::getDeltaTime() noexcept
 	{ return s_deltaTime; }
+
+	std::string application::getAppLocation() noexcept
+	{ return s_appLocation; }
 }
