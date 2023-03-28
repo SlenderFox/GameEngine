@@ -6,8 +6,8 @@ DFLAGS:=-O1 -DDEBUG -D_DEBUG
 RFLAGS:=-O3 -DNDEBUG -D_RELEASE
 
 SRC:=SRender
-OBJ:=temp
-BIN:=build
+OBJ:=temp/gcc
+BIN:=build/gcc
 DEBUG:=debug
 RELEASE:=release
 
