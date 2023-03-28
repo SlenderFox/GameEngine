@@ -18,6 +18,16 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="project.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="project.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\assets\shaders\default.frag" />
+    <None Include="..\assets\shaders\default.vert" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -75,16 +85,16 @@
     <OutDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\</IntDir>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)build\SRender\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <IncludePath>$(SolutionDir)linking\include;$(SolutionDir)SRender\src\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)\build\SRender\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>$(SolutionDir)linking\include;$(SolutionDir)SRender\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\</IntDir>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)build\SRender\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <IncludePath>$(SolutionDir)linking\include;$(SolutionDir)SRender\src\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)\build\SRender\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>$(SolutionDir)linking\include;$(SolutionDir)SRender\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -92,16 +102,16 @@
     <IntDir>$(SolutionDir)$(Platform)\temp\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)-win32</TargetName>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)build\SRender\$(Configuration);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
-    <IncludePath>$(SolutionDir)linking\include;$(SolutionDir)SRender\src\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)\build\SRender\$(Configuration);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>$(SolutionDir)linking\include;$(SolutionDir)SRender\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(Platform)\temp\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)-win32</TargetName>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)build\SRender\$(Configuration);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
-    <IncludePath>$(SolutionDir)linking\include;$(SolutionDir)SRender\src\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)linking\lib\;$(SolutionDir)\build\SRender\$(Configuration);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>$(SolutionDir)linking\include;$(SolutionDir)SRender\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -122,13 +132,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp.lib;glad.lib;srender.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PreBuildEvent>
-      <Command>rd /s /q $(OutDir)</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
-      <Command>Xcopy /E assets\ $(OutDir)assets\
-copy assimp-vc142-mt.dll "$(OutDir)"</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -153,13 +156,6 @@ copy assimp-vc142-mt.dll "$(OutDir)"</Command>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp.lib;glad.lib;srender.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
-    <PreBuildEvent>
-      <Command>rd /s /q $(OutDir)</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
-      <Command>Xcopy /E assets\ $(OutDir)assets\
-copy assimp-vc142-mt.dll "$(OutDir)"</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -180,13 +176,6 @@ copy assimp-vc142-mt.dll "$(OutDir)"</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp.lib;glad.lib;srender.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PreBuildEvent>
-      <Command>rd /s /q $(OutDir)</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
-      <Command>Xcopy /E assets\ $(OutDir)assets\
-copy assimp-vc142-mt.dll "$(OutDir)"</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -211,24 +200,7 @@ copy assimp-vc142-mt.dll "$(OutDir)"</Command>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp.lib;glad.lib;srender.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
-    <PreBuildEvent>
-      <Command>rd /s /q $(OutDir)</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
-      <Command>Xcopy /E assets\ $(OutDir)assets\
-copy assimp-vc142-mt.dll "$(OutDir)"</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <None Include="assets\shaders\default.frag" />
-    <None Include="assets\shaders\default.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\project.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\project.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

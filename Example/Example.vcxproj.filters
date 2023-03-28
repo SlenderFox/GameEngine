@@ -15,17 +15,17 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\shaders\default.frag" />
-    <None Include="assets\shaders\default.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\project.cpp">
+    <ClCompile Include="project.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\project.hpp">
+    <ClInclude Include="project.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\assets\shaders\default.frag" />
+    <None Include="..\assets\shaders\default.vert" />
   </ItemGroup>
 </Project>

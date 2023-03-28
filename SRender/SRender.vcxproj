@@ -19,51 +19,35 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="imgui\imgui_demo.cpp" />
-    <ClCompile Include="imgui\imgui_draw.cpp" />
-    <ClCompile Include="imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="imgui\imgui_tables.cpp" />
-    <ClCompile Include="imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\application.cpp" />
-    <ClCompile Include="src\camera.cpp" />
-    <ClCompile Include="src\colour.cpp" />
-    <ClCompile Include="src\debug.cpp" />
-    <ClCompile Include="src\entity.cpp" />
-    <ClCompile Include="src\input.cpp" />
-    <ClCompile Include="src\light.cpp" />
-    <ClCompile Include="src\mesh.cpp" />
-    <ClCompile Include="src\model.cpp" />
-    <ClCompile Include="src\renderer.cpp" />
-    <ClCompile Include="src\shader.cpp" />
-    <ClCompile Include="src\texture.cpp" />
-    <ClCompile Include="src\transform.cpp" />
+    <ClCompile Include="application.cpp" />
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="colour.cpp" />
+    <ClCompile Include="debug.cpp" />
+    <ClCompile Include="entity.cpp" />
+    <ClCompile Include="input.cpp" />
+    <ClCompile Include="light.cpp" />
+    <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="model.cpp" />
+    <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="shader.cpp" />
+    <ClCompile Include="texture.cpp" />
+    <ClCompile Include="transform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui\imgui_impl_glfw.h" />
-    <ClInclude Include="imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="imgui\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="imgui\imgui_internal.h" />
-    <ClInclude Include="imgui\imstb_rectpack.h" />
-    <ClInclude Include="imgui\imstb_textedit.h" />
-    <ClInclude Include="imgui\imstb_truetype.h" />
-    <ClInclude Include="src\application.hpp" />
-    <ClInclude Include="src\camera.hpp" />
-    <ClInclude Include="src\colour.hpp" />
-    <ClInclude Include="src\debug.hpp" />
-    <ClInclude Include="src\entity.hpp" />
-    <ClInclude Include="src\input.hpp" />
-    <ClInclude Include="src\light.hpp" />
-    <ClInclude Include="src\mesh.hpp" />
-    <ClInclude Include="src\model.hpp" />
-    <ClInclude Include="src\renderer.hpp" />
-    <ClInclude Include="src\shader.hpp" />
-    <ClInclude Include="src\texture.hpp" />
-    <ClInclude Include="src\transform.hpp" />
-    <ClInclude Include="src\winclude.hpp" />
+    <ClInclude Include="application.hpp" />
+    <ClInclude Include="camera.hpp" />
+    <ClInclude Include="colour.hpp" />
+    <ClInclude Include="debug.hpp" />
+    <ClInclude Include="entity.hpp" />
+    <ClInclude Include="input.hpp" />
+    <ClInclude Include="light.hpp" />
+    <ClInclude Include="mesh.hpp" />
+    <ClInclude Include="model.hpp" />
+    <ClInclude Include="renderer.hpp" />
+    <ClInclude Include="shader.hpp" />
+    <ClInclude Include="texture.hpp" />
+    <ClInclude Include="transform.hpp" />
+    <ClInclude Include="winclude.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
