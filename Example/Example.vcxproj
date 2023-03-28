@@ -133,7 +133,7 @@
       <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp.lib;glad.lib;srender.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>Xcopy /E ..\assets\ $(OutDir)assets\
+      <Command>Xcopy /E assets\ $(OutDir)assets\
 copy assimp-vc142-mt.dll "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -161,7 +161,7 @@ copy assimp-vc142-mt.dll "$(OutDir)"</Command>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>Xcopy /E ..\assets\ $(OutDir)assets\
+      <Command>Xcopy /E assets\ $(OutDir)assets\
 copy assimp-vc142-mt.dll "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -185,7 +185,7 @@ copy assimp-vc142-mt.dll "$(OutDir)"</Command>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp.lib;glad.lib;srender.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>Xcopy /E ..\assets\ $(OutDir)assets\
+      <Command>Xcopy /E assets\ $(OutDir)assets\
 copy assimp-vc142-mt.dll "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -213,7 +213,7 @@ copy assimp-vc142-mt.dll "$(OutDir)"</Command>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>Xcopy /E ..\assets\ $(OutDir)assets\
+      <Command>Xcopy /E assets\ $(OutDir)assets\
 copy assimp-vc142-mt.dll "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
