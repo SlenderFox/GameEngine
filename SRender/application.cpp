@@ -212,7 +212,7 @@ namespace srender
 			#ifdef _DEBUG
 				// Moves the window to the left of the monitor
 				glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_winHeight) * 0.5f));
-				#ifdef __WINDOWS__
+				#ifdef _WIN32
 					debug::MoveConsole(s_winWidth);
 				#endif
 			#else
