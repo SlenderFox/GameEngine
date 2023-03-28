@@ -24,9 +24,7 @@ ifneq (,$(filter debug,$(MAKECMDGOALS)))
 	CXXFLAGS:=$(CXXFLAGS) $(DFLAGS)
 	OBJ:=$(OBJ)/$(DEBUG)
 	BIN:=$(BIN)/$(DEBUG)
-endif
-
-ifneq (,$(filter release,$(MAKECMDGOALS)))
+else
 	CXXFLAGS:=$(CXXFLAGS) $(RFLAGS)
 	OBJ:=$(OBJ)/$(RELEASE)
 	BIN:=$(BIN)/$(RELEASE)
@@ -36,12 +34,15 @@ HEADERS:=$(wildcard $(SRC)/*.hpp)
 SOURCES:=$(wildcard $(SRC)/*.cpp)
 OBJECTS:=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.o,$(SOURCES))
 
-.PHONY: makefile help clear clean build debug release example
+.PHONY: makefile help clear clean debug release build example
 
 # Default target simply tells you how to correctly use this makefile
 .DEFAULT_GOAL:=help
 help:
-	@printf "clear: Remove bin files\nclean: Remove temp files\ndebug: Make a debug build\nrelease: Make a release build\n"
+	@printf "clear: Remove bin files\n\
+	clean: Remove temp files\n\
+	debug: Make a debug build\n\
+	release: Make a release build\n"
 
 clear:
 	rm -rf $(BIN)/
@@ -69,7 +70,6 @@ $(BIN)/assets/:
 	cp -r Example/assets $(BIN)/assets
 
 debug: build
-release: build
 
 # Making directories as needed
 $(BIN)/: ; mkdir -p $@
