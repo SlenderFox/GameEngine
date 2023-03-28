@@ -24,9 +24,10 @@ using namespace srender;
  * 1920, 1080
  * @note Refer to Notes.md to see TODO and notes
  */
-int main()
+int main(int argc, char *args[])
 {
 	Project *app = new Project();
+	app->setAppLocation(args[0]);
 	#ifdef _DEBUG
 		app->setDimensions(1030, 650);
 		app->setTitle("SRender (DEBUG)");
@@ -144,7 +145,9 @@ void Project::CreateScene()
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
 		entity *cube = entity::createWithModel(
-			"assets/models/cube/cube.obj", "assets/shaders/default", model, shader
+			getAppLocation() + std::string("assets/models/cube/cube.obj"),
+			getAppLocation() + std::string("assets/shaders/default"),
+			model, shader
 		);
 		cube->translate(s_cubePositions[i]);
 		cube->setScale(vec3(0.6f));
@@ -153,7 +156,9 @@ void Project::CreateScene()
 
 	// Create a backpack in the centre
 	entity *backpack = entity::createWithModel(
-		"assets/models/backpack/backpack.obj", "assets/shaders/default", model, shader
+		getAppLocation() + std::string("assets/models/backpack/backpack.obj"),
+		getAppLocation() + std::string("assets/shaders/default"),
+		model, shader
 	);
 	backpack->translate(vec3(0.0f, 0.0f, 0.9f));
 	backpack->setScale(vec3(0.6f));
@@ -218,7 +223,11 @@ void Project::CreateLights()
 		if (light->getType() == lightType::Point
 		 || light->getType() == lightType::Spot)
 		{
-			light->loadModel("assets/models/cube/cube.obj", "assets/shaders/default", model, shader, false);
+			light->loadModel(
+				getAppLocation() + std::string("assets/models/cube/cube.obj"),
+				getAppLocation() + std::string("assets/shaders/default"),
+				model, shader, false
+			);
 			light->setScale(vec3(0.2f, 0.2f, (light->getType() == lightType::Spot) ? 0.4f : 0.2f));
 			light->sentTint(light->getColour());
 			light->renderOnlyColour(true);
