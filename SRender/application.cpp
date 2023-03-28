@@ -265,7 +265,7 @@ namespace srender
 	void application::setAppLocation(string inLocation) noexcept
 	{
 		size_t last_slash = inLocation.find_last_of("\\/");
-		std::string s_appLocation = inLocation.substr(0, last_slash + 1);
+		s_appLocation = inLocation.substr(0, last_slash + 1);
 		//debug::send("App location set to: " + s_appLocation + "\nFrom source: " + inLocation);
 	}
 
