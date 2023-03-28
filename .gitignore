@@ -11,3 +11,4 @@ Win32/
 .obsidian/
 doxygen/
 imgui.ini
+logs/
