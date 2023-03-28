@@ -22,12 +22,20 @@ LIBS:=/lib/libglfw.so.3.3 /lib/libglib-2.0.so /lib/libassimp.so
 # Dumb way to get variables specific to target
 ifneq (,$(filter debug,$(MAKECMDGOALS)))
 	CXXFLAGS:=$(CXXFLAGS) $(DFLAGS)
-	OBJ:=$(OBJ)/$(DEBUG)
-	BIN:=$(BIN)/$(DEBUG)
+	ifeq (,$(filter clean,$(MAKECMDGOALS)))
+		OBJ:=$(OBJ)/$(DEBUG)
+	endif
+	ifeq (,$(filter clear,$(MAKECMDGOALS)))
+		BIN:=$(BIN)/$(DEBUG)
+	endif
 else
 	CXXFLAGS:=$(CXXFLAGS) $(RFLAGS)
-	OBJ:=$(OBJ)/$(RELEASE)
-	BIN:=$(BIN)/$(RELEASE)
+	ifeq (,$(filter clean,$(MAKECMDGOALS)))
+		OBJ:=$(OBJ)/$(RELEASE)
+	endif
+	ifeq (,$(filter clear,$(MAKECMDGOALS)))
+		BIN:=$(BIN)/$(RELEASE)
+	endif
 endif
 
 HEADERS:=$(wildcard $(SRC)/*.hpp)
@@ -66,14 +74,15 @@ $(OBJ)/glad.o:: linking/include/glad/glad.c linking/include/glad/glad.h
 $(BIN)/$(NAME): $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o
 	ar rcs $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o $(LIBS)
 
-#build: $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o $(BIN)/assets/
-#	$(CXX) $(CXXFLAGS) -o $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o $(LIBS)
-
-example: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME) $(BIN)/assets/
-	$(CXX) $(CXXFLAGS) -o $(BIN)/example $(OBJ)/glad.o $(LIBS) $(BIN)/$(NAME)
-
 build: $(BIN)/$(NAME)
 debug: build
+
+$(OBJ)/project.o:: Example/project.cpp Example/project.hpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCPATH) -ISRender/
+
+# Compile the example project using the SRender library
+example: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME) $(OBJ)/project.o $(BIN)/assets/
+	$(CXX) $(CXXFLAGS) -o $(BIN)/example $(OBJ)/project.o $(LIBS) $(BIN)/$(NAME)
 
 # Making directories as needed
 $(BIN)/: ; mkdir -p $@
