@@ -65,16 +65,6 @@ namespace srender
 			return;
 		}
 
-		string path = m_shaderPath + byType(inType, string(".vert"), string(".frag"));
-		debug::send(
-			"Compiling shader \"" + path + "\"...",
-			debug::type::Process,
-			debug::impact::Small,
-			debug::stage::Mid,
-			false,
-			false
-		);
-
 		if (m_shaderPath == "")
 		{
 			m_usingFallback = true;
@@ -82,6 +72,17 @@ namespace srender
 		}
 		else
 		{
+			string path = m_shaderPath + byType(inType, string(".vert"), string(".frag"));
+
+			debug::send(
+				"Compiling shader \"" + path + "\"...",
+				debug::type::Process,
+				debug::impact::Small,
+				debug::stage::Mid,
+				false,
+				false
+			);
+
 			// Try to retrieve the vertex/fragment source code from filePath
 			try
 			{

@@ -12,6 +12,9 @@ using glm::inverse;
 
 namespace srender
 {
+	// Forward declaration
+	class application { public: [[nodiscard]] static std::string getAppLocation() noexcept; };
+
 	// Blame https://stackoverflow.com/a/40937193/15035125 for this
 	struct entityLoader
 	{
@@ -59,6 +62,8 @@ namespace srender
 	) noexcept
 	{
 		entity *result = new entity();
+		pModelPath = application::getAppLocation() + pModelPath;
+		pShaderPath = application::getAppLocation() + pShaderPath;
 		entityLoader::BackgroundLoadModel(&pModelPath, &pShaderPath, result, pLoadTextures);
 		pModelOut = result->m_modelRef;
 		pShaderOut = result->m_modelRef->getShaderRef();

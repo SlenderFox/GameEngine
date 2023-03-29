@@ -72,6 +72,7 @@ namespace srender
 			debug::impact::Large,
 			debug::stage::Begin
 		);
+
 		if (!m_loadTextures)
 		{
 			debug::send(
@@ -95,7 +96,9 @@ namespace srender
 			);
 			return;
 		}
-		m_directory = (*inPath).substr(0, (*inPath).find_last_of('/'));
+
+		size_t last_slash = (*inPath).find_last_of("\\/");
+		m_directory = (*inPath).substr(0, last_slash);
 		processNode(scene->mRootNode, scene);
 	}
 
@@ -197,7 +200,7 @@ namespace srender
 			aiString file;
 			inMat->GetTexture(inType, i, &file);
 			bool loadTexture = true;
-			string path = (m_directory + '/' + file.C_Str());
+			string path = m_directory + '/' + file.C_Str();
 
 			// First we check if the texture has already been loaded into memory
 			for (size_t j = 0; j < texture::s_loadedTextures.size(); ++j)

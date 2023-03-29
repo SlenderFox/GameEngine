@@ -144,8 +144,8 @@ void project::createScene()
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
 		entity *cube = entity::createWithModel(
-			getAppLocation() + std::string("assets/models/cube/cube.obj"),
-			getAppLocation() + std::string("assets/shaders/default"),
+			"assets/models/cube/cube.obj",
+			"assets/shaders/default",
 			model, shader
 		);
 		cube->translate(s_cubePositions[i]);
@@ -155,8 +155,8 @@ void project::createScene()
 
 	// Create a backpack in the centre
 	entity *backpack = entity::createWithModel(
-		getAppLocation() + std::string("assets/models/backpack/backpack.obj"),
-		getAppLocation() + std::string("assets/shaders/default"),
+		"assets/models/backpack/backpack.obj",
+		"assets/shaders/default",
 		model, shader
 	);
 	backpack->translate(vec3(0.0f, 0.0f, 0.9f));
@@ -223,8 +223,8 @@ void project::createLights()
 		 || light->getType() == lightType::Spot)
 		{
 			light->loadModel(
-				getAppLocation() + std::string("assets/models/cube/cube.obj"),
-				getAppLocation() + std::string("assets/shaders/default"),
+				"assets/models/cube/cube.obj",
+				"assets/shaders/default",
 				model, shader, false
 			);
 			light->setScale(vec3(0.2f, 0.2f, (light->getType() == lightType::Spot) ? 0.4f : 0.2f));
