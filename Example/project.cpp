@@ -26,14 +26,14 @@ using namespace srender;
  */
 int main(int argc, char *args[])
 {
-	Project *app = new Project();
+	project *app = new project();
 	app->setAppLocation(args[0]);
 	#ifdef _DEBUG
 		app->setDimensions(1030, 650);
-		app->setTitle("SRender (DEBUG)");
+		app->setTitle("SRender Example (DEBUG)");
 	#else
 		app->setDimensions(1600, 900);
-		app->setTitle("SRender (RELEASE)");
+		app->setTitle("SRender Example (RELEASE)");
 	#endif
 	app->setFullscreen(false);
 	int code = (int)app->run();
@@ -43,9 +43,9 @@ int main(int argc, char *args[])
 
 // Static
 
-double Project::s_camYaw = 90.0;
-double Project::s_camPitch = 0.0;
-const vec3 Project::s_cubePositions[Project::s_numCubes] = {
+double project::s_camYaw = 90.0;
+double project::s_camPitch = 0.0;
+const vec3 project::s_cubePositions[project::s_numCubes] = {
 	glm::vec3( 2.0f,  5.0f, -15.0f),
 	glm::vec3(-1.5f, -2.2f,  -2.5f),
 	glm::vec3(-3.8f, -2.0f, -12.3f),
@@ -57,13 +57,13 @@ const vec3 Project::s_cubePositions[Project::s_numCubes] = {
 	glm::vec3(-1.3f,  1.0f,  -1.5f)
 };
 
-void Project::MouseCallback(double inDeltaX, double inDeltaY) noexcept
+void project::mouseCallback(double _deltaX, double _deltaY) noexcept
 {
 	const double sens = 0.05f;
-	inDeltaX *= sens;
-	inDeltaY *= sens;
-	s_camYaw += inDeltaX;
-	s_camPitch += inDeltaY;
+	_deltaX *= sens;
+	_deltaY *= sens;
+	s_camYaw += _deltaX;
+	s_camPitch += _deltaY;
 	if (s_camPitch > 89.0f)
 		s_camPitch = 89.0f;
 	else if (s_camPitch < -89.0f)
@@ -77,14 +77,14 @@ void Project::MouseCallback(double inDeltaX, double inDeltaY) noexcept
 	renderer::getCamera()->setForward(forward);
 }
 
-void Project::ScrollCallback(double inOffsetX, double inOffsetY) noexcept
+void project::scrollCallback(double _offsetX, double _offsetY) noexcept
 {
-	renderer::getCamera()->modifyFovH((float)inOffsetY * -3.0f);
+	renderer::getCamera()->modifyFovH((float)_offsetY * -3.0f);
 }
 
 // Member
 
-Project::Project()
+project::project()
 {
 	m_lightRefs = vector<light*>();
 	m_cubes = vector<entity*>();
@@ -92,7 +92,7 @@ Project::Project()
 	object_backpack = new entity();
 }
 
-Project::~Project()
+project::~project()
 {
 	for (uint8_t i = 0; i < m_cubes.size(); ++i)
 	{
@@ -104,18 +104,18 @@ Project::~Project()
 		delete object_backpack;
 }
 
-bool Project::startup()
+bool project::startup()
 {
-	CreateLights();
-	CreateScene();
-	input::addMouseCallback(MouseCallback);
-	input::addSrollCallback(ScrollCallback);
+	createLights();
+	createScene();
+	input::addMouseCallback(mouseCallback);
+	input::addSrollCallback(scrollCallback);
 	return true;
 }
 
-void Project::shutdown() {}
+void project::shutdown() {}
 
-void Project::update()
+void project::update()
 {
 	processInput();
 
@@ -132,11 +132,11 @@ void Project::update()
 	}
 }
 
-void Project::fixedUpdate() {}
+void project::fixedUpdate() {}
 
-void Project::fateUpdate() {}
+void project::fateUpdate() {}
 
-void Project::CreateScene()
+void project::createScene()
 {
 	model *model = nullptr;
 	shader *shader = nullptr;
@@ -165,7 +165,7 @@ void Project::CreateScene()
 	object_backpack = backpack;
 }
 
-void Project::CreateLights()
+void project::createLights()
 {
 	// Allows me to toggle at will
 	const bool directional = true,
@@ -236,7 +236,7 @@ void Project::CreateLights()
 	}
 }
 
-void Project::processInput() noexcept
+void project::processInput() noexcept
 {
 	// Render triangles normally
 	if (input::checkKeyState(input::key::Key_F1, input::state::Press))
