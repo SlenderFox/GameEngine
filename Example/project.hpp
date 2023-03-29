@@ -2,7 +2,7 @@
 #include "application.hpp"
 
 /** Example project */
-class Project: public srender::application
+class project: public srender::application
 {
 	static double s_camYaw, s_camPitch;
 
@@ -10,13 +10,13 @@ class Project: public srender::application
 	 * @param inDeltaX The horizontal position change since last call
 	 * @param inDeltaY The vertical position change since last call
 	 */
-	static void MouseCallback(double inDeltaX, double inDeltaY) noexcept;
+	static void mouseCallback(double inDeltaX, double inDeltaY) noexcept;
 
 	/** Static function to use as a callback for scroll input
 	 * @param inOffsetX The horizontal position change since last call
 	 * @param inOffsetY The vertical position change since last call
 	 */
-	static void ScrollCallback(double inOffsetX, double inOffsetY) noexcept;
+	static void scrollCallback(double inOffsetX, double inOffsetY) noexcept;
 
 	static constexpr
 	uint8_t s_numCubes = 9U;
@@ -29,16 +29,16 @@ class Project: public srender::application
 	srender::entity *object_backpack;
 
 	/** Loads entities in to create the scene */
-	void CreateScene();
+	void createScene();
 	/** Loads lights in to light the scene */
-	void CreateLights();
+	void createLights();
 
 	/** Crappy way to check input each frame */
 	void processInput() noexcept;
 
 public:
-	Project();
-	~Project();
+	project();
+	~project();
 
 	/** Called once at the start of runtime
 	 * @return [bool] False will terminate application
