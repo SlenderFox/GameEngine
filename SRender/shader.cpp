@@ -102,7 +102,9 @@ namespace srender
 			{
 				string msg = "ERROR::SHADER::"
 					+ byType(inType, string("VERTEX"), string("FRAGMENT"))
-					+ "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE";
+					+ "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE:\n"
+					+ string(e.what());
+
 				debug::send(
 					msg,
 					debug::type::Note,
