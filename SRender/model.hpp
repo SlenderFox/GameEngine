@@ -19,44 +19,44 @@ namespace srender
 
 		bool m_loadTextures;
 
-		inline void loadModel(const std::string *inPath) noexcept;
+		inline void loadModel(const std::string *_path) noexcept;
 
 		inline void processNode(
-			const aiNode *inNode,
-			const aiScene *inScene
+			const aiNode *_node,
+			const aiScene *_scene
 		) noexcept;
 
 		[[nodiscard]] inline
 		mesh *processMesh(
-			const aiMesh *inMesh,
-			const aiScene *inScene
+			const aiMesh *_mesh,
+			const aiScene *_scene
 		) noexcept;
 
 		[[nodiscard]] inline
 		std::vector<texture*> loadMaterialTextures(
-			const aiMaterial *inMat,
-			const aiTextureType inType,
-			const texture::texType inTexType
+			const aiMaterial *_material,
+			const aiTextureType _type,
+			const texture::texType _texType
 		) const noexcept;
 
 		inline void loadTexturesToShader() const noexcept;
 
 	public:
 		model(
-			const std::string *inModelPath,
-			const std::string *inShaderPath,
-			camera *inCamera = nullptr,
-			const bool inLoadTextures = true
+			const std::string *_modelPath,
+			const std::string *_shaderPath,
+			camera *_camera = nullptr,
+			const bool _loadTextures = true
 		) noexcept;
 
 		~model();
 
-		void draw(const camera *inCamera = nullptr) const noexcept;
+		void draw(const camera *_camera = nullptr) const noexcept;
 
-		constexpr void setCameraRef(camera *inCamera) noexcept;
-		constexpr void setShaderRef(shader *inShader) noexcept;
+		constexpr void setCameraRef(camera *_camera) noexcept;
+		constexpr void setShaderRef(shader *_shader) noexcept;
 
 		[[nodiscard]] shader *getShaderRef() const noexcept;
-		[[nodiscard]] mesh *getMeshAt(const uint16_t inPos) const noexcept;
+		[[nodiscard]] mesh *getMeshAt(const uint16_t _pos) const noexcept;
 	};
 }

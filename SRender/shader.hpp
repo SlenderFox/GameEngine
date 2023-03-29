@@ -20,63 +20,63 @@ namespace srender
 		uint32_t m_idProgram, m_idVertex, m_idFragment;
 		std::string m_shaderPath;	// The file inath of the shaders
 
-		inline void loadShader(const shaderType inType);
+		inline void loadShader(const shaderType _type);
 
 		inline bool compileShader(
-			uint32_t *inId,
-			shaderType inType,
-			const char *inCode
+			uint32_t *_id,
+			shaderType _type,
+			const char *_code
 		) noexcept;
 
 		inline void createShaderProgram() noexcept;
 
 		[[nodiscard]] inline
 		bool checkForErrors(
-			const uint32_t *inShaderID,
-			const shaderType inType
+			const uint32_t *_shaderID,
+			const shaderType _type
 		) const noexcept;
 
 		/** Select between two outputs based on the shadertype input
 		 * @tparam T Arbitrary type allows this function to select for many different types
-		 * @param inType The input shader type, must be either vertex or fragment
-		 * @param inVertex The output if the type is vertex
-		 * @param inFragment The output if the type is fragment
+		 * @param _type The input shader type, must be either vertex or fragment
+		 * @param _vertex The output if the type is vertex
+		 * @param _fragment The output if the type is fragment
 		 * @return [T] One of the two given params
-		 * @note Will assert that inType is not shaderType::program
+		 * @note Will assert that _type is not shaderType::program
 		 */
 		template<typename T> [[nodiscard]] inline
 		T byType(
-			const shaderType inType,
-			T inVertex,
-			T inFragment
+			const shaderType _type,
+			T _vertex,
+			T _fragment
 		) const noexcept;
 
 	public:
-		shader(const std::string *inShaderPath = nullptr);
+		shader(const std::string *_shaderPath = nullptr);
 		~shader();
 
 		/** Deletes the currently used shader program */
 		void destroy() noexcept;
 		/** Given a path, will load and compile a shader
-		 * @param inShaderPath The relative path of the vertex and fragment shader and their name
+		 * @param _shaderPath The relative path of the vertex and fragment shader and their name
 		 * @note The vertex and fragment shaders must have the same name,
 		 * the path does no require the extension
 		 */
-		void load(const std::string *inShaderPath = nullptr);
+		void load(const std::string *_shaderPath = nullptr);
 		/** Makes this shader the active shader */
 		void use() const noexcept;
 
 		[[nodiscard]] constexpr
 		bool isLoaded() const noexcept;
 
-		void setBool   (const std::string inName, const bool      inValue) const noexcept;
-		void setInt    (const std::string inName, const int32_t   inValue) const noexcept;
-		void setUint   (const std::string inName, const uint32_t  inValue) const noexcept;
-		void setFloat  (const std::string inName, const float     inValue) const noexcept;
-		void setFloat2 (const std::string inName, const glm::vec2 inValue) const noexcept;
-		void setFloat3 (const std::string inName, const glm::vec3 inValue) const noexcept;
-		void setFloat4 (const std::string inName, const glm::vec4 inValue) const noexcept;
-		void setMat3   (const std::string inName, const glm::mat3 inValue) const noexcept;
-		void setMat4   (const std::string inName, const glm::mat4 inValue) const noexcept;
+		void setBool   (const std::string _name, const bool      _value) const noexcept;
+		void setInt    (const std::string _name, const int32_t   _value) const noexcept;
+		void setUint   (const std::string _name, const uint32_t  _value) const noexcept;
+		void setFloat  (const std::string _name, const float     _value) const noexcept;
+		void setFloat2 (const std::string _name, const glm::vec2 _value) const noexcept;
+		void setFloat3 (const std::string _name, const glm::vec3 _value) const noexcept;
+		void setFloat4 (const std::string _name, const glm::vec4 _value) const noexcept;
+		void setMat3   (const std::string _name, const glm::mat3 _value) const noexcept;
+		void setMat4   (const std::string _name, const glm::mat4 _value) const noexcept;
 	};
 }

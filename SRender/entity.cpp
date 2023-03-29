@@ -20,27 +20,27 @@ namespace srender
 	{
 		static inline
 		void BackgroundLoadModel(
-			string *pModelPath,
-			string *pShaderPath,
-			entity *pEntity,
-			const bool pLoadTextures = true
+			string *_modelPath,
+			string *_shaderPath,
+			entity *_entity,
+			const bool _loadTextures = true
 		) noexcept
 		{
 			uint8_t ID;
-			pEntity->m_modelRef = renderer::addNewModel(ID, pModelPath, pShaderPath, pLoadTextures);
-			renderer::loadLightsIntoShader(pEntity->m_modelRef->getShaderRef());
-			pEntity->updateModel();
+			_entity->m_modelRef = renderer::addNewModel(ID, _modelPath, _shaderPath, _loadTextures);
+			renderer::loadLightsIntoShader(_entity->m_modelRef->getShaderRef());
+			_entity->updateModel();
 		}
 	};
 
-	void entityBase::addChild(entity *pChild) noexcept
-	{ m_childrenRef.push_back(pChild); }
+	void entityBase::addChild(entity *_child) noexcept
+	{ m_childrenRef.push_back(_child); }
 
-	void entityBase::removeChild(const entity *pChild) noexcept
+	void entityBase::removeChild(const entity *_child) noexcept
 	{
 		for (auto it = m_childrenRef.begin(); it != m_childrenRef.end(); ++it)
 		{
-			if (*it == pChild)
+			if (*it == _child)
 			{
 				m_childrenRef.erase(it);
 				break;
@@ -54,19 +54,19 @@ namespace srender
 	// Static
 
 	entity *entity::createWithModel(
-		string pModelPath,
-		string pShaderPath,
-		model *&pModelOut,
-		shader *&pShaderOut,
-		const bool pLoadTextures
+		string _modelPath,
+		string _shaderPath,
+		model *&_outModel,
+		shader *&_outShader,
+		const bool _loadTextures
 	) noexcept
 	{
 		entity *result = new entity();
-		pModelPath = application::getAppLocation() + pModelPath;
-		pShaderPath = application::getAppLocation() + pShaderPath;
-		entityLoader::BackgroundLoadModel(&pModelPath, &pShaderPath, result, pLoadTextures);
-		pModelOut = result->m_modelRef;
-		pShaderOut = result->m_modelRef->getShaderRef();
+		_modelPath = application::getAppLocation() + _modelPath;
+		_shaderPath = application::getAppLocation() + _shaderPath;
+		entityLoader::BackgroundLoadModel(&_modelPath, &_shaderPath, result, _loadTextures);
+		_outModel = result->m_modelRef;
+		_outShader = result->m_modelRef->getShaderRef();
 		return result;
 	}
 
@@ -76,8 +76,8 @@ namespace srender
 	: m_parentRef(root::getRoot())
 	{ }
 
-	entity::entity(entityBase *pParent)
-	: m_parentRef(pParent)
+	entity::entity(entityBase *_parent)
+	: m_parentRef(_parent)
 	{ }
 
 	void entity::updateModel() const noexcept
@@ -89,42 +89,42 @@ namespace srender
 	}
 
 	void entity::loadModel(
-		string pModelPath,
-		string pShaderPath,
-		model *&pModelOut,
-		shader *&pShaderOut,
-		const bool pLoadTextures
+		string _modelPath,
+		string _shaderPath,
+		model *&_outModel,
+		shader *&_outShader,
+		const bool _loadTextures
 	) noexcept
 	{
 		// Currently this does nothing about the previous model and shader
 		// but does not cause a memory leak as they are managed by renderer
-		entityLoader::BackgroundLoadModel(&pModelPath, &pShaderPath, this, pLoadTextures);
-		pModelOut = m_modelRef;
-		pShaderOut = m_modelRef->getShaderRef();
+		entityLoader::BackgroundLoadModel(&_modelPath, &_shaderPath, this, _loadTextures);
+		_outModel = m_modelRef;
+		_outShader = m_modelRef->getShaderRef();
 	}
 
-	void entity::setTransform(const mat4 *pValue) noexcept
+	void entity::setTransform(const mat4 *_value) noexcept
 	{
-		transform::setTransform(pValue);
+		transform::setTransform(_value);
 		updateModel();
 	}
 
-	void entity::setPosition(const vec3 pValue) noexcept
+	void entity::setPosition(const vec3 _value) noexcept
 	{
-		transform::setPosition(pValue);
+		transform::setPosition(_value);
 		updateModel();
 	}
 
-	void entity::translate(const vec3 pValue) noexcept
+	void entity::translate(const vec3 _value) noexcept
 	{
-		transform::translate(pValue);
+		transform::translate(_value);
 		updateModel();
 	}
 
-	void entity::setParent(entityBase *pParent) noexcept
+	void entity::setParent(entityBase *_parent) noexcept
 	{
 		// Look into the potential for this to return without changing anything
-		if (!pParent)
+		if (!_parent)
 		{
 			m_parentRef = nullptr;
 			return;
@@ -134,18 +134,18 @@ namespace srender
 		if (m_parentRef) { m_parentRef->removeChild(this); }
 
 		// Assign new parent and join it's children
-		m_parentRef = pParent;
+		m_parentRef = _parent;
 		m_parentRef->addChild(this);
 	}
 
-	void entity::renderOnlyColour(const bool pState) noexcept
-	{ m_modelRef->getShaderRef()->setBool("u_justColour", pState); }
+	void entity::renderOnlyColour(const bool _state) noexcept
+	{ m_modelRef->getShaderRef()->setBool("u_justColour", _state); }
 
-	void entity::setScale(const vec3 pValue) noexcept
-	{ m_modelRef->getShaderRef()->setFloat3("u_scale", pValue); }
+	void entity::setScale(const vec3 _value) noexcept
+	{ m_modelRef->getShaderRef()->setFloat3("u_scale", _value); }
 
-	void entity::sentTint(const colour pCol) noexcept
-	{ m_modelRef->getShaderRef()->setFloat3("u_colour", pCol.rgb()); }
+	void entity::sentTint(const colour _colour) noexcept
+	{ m_modelRef->getShaderRef()->setFloat3("u_colour", _colour.rgb()); }
 
 	constexpr entityBase &entity::getParent() const noexcept
 	{ return *m_parentRef; }

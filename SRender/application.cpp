@@ -18,8 +18,8 @@ namespace srender
 	GLFWwindow *application::s_windowRef = nullptr;
 	bool application::s_gladLoaded = false,
 		application::s_fullscreen = false;
-	uint16_t application::s_winWidth = 320U,
-		application::s_winHeight = 180U,
+	uint16_t application::s_w_width = 320U,
+		application::s_w_height = 180U,
 		application::s_fps = 0U,
 		application::s_perSecondFrameCount = 0U;
 	uint64_t application::s_totalFrames = 0U;
@@ -135,7 +135,7 @@ namespace srender
 		// Has to be initialised after glfw and glad
 		debug::init();
 
-		if (!renderer::init((float)s_winWidth / (float)s_winHeight))
+		if (!renderer::init((float)s_w_width / (float)s_w_height))
 		{
 			s_exitCode = exitCode::fail_Renderer;
 			return false;
@@ -191,9 +191,9 @@ namespace srender
 		glfwWindowHint(GLFW_REFRESH_RATE, vid->refreshRate);
 
 		GLFWmonitor *mon = s_fullscreen ? primMon : nullptr;
-		//int wid = s_winWidth, hei = s_winHeight;
+		//int wid = s_w_width, hei = s_w_height;
 
-		s_windowRef = glfwCreateWindow(s_winWidth, s_winHeight, s_title.c_str(), mon, nullptr);
+		s_windowRef = glfwCreateWindow(s_w_width, s_w_height, s_title.c_str(), mon, nullptr);
 
 		if (!s_windowRef)
 		{
@@ -211,14 +211,14 @@ namespace srender
 			glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
 			#ifdef _DEBUG
 				// Moves the window to the left of the monitor
-				glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_winHeight) * 0.5f));
+				glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_w_height) * 0.5f));
 				#ifdef _WIN32
-					debug::MoveConsole(s_winWidth);
+					debug::MoveConsole(s_w_width);
 				#endif
 			#else
 				// Moves the window to the center of the workarea
-				glfwSetWindowPos(s_windowRef, (int)((monWidth - s_winWidth) * 0.5f),
-					(int)((monHeight - s_winHeight) * 0.5f));
+				glfwSetWindowPos(s_windowRef, (int)((monWidth - s_w_width) * 0.5f),
+					(int)((monHeight - s_w_height) * 0.5f));
 			#endif
 		}
 
@@ -237,36 +237,36 @@ namespace srender
 	}
 
 	void application::setDimensions(
-		const uint16_t inWidth,
-		const uint16_t inHeight
+		const uint16_t _width,
+		const uint16_t _height
 	) noexcept
 	{
-		s_winWidth = inWidth;
-		s_winHeight = inHeight;
+		s_w_width = _width;
+		s_w_height = _height;
 
-		if (renderer::s_camera && inWidth > 0 && inHeight > 0)
+		if (renderer::s_camera && _width > 0 && _height > 0)
 			updateCamera();
 
-		//Debug::send(string("Dimensions set to " + to_string(s_winWidth) + ", " + to_string(s_winHeight)));
+		//Debug::send(string("Dimensions set to " + to_string(s_w_width) + ", " + to_string(s_w_height)));
 	}
 
-	void application::setTitle(const string inTitle) noexcept
+	void application::setTitle(const string _title) noexcept
 	{
-		s_title = inTitle;
+		s_title = _title;
 		//debug::send("Title set to \"" + s_title + "\"");
 	}
 
-	void application::setFullscreen(const bool inFullscreen) noexcept
+	void application::setFullscreen(const bool _fullscreen) noexcept
 	{
-		s_fullscreen = inFullscreen;
+		s_fullscreen = _fullscreen;
 		//debug::send("Fullscreen set to " + string(s_fullscreen ? "true" : "false"));
 	}
 
-	void application::setAppLocation(string inLocation) noexcept
+	void application::setAppLocation(string _location) noexcept
 	{
-		size_t last_slash = inLocation.find_last_of("\\/");
-		s_appLocation = inLocation.substr(0, last_slash + 1);
-		//debug::send("App location set to: " + s_appLocation + "\nFrom source: " + inLocation);
+		size_t last_slash = _location.find_last_of("\\/");
+		s_appLocation = _location.substr(0, last_slash + 1);
+		//debug::send("App location set to: " + s_appLocation + "\nFrom source: " + _location);
 	}
 
 	void application::updateFrameTimeData() noexcept
@@ -292,7 +292,7 @@ namespace srender
 
 	void application::updateCamera() noexcept
 	{
-		renderer::s_camera->setAspectRatio((float)s_winWidth / (float)s_winHeight);
+		renderer::s_camera->setAspectRatio((float)s_w_width / (float)s_w_height);
 		renderer::s_camera->updateFovV();
 	}
 
@@ -301,9 +301,9 @@ namespace srender
 		string title = {
 			s_title
 			+ " | "
-			+ to_string(s_winWidth)
+			+ to_string(s_w_width)
 			+ "x"
-			+ to_string(s_winHeight)
+			+ to_string(s_w_height)
 			+ " | "
 			+ to_string(s_fps)
 		};
@@ -328,9 +328,9 @@ namespace srender
 		//	s_fullscreen = false;
 		//	int monPosX, monPosY, monWidth, monHeight;
 		//	glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
-		//	glfwSetWindowMonitor(s_windowRef, nullptr, 2, (int)((monHeight - s_winHeight) * 0.5f),
-		//		s_winWidth, s_winHeight, GLFW_DONT_CARE);
-		//	glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_winHeight) * 0.5f));
+		//	glfwSetWindowMonitor(s_windowRef, nullptr, 2, (int)((monHeight - s_w_height) * 0.5f),
+		//		s_w_width, s_w_height, GLFW_DONT_CARE);
+		//	glfwSetWindowPos(s_windowRef, 2, (int)((monHeight - s_w_height) * 0.5f));
 		//}
 
 		// End application
@@ -338,13 +338,13 @@ namespace srender
 	}
 
 	void application::framebufferSizeCallback(
-		GLFWwindow *inWindow,
-		const int inWidth,
-		const int inHeight
+		GLFWwindow *_window,
+		const int _width,
+		const int _height
 	) noexcept
 	{
-		setDimensions((const uint16_t)inWidth, (const uint16_t)inHeight);
-		renderer::setResolution(inWidth, inHeight);
+		setDimensions((const uint16_t)_width, (const uint16_t)_height);
+		renderer::setResolution(_width, _height);
 	}
 
 	double application::getTime() noexcept

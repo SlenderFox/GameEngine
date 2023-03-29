@@ -52,57 +52,57 @@ float LineariseDepth(float pDepth){
 	float z=pDepth*2.0-1.0;	// Back to ndc
 	return (2.0*near*far)/(far+near-z*(far-near));
 }
-vec3 PhongShading(LightColour pColour,vec3 pLightDir,float pIntensity){
+vec3 PhongShading(LightColour _colour,vec3 _lightDir,float _intensity){
 	// Textures
 	vec3 diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;
 	vec3 specularTex=texture(u_material.texture_specular0,TexCoords).rgb;
 	// Diffuse shading
-	float diff=max(dot(m_normal,pLightDir),0.0);
+	float diff=max(dot(m_normal,_lightDir),0.0);
 	// Specular shading
-	vec3 reflectDir=reflect(-pLightDir,m_normal);
+	vec3 reflectDir=reflect(-_lightDir,m_normal);
 	float spec=pow(max(dot(m_viewDir,reflectDir),0.0),u_material.shininess);
 	// Combine results
-	vec3 ambient=pColour.ambient*diffuseTex;
-	vec3 diffuse=pColour.diffuse*diffuseTex*diff*pIntensity;
-	vec3 specular=pColour.specular*specularTex*spec*pIntensity;
+	vec3 ambient=_colour.ambient*diffuseTex;
+	vec3 diffuse=_colour.diffuse*diffuseTex*diff*_intensity;
+	vec3 specular=_colour.specular*specularTex*spec*_intensity;
 	return ambient+diffuse+specular;
 }
-float CalculateAttentuation(float pDist,float pLinear,float pQuadratic){
-	return 1.0/(1.0+pLinear*pDist+pQuadratic*(pDist*pDist));
+float CalculateAttentuation(float _dist,float _linear,float _quadratic){
+	return 1.0/(1.0+_linear*_dist+_quadratic*(_dist*_dist));
 }
-vec3 CalculateDirectionalLighting(LightDirectional pLight){
-	vec3 lightDir=normalise(pLight.direction.xyz);
-	return PhongShading(pLight.colour,lightDir,1);
+vec3 CalculateDirectionalLighting(LightDirectional _light){
+	vec3 lightDir=normalise(_light.direction.xyz);
+	return PhongShading(_light.colour,lightDir,1);
 }
-vec3 CalculatePointLight(LightPoint pLight){
+vec3 CalculatePointLight(LightPoint _light){
 	// Skip over "dead" lights
-	if(length(pLight.linear)==0)
+	if(length(_light.linear)==0)
 		return vec3(0);
 	// Point or spotlight
-	vec3 lightDiff=pLight.position.xyz-FragPos;
+	vec3 lightDiff=_light.position.xyz-FragPos;
 	vec3 lightDir=normalise(lightDiff);
 	// Light fading over distance
 	float lightDist=length(lightDiff);
-	float attenuation=CalculateAttentuation(lightDist,pLight.linear,pLight.quadratic);
-	return PhongShading(pLight.colour,lightDir,1)*attenuation;
+	float attenuation=CalculateAttentuation(lightDist,_light.linear,_light.quadratic);
+	return PhongShading(_light.colour,lightDir,1)*attenuation;
 }
-vec3 CalculateSpotLight(LightSpot pLight){
+vec3 CalculateSpotLight(LightSpot _light){
 	// Skip over "dead" lights
-	if(length(pLight.linear)==0)
+	if(length(_light.linear)==0)
 		return vec3(0);
 	// Point or spotlight
-	vec3 lightDiff=pLight.position.xyz-FragPos;
+	vec3 lightDiff=_light.position.xyz-FragPos;
 	vec3 lightDir=normalise(lightDiff);
 	// Light fading over distance
 	float lightDist=length(lightDiff);
-	float attenuation=CalculateAttentuation(lightDist,pLight.linear,pLight.quadratic);
+	float attenuation=CalculateAttentuation(lightDist,_light.linear,_light.quadratic);
 	// Soft edges
 	float intensity=1;
-	float theta=dot(lightDir,normalise(pLight.direction.xyz));
+	float theta=dot(lightDir,normalise(_light.direction.xyz));
 	// l(1-c)+c scales light.blur from 0-1 to light.cutoff-1
-	float epsilon=(pLight.blur*(1-pLight.cutoff)+pLight.cutoff)-pLight.cutoff;
-	intensity=clamp((theta-pLight.cutoff)/epsilon,0.0,1.0);
-	return PhongShading(pLight.colour,lightDir,intensity)*attenuation;
+	float epsilon=(_light.blur*(1-_light.cutoff)+_light.cutoff)-_light.cutoff;
+	intensity=clamp((theta-_light.cutoff)/epsilon,0.0,1.0);
+	return PhongShading(_light.colour,lightDir,intensity)*attenuation;
 }
 void main(){
 	if(u_justColour)

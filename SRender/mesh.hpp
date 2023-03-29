@@ -99,8 +99,8 @@ namespace srender
 		std::vector<uint32_t> generateIndices() noexcept;
 
 		mesh(
-			const std::vector<vertex> *pVertices = nullptr,
-			const std::vector<uint32_t> *pIndices = nullptr
+			const std::vector<vertex> *_vertices = nullptr,
+			const std::vector<uint32_t> *_indices = nullptr
 		) noexcept;
 		~mesh();
 

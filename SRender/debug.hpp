@@ -29,29 +29,29 @@ namespace srender
 		void init() noexcept;
 
 		void send(
-			const std::string pMsg,
-			const bool pNewline = false,
-			const bool pEndline = true
+			const std::string _msg,
+			const bool _newline = false,
+			const bool _endline = true
 		) noexcept;
 		void send(
-			const std::string pMsg,
-			const wchar_t *pPrefix,
-			const bool pNewline = false,
-			const bool pEndline = true
+			const std::string _msg,
+			const wchar_t *_prefix,
+			const bool _newline = false,
+			const bool _endline = true
 		) noexcept;
 		void send(
-			const std::string pMsg,
-			const type pType,
-			const impact pImpact,
-			const stage pStage,
-			const bool pNewline = false,
-			const bool pEndline = true
+			const std::string _msg,
+			const type _type,
+			const impact _impact,
+			const stage _stage,
+			const bool _newline = false,
+			const bool _endline = true
 		) noexcept;
 
 		void newLine() noexcept;
 
 		#ifdef _DEBUG
-			void MoveConsole(const uint16_t inWidth) noexcept;
+			void MoveConsole(const uint16_t _width) noexcept;
 		#endif
 	};
 }

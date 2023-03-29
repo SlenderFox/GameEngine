@@ -24,10 +24,10 @@ namespace srender
 		{ glDeleteTextures(s_textureCount, s_textureIds); }
 	}
 
-	int32_t texture::loadTextureFromFile(const string *inPath) noexcept
+	int32_t texture::loadTextureFromFile(const string *_path) noexcept
 	{
 		debug::send(
-			"Loading texture " + std::to_string(s_textureCount) + ": \"" + *inPath + "\"...",
+			"Loading texture " + std::to_string(s_textureCount) + ": \"" + *_path + "\"...",
 			debug::type::Process,
 			debug::impact::Large,
 			debug::stage::Mid,
@@ -51,7 +51,7 @@ namespace srender
 		stbi_set_flip_vertically_on_load(true);
 
 		int texWidth = 0, texHeight = 0, numComponents = 0;
-		unsigned char *imageData = stbi_load(inPath->c_str(), &texWidth, &texHeight, &numComponents, 0);
+		unsigned char *imageData = stbi_load(_path->c_str(), &texWidth, &texHeight, &numComponents, 0);
 		if (imageData)
 		{
 			float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -124,11 +124,11 @@ namespace srender
 	// Member
 
 	texture::texture(
-		string inPath,
-		texType inType
+		string _path,
+		texType _type
 	) noexcept
-		: m_file(inPath)
-		, m_type(inType)
+		: m_file(_path)
+		, m_type(_type)
 	{
 		m_id = loadTextureFromFile(&m_file);
 	}

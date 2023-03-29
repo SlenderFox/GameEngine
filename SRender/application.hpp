@@ -26,7 +26,7 @@ namespace srender
 		// Is the application fullscreen or not
 		static bool s_fullscreen;
 		// The width and height of the window, should only be modified through setDimensions()
-		static uint16_t s_winWidth, s_winHeight;
+		static uint16_t s_w_width, s_w_height;
 		// The amount of frames rendered per second
 		static uint16_t s_fps, s_perSecondFrameCount;
 		// The total amount of frames rendered
@@ -60,9 +60,9 @@ namespace srender
 		static void processInput() noexcept;
 
 		static void framebufferSizeCallback(
-			GLFWwindow *inWindow,
-			const int inWidth,
-			const int inHeight
+			GLFWwindow *_window,
+			const int _width,
+			const int _height
 		) noexcept;
 
 	public:
@@ -82,16 +82,16 @@ namespace srender
 		exitCode run();
 
 		static void setDimensions(
-			const uint16_t inWidth,
-			const uint16_t inHeight
+			const uint16_t _width,
+			const uint16_t _height
 		) noexcept;
-		static void setTitle(const std::string inTitle) noexcept;
-		static void setFullscreen(const bool inFullscreen) noexcept;
+		static void setTitle(const std::string _title) noexcept;
+		static void setFullscreen(const bool _fullscreen) noexcept;
 		/** Sets a string saving the location of the application
-		 * @param inLocation The first argument of main
+		 * @param _location The first argument of main
 		 * @note This function will remove everything after the final slash, so don't bother processing the argument.
 		 */
-		static void setAppLocation(std::string inLocation) noexcept;
+		static void setAppLocation(std::string _location) noexcept;
 
 		[[nodiscard]] static
 		double getTime() noexcept;

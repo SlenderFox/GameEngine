@@ -55,43 +55,43 @@ namespace srender
 		}
 
 		void send(
-			const string pMsg,
-			const bool pNewline,
-			const bool pEndline
+			const string _msg,
+			const bool _newline,
+			const bool _endline
 		) noexcept
 		{
 			#ifdef _DEBUG
-				if (pNewline) wcout << '\n';
-				wcout << pMsg.c_str();
-				if (pEndline) wcout << endl;
+				if (_newline) wcout << '\n';
+				wcout << _msg.c_str();
+				if (_endline) wcout << endl;
 			#endif
 		}
 
 		void send(
-			const string pMsg,
-			const wchar_t *pPrefix,
-			const bool pNewline,
-			const bool pEndline
+			const string _msg,
+			const wchar_t *_prefix,
+			const bool _newline,
+			const bool _endline
 		) noexcept
 		{
 			#ifdef _DEBUG
-				if (pNewline) wcout << '\n';
-				wcout << pPrefix << pMsg.c_str();
-				if (pEndline) wcout << endl;
+				if (_newline) wcout << '\n';
+				wcout << _prefix << _msg.c_str();
+				if (_endline) wcout << endl;
 			#endif
 		}
 
 		void send(
-			const string pMsg,
-			const type pType,
-			const impact pImpact,
-			const stage pStage,
-			const bool pNewline,
-			const bool pEndline
+			const string _msg,
+			const type _type,
+			const impact _impact,
+			const stage _stage,
+			const bool _newline,
+			const bool _endline
 		) noexcept
 		{
-			uint8_t pre = (uint8_t)pType + (uint8_t)pImpact + (uint8_t)pStage;
-			send(pMsg, prefixes[pre], pNewline, pEndline);
+			uint8_t pre = (uint8_t)_type + (uint8_t)_impact + (uint8_t)_stage;
+			send(_msg, prefixes[pre], _newline, _endline);
 		}
 
 		void newLine() noexcept
@@ -102,10 +102,10 @@ namespace srender
 		}
 
 		#if defined(_DEBUG) && defined(__WINDOWS__)
-			void MoveConsole(const uint16_t inWidth) noexcept
+			void MoveConsole(const uint16_t _width) noexcept
 			{
 				// Moves the console to the right and resizes
-				MoveWindow(GetConsoleWindow(), inWidth - 3, 0, 900, 1040, TRUE);
+				MoveWindow(GetConsoleWindow(), _width - 3, 0, 900, 1040, TRUE);
 			}
 		#endif
 	}

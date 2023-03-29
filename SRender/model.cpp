@@ -14,19 +14,19 @@ using std::vector;
 namespace srender
 {
 	model::model(
-		const string *inModelPath,
-		const string *inShaderPath,
-		camera *inCamera,
-		const bool pLoadTextures
+		const string *_modelPath,
+		const string *_shaderPath,
+		camera *_camera,
+		const bool _loadTextures
 	) noexcept
-		: m_cameraRef(inCamera)
-		, m_loadTextures(pLoadTextures)
+		: m_cameraRef(_camera)
+		, m_loadTextures(_loadTextures)
 	{
 		m_meshes = vector<mesh*>();
 		m_textures = vector<texture*>();
 
-		loadModel(inModelPath);
-		m_shader = new shader(inShaderPath);
+		loadModel(_modelPath);
+		m_shader = new shader(_shaderPath);
 		if (m_loadTextures) loadTexturesToShader();
 
 		debug::send(
@@ -45,13 +45,13 @@ namespace srender
 		delete m_shader;
 	}
 
-	void model::draw(const camera *inCamera) const noexcept
+	void model::draw(const camera *_camera) const noexcept
 	{
 		m_shader->use();
-		if (inCamera)
+		if (_camera)
 		{
-			m_shader->setMat4("u_camera", inCamera->getWorldToCameraMatrix());
-			m_shader->setFloat3("u_viewPos", (vec3)inCamera->getPosition());
+			m_shader->setMat4("u_camera", _camera->getWorldToCameraMatrix());
+			m_shader->setFloat3("u_viewPos", (vec3)_camera->getPosition());
 		}
 		else
 		{
@@ -64,10 +64,10 @@ namespace srender
 		{ getMeshAt(i)->draw(); }
 	}
 
-	inline void model::loadModel(const string *inPath) noexcept
+	inline void model::loadModel(const string *_path) noexcept
 	{
 		debug::send(
-			"Loading model \"" + *inPath + "\"",
+			"Loading model \"" + *_path + "\"",
 			debug::type::Process,
 			debug::impact::Large,
 			debug::stage::Begin
@@ -84,7 +84,7 @@ namespace srender
 		}
 
 		Assimp::Importer importer;
-		const aiScene *scene = importer.ReadFile(*inPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene *scene = importer.ReadFile(*_path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -97,60 +97,60 @@ namespace srender
 			return;
 		}
 
-		size_t last_slash = (*inPath).find_last_of("\\/");
-		m_directory = (*inPath).substr(0, last_slash);
+		size_t last_slash = (*_path).find_last_of("\\/");
+		m_directory = (*_path).substr(0, last_slash);
 		processNode(scene->mRootNode, scene);
 	}
 
 	inline void model::processNode(
-		const aiNode *inNode,
-		const aiScene *inScene
+		const aiNode *_node,
+		const aiScene *_scene
 	) noexcept
 	{
 		// Process all the node's meshes (if any)
-		for (uint32_t i = 0; i < inNode->mNumMeshes; ++i)
+		for (uint32_t i = 0; i < _node->mNumMeshes; ++i)
 		{
-			aiMesh *mesh = inScene->mMeshes[inNode->mMeshes[i]];
-			m_meshes.push_back(processMesh(mesh, inScene));
+			aiMesh *mesh = _scene->mMeshes[_node->mMeshes[i]];
+			m_meshes.push_back(processMesh(mesh, _scene));
 		}
 		// Then do the same for each of it's children
-		for (uint32_t i = 0; i < inNode->mNumChildren; ++i)
+		for (uint32_t i = 0; i < _node->mNumChildren; ++i)
 		{
-			processNode(inNode->mChildren[i], inScene);
+			processNode(_node->mChildren[i], _scene);
 		}
 	}
 
 	inline mesh *model::processMesh(
-		const aiMesh *inMesh,
-		const aiScene *inScene
+		const aiMesh *_mesh,
+		const aiScene *_scene
 	) noexcept
 	{
 		vector<vertex> vertices;
 		vector<uint32_t> indices;
 		// Process vertex positions, normals, and texture coordinates
-		for (uint32_t i = 0; i < inMesh->mNumVertices; ++i)
+		for (uint32_t i = 0; i < _mesh->mNumVertices; ++i)
 		{
 			vertex vertex;
 			vec3 vector;
 			// Position
-			vector.x = inMesh->mVertices[i].x;
-			vector.y = inMesh->mVertices[i].y;
-			vector.z = inMesh->mVertices[i].z;
+			vector.x = _mesh->mVertices[i].x;
+			vector.y = _mesh->mVertices[i].y;
+			vector.z = _mesh->mVertices[i].z;
 			vertex.position = vector;
 			// Normal
-			if (inMesh->HasNormals())
+			if (_mesh->HasNormals())
 			{
-				vector.x = inMesh->mNormals[i].x;
-				vector.y = inMesh->mNormals[i].y;
-				vector.z = inMesh->mNormals[i].z;
+				vector.x = _mesh->mNormals[i].x;
+				vector.y = _mesh->mNormals[i].y;
+				vector.z = _mesh->mNormals[i].z;
 				vertex.normal = vector;
 			}
 			// TexCoords
-			if (inMesh->mTextureCoords[0])	// Does the mesh have texture coords
+			if (_mesh->mTextureCoords[0])	// Does the mesh have texture coords
 			{
 				vec2 vec;
-				vec.x = inMesh->mTextureCoords[0][i].x;
-				vec.y = inMesh->mTextureCoords[0][i].y;
+				vec.x = _mesh->mTextureCoords[0][i].x;
+				vec.y = _mesh->mTextureCoords[0][i].y;
 				vertex.texCoords = vec;
 			}
 			else
@@ -159,17 +159,17 @@ namespace srender
 			vertices.push_back(vertex);
 		}
 		// Process indices
-		for (uint32_t i = 0; i < inMesh->mNumFaces; ++i)
+		for (uint32_t i = 0; i < _mesh->mNumFaces; ++i)
 		{
-			aiFace face = inMesh->mFaces[i];
+			aiFace face = _mesh->mFaces[i];
 			for (uint32_t j = 0; j < face.mNumIndices; ++j)
 				indices.push_back(face.mIndices[j]);
 		}
 
 		// Process material
-		if (m_loadTextures && inMesh->mMaterialIndex >= 0U)
+		if (m_loadTextures && _mesh->mMaterialIndex >= 0U)
 		{
-			aiMaterial *material = inScene->mMaterials[inMesh->mMaterialIndex];
+			aiMaterial *material = _scene->mMaterials[_mesh->mMaterialIndex];
 			vector<texture*> diffuseMaps = loadMaterialTextures(
 				material,
 				aiTextureType_DIFFUSE,
@@ -188,17 +188,17 @@ namespace srender
 	}
 
 	inline vector<texture*> model::loadMaterialTextures(
-		const aiMaterial *inMat,
-		const aiTextureType inType,
-		const texture::texType inTexType
+		const aiMaterial *_material,
+		const aiTextureType _type,
+		const texture::texType _texType
 	) const noexcept
 	{
 		// Textures from this specific node being output
 		vector<texture*> texturesOut;
-		for (uint32_t i = 0; i < inMat->GetTextureCount(inType); ++i)
+		for (uint32_t i = 0; i < _material->GetTextureCount(_type); ++i)
 		{
 			aiString file;
-			inMat->GetTexture(inType, i, &file);
+			_material->GetTexture(_type, i, &file);
 			bool loadTexture = true;
 			string path = m_directory + '/' + file.C_Str();
 
@@ -241,7 +241,7 @@ namespace srender
 			// If texture has not been loaded before, load it for the first time
 			if (loadTexture)
 			{
-				texture *tex = new texture(path, inTexType);
+				texture *tex = new texture(path, _texType);
 				texturesOut.push_back(tex);
 				texture::s_loadedTextures.push_back(tex);
 			}
@@ -289,23 +289,23 @@ namespace srender
 		}
 	}
 
-	constexpr void model::setCameraRef(camera *inCamera) noexcept
-	{ m_cameraRef = inCamera; }
+	constexpr void model::setCameraRef(camera *_camera) noexcept
+	{ m_cameraRef = _camera; }
 
-	constexpr void model::setShaderRef(shader *inShader) noexcept
-	{ m_shader = inShader; }
+	constexpr void model::setShaderRef(shader *_shader) noexcept
+	{ m_shader = _shader; }
 
 	shader *model::getShaderRef() const noexcept
 	{ return m_shader; }
 
-	mesh *model::getMeshAt(const uint16_t inPos) const  noexcept
+	mesh *model::getMeshAt(const uint16_t _pos) const  noexcept
 	{
-		if (inPos > m_meshes.size() - 1)
+		if (_pos > m_meshes.size() - 1)
 		{
 			debug::send("Attempting to access mesh outside array size");
 			return nullptr;
 		}
 
-		return m_meshes[inPos];
+		return m_meshes[_pos];
 	}
 }

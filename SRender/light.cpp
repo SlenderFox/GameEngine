@@ -9,38 +9,38 @@ using glm::radians;
 namespace srender
 {
 	light::light(
-		const lightType inType,
-		const colour inColour,
+		const lightType _type,
+		const colour _colour,
 		mat4 inTransform
 	) noexcept
-		: m_type(inType)
-		, m_lightColour(inColour)
+		: m_type(_type)
+		, m_lightColour(_colour)
 	{
 		transform::setTransform(&inTransform);
-		if (inType == lightType::Spot)
+		if (_type == lightType::Spot)
 		{ m_angle = cos(radians(m_angle)); }
 	}
 
-	void light::setDirection (const glm::vec3 inDirection) noexcept
-	{ transform::setForward(inDirection); }
+	void light::setDirection (const glm::vec3 _direction) noexcept
+	{ transform::setForward(_direction); }
 
-	void light::setType (lightType inType) noexcept
-	{ m_type = inType; }
+	void light::setType (lightType _type) noexcept
+	{ m_type = _type; }
 
-	void light::setColour (colour inColour) noexcept
-	{ m_lightColour = inColour; }
+	void light::setColour (colour _colour) noexcept
+	{ m_lightColour = _colour; }
 
-	void light::setLinear (float inValue) noexcept
-	{ m_linear = inValue; }
+	void light::setLinear (float _value) noexcept
+	{ m_linear = _value; }
 
-	void light::setQuadratic (float inValue) noexcept
-	{ m_quadratic = inValue; }
+	void light::setQuadratic (float _value) noexcept
+	{ m_quadratic = _value; }
 
-	void light::setAngle (float inValue) noexcept
-	{ m_angle = inValue; }
+	void light::setAngle (float _value) noexcept
+	{ m_angle = _value; }
 
-	void light::setBlur (float inValue) noexcept
-	{ m_blur = inValue; }
+	void light::setBlur (float _value) noexcept
+	{ m_blur = _value; }
 
 	float light::getAngle() const noexcept
 	{ return cos(radians(m_angle)); }

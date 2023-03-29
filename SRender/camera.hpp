@@ -13,62 +13,62 @@ namespace srender
 		glm::mat4 m_projection;
 
 	public:
-		camera(float inAspectRatio) noexcept;
+		camera(float _aspectRatio) noexcept;
 		camera(
-			float inAspectRatio,
-			float inFovH
+			float _aspectRatio,
+			float _fovH
 		) noexcept;
 		camera(
-			float inAspectRatio,
-			glm::mat4 inTransform
+			float _aspectRatio,
+			glm::mat4 _transform
 		) noexcept;
 		camera(
-			float inAspectRatio,
-			float inFovH,
-			glm::mat4 inTransform
+			float _aspectRatio,
+			float _fovH,
+			glm::mat4 _transform
 		) noexcept;
 		camera(
-			float inAspectRatio,
-			glm::vec3 inFrom,
-			glm::vec3 inTo,
-			glm::vec3 inUp = { 0, 1, 0 }
+			float _aspectRatio,
+			glm::vec3 _from,
+			glm::vec3 _to,
+			glm::vec3 _up = { 0, 1, 0 }
 		) noexcept;
 		camera(
-			float inAspectRatio,
-			float inFovH,
-			glm::vec3 inFrom,
-			glm::vec3 inTo,
-			glm::vec3 inUp = { 0, 1, 0 }
+			float _aspectRatio,
+			float _fovH,
+			glm::vec3 _from,
+			glm::vec3 _to,
+			glm::vec3 _up = { 0, 1, 0 }
 		) noexcept;
 
 		void lookAt(
-			glm::vec3 inFrom,
-			glm::vec3 inTo,
-			glm::vec3 inUp = { 0, 1, 0 }
+			glm::vec3 _from,
+			glm::vec3 _to,
+			glm::vec3 _up = { 0, 1, 0 }
 		) noexcept;
 
-		void modifyFovH(float inValue) noexcept;
-		void modifyFovV(float inValue) noexcept;
+		void modifyFovH(float _value) noexcept;
+		void modifyFovV(float _value) noexcept;
 		void updateFovH() noexcept;
 		void updateFovV() noexcept;
 
-		void setTransform(const glm::mat4 *inValue) noexcept override;
-		void setView(glm::mat4 *inValue) noexcept;
-		void setProjection(float inFovV) noexcept;
+		void setTransform(const glm::mat4 *_value) noexcept override;
+		void setView(glm::mat4 *_value) noexcept;
+		void setProjection(float _fovV) noexcept;
 
-		void setProjection(glm::mat4 *inValue) noexcept;
-		void setAspectRatio(float inAspectRatio) noexcept;
+		void setProjection(glm::mat4 *_value) noexcept;
+		void setAspectRatio(float _aspectRatio) noexcept;
 
-		void setPosition(glm::vec3 inValue) noexcept override;
-		void translate(glm::vec3 inValue) noexcept override;
+		void setPosition(glm::vec3 _value) noexcept override;
+		void translate(glm::vec3 _value) noexcept override;
 		void setAxes(
-			glm::vec3 inRight,
-			glm::vec3 inUp,
-			glm::vec3 inForward
+			glm::vec3 _right,
+			glm::vec3 _up,
+			glm::vec3 _forward
 		) noexcept override;
 
-		void setFovH(float inFovH) noexcept;
-		void setFovV(float inFovV) noexcept;
+		void setFovH(float _fovH) noexcept;
+		void setFovV(float _fovV) noexcept;
 
 		[[nodiscard]] glm::mat4 getWorldToCameraMatrix() const noexcept;
 

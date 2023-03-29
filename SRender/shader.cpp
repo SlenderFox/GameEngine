@@ -14,8 +14,8 @@ namespace srender
 	// Forward declaration
 	class application { public: [[nodiscard]] static const bool gladLoaded() noexcept; };
 
-	shader::shader(const string *inShaderPath)
-	{ load(inShaderPath); }
+	shader::shader(const string *_shaderPath)
+	{ load(_shaderPath); }
 
 	shader::~shader()
 	{ destroy(); }
@@ -29,7 +29,7 @@ namespace srender
 		}
 	}
 
-	void shader::load(const std::string *inShaderPath)
+	void shader::load(const std::string *_shaderPath)
 	{
 		if (m_shaderLoaded)
 		{
@@ -37,7 +37,7 @@ namespace srender
 			return;
 		}
 		// If no path is given, will use fallback shader
-		m_shaderPath = inShaderPath ? *inShaderPath : "";
+		m_shaderPath = _shaderPath ? *_shaderPath : "";
 		loadShader(shaderType::vertex);
 		loadShader(shaderType::fragment);
 		createShaderProgram();
@@ -49,12 +49,12 @@ namespace srender
 	constexpr bool shader::isLoaded() const noexcept
 	{ return m_shaderLoaded; }
 
-	inline void shader::loadShader(const shaderType inType)
+	inline void shader::loadShader(const shaderType _type)
 	{
 		bool m_usingFallback = false;
 		string codeString;
 
-		if (inType == shaderType::program)
+		if (_type == shaderType::program)
 		{
 			debug::send(
 				"ERROR::SHADER::LOADING_INCORRECT_SHADER_TYPE",
@@ -72,7 +72,7 @@ namespace srender
 		}
 		else
 		{
-			string path = m_shaderPath + byType(inType, string(".vert"), string(".frag"));
+			string path = m_shaderPath + byType(_type, string(".vert"), string(".frag"));
 
 			debug::send(
 				"Compiling shader \"" + path + "\"...",
@@ -101,7 +101,7 @@ namespace srender
 			catch (ifstream::failure &e)
 			{
 				string msg = "ERROR::SHADER::"
-					+ byType(inType, string("VERTEX"), string("FRAGMENT"))
+					+ byType(_type, string("VERTEX"), string("FRAGMENT"))
 					+ "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE:\n"
 					+ string(e.what());
 
@@ -121,8 +121,8 @@ namespace srender
 		{
 			if (
 				!compileShader(
-					byType(inType, &m_idVertex, &m_idFragment),
-					inType,
+					byType(_type, &m_idVertex, &m_idFragment),
+					_type,
 					codeString.c_str()
 				)
 			)
@@ -190,39 +190,39 @@ vec3 m_viewDir;\
 float LineariseDepth(float pDepth){\
 float z=pDepth*2.0-1.0;\
 return (2.0*near*far)/(far+near-z*(far-near));}\
-vec3 PhongShading(LightColour pColour,vec3 pLightDir,float pIntensity){\
+vec3 PhongShading(LightColour _colour,vec3 _lightDir,float _intensity){\
 vec3 diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;\
 vec3 specularTex=texture(u_material.texture_specular0,TexCoords).rgb;\
-float diff=max(dot(m_normal,pLightDir),0.0);\
-vec3 reflectDir=reflect(-pLightDir,m_normal);\
+float diff=max(dot(m_normal,_lightDir),0.0);\
+vec3 reflectDir=reflect(-_lightDir,m_normal);\
 float spec=pow(max(dot(m_viewDir,reflectDir),0.0),u_material.shininess);\
-vec3 ambient=pColour.ambient*diffuseTex;\
-vec3 diffuse=pColour.diffuse*diffuseTex*diff*pIntensity;\
-vec3 specular=pColour.specular*specularTex*spec*pIntensity;\
+vec3 ambient=_colour.ambient*diffuseTex;\
+vec3 diffuse=_colour.diffuse*diffuseTex*diff*_intensity;\
+vec3 specular=_colour.specular*specularTex*spec*_intensity;\
 return ambient+diffuse+specular;}\
-float CalculateAttentuation(float pDist,float pLinear,float pQuadratic){\
-return 1.0/(1.0+pLinear*pDist+pQuadratic*(pDist*pDist));}\
-vec3 CalculateDirectionalLighting(LightDirectional pLight){\
-vec3 lightDir=normalise(pLight.direction.xyz);\
-return PhongShading(pLight.colour,lightDir,1);}\
-vec3 CalculatePointLight(LightPoint pLight){\
-if(length(pLight.linear)==0)return vec3(0);\
-vec3 lightDiff=pLight.position.xyz-FragPos;\
+float CalculateAttentuation(float _dist,float _linear,float _quadratic){\
+return 1.0/(1.0+_linear*_dist+_quadratic*(_dist*_dist));}\
+vec3 CalculateDirectionalLighting(LightDirectional _light){\
+vec3 lightDir=normalise(_light.direction.xyz);\
+return PhongShading(_light.colour,lightDir,1);}\
+vec3 CalculatePointLight(LightPoint _light){\
+if(length(_light.linear)==0)return vec3(0);\
+vec3 lightDiff=_light.position.xyz-FragPos;\
 vec3 lightDir=normalise(lightDiff);\
 float lightDist=length(lightDiff);\
-float attenuation=CalculateAttentuation(lightDist,pLight.linear,pLight.quadratic);\
-return PhongShading(pLight.colour,lightDir,1)*attenuation;}\
-vec3 CalculateSpotLight(LightSpot pLight){\
-if(length(pLight.linear)==0)return vec3(0);\
-vec3 lightDiff=pLight.position.xyz-FragPos;\
+float attenuation=CalculateAttentuation(lightDist,_light.linear,_light.quadratic);\
+return PhongShading(_light.colour,lightDir,1)*attenuation;}\
+vec3 CalculateSpotLight(LightSpot _light){\
+if(length(_light.linear)==0)return vec3(0);\
+vec3 lightDiff=_light.position.xyz-FragPos;\
 vec3 lightDir=normalise(lightDiff);\
 float lightDist=length(lightDiff);\
-float attenuation=CalculateAttentuation(lightDist,pLight.linear,pLight.quadratic);\
+float attenuation=CalculateAttentuation(lightDist,_light.linear,_light.quadratic);\
 float intensity=1;\
-float theta=dot(lightDir,normalise(pLight.direction.xyz));\
-float epsilon=(pLight.blur*(1-pLight.cutoff)+pLight.cutoff)-pLight.cutoff;\
-intensity=clamp((theta-pLight.cutoff)/epsilon,0.0,1.0);\
-return PhongShading(pLight.colour,lightDir,intensity)*attenuation;}\
+float theta=dot(lightDir,normalise(_light.direction.xyz));\
+float epsilon=(_light.blur*(1-_light.cutoff)+_light.cutoff)-_light.cutoff;\
+intensity=clamp((theta-_light.cutoff)/epsilon,0.0,1.0);\
+return PhongShading(_light.colour,lightDir,intensity)*attenuation;}\
 void main(){\
 m_normal=normalise(Normal);\
 m_viewDir=normalise(u_viewPos-FragPos);\
@@ -235,16 +235,16 @@ else FragCol=vec4(result*u_colour,1);\
 return;}";
 
 				result = compileShader(
-					byType(inType, &m_idVertex, &m_idFragment),
-					inType,
-					byType<const char*&>(inType, vertexFallback, fragmentFallback)
+					byType(_type, &m_idVertex, &m_idFragment),
+					_type,
+					byType<const char*&>(_type, vertexFallback, fragmentFallback)
 				);
 			}
 
 			if (!result)
 			{
 				string msg = "ERROR::SHADER::"
-					+ byType(inType, string("VERTEX"), string("FRAGMENT"))
+					+ byType(_type, string("VERTEX"), string("FRAGMENT"))
 					+ "::FALLBACK_CODE_FAILURE";
 				debug::send(
 					msg,
@@ -262,21 +262,21 @@ return;}";
 	}
 
 	inline bool shader::compileShader(
-		uint32_t *pId,
-		shaderType inType,
-		const char *inCode
+		uint32_t *_id,
+		shaderType _type,
+		const char *_code
 	) noexcept
 	{
-		assert(inType != shaderType::program && "Incorrect shaderType passed");
+		assert(_type != shaderType::program && "Incorrect shaderType passed");
 
 		// Creates a shader object and assigns to an id
-		switch (inType)
+		switch (_type)
 		{
 		case shaderType::vertex:
-			*pId = glCreateShader(GL_VERTEX_SHADER);
+			*_id = glCreateShader(GL_VERTEX_SHADER);
 			break;
 		case shaderType::fragment:
-			*pId = glCreateShader(GL_FRAGMENT_SHADER);
+			*_id = glCreateShader(GL_FRAGMENT_SHADER);
 			break;
 		default:
 			debug::send(
@@ -290,11 +290,11 @@ return;}";
 		}
 
 		// Loads the shader code into the shader object
-		glShaderSource(*pId, 1, &inCode, NULL);
+		glShaderSource(*_id, 1, &_code, NULL);
 		// Compiles the shader at run-time
-		glCompileShader(*pId);
+		glCompileShader(*_id);
 		// Performs error checking on the shader
-		return checkForErrors(pId, inType);
+		return checkForErrors(_id, _type);
 	}
 
 	inline void shader::createShaderProgram() noexcept
@@ -320,22 +320,22 @@ return;}";
 	}
 
 	inline bool shader::checkForErrors(
-		const uint32_t *inShaderID,
-		const shaderType inType
+		const uint32_t *_shaderID,
+		const shaderType _type
 	) const noexcept
 	{
 		// Boolean output as int32
 		int32_t success;
 		char infoLog[512];
 
-		if (inType == shaderType::program)
+		if (_type == shaderType::program)
 		{
 			// Retrieves the compile status of the given shader by id
-			glGetProgramiv(*inShaderID, GL_LINK_STATUS, &success);
+			glGetProgramiv(*_shaderID, GL_LINK_STATUS, &success);
 			if (!success)
 			{
 				// In the case of a failure it loads the log and outputs
-				glGetProgramInfoLog(*inShaderID, 512, NULL, infoLog);
+				glGetProgramInfoLog(*_shaderID, 512, NULL, infoLog);
 				debug::send(
 					"ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog),
 					debug::type::Note,
@@ -350,13 +350,13 @@ return;}";
 		else
 		{
 			// Retrieves the compile status of the given shader by id
-			glGetShaderiv(*inShaderID, GL_COMPILE_STATUS, &success);
+			glGetShaderiv(*_shaderID, GL_COMPILE_STATUS, &success);
 			if (!success)
 			{
 				// In the case of a failure it loads the log and outputs
-				glGetShaderInfoLog(*inShaderID, 512, NULL, infoLog);
+				glGetShaderInfoLog(*_shaderID, 512, NULL, infoLog);
 				string msg = "ERROR::SHADER::"
-					+ byType(inType, string("VERTEX"), string("FRAGMENT"))
+					+ byType(_type, string("VERTEX"), string("FRAGMENT"))
 					+ "::COMPILATION_FAILED:\n"
 					+ string(infoLog);
 				debug::send(
@@ -375,100 +375,100 @@ return;}";
 
 	template<typename T> inline
 	T shader::byType(
-		const shaderType inType,
-		T inVertex,
-		T inFragment
+		const shaderType _type,
+		T _vertex,
+		T _fragment
 	) const noexcept
 	{
-		assert(inType != shaderType::program && "Incorrect shaderType passed");
-		return (inType == shaderType::vertex ? inVertex : inFragment);
+		assert(_type != shaderType::program && "Incorrect shaderType passed");
+		return (_type == shaderType::vertex ? _vertex : _fragment);
 	}
 
-	void shader::setBool(string inName, bool inValue) const noexcept
+	void shader::setBool(string _name, bool _value) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(
-			glGetUniformLocation(m_idProgram, inName.c_str()),
-			(int32_t)inValue
+			glGetUniformLocation(m_idProgram, _name.c_str()),
+			(int32_t)_value
 		);
 	}
 
-	void shader::setInt(string inName, int32_t inValue) const noexcept
+	void shader::setInt(string _name, int32_t _value) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1i(glGetUniformLocation(
-			m_idProgram, inName.c_str()),
-			inValue
+			m_idProgram, _name.c_str()),
+			_value
 		);
 	}
 
-	void shader::setUint(string inName, uint32_t inValue) const noexcept
+	void shader::setUint(string _name, uint32_t _value) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1ui(
-			glGetUniformLocation(m_idProgram, inName.c_str()),
-			inValue
+			glGetUniformLocation(m_idProgram, _name.c_str()),
+			_value
 		);
 	}
 
-	void shader::setFloat(string inName, float inValue) const noexcept
+	void shader::setFloat(string _name, float _value) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform1f(
-			glGetUniformLocation(m_idProgram, inName.c_str()),
-			inValue
+			glGetUniformLocation(m_idProgram, _name.c_str()),
+			_value
 		);
 	}
 
-	void shader::setFloat2(string inName, glm::vec2 inValue) const noexcept
+	void shader::setFloat2(string _name, glm::vec2 _value) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform2fv(
-			glGetUniformLocation(m_idProgram, inName.c_str()),
+			glGetUniformLocation(m_idProgram, _name.c_str()),
 			1,
-			&inValue[0]
+			&_value[0]
 		);
 	}
 
-	void shader::setFloat3(string inName, glm::vec3 inValue) const noexcept
+	void shader::setFloat3(string _name, glm::vec3 _value) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform3fv(
-			glGetUniformLocation(m_idProgram, inName.c_str()),
+			glGetUniformLocation(m_idProgram, _name.c_str()),
 			1,
-			&inValue[0]
+			&_value[0]
 		);
 	}
 
-	void shader::setFloat4(string inName, glm::vec4 inValue) const noexcept
+	void shader::setFloat4(string _name, glm::vec4 _value) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniform4fv(
-			glGetUniformLocation(m_idProgram, inName.c_str()),
+			glGetUniformLocation(m_idProgram, _name.c_str()),
 			1,
-			&inValue[0]
+			&_value[0]
 		);
 	}
 
-	void shader::setMat3(string inName, glm::mat3 inValue) const noexcept
+	void shader::setMat3(string _name, glm::mat3 _value) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniformMatrix3fv(
-			glGetUniformLocation(m_idProgram, inName.c_str()),
+			glGetUniformLocation(m_idProgram, _name.c_str()),
 			1,
 			GL_FALSE,
-			&inValue[0][0]
+			&_value[0][0]
 		);
 	}
 
-	void shader::setMat4(string inName, glm::mat4 inValue) const noexcept
+	void shader::setMat4(string _name, glm::mat4 _value) const noexcept
 	{
 		glUseProgram(m_idProgram);
 		glUniformMatrix4fv(
-			glGetUniformLocation(m_idProgram, inName.c_str()),
+			glGetUniformLocation(m_idProgram, _name.c_str()),
 			1,
 			GL_FALSE,
-			&inValue[0][0]
+			&_value[0][0]
 		);
 	}
 }

@@ -4,84 +4,84 @@ using glm::vec3;
 
 namespace srender
 {
-	constexpr float colour::fmod(float x, float y) noexcept
+	constexpr float colour::fmod(float _x, float _y) noexcept
 	{
 		// Error handling
-		assert(y != 0.0f);
-		assert(x != INFINITY || x != -INFINITY);
-		if (x == 0.0f) return 0.0f;
-		if (y == INFINITY || y == -INFINITY) return x;
+		assert(_y != 0.0f);
+		assert(_x != INFINITY || _x != -INFINITY);
+		if (_x == 0.0f) return 0.0f;
+		if (_y == INFINITY || _y == -INFINITY) return _x;
 
 		// Truncate the division
-		int32_t n = (int32_t)(x / y);
-		return x - n * y;
+		int32_t n = (int32_t)(_x / _y);
+		return _x - n * _y;
 	}
 
 	constexpr void colour::rgbToHsv(
-		float inR,
-		float inG,
-		float inB,
-		uint16_t &outH,
-		float &outS,
-		float &outV
+		float _r,
+		float _g,
+		float _b,
+		uint16_t &_outH,
+		float &_outS,
+		float &_outV
 	) noexcept
 	{
 		// Sanitise inputs
-		inR = glm::clamp(inR, 0.0f, 1.0f);
-		inG = glm::clamp(inG, 0.0f, 1.0f);
-		inB = glm::clamp(inB, 0.0f, 1.0f);
+		_r = glm::clamp(_r, 0.0f, 1.0f);
+		_g = glm::clamp(_g, 0.0f, 1.0f);
+		_b = glm::clamp(_b, 0.0f, 1.0f);
 		// Initialise variables
-		float Cmax = glm::max(inR, glm::max(inG, inB));
-		float Cmin = glm::min(inR, glm::min(inG, inB));
+		float Cmax = glm::max(_r, glm::max(_g, _b));
+		float Cmin = glm::min(_r, glm::min(_g, _b));
 		float delta = Cmax - Cmin;
 		// Hue
 		if (delta == 0)
-			outH = 0;
-		else if (Cmax == inR)
-			outH = (uint16_t)(60.0f * (((inG - inB) / delta) + 360.0f)) % 360;
-		else if (Cmax == inG)
-			outH = (uint16_t)(60.0f * (((inB - inR) / delta) + 120.0f)) % 360;
-		else if (Cmax == inB)
-			outH = (uint16_t)(60.0f * (((inR - inG) / delta) + 240.0f)) % 360;
+			_outH = 0;
+		else if (Cmax == _r)
+			_outH = (uint16_t)(60.0f * (((_g - _b) / delta) + 360.0f)) % 360;
+		else if (Cmax == _g)
+			_outH = (uint16_t)(60.0f * (((_b - _r) / delta) + 120.0f)) % 360;
+		else if (Cmax == _b)
+			_outH = (uint16_t)(60.0f * (((_r - _g) / delta) + 240.0f)) % 360;
 		// Saturation
 		if (Cmax == 0)
-			outS = 0;
+			_outS = 0;
 		else
-			outS = delta / Cmax;
+			_outS = delta / Cmax;
 		// Value
-		outV = Cmax;
+		_outV = Cmax;
 	}
 
-	constexpr vec3 colour::rgbToHsv(vec3 inRGB) noexcept
+	constexpr vec3 colour::rgbToHsv(vec3 _RGB) noexcept
 	{
 		uint16_t hue = 0;
 		float saturation = 0;
 		float value = 0;
-		rgbToHsv(inRGB.r, inRGB.g, inRGB.b, hue, saturation, value);
+		rgbToHsv(_RGB.r, _RGB.g, _RGB.b, hue, saturation, value);
 		return { hue, saturation, value };
 	}
 
 	constexpr void colour::hsvToRgb(
-		uint16_t inH,
-		float inS,
-		float inV,
-		float &outR,
-		float &outG,
-		float &outB
+		uint16_t _h,
+		float _s,
+		float _v,
+		float &_outR,
+		float &_outG,
+		float &_outB
 	) noexcept
 	{
 		// Sanitise inputs
-		inH = inH % 360;
-		inS = glm::clamp(inS, 0.0f, 1.0f);
-		inV = glm::clamp(inV, 0.0f, 1.0f);
+		_h = _h % 360;
+		_s = glm::clamp(_s, 0.0f, 1.0f);
+		_v = glm::clamp(_v, 0.0f, 1.0f);
 		// Initialise variables
 		vec3 result;
-		float chroma = inV * inS;
-		float min = inV - chroma;
-		float hueMod = fmod((float)inH / 60, 2.0f);
+		float chroma = _v * _s;
+		float min = _v - chroma;
+		float hueMod = fmod((float)_h / 60, 2.0f);
 		float x = chroma * (1 - glm::abs(hueMod - 1));
 		// Find a point along the three bottom faces of the RGB cube (??)
-		short intHue = inH / 60;
+		short intHue = _h / 60;
 		switch (intHue)
 		{
 		case 0:
@@ -109,17 +109,17 @@ namespace srender
 		result += min;
 
 		// Not a big fan of doing it this way but it makes the above cleaner and simpler
-		outR = result.r;
-		outB = result.b;
-		outG = result.g;
+		_outR = result.r;
+		_outB = result.b;
+		_outG = result.g;
 	}
 
-	vec3 colour::hsvToRgb(const vec3 inHSV) noexcept
+	vec3 colour::hsvToRgb(const vec3 _HSV) noexcept
 	{
 		// Don't want a negative number
-		uint16_t hue = (uint16_t)glm::max(inHSV.r, 0.0f);
+		uint16_t hue = (uint16_t)glm::max(_HSV.r, 0.0f);
 		vec3 result = vec3();
-		hsvToRgb(hue, inHSV.y, inHSV.z, result.r, result.g, result.b);
+		hsvToRgb(hue, _HSV.y, _HSV.z, result.r, result.g, result.b);
 		return result;
 	}
 
@@ -132,55 +132,55 @@ namespace srender
 	colour::colour() noexcept
 	{}
 
-	colour::colour(float inGreyscale) noexcept
-	: m_RGB(vec3(inGreyscale))
+	colour::colour(float _greyscale) noexcept
+	: m_RGB(vec3(_greyscale))
 	{}
 
-	colour::colour(float inR, float inG, float inB) noexcept
-	: m_RGB(vec3(inR, inG, inB))
+	colour::colour(float _r, float _g, float _b) noexcept
+	: m_RGB(vec3(_r, _g, _b))
 	{}
 
-	colour::colour(vec3 inColour) noexcept
-	: m_RGB(inColour)
+	colour::colour(vec3 _colour) noexcept
+	: m_RGB(_colour)
 	{}
 
-	colour::colour(const colour &pOther)
-	{ m_RGB = pOther.m_RGB; }
+	colour::colour(const colour &_other)
+	{ m_RGB = _other.m_RGB; }
 
-	colour &colour::operator=(const colour &pOther)
-	{ this->m_RGB = pOther.m_RGB; return *this; }
+	colour &colour::operator=(const colour &_other)
+	{ this->m_RGB = _other.m_RGB; return *this; }
 
-	constexpr colour::colour(colour&& pOther) noexcept
-	{ m_RGB = std::move(pOther.m_RGB); }
+	constexpr colour::colour(colour&& _other) noexcept
+	{ m_RGB = std::move(_other.m_RGB); }
 
-	constexpr colour &colour::operator=(colour&& pOther) noexcept
-	{ this->m_RGB = std::move(pOther.m_RGB); return *this; }
+	constexpr colour &colour::operator=(colour&& _other) noexcept
+	{ this->m_RGB = std::move(_other.m_RGB); return *this; }
 
 	colour::operator glm::vec3() const { return m_RGB; }
 
 	#define COL_OP_CONST_FLOAT_DEF(OPERAND) \
-	colour colour::operator OPERAND(const float &pOther) const noexcept\
-	{ return colour(m_RGB OPERAND pOther); }
+	colour colour::operator OPERAND(const float &_other) const noexcept\
+	{ return colour(m_RGB OPERAND _other); }
 
 	#define COL_OP_CONST_COL_DEF(OPERAND) \
-	colour colour::operator OPERAND(const colour &pOther) const noexcept\
-	{ return colour(m_RGB OPERAND pOther.m_RGB); }
+	colour colour::operator OPERAND(const colour &_other) const noexcept\
+	{ return colour(m_RGB OPERAND _other.m_RGB); }
 
 	#define COL_OP_CONST_VEC3_DEF(OPERAND) \
-	colour colour::operator OPERAND(const vec3 &pOther) const noexcept\
-	{ return colour(m_RGB OPERAND pOther); }
+	colour colour::operator OPERAND(const vec3 &_other) const noexcept\
+	{ return colour(m_RGB OPERAND _other); }
 
 	#define COL_OP_FLOAT_DEF(OPERAND) \
-	colour &colour::operator OPERAND(const float &pOther) noexcept\
-	{ m_RGB OPERAND pOther; return *this; }
+	colour &colour::operator OPERAND(const float &_other) noexcept\
+	{ m_RGB OPERAND _other; return *this; }
 
 	#define COL_OP_COL_DEF(OPERAND) \
-	colour &colour::operator OPERAND(const colour &pOther) noexcept\
-	{ m_RGB OPERAND pOther.m_RGB; return *this; }
+	colour &colour::operator OPERAND(const colour &_other) noexcept\
+	{ m_RGB OPERAND _other.m_RGB; return *this; }
 
 	#define COL_OP_VEC3_DEF(OPERAND) \
-	colour &colour::operator OPERAND(const vec3 &pOther) noexcept\
-	{ m_RGB OPERAND pOther; return *this; }
+	colour &colour::operator OPERAND(const vec3 &_other) noexcept\
+	{ m_RGB OPERAND _other; return *this; }
 
 	COL_OP_CONST_FLOAT_DEF(+)
 	COL_OP_CONST_FLOAT_DEF(-)

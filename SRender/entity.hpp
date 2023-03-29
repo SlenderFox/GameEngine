@@ -16,8 +16,8 @@ namespace srender
 	public:
 		~entityBase() = default;
 
-		void addChild(entity *inChild) noexcept;
-		void removeChild(const entity *inChild) noexcept;
+		void addChild(entity *_child) noexcept;
+		void removeChild(const entity *_child) noexcept;
 
 		[[nodiscard]] constexpr
 		std::vector<entity*> getChildren() const noexcept;
@@ -31,11 +31,11 @@ namespace srender
 	public:
 		[[nodiscard]] static
 		entity *createWithModel(
-			std::string pModelPath,
-			std::string pShaderPath,
-			model *&pModelOut,
-			shader *&pShaderOut,
-			const bool inLoadTextures = true
+			std::string _modelPath,
+			std::string _shaderPath,
+			model *&_outModel,
+			shader *&_outShader,
+			const bool _loadTextures = true
 		) noexcept;
 
 	private:
@@ -46,25 +46,25 @@ namespace srender
 
 	public:
 		entity();
-		entity(entityBase *inParent);
+		entity(entityBase *_parent);
 		~entity() {}
 
 		void loadModel(
-			std::string pModelPath,
-			std::string pShaderPath,
-			model *&pModelOut,
-			shader *&pShaderOut,
-			const bool inLoadTextures = true
+			std::string _modelPath,
+			std::string _shaderPath,
+			model *&_outModel,
+			shader *&_outShader,
+			const bool _loadTextures = true
 		) noexcept;
 
-		void setTransform(const glm::mat4 *inValue) noexcept override;
-		void setPosition(const glm::vec3 inValue) noexcept override;
-		void translate(const glm::vec3 inValue) noexcept override;
+		void setTransform(const glm::mat4 *_value) noexcept override;
+		void setPosition(const glm::vec3 _value) noexcept override;
+		void translate(const glm::vec3 _value) noexcept override;
 
-		void setParent(entityBase *inParent) noexcept;
-		void renderOnlyColour(const bool inState) noexcept;
-		void setScale(const glm::vec3 inValue) noexcept;
-		void sentTint(const colour inCol) noexcept;
+		void setParent(entityBase *_parent) noexcept;
+		void renderOnlyColour(const bool _state) noexcept;
+		void setScale(const glm::vec3 _value) noexcept;
+		void sentTint(const colour _colour) noexcept;
 
 		[[nodiscard]] constexpr
 		entityBase &getParent() const noexcept;

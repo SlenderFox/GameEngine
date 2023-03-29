@@ -13,25 +13,25 @@ namespace srender
 		input::s_mouseLastY = 0.0;
 
 	void input::key_callback(
-		GLFWwindow *pWindow,
-		int pKey,
-		int pScancode,
-		int pAction,
-		int pMods) noexcept
+		GLFWwindow *_window,
+		int _key,
+		int _scancode,
+		int _action,
+		int _mods) noexcept
 	{
-		if (pAction != GLFW_PRESS) return;
-		//srender::debug::send(std::to_string(pScancode) + " ", false, false);
+		if (_action != GLFW_PRESS) return;
+		//srender::debug::send(std::to_string(_scancode) + " ", false, false);
 	}
 
 	void input::mouse_callback(
-		GLFWwindow *pWindow,
-		double pPosX,
-		double pPosY) noexcept
+		GLFWwindow *_window,
+		double _posX,
+		double _posY) noexcept
 	{
 		s_mouseLastX = s_mouseX;
 		s_mouseLastY = s_mouseY;
-		s_mouseX = pPosX;
-		s_mouseY = pPosY;
+		s_mouseX = _posX;
+		s_mouseY = _posY;
 		double deltaX = s_mouseX - s_mouseLastX;
 		double deltaY = s_mouseY - s_mouseLastY;
 		if (s_mouseCallbackFun)
@@ -39,17 +39,17 @@ namespace srender
 	}
 
 	void input::scroll_callback(
-		GLFWwindow *pWindow,
-		double pOffsetX,
-		double pOffsetY) noexcept
+		GLFWwindow *_window,
+		double _offsetX,
+		double _offsetY) noexcept
 	{
 		if (s_scrollCallbackFun)
-			s_scrollCallbackFun(pOffsetX, pOffsetY);
+			s_scrollCallbackFun(_offsetX, _offsetY);
 	}
 
-	bool input::init(GLFWwindow *pWindowRef) noexcept
+	bool input::init(GLFWwindow *_windowRef) noexcept
 	{
-		s_windowRef = pWindowRef;
+		s_windowRef = _windowRef;
 
 		glfwGetCursorPos(s_windowRef, &s_mouseX, &s_mouseY);
 		s_mouseLastX = s_mouseX;
@@ -71,8 +71,8 @@ namespace srender
 		// TODO
 	}
 
-	bool input::checkKeyState(const key pKey, const state pState) noexcept
+	bool input::checkKeyState(const key _key, const state _state) noexcept
 	{
-		return (int)pState == glfwGetKey(s_windowRef, (int)pKey);
+		return (int)_state == glfwGetKey(s_windowRef, (int)_key);
 	}
 }

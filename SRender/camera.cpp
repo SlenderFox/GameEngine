@@ -13,84 +13,84 @@ using glm::inverse;
 
 namespace srender
 {
-	camera::camera(float inAspectRatio) noexcept
+	camera::camera(float _aspectRatio) noexcept
 	{
 		mat4 id = mat4(1.0f);
-		setAspectRatio(inAspectRatio);
+		setAspectRatio(_aspectRatio);
 		setTransform(&id);
 		setFovH(75.0f);
 	}
 
 	camera::camera(
-		float inAspectRatio,
-		float inFovH
+		float _aspectRatio,
+		float _fovH
 	) noexcept
 	{
 		mat4 id = mat4(1.0f);
-		setAspectRatio(inAspectRatio);
+		setAspectRatio(_aspectRatio);
 		setTransform(&id);
-		setFovH(inFovH);
+		setFovH(_fovH);
 	}
 
 	camera::camera(
-		float inAspectRatio,
-		mat4 inTransform
+		float _aspectRatio,
+		mat4 _transform
 	) noexcept
 	{
-		setAspectRatio(inAspectRatio);
-		setTransform(&inTransform);
+		setAspectRatio(_aspectRatio);
+		setTransform(&_transform);
 		setFovH(75.0f);
 	}
 
 	camera::camera(
-		float inAspectRatio,
-		float inFovH,
-		mat4 inTransform
+		float _aspectRatio,
+		float _fovH,
+		mat4 _transform
 	) noexcept
 	{
-		setAspectRatio(inAspectRatio);
-		setTransform(&inTransform);
-		setFovH(inFovH);
+		setAspectRatio(_aspectRatio);
+		setTransform(&_transform);
+		setFovH(_fovH);
 	}
 
 	camera::camera(
-		float inAspectRatio,
-		vec3 inFrom,
-		vec3 inTo,
-		vec3 inUp
+		float _aspectRatio,
+		vec3 _from,
+		vec3 _to,
+		vec3 _up
 	) noexcept
 	{
-		setAspectRatio(inAspectRatio);
-		lookAt(inFrom, inTo, inUp);
+		setAspectRatio(_aspectRatio);
+		lookAt(_from, _to, _up);
 		setFovH(75.0f);
 	}
 
 	camera::camera(
-		float inAspectRatio,
-		float inFovH,
-		vec3 inFrom,
-		vec3 inTo,
-		vec3 inUp
+		float _aspectRatio,
+		float _fovH,
+		vec3 _from,
+		vec3 _to,
+		vec3 _up
 	) noexcept
 	{
-		setAspectRatio(inAspectRatio);
-		lookAt(inFrom, inTo, inUp);
-		setFovH(inFovH);
+		setAspectRatio(_aspectRatio);
+		lookAt(_from, _to, _up);
+		setFovH(_fovH);
 	}
 
 	void camera::lookAt(
-		vec3 inFrom,
-		vec3 inTo,
-		vec3 inUp
+		vec3 _from,
+		vec3 _to,
+		vec3 _up
 	) noexcept
 	{
-		m_view = glm::lookAt(inFrom, inTo, inUp);
+		m_view = glm::lookAt(_from, _to, _up);
 		setView(&m_view);
 	}
 
-	void camera::modifyFovH(float inValue) noexcept
+	void camera::modifyFovH(float _value) noexcept
 	{
-		m_fovH += inValue;
+		m_fovH += _value;
 		if (m_fovH > 120.0f)
 			m_fovH = 120.0f;
 		else if (m_fovH < 1.0f)
@@ -98,9 +98,9 @@ namespace srender
 		updateFovV();
 	}
 
-	void camera::modifyFovV(float inValue) noexcept
+	void camera::modifyFovV(float _value) noexcept
 	{
-		m_fovV += inValue;
+		m_fovV += _value;
 		if (m_fovV > 120.0f)
 			m_fovV = 120.0f;
 		else if (m_fovV < 1.0f)
@@ -120,15 +120,15 @@ namespace srender
 		setProjection(m_fovV);
 	}
 
-	void camera::setTransform(const mat4 *inValue) noexcept
+	void camera::setTransform(const mat4 *_value) noexcept
 	{
-		transform::setTransform(inValue);
+		transform::setTransform(_value);
 		m_view = inverse(getTransform());
 	}
 
-	void camera::setView(mat4 *inValue) noexcept
+	void camera::setView(mat4 *_value) noexcept
 	{
-		m_view = *inValue;
+		m_view = *_value;
 		mat4 inv = inverse(m_view);
 		transform::setTransform(&inv);
 	}
@@ -138,37 +138,37 @@ namespace srender
 		m_projection = perspective(radians(inFovV), m_aspectRatio, 0.1f, 500.0f);
 	}
 
-	void camera::setProjection(glm::mat4 *inValue) noexcept
-	{ m_projection = *inValue; }
+	void camera::setProjection(glm::mat4 *_value) noexcept
+	{ m_projection = *_value; }
 
-	void camera::setAspectRatio(float inAspectRatio) noexcept
-	{ m_aspectRatio = inAspectRatio; }
+	void camera::setAspectRatio(float _aspectRatio) noexcept
+	{ m_aspectRatio = _aspectRatio; }
 
-	void camera::setPosition(vec3 inValue) noexcept
+	void camera::setPosition(vec3 _value) noexcept
 	{
-		transform::setPosition(inValue);
+		transform::setPosition(_value);
 		m_view = inverse(getTransform());
 	}
 
-	void camera::translate(vec3 inValue) noexcept
+	void camera::translate(vec3 _value) noexcept
 	{
-		transform::translate(inValue);
+		transform::translate(_value);
 		m_view = inverse(getTransform());
 	}
 
 	void camera::setAxes(
-		vec3 pRight,
-		vec3 inUp,
-		vec3 pForward
+		vec3 _right,
+		vec3 _up,
+		vec3 _forward
 	) noexcept
 	{
-		transform::setAxes(pRight, inUp, pForward);
+		transform::setAxes(_right, _up, _forward);
 		m_view = inverse(getTransform());
 	}
 
-	void camera::setFovH(float inFovH) noexcept
+	void camera::setFovH(float _fovH) noexcept
 	{
-		m_fovH = inFovH;
+		m_fovH = _fovH;
 		if (m_fovH > 120.0f)
 			m_fovH = 120.0f;
 		else if (m_fovH < 1.0f)

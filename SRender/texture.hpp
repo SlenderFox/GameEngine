@@ -28,13 +28,13 @@ namespace srender
 		static std::vector<texture*> s_loadedTextures;
 
 		static void unloadAll() noexcept;
-		static int32_t loadTextureFromFile(const std::string *inPath) noexcept;
+		static int32_t loadTextureFromFile(const std::string *_path) noexcept;
 
 		static uint32_t getTexCount() noexcept;
 
 		texture(
-			std::string inPath,
-			texType inType = texType::diffuse
+			std::string _path,
+			texType _type = texType::diffuse
 		) noexcept;
 
 		//void destroy();

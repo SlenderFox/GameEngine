@@ -22,22 +22,22 @@ namespace srender
 
 	public:
 		light(
-			const lightType inType = lightType::Directional,
-			const colour inColour = colour::white(),
+			const lightType _type = lightType::Directional,
+			const colour _colour = colour::white(),
 			glm::mat4 inTransform = glm::mat4(1)
 		) noexcept;
 		~light() = default;
 
 		/** Wrapper function that passes to setForward
-		 * @param pDirection Value to be set
+		 * @param _direction Value to be set
 		 */
-		void setDirection (const glm::vec3 inDirection) noexcept;
-		void setType (lightType inType) noexcept;
-		void setColour (colour inColour) noexcept;
-		void setLinear (float inValue) noexcept;
-		void setQuadratic (float inValue) noexcept;
-		void setAngle (float inValue) noexcept; // In degrees
-		void setBlur (float inValue) noexcept;  // In degrees
+		void setDirection (const glm::vec3 _direction) noexcept;
+		void setType (lightType _type) noexcept;
+		void setColour (colour _colour) noexcept;
+		void setLinear (float _value) noexcept;
+		void setQuadratic (float _value) noexcept;
+		void setAngle (float _value) noexcept; // In degrees
+		void setBlur (float _value) noexcept;  // In degrees
 
 		[[nodiscard]] float getAngle() const noexcept;
 		[[nodiscard]] float getBlur() const noexcept;

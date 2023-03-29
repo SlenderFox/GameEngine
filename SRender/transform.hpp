@@ -9,26 +9,26 @@ namespace srender
 
 	public:
 		transform() noexcept;
-		transform(const glm::mat4 inValue) noexcept;
+		transform(const glm::mat4 _value) noexcept;
 		virtual ~transform() = default;
 		// Copy, takes lvalue
-		transform(transform const &inOther) noexcept;
-		transform &operator=(transform const &inOther) noexcept;
+		transform(transform const &_other) noexcept;
+		transform &operator=(transform const &_other) noexcept;
 		// Move, take rvalue
-		transform(transform&& inOther) noexcept;
-		transform &operator=(transform&& inOther) noexcept;
+		transform(transform&& _other) noexcept;
+		transform &operator=(transform&& _other) noexcept;
 
-		virtual void setTransform(const glm::mat4 *inValue) noexcept;
-		virtual void setPosition(const glm::vec3 inValue) noexcept;
-		virtual void translate(const glm::vec3 inValue) noexcept;
+		virtual void setTransform(const glm::mat4 *_value) noexcept;
+		virtual void setPosition(const glm::vec3 _value) noexcept;
+		virtual void translate(const glm::vec3 _value) noexcept;
 		virtual void setAxes(
-			const glm::vec3 inRight,
-			const glm::vec3 inUp,
-			const glm::vec3 inForward
+			const glm::vec3 _right,
+			const glm::vec3 _up,
+			const glm::vec3 _forward
 		) noexcept;
-		virtual void setRight(const glm::vec3 inRight) noexcept;
-		virtual void setUp(const glm::vec3 inUp) noexcept;
-		virtual void setForward(const glm::vec3 inForward) noexcept;
+		virtual void setRight(const glm::vec3 _right) noexcept;
+		virtual void setUp(const glm::vec3 _up) noexcept;
+		virtual void setForward(const glm::vec3 _forward) noexcept;
 
 		[[nodiscard]] glm::mat4 getTransform() const noexcept;
 		[[nodiscard]] glm::vec4 getPosition() const noexcept;

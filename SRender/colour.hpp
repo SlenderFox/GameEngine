@@ -1,7 +1,7 @@
 /*
  * Bibliography:
  * https://en.wikipedia.org/wiki/HSL_and_HSV#HSV_to_RGB
- * https://www.rapidtables.com/web/color/RGB_Color.html
+ * https://www.ra_idtables.com/web/color/RGB_Color.html
  * https://cs.stackexchange.com/questions/64549/convert-hsv-to-rgb-colors
  * https://www.codespeedy.com/hsv-to-rgb-in-cpp/
  */
@@ -23,58 +23,58 @@ namespace srender
 
 		/** My own fmod function to have constexpr*/
 		[[nodiscard]] static constexpr
-		float fmod(float x, float y) noexcept;
+		float fmod(float _x, float _y) noexcept;
 
 	public:
 		/** Converts colour data from RGB to HSV
-		 * @param inR Input red
-		 * @param inG Input green
-		 * @param inB Input blue
-		 * @param outH Output hue
-		 * @param outS Output saturation
-		 * @param outV Output value
+		 * @param _r Input red
+		 * @param _g Input green
+		 * @param _b Input blue
+		 * @param _outH Output hue
+		 * @param _outS Output saturation
+		 * @param _outV Output value
 		 */
 		static constexpr
 		void rgbToHsv(
-			float inR,
-			float inG,
-			float inB,
-			uint16_t &outH,
-			float &outS,
-			float &outV
+			float _r,
+			float _g,
+			float _b,
+			uint16_t &_outH,
+			float &_outS,
+			float &_outV
 		) noexcept;
 
 		/** Converts colour data from RGB to HSV
-		 * @param inRGB 0-1 Red, 0-1 Green, 0-1 Blue
+		 * @param _RGB 0-1 Red, 0-1 Green, 0-1 Blue
 		 * @return [glm::vec3] 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 */
 		[[nodiscard]] static constexpr
-		glm::vec3 rgbToHsv(glm::vec3 inRGB) noexcept;
+		glm::vec3 rgbToHsv(glm::vec3 _RGB) noexcept;
 
 		/** Converts colour data from HSV to RGB
-		 * @param inH Input hue
-		 * @param inS Input saturation
-		 * @param inV Input value
-		 * @param outR Output red
-		 * @param outG Output green
-		 * @param outB Output blue
+		 * @param _h Input hue
+		 * @param _s Input saturation
+		 * @param _v Input value
+		 * @param _outR Output red
+		 * @param _outG Output green
+		 * @param _outB Output blue
 		 */
 		static constexpr
 		void hsvToRgb(
-			uint16_t inH,
-			float inS,
-			float inV,
-			float &outR,
-			float &outG,
-			float &outB
+			uint16_t _h,
+			float _s,
+			float _v,
+			float &_outR,
+			float &_outG,
+			float &_outB
 		) noexcept;
 
 		/** Converts colour data from HSV to RGB
-		 * @param inHSV 0-360 Hue, 0-1 Saturation, 0-1 Value
+		 * @param _HSV 0-360 Hue, 0-1 Saturation, 0-1 Value
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		 */
 		[[nodiscard]] static
-		glm::vec3 hsvToRgb(const glm::vec3 inHSV) noexcept;
+		glm::vec3 hsvToRgb(const glm::vec3 _HSV) noexcept;
 
 		static colour black()    noexcept { return colour(0.0f); }
 		static colour white()    noexcept { return colour(1.0f); }
@@ -107,18 +107,18 @@ namespace srender
 		glm::vec3 hsv() const noexcept;
 
 		colour() noexcept;
-		colour(float inGreyscale) noexcept;
-		colour(float inR, float inG, float inB) noexcept;
-		colour(glm::vec3 inColour) noexcept;
+		colour(float _greyscale) noexcept;
+		colour(float _r, float _g, float _b) noexcept;
+		colour(glm::vec3 _colour) noexcept;
 
 		~colour() = default;
 
 		// Copy, takes lvalue
-		colour(const colour &pOther);
-		colour &operator=(const colour &pOther);
+		colour(const colour &_other);
+		colour &operator=(const colour &_other);
 		// Move, take rvalue
-		constexpr colour(colour&& pOther) noexcept;
-		constexpr colour &operator=(colour&& pOther) noexcept;
+		constexpr colour(colour&& _other) noexcept;
+		constexpr colour &operator=(colour&& _other) noexcept;
 
 		operator glm::vec3() const;
 

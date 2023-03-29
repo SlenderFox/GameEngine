@@ -160,31 +160,31 @@ namespace srender
 		};
 
 		static void key_callback(
-			GLFWwindow *pWindow,
-			int pKey,
-			int pScancode,
-			int pAction,
-			int pMods) noexcept;
+			GLFWwindow *_window,
+			int _key,
+			int _scancode,
+			int _action,
+			int _mods) noexcept;
 		static void mouse_callback(
-			GLFWwindow *pWindow,
-			double pPosX,
-			double pPosY) noexcept;
+			GLFWwindow *_window,
+			double _posX,
+			double _posY) noexcept;
 		static void scroll_callback(
-			GLFWwindow *pWindow,
-			double pOffsetX,
-			double pOffsetY) noexcept;
+			GLFWwindow *_window,
+			double _offsetX,
+			double _offsetY) noexcept;
 
 		/** Initialise input with GLFW
-		 * @param pWindowRef The active window
+		 * @param _windowRef The active window
 		 * @return [bool] Success
 		 */
-		static bool init(GLFWwindow *pWindowRef) noexcept;
+		static bool init(GLFWwindow *_windowRef) noexcept;
 		static void process() noexcept;
-		static bool checkKeyState(const key pKey, const state pState) noexcept;
+		static bool checkKeyState(const key _key, const state _state) noexcept;
 
-		static inline void addMouseCallback(callbackFunc pCallback) noexcept
-		{ s_mouseCallbackFun = pCallback; }
-		static inline void addSrollCallback(callbackFunc pCallback) noexcept
-		{ s_scrollCallbackFun = pCallback; }
+		static inline void addMouseCallback(callbackFunc _callback) noexcept
+		{ s_mouseCallbackFun = _callback; }
+		static inline void addSrollCallback(callbackFunc _callback) noexcept
+		{ s_scrollCallbackFun = _callback; }
 	};
 }

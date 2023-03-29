@@ -53,12 +53,12 @@ namespace srender
 	//Member
 
 	mesh::mesh(
-		const std::vector<vertex> *pVertices,
-		const std::vector<uint32_t> *pIndices
+		const std::vector<vertex> *_vertices,
+		const std::vector<uint32_t> *_indices
 	) noexcept
 	{
-		m_vertices = new vector<vertex>(pVertices ? *pVertices : generateVertices());
-		m_indices = new vector<uint32_t>(pIndices ? *pIndices : generateIndices());
+		m_vertices = new vector<vertex>(_vertices ? *_vertices : generateVertices());
+		m_indices = new vector<uint32_t>(_indices ? *_indices : generateIndices());
 		setupMesh();
 	}
 

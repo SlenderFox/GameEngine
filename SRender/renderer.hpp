@@ -22,7 +22,7 @@ namespace srender
 		renderer(renderer&&) = delete;
 		renderer &operator=(renderer&&) = delete;
 
-		static bool init(const float inAspect) noexcept;
+		static bool init(const float _aspect) noexcept;
 		static void draw() noexcept;
 
 	public:
@@ -37,33 +37,33 @@ namespace srender
 
 		static void terminate() noexcept;
 
-		static void loadLightsIntoShader(const shader *inShader) noexcept;
+		static void loadLightsIntoShader(const shader *_shader) noexcept;
 		/** Modifies either the angle or blur of all spotlights by a value
 		 * @note Max value is 90 for angle, 1 for blur, min for both is 0
-		 * @param pIsAngle True to modify the angle, false to modify the blur of the spotlight
-		 * @param pValue The amount to modify it by
+		 * @param _isAngle True to modify the angle, false to modify the blur of the spotlight
+		 * @param _value The amount to modify it by
 		 */
 		static void modifyAllSpotlights(
-			const bool inIsAngle,
-			const float inValue
+			const bool _isAngle,
+			const float _value
 		) noexcept;
 
 		static model *addNewModel(
-			uint8_t &outId,
-			const std::string *inModelPath,
-			const std::string *inShaderPath,
-			const bool inLoadTextures = true) noexcept;
+			uint8_t &_outId,
+			const std::string *_modelPath,
+			const std::string *_shaderPath,
+			const bool _loadTextures = true) noexcept;
 
 		static light *addNewLight(
-			uint8_t &outId,
-			const lightType inType,
-			const colour inColour = colour::white()) noexcept;
+			uint8_t &_outId,
+			const lightType _type,
+			const colour _colour = colour::white()) noexcept;
 
-		static void setClearColour(const colour inColour) noexcept;
-		static void setRenderMode(const Mode inMode = Mode::fill) noexcept;
+		static void setClearColour(const colour _colour) noexcept;
+		static void setRenderMode(const Mode _mode = Mode::fill) noexcept;
 		static void setResolution(
-			const size_t inWidth,
-			const size_t inHeight
+			const size_t _width,
+			const size_t _height
 		) noexcept;
 
 		[[nodiscard]] static
@@ -71,9 +71,9 @@ namespace srender
 		[[nodiscard]] static
 		uint8_t lightCount() noexcept;
 		[[nodiscard]] static
-		model *getModelAt(const uint8_t inPos) noexcept;
+		model *getModelAt(const uint8_t _pos) noexcept;
 		[[nodiscard]] static
-		light *getLightAt(const uint8_t inPos) noexcept;
+		light *getLightAt(const uint8_t _pos) noexcept;
 
 		[[nodiscard]] static
 		camera *getCamera() noexcept;
