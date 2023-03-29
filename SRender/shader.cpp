@@ -33,7 +33,7 @@ namespace srender
 	{
 		if (m_shaderLoaded)
 		{
-			debug::send("ERROR::SHADER::ATTEMPTING_TO_LOAD_NEW_SHADER_WITHOUT_DELETING_OLD_ONE");
+			debug::send("ERROR::SHADER::ATTEMPTING_TO_OVERLOAD_SHADER");
 			return;
 		}
 		// If no path is given, will use fallback shader
