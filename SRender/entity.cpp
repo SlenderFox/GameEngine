@@ -98,6 +98,8 @@ namespace srender
 	{
 		// Currently this does nothing about the previous model and shader
 		// but does not cause a memory leak as they are managed by renderer
+		_modelPath = application::getAppLocation() + _modelPath;
+		_shaderPath = application::getAppLocation() + _shaderPath;
 		entityLoader::BackgroundLoadModel(&_modelPath, &_shaderPath, this, _loadTextures);
 		_outModel = m_modelRef;
 		_outShader = m_modelRef->getShaderRef();
