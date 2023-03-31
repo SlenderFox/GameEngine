@@ -25,29 +25,29 @@ namespace srender
 		fail_Startup = -6
 	};
 
-	// Reference to the application
+	/** Reference to the application */
 	application *l_application = nullptr;
-	// Memory is managed by glfw
+	/** Memory is managed by glfw */
 	GLFWwindow *l_windowRef = nullptr;
-	// Whether glad has loaded or not
+	/** Whether glad has loaded or not */
 	bool l_gladLoaded = false;
-	// Is the application fullscreen or not
+	/** Is the application fullscreen or not */
 	bool l_fullscreen = false;
-	// The width and height of the window, should only be modified through setDimensions()
+	/** The width and height of the window, should only be modified through setDimensions() */
 	uint16_t l_wWidth = 320U, l_wHeight = 180U;
-	// The amount of frames rendered per second
+	/** The amount of frames rendered per second */
 	uint16_t l_fps = 0U, l_perSecondFrameCount = 0U;
-	// The total amount of frames rendered
+	/** The total amount of frames rendered */
 	uint64_t l_totalFrames = 0U;
-	// Used for tracking the time between rendered frames
+	/** Used for tracking the time between rendered frames */
 	double l_currentTime = 0.0, l_prevTime = 0.0, l_deltaTime = 0.0;
-	// Timers used for calling fixed update and displaying fps
+	/** Timers used for calling fixed update and displaying fps */
 	double l_fixedTimer = 0.0, l_frameTimer = 0.0;
-	// The title of the window
+	/** The title of the window */
 	std::string l_title = "SRender";
-	// The location of the application
+	/** The location of the application */
 	std::string l_appLocation = "";
-	// The error code returned by main
+	/** The error code returned by main */
 	exitCode l_exitCode = exitCode::okay;
 
 	void updateTitle() noexcept
