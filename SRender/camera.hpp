@@ -1,6 +1,10 @@
 #pragma once
 #include "transform.hpp"
 
+#ifndef _NODISCARD
+#define _NODISCARD [[nodiscard]]
+#endif
+
 namespace srender
 {
 	class camera: public transform
@@ -70,12 +74,8 @@ namespace srender
 		void setFovH(float _fovH) noexcept;
 		void setFovV(float _fovV) noexcept;
 
-		[[nodiscard]] glm::mat4 getWorldToCameraMatrix() const noexcept;
-
-		[[nodiscard]] constexpr
-		glm::mat4 getView() const noexcept;
-
-		[[nodiscard]] constexpr
-		glm::mat4 getProjection() const noexcept;
+		_NODISCARD glm::mat4 getWorldToCameraMatrix() const noexcept;
+		_NODISCARD constexpr glm::mat4 getView() const noexcept;
+		_NODISCARD constexpr glm::mat4 getProjection() const noexcept;
 	};
 }

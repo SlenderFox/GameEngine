@@ -1,6 +1,10 @@
 #pragma once
 #include "application.hpp"
 
+#ifndef _NODISCARD
+#define _NODISCARD [[nodiscard]]
+#endif
+
 /** Example project */
 class project: public srender::application
 {
@@ -40,7 +44,7 @@ public:
 	/** Called once at the start of runtime
 	 * @return [bool] False will terminate application
 	 */
-	bool startup() override;
+	_NODISCARD bool startup() override;
 	/** Called when the application shuts down */
 	void shutdown() override;
 	/** Called once at the start of every frame */

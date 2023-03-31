@@ -1,6 +1,10 @@
 #pragma once
 #include "glm/glm.hpp"
 
+#ifndef _NODISCARD
+#define _NODISCARD [[nodiscard]]
+#endif
+
 namespace srender
 {
 	class transform
@@ -30,10 +34,10 @@ namespace srender
 		virtual void setUp(const glm::vec3 _up) noexcept;
 		virtual void setForward(const glm::vec3 _forward) noexcept;
 
-		[[nodiscard]] glm::mat4 getTransform() const noexcept;
-		[[nodiscard]] glm::vec4 getPosition() const noexcept;
-		[[nodiscard]] glm::vec4 getRight() const noexcept;
-		[[nodiscard]] glm::vec4 getUp() const noexcept;
-		[[nodiscard]] glm::vec4 getForward() const noexcept;
+		_NODISCARD glm::mat4 getTransform() const noexcept;
+		_NODISCARD glm::vec4 getPosition() const noexcept;
+		_NODISCARD glm::vec4 getRight() const noexcept;
+		_NODISCARD glm::vec4 getUp() const noexcept;
+		_NODISCARD glm::vec4 getForward() const noexcept;
 	};
 }

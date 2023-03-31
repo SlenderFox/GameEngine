@@ -1,6 +1,10 @@
 #pragma once
 #include "light.hpp"
 
+#ifndef _NODISCARD
+#define _NODISCARD [[nodiscard]]
+#endif
+
 namespace srender
 {
 	namespace renderer
@@ -46,18 +50,12 @@ namespace srender
 			const size_t _height
 		) noexcept;
 
-		[[nodiscard]]
-		uint8_t modelCount() noexcept;
-		[[nodiscard]]
-		uint8_t lightCount() noexcept;
-		[[nodiscard]]
-		model *getModelAt(const uint8_t _pos) noexcept;
-		[[nodiscard]]
-		light *getLightAt(const uint8_t _pos) noexcept;
+		_NODISCARD uint8_t modelCount() noexcept;
+		_NODISCARD uint8_t lightCount() noexcept;
+		_NODISCARD model *getModelAt(const uint8_t _pos) noexcept;
+		_NODISCARD light *getLightAt(const uint8_t _pos) noexcept;
+		_NODISCARD camera *getCamera() noexcept;
 
-		[[nodiscard]]
-		camera *getCamera() noexcept;
-
-		constexpr float getAmbience() { return 0.15f; }
+		_NODISCARD constexpr float getAmbience() { return 0.15f; }
 	}
 }

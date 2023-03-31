@@ -1,6 +1,10 @@
 #pragma once
 #include "entity.hpp"
 
+#ifndef _NODISCARD
+#define _NODISCARD [[nodiscard]]
+#endif
+
 namespace srender
 {
 	enum class lightType: uint8_t
@@ -39,17 +43,17 @@ namespace srender
 		void setAngle (float _value) noexcept; // In degrees
 		void setBlur (float _value) noexcept;  // In degrees
 
-		[[nodiscard]] float getAngle() const noexcept;
-		[[nodiscard]] float getBlur() const noexcept;
+		_NODISCARD float getAngle() const noexcept;
+		_NODISCARD float getBlur() const noexcept;
 		/** Wrapper function to getForward
 		 * @return [constexpr glm::vec4] The forward direction
 		 */
-		[[nodiscard]] glm::vec4 getDirection() const noexcept;
-		[[nodiscard]] lightType getType() const noexcept;
-		[[nodiscard]] colour getColour() const noexcept;
-		[[nodiscard]] float getLinear() const noexcept;
-		[[nodiscard]] float getQuadratic() const noexcept;
-		[[nodiscard]] float getAngleRaw() const noexcept;
-		[[nodiscard]] float getBlurRaw() const noexcept;
+		_NODISCARD glm::vec4 getDirection() const noexcept;
+		_NODISCARD lightType getType() const noexcept;
+		_NODISCARD colour getColour() const noexcept;
+		_NODISCARD float getLinear() const noexcept;
+		_NODISCARD float getQuadratic() const noexcept;
+		_NODISCARD float getAngleRaw() const noexcept;
+		_NODISCARD float getBlurRaw() const noexcept;
 	};
 }

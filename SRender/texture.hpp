@@ -2,6 +2,10 @@
 #include <string>
 #include <vector>
 
+#ifndef _NODISCARD
+#define _NODISCARD [[nodiscard]]
+#endif
+
 namespace srender
 {
 	/** The texture object stores a reference to a texture on the gpu */
@@ -28,9 +32,9 @@ namespace srender
 		static std::vector<texture*> s_loadedTextures;
 
 		static void unloadAll() noexcept;
-		static int32_t loadTextureFromFile(const std::string *_path) noexcept;
+		_NODISCARD static int32_t loadTextureFromFile(const std::string *_path) noexcept;
 
-		static uint32_t getTexCount() noexcept;
+		_NODISCARD static uint32_t getTexCount() noexcept;
 
 		texture(
 			std::string _path,
@@ -39,8 +43,8 @@ namespace srender
 
 		//void destroy();
 
-		[[nodiscard]] int32_t getId() const noexcept;
-		[[nodiscard]] texType getType() const noexcept;
-		[[nodiscard]] std::string getFile() const noexcept;
+		_NODISCARD int32_t getId() const noexcept;
+		_NODISCARD texType getType() const noexcept;
+		_NODISCARD std::string getFile() const noexcept;
 	};
 }

@@ -131,7 +131,7 @@ namespace srender
 		renderer::setResolution(_width, _height);
 	}
 
-	bool setupGLFW()
+	_NODISCARD bool setupGLFW()
 	{
 		// glfw: initialise and configure
 		if (!glfwInit())
@@ -193,7 +193,7 @@ namespace srender
 		return true;
 	}
 
-	bool setupGlad()
+	_NODISCARD bool setupGlad()
 	{
 		// Glad: load all OpenGL function pointers
 		if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))

@@ -4,6 +4,10 @@
 #include "assimp/scene.h"
 #include "assimp/mesh.h"
 
+#ifndef _NODISCARD
+#define _NODISCARD [[nodiscard]]
+#endif
+
 namespace srender
 {
 	struct model
@@ -25,14 +29,12 @@ namespace srender
 			const aiScene *_scene
 		) noexcept;
 
-		[[nodiscard]] inline
-		mesh *processMesh(
+		_NODISCARD inline mesh *processMesh(
 			const aiMesh *_mesh,
 			const aiScene *_scene
 		) noexcept;
 
-		[[nodiscard]] inline
-		std::vector<texture*> loadMaterialTextures(
+		_NODISCARD inline std::vector<texture*> loadMaterialTextures(
 			const aiMaterial *_material,
 			const aiTextureType _type,
 			const texture::texType _texType
@@ -55,7 +57,7 @@ namespace srender
 		constexpr void setCameraRef(camera *_camera) noexcept;
 		constexpr void setShaderRef(shader *_shader) noexcept;
 
-		[[nodiscard]] shader *getShaderRef() const noexcept;
-		[[nodiscard]] mesh *getMeshAt(const uint16_t _pos) const noexcept;
+		_NODISCARD shader *getShaderRef() const noexcept;
+		_NODISCARD mesh *getMeshAt(const uint16_t _pos) const noexcept;
 	};
 }

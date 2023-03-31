@@ -16,7 +16,7 @@ namespace srender
 		application(application&&) = delete;
 		application &operator=(application&&) = delete;
 
-		static bool init();
+		_NODISCARD static bool init();
 		static void terminate() noexcept;
 
 	public:
@@ -51,7 +51,7 @@ namespace srender
 		/** Called once at the start of runtime
 		 * @return [bool] False will terminate application
 		 */
-		virtual bool startup() = 0;
+		_NODISCARD virtual bool startup() = 0;
 		/** Called when the application shuts down */
 		virtual void shutdown() = 0;
 		/** Called once at the start of every frame */

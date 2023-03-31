@@ -12,7 +12,7 @@ using std::ifstream;
 namespace srender
 {
 	// Forward declaration
-	class application { public: [[nodiscard]] static const bool gladLoaded() noexcept; };
+	class application { public: _NODISCARD static const bool gladLoaded() noexcept; };
 
 	shader::shader(const string *_shaderPath)
 	{ load(_shaderPath); }

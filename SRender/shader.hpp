@@ -2,6 +2,10 @@
 #include "camera.hpp"
 #include "texture.hpp"
 
+#ifndef _NODISCARD
+#define _NODISCARD [[nodiscard]]
+#endif
+
 namespace srender
 {
 	/** A shader is used to render the given vertex and texture information to the screen */
@@ -22,7 +26,7 @@ namespace srender
 
 		inline void loadShader(const shaderType _type);
 
-		inline bool compileShader(
+		_NODISCARD inline bool compileShader(
 			uint32_t *_id,
 			shaderType _type,
 			const char *_code
@@ -30,8 +34,7 @@ namespace srender
 
 		inline void createShaderProgram() noexcept;
 
-		[[nodiscard]] inline
-		bool checkForErrors(
+		_NODISCARD inline bool checkForErrors(
 			const uint32_t *_shaderID,
 			const shaderType _type
 		) const noexcept;
@@ -44,8 +47,8 @@ namespace srender
 		 * @return [T] One of the two given params
 		 * @note Will assert that _type is not shaderType::program
 		 */
-		template<typename T> [[nodiscard]] inline
-		T byType(
+		template<typename T>
+		_NODISCARD inline T byType(
 			const shaderType _type,
 			T _vertex,
 			T _fragment
@@ -66,8 +69,7 @@ namespace srender
 		/** Makes this shader the active shader */
 		void use() const noexcept;
 
-		[[nodiscard]] constexpr
-		bool isLoaded() const noexcept;
+		_NODISCARD constexpr bool isLoaded() const noexcept;
 
 		void setBool   (const std::string _name, const bool      _value) const noexcept;
 		void setInt    (const std::string _name, const int32_t   _value) const noexcept;

@@ -1,6 +1,10 @@
 #pragma once
 #include "colour.hpp"
 
+#ifndef _NODISCARD
+#define _NODISCARD [[nodiscard]]
+#endif
+
 namespace srender
 {
 	class entity;
@@ -19,8 +23,7 @@ namespace srender
 		void addChild(entity *_child) noexcept;
 		void removeChild(const entity *_child) noexcept;
 
-		[[nodiscard]] constexpr
-		std::vector<entity*> getChildren() const noexcept;
+		_NODISCARD constexpr std::vector<entity*> getChildren() const noexcept;
 	};
 
 	/** An entity is any object in world space, each entity must have a parent*/
@@ -29,8 +32,7 @@ namespace srender
 		friend struct entityLoader;
 
 	public:
-		[[nodiscard]] static
-		entity *createWithModel(
+		_NODISCARD static entity *createWithModel(
 			std::string _modelPath,
 			std::string _shaderPath,
 			model *&_outModel,
@@ -66,15 +68,14 @@ namespace srender
 		void setScale(const glm::vec3 _value) noexcept;
 		void sentTint(const colour _colour) noexcept;
 
-		[[nodiscard]] constexpr
-		entityBase &getParent() const noexcept;
+		_NODISCARD constexpr entityBase &getParent() const noexcept;
 	};
 
 	/** Root is a special, static entity that only has children */
 	class root: public entityBase
 	{
 	public:
-		static root *getRoot() noexcept
+		_NODISCARD static root *getRoot() noexcept
 		{
 			static root *s_root = new root();
 			return s_root;

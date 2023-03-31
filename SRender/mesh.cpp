@@ -8,7 +8,7 @@ using std::vector;
 namespace srender
 {
 	// Forward declaration
-	class application { public: [[nodiscard]] static const bool gladLoaded() noexcept; };
+	class application { public: _NODISCARD static const bool gladLoaded() noexcept; };
 
 	//Static
 

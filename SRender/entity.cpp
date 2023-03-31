@@ -13,7 +13,7 @@ using glm::inverse;
 namespace srender
 {
 	// Forward declaration
-	class application { public: [[nodiscard]] static std::string getAppLocation() noexcept; };
+	class application { public: _NODISCARD static std::string getAppLocation() noexcept; };
 
 	// Blame https://stackoverflow.com/a/40937193/15035125 for this
 	struct entityLoader
