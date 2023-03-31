@@ -244,7 +244,7 @@ namespace srender
 		s_w_width = _width;
 		s_w_height = _height;
 
-		if (renderer::s_camera && _width > 0 && _height > 0)
+		if (renderer::getCamera() && _width > 0 && _height > 0)
 			updateCamera();
 
 		//Debug::send(string("Dimensions set to " + to_string(s_w_width) + ", " + to_string(s_w_height)));
@@ -292,8 +292,8 @@ namespace srender
 
 	void application::updateCamera() noexcept
 	{
-		renderer::s_camera->setAspectRatio((float)s_w_width / (float)s_w_height);
-		renderer::s_camera->updateFovV();
+		renderer::getCamera()->setAspectRatio((float)s_w_width / (float)s_w_height);
+		renderer::getCamera()->updateFovV();
 	}
 
 	void application::updateTitle() noexcept

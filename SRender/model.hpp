@@ -8,7 +8,6 @@ namespace srender
 {
 	struct model
 	{
-		friend class renderer;
 	private:
 		std::vector<mesh*> m_meshes;
 		std::vector<texture*> m_textures;

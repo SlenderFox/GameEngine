@@ -183,7 +183,7 @@ void project::createLights()
 		);
 		light->setDirection(vec3(0, -1, 0));
 		renderer::setClearColour(
-			renderer::getLightAt(ID)->getColour() * renderer::s_ambience
+			renderer::getLightAt(ID)->getColour() * renderer::getAmbience()
 		);
 	}
 	if (point)
