@@ -101,11 +101,13 @@ namespace srender
 			#endif
 		}
 
-		#if defined(_DEBUG) && defined(__WINDOWS__)
-			void MoveConsole(const uint16_t _width) noexcept
+		#ifdef _DEBUG
+			void moveConsole(const uint16_t _width) noexcept
 			{
-				// Moves the console to the right and resizes
-				MoveWindow(GetConsoleWindow(), _width - 3, 0, 900, 1040, TRUE);
+				#ifdef __WINDOWS__
+					// Moves the console to the right and resizes
+					MoveWindow(GetConsoleWindow(), _width - 3, 0, 900, 1040, TRUE);
+				#endif
 			}
 		#endif
 	}

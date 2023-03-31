@@ -133,7 +133,7 @@ void project::update()
 
 void project::fixedUpdate() {}
 
-void project::fateUpdate() {}
+void project::lateUpdate() {}
 
 void project::createScene()
 {

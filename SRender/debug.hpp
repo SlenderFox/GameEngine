@@ -51,7 +51,7 @@ namespace srender
 		void newLine() noexcept;
 
 		#ifdef _DEBUG
-			void MoveConsole(const uint16_t _width) noexcept;
+			void moveConsole(const uint16_t _width) noexcept;
 		#endif
 	};
 }

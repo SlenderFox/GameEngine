@@ -18,11 +18,8 @@ class project: public srender::application
 	 */
 	static void scrollCallback(double inOffsetX, double inOffsetY) noexcept;
 
-	static constexpr
-	uint8_t s_numCubes = 9U;
-
-	static const
-	glm::vec3 s_cubePositions[s_numCubes];
+	static constexpr uint8_t s_numCubes = 9U;
+	static const glm::vec3 s_cubePositions[s_numCubes];
 
 	std::vector<srender::light*> m_lightRefs;
 	std::vector<srender::entity*> m_cubes;
@@ -51,5 +48,5 @@ public:
 	/** Called 60 times per second, after Update */
 	void fixedUpdate() override;
 	/** Called once per frame, after fixedUpdate but still before rendering */
-	void fateUpdate() override;
+	void lateUpdate() override;
 };
