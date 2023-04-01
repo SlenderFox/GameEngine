@@ -50,20 +50,6 @@ namespace srender
 	/** The error code returned by main */
 	exitCode l_exitCode = exitCode::okay;
 
-	void updateTitle() noexcept
-	{
-		string title = {
-			l_title
-			+ " | "
-			+ to_string(l_wWidth)
-			+ "x"
-			+ to_string(l_wHeight)
-			+ " | "
-			+ to_string(l_fps)
-		};
-		glfwSetWindowTitle(l_windowRef, title.c_str());
-	}
-
 	void updateFrameTimeData() noexcept
 	{
 		l_prevTime = l_currentTime;
@@ -81,7 +67,16 @@ namespace srender
 			l_frameTimer -= secondsPerUpdate;
 			l_fps = (uint16_t)((double)l_perSecondFrameCount / secondsPerUpdate);
 			l_perSecondFrameCount = 0U;
-			updateTitle();
+			string title = {
+				l_title
+				+ " | "
+				+ to_string(l_wWidth)
+				+ "x"
+				+ to_string(l_wHeight)
+				+ " | "
+				+ to_string(l_fps)
+			};
+			glfwSetWindowTitle(l_windowRef, title.c_str());
 		}
 	}
 
@@ -317,7 +312,7 @@ namespace srender
 		l_wHeight = _height;
 
 		if (renderer::getCamera() && _width > 0 && _height > 0)
-			updateCamera();
+		{ updateCamera(); }
 
 		//debug::send("Dimensions set to " + to_string(l_wWidth) + ", " + to_string(l_wHeight));
 	}

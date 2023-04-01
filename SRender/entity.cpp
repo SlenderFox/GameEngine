@@ -18,8 +18,7 @@ namespace srender
 	// Blame https://stackoverflow.com/a/40937193/15035125 for this
 	struct entityLoader
 	{
-		static inline
-		void BackgroundLoadModel(
+		static inline void BackgroundLoadModel(
 			string *_modelPath,
 			string *_shaderPath,
 			entity *_entity,
