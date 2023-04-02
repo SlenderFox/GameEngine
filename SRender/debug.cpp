@@ -1,6 +1,6 @@
 #include "debug.hpp"
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	#include "winclude.hpp"
 	#ifdef __WINDOWS__
 		#include <io.h>
@@ -9,7 +9,7 @@
 	#include <iostream>
 	using std::wcout;
 	using std::endl;
-#endif
+//#endif
 
 using std::string;
 
@@ -60,11 +60,11 @@ namespace srender
 			const bool _endline
 		) noexcept
 		{
-			#ifdef _DEBUG
+			//#ifdef _DEBUG
 				if (_newline) wcout << '\n';
 				wcout << _msg.c_str();
 				if (_endline) wcout << endl;
-			#endif
+			//#endif
 		}
 
 		void send(
@@ -74,11 +74,11 @@ namespace srender
 			const bool _endline
 		) noexcept
 		{
-			#ifdef _DEBUG
+			//#ifdef _DEBUG
 				if (_newline) wcout << '\n';
 				wcout << _prefix << _msg.c_str();
 				if (_endline) wcout << endl;
-			#endif
+			//#endif
 		}
 
 		void send(
