@@ -1,15 +1,12 @@
-#include "mesh.hpp"
-#include "glad/glad.h"
 #include <assert.h>
+#include "mesh.hpp"
+#include "graphics.hpp"
 
 using std::string;
 using std::vector;
 
 namespace srender
 {
-	// Forward declaration
-	class application { public: _NODISCARD static const bool gladLoaded() noexcept; };
-
 	//Static
 
 	vector<vertex> mesh::generateVertices() noexcept
@@ -59,104 +56,39 @@ namespace srender
 	{
 		m_vertices = new vector<vertex>(_vertices ? *_vertices : generateVertices());
 		m_indices = new vector<uint32_t>(_indices ? *_indices : generateIndices());
-		setupMesh();
+		graphics::setupMesh(
+			&m_idVAO,
+			&m_idVBO,
+			&m_idEBO,
+			&(*m_vertices)[0].position[0],
+			&(*m_indices)[0],
+			m_vertices->size() * sizeof(vertex),
+			m_indices->size() * sizeof(uint32_t),
+			sizeof(vertex),
+			offsetof(vertex, normal),
+			offsetof(vertex, texCoords)
+		);
 	}
 
 	mesh::~mesh()
 	{
-		if (application::gladLoaded())
-		{
-			glDeleteVertexArrays(1, m_idVAO);
-			glDeleteBuffers(1, m_idVBO);
-			glDeleteBuffers(1, m_idEBO);
-		}
+		graphics::deleteMesh(m_idVAO, m_idVBO, m_idEBO);
 
 		delete m_vertices;
 		delete m_indices;
-		delete m_idVAO;
-		delete m_idVBO;
-		delete m_idEBO;
 	}
 
 	void mesh::draw() const noexcept
 	{
-		glBindVertexArray(*m_idVAO);
-		glDrawElements(
-			GL_TRIANGLES,
-			(GLsizei)m_indices->size(),
-			GL_UNSIGNED_INT,
-			0
-		);
-		glBindVertexArray(0);
+		graphics::drawElements(m_idVAO, m_indices);
 	}
 
-	void mesh::setupMesh() const noexcept
-	{
-		// Creates and assigns to an id the Vertex Array Object, Vertex Buffer Object, and Element Buffer Object
-		// Arguments are number of objects to generate, and an array of uints to have the ids stored in
-		glGenVertexArrays(1, m_idVAO);
-		glGenBuffers(1, m_idVBO);
-		glGenBuffers(1, m_idEBO);
-
-		// Binds the vertex array so that the VBO and EBO are neatly stored within
-		glBindVertexArray(*m_idVAO);
-
-		// GL_ARRAY_BUFFER effectively works like a pointer, using the id provided to point to the buffer
-		glBindBuffer(GL_ARRAY_BUFFER, *m_idVBO);
-		// Loads the vertices to the VBO
-		glBufferData(
-			GL_ARRAY_BUFFER,
-			(GLsizei)m_vertices->size() * sizeof(vertex),
-			&(*m_vertices)[0],	// Returns the zeroth element in the vector
-			GL_STATIC_DRAW
-		);
-
-		/*GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
-		* GL_STATIC_DRAW: the data is set only once and used many times.
-		*GL_DYNAMIC_DRAW: the data is changed a lot and used many times.
-		*/
-
-		// This buffer stores the indices that reference the elements of the VBO
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *m_idEBO);
-		glBufferData(
-			GL_ELEMENT_ARRAY_BUFFER,
-			(GLsizei)m_indices->size() * sizeof(uint32_t),
-			&(*m_indices)[0],	// Returns the zeroth element in the vector
-			GL_STATIC_DRAW
-		);
-
-		/*Tells the shader how to use the vertex data provided
-		* p1: Which vertex attribute we want to configure in the vertex shader (location = 0)
-		* p2: Vertex size (vec3)
-		* p3: The type of data (vec is using floats)
-		* p4: Whether we want to normalise the data
-		* p5: Stride, how big each chunk of data is
-		* p6: Offset, for some reason a void*
-		*/
-		// Position attribute
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)0);
-		// Normal attribute
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, normal));
-		// Texcoord attribute
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, texCoords));
-
-		// Unbinds the vertex array
-		glBindVertexArray(0);
-		// Unbinds the GL_ARRAY_BUFFER
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		// Unbinds the GL_ELEMENT_ARRAY_BUFFER
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
-
-	uint32_t *mesh::getVAO() const noexcept
+	uint32_t mesh::getVAO() const noexcept
 	{ return m_idVAO; }
 
-	uint32_t *mesh::getVBO() const noexcept
+	uint32_t mesh::getVBO() const noexcept
 	{ return m_idVBO; }
 
-	uint32_t *mesh::getEBO() const noexcept
+	uint32_t mesh::getEBO() const noexcept
 	{ return m_idEBO; }
 }

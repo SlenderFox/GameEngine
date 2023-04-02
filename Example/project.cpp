@@ -239,13 +239,13 @@ void project::processInput() noexcept
 {
 	// Render triangles normally
 	if (input::checkKeyState(input::key::Key_F1, input::state::Press))
-		renderer::setRenderMode(renderer::Mode::fill);
+		renderer::setRenderMode(renderer::mode::fill);
 	// Render triangles as lines
 	if (input::checkKeyState(input::key::Key_F2, input::state::Press))
-		renderer::setRenderMode(renderer::Mode::line);
+		renderer::setRenderMode(renderer::mode::line);
 	// Render triangles as dots
 	if (input::checkKeyState(input::key::Key_F3, input::state::Press))
-		renderer::setRenderMode(renderer::Mode::point);
+		renderer::setRenderMode(renderer::mode::point);
 
 	// Spotlight cone
 	if (input::checkKeyState(input::key::Key_T, input::state::Press))

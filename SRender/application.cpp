@@ -1,10 +1,10 @@
-#include "application.hpp"
-#include "debug.hpp"
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
-#include "glm/gtc/matrix_transform.hpp"
 #include <chrono>
 //#include <thread>
+#include "application.hpp"
+#include "graphics.hpp"
+#include "GLFW/glfw3.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "debug.hpp"
 
 using std::string;
 using std::to_string;
@@ -29,8 +29,6 @@ namespace srender
 	application *l_application = nullptr;
 	/** Memory is managed by glfw */
 	GLFWwindow *l_windowRef = nullptr;
-	/** Whether glad has loaded or not */
-	bool l_gladLoaded = false;
 	/** Is the application fullscreen or not */
 	bool l_fullscreen = false;
 	/** The width and height of the window, should only be modified through setDimensions() */
@@ -123,7 +121,7 @@ namespace srender
 	) noexcept
 	{
 		application::setDimensions((const uint16_t)_width, (const uint16_t)_height);
-		renderer::setResolution(_width, _height);
+		graphics::setResolution(_width, _height);
 	}
 
 	_NODISCARD bool setupGLFW()
@@ -188,22 +186,13 @@ namespace srender
 		return true;
 	}
 
-	_NODISCARD bool setupGlad()
-	{
-		// Glad: load all OpenGL function pointers
-		if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-		{ return l_gladLoaded = true; }
-
-		return false;
-	}
-
 	bool application::init()
 	{
 		auto startTime = std::chrono::high_resolution_clock::now();
 
 		if (!setupGLFW()) return false;	// Sets own exit code
 
-		if (!setupGlad())
+		if (!graphics::loadGlad())
 		{
 			l_exitCode = exitCode::fail_Glad;
 			return false;
@@ -338,9 +327,6 @@ namespace srender
 
 	application *application::getApplication() noexcept
 	{ return l_application; }
-
-	const bool application::gladLoaded() noexcept
-	{ return l_gladLoaded; }
 
 	double application::getTime() noexcept
 	{ return l_currentTime; }

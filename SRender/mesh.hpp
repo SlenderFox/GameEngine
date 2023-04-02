@@ -76,14 +76,12 @@ namespace srender
 			30U,	31U,	32U,	33U,	34U,	35U	// Face 6
 		};
 
-		uint32_t *m_idVAO = new uint32_t(0U);	// The id for the vertex attribute object
-		uint32_t *m_idVBO = new uint32_t(0U);	// The id for the vertex buffer object
-		uint32_t *m_idEBO = new uint32_t(0U);	// The id for the element buffer object
+		uint32_t m_idVAO = 0U;	// The id for the vertex attribute object
+		uint32_t m_idVBO = 0U;	// The id for the vertex buffer object
+		uint32_t m_idEBO = 0U;	// The id for the element buffer object
 
 		std::vector<vertex> *m_vertices = nullptr;
-		std::vector<unsigned int> *m_indices = nullptr;
-
-		void setupMesh() const noexcept;
+		std::vector<uint32_t> *m_indices = nullptr;
 
 	public:
 		/** Takes the vertices array and places it in a vector
@@ -107,16 +105,16 @@ namespace srender
 		void draw() const noexcept;
 
 		/** Get the id for the vertex attribute object
-		 * @return [uint32_t*] The id of the vertex attribute object
+		 * @return [uint32_t] The id of the vertex attribute object
 		 */
-		_NODISCARD uint32_t *getVAO() const noexcept;
+		_NODISCARD uint32_t getVAO() const noexcept;
 		/** Get the id for the vertex buffer object
-		 * @return [uint32_t*] The id of the vertex buffer object
+		 * @return [uint32_t] The id of the vertex buffer object
 		 */
-		_NODISCARD uint32_t *getVBO() const noexcept;
+		_NODISCARD uint32_t getVBO() const noexcept;
 		/** Get the id for the element buffer object
-		 * @return [uint32_t*] The id of the element buffer object
+		 * @return [uint32_t] The id of the element buffer object
 		 */
-		_NODISCARD uint32_t *getEBO() const noexcept;
+		_NODISCARD uint32_t getEBO() const noexcept;
 	};
 }

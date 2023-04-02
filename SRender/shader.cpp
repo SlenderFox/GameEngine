@@ -1,8 +1,9 @@
-#include "shader.hpp"
-#include "glad/glad.h"
-#include <glm/gtc/type_ptr.hpp>
 #include <fstream>
 #include <sstream>
+#include "shader.hpp"
+#include "graphics.hpp"
+#include "glad/glad.h"
+#include "glm/gtc/type_ptr.hpp"
 #include "debug.hpp"
 
 using std::string;
@@ -11,9 +12,6 @@ using std::ifstream;
 
 namespace srender
 {
-	// Forward declaration
-	class application { public: _NODISCARD static const bool gladLoaded() noexcept; };
-
 	shader::shader(const string *_shaderPath)
 	{ load(_shaderPath); }
 
@@ -22,9 +20,9 @@ namespace srender
 
 	void shader::destroy() noexcept
 	{
-		if (m_shaderLoaded && application::gladLoaded())
+		if (m_shaderLoaded)
 		{
-			glDeleteProgram(m_idProgram);
+			graphics::deleteShader(m_idProgram);
 			m_shaderLoaded = false;
 		}
 	}

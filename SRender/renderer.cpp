@@ -1,5 +1,5 @@
 #include "renderer.hpp"
-#include "glad/glad.h"
+#include "graphics.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "debug.hpp"
 
@@ -19,11 +19,8 @@ namespace srender
 
 		bool init(const float _aspect) noexcept
 		{
-			// Enables the use of the depth buffer
-			glEnable(GL_DEPTH_TEST);
-			//glEnable(GL_STENCIL_TEST);
-
-			//setClearColour(colour::CreateWithRGB(vec3(0.1f)));
+			// Default clear colour
+			graphics::setClearColour(0.1f, 0.1f, 0.1f);
 
 			// Initialise camera
 			s_camera = new camera(_aspect, 75.0f);
@@ -60,7 +57,7 @@ namespace srender
 		void draw() noexcept
 		{
 			// Clears to background colour
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			graphics::clear();
 
 			if (s_models.size() > 0)
 			{
@@ -248,20 +245,12 @@ namespace srender
 		void setClearColour(const colour _colour) noexcept
 		{
 			vec3 col = _colour.rgb();
-			glClearColor(col.r, col.g, col.b, 1.0f);
+			graphics::setClearColour(col.r, col.g, col.b);
 		}
 
-		void setRenderMode(const Mode _mode) noexcept
+		void setRenderMode(const mode _mode) noexcept
 		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + (int)_mode);
-		}
-
-		void setResolution(
-			const size_t _width,
-			const size_t _height
-		) noexcept
-		{
-			glViewport(0, 0, (GLsizei)_width, (GLsizei)_height);
+			graphics::setRenderMode(int(_mode));
 		}
 
 		uint8_t modelCount() noexcept

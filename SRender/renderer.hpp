@@ -9,15 +9,15 @@ namespace srender
 {
 	namespace renderer
 	{
-		bool init(const float _aspect) noexcept;
-		void draw() noexcept;
-
-		enum class Mode: uint8_t
+		enum class mode: uint8_t
 		{
 			point,
 			line,
 			fill
 		};
+
+		bool init(const float _aspect) noexcept;
+		void draw() noexcept;
 
 		void terminate() noexcept;
 
@@ -44,11 +44,7 @@ namespace srender
 			const colour _colour = colour::white()) noexcept;
 
 		void setClearColour(const colour _colour) noexcept;
-		void setRenderMode(const Mode _mode = Mode::fill) noexcept;
-		void setResolution(
-			const size_t _width,
-			const size_t _height
-		) noexcept;
+		void setRenderMode(const mode _mode = mode::fill) noexcept;
 
 		_NODISCARD uint8_t modelCount() noexcept;
 		_NODISCARD uint8_t lightCount() noexcept;

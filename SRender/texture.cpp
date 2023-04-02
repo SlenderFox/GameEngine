@@ -1,4 +1,5 @@
 #include "texture.hpp"
+#include "graphics.hpp"
 #include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
@@ -9,9 +10,6 @@ using std::vector;
 
 namespace srender
 {
-	// Forward declaration
-	class application { public: _NODISCARD static const bool gladLoaded() noexcept; };
-
 	// Static
 
 	uint32_t texture::s_textureIds[32];
@@ -19,10 +17,7 @@ namespace srender
 	vector<texture*> texture::s_loadedTextures = vector<texture*>();
 
 	void texture::unloadAll() noexcept
-	{
-		if (application::gladLoaded())
-		{ glDeleteTextures(s_textureCount, s_textureIds); }
-	}
+	{ graphics::deleteTextures(s_textureCount, s_textureIds); }
 
 	int32_t texture::loadTextureFromFile(const string *_path) noexcept
 	{

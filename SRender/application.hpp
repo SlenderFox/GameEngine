@@ -36,8 +36,6 @@ namespace srender
 		static void setAppLocation(std::string _location) noexcept;
 
 		_NODISCARD static application *getApplication() noexcept;
-		// Intended to be forward declared in other translation units
-		_NODISCARD static const bool gladLoaded() noexcept;
 		_NODISCARD static double getTime() noexcept;
 		_NODISCARD static double getDeltaTime() noexcept;
 		/** Should evaluate to 0.01666666666666666 */
