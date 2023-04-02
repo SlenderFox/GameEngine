@@ -2,7 +2,7 @@
 
 NAME:=libsrender.a
 CXXFLAGS:=-std=c++20 -Wall
-DFLAGS:=-O1 -DDEBUG -D_DEBUG
+DFLAGS:=-Og -DDEBUG -D_DEBUG
 RFLAGS:=-O3 -DNDEBUG -D_RELEASE
 
 SRC:=SRender
