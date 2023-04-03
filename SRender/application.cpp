@@ -290,7 +290,7 @@ namespace srender
 	}
 
 	void application::quit() noexcept
-	{ glfwSetWindowShouldClose(l_windowRef, true); }
+	{	glfwSetWindowShouldClose(l_windowRef, true); }
 
 	void application::setDimensions(
 		const uint16_t _width,
@@ -301,7 +301,7 @@ namespace srender
 		l_wHeight = _height;
 
 		if (renderer::getCamera() && _width > 0 && _height > 0)
-		{ updateCamera(); }
+		{	updateCamera(); }
 
 		//debug::send("Dimensions set to " + to_string(l_wWidth) + ", " + to_string(l_wHeight));
 	}
@@ -326,16 +326,16 @@ namespace srender
 	}
 
 	application *application::getApplication() noexcept
-	{ return l_application; }
+	{	return l_application; }
 
 	double application::getTime() noexcept
-	{ return l_currentTime; }
+	{	return l_currentTime; }
 
 	double application::getDeltaTime() noexcept
-	{ return l_deltaTime; }
+	{	return l_deltaTime; }
 
 	std::string application::getAppLocation() noexcept
-	{ return l_appLocation; }
+	{	return l_appLocation; }
 
 	application::application() noexcept
 	{

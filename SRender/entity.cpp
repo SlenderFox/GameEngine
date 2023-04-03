@@ -33,7 +33,7 @@ namespace srender
 	};
 
 	void entityBase::addChild(entity *_child) noexcept
-	{ m_childrenRef.push_back(_child); }
+	{	m_childrenRef.push_back(_child); }
 
 	void entityBase::removeChild(const entity *_child) noexcept
 	{
@@ -48,7 +48,7 @@ namespace srender
 	}
 
 	constexpr std::vector<entity*>entityBase::getChildren() const noexcept
-	{ return m_childrenRef; }
+	{	return m_childrenRef; }
 
 	// Static
 
@@ -132,7 +132,8 @@ namespace srender
 		}
 
 		// Remove from previous parents children
-		if (m_parentRef) { m_parentRef->removeChild(this); }
+		if (m_parentRef)
+		{	m_parentRef->removeChild(this); }
 
 		// Assign new parent and join it's children
 		m_parentRef = _parent;
@@ -140,14 +141,14 @@ namespace srender
 	}
 
 	void entity::renderOnlyColour(const bool _state) noexcept
-	{ m_modelRef->getShaderRef()->setBool("u_justColour", _state); }
+	{	m_modelRef->getShaderRef()->setBool("u_justColour", _state); }
 
 	void entity::setScale(const vec3 _value) noexcept
-	{ m_modelRef->getShaderRef()->setFloat3("u_scale", _value); }
+	{	m_modelRef->getShaderRef()->setFloat3("u_scale", _value); }
 
 	void entity::sentTint(const colour _colour) noexcept
-	{ m_modelRef->getShaderRef()->setFloat3("u_colour", _colour.rgb()); }
+	{	m_modelRef->getShaderRef()->setFloat3("u_colour", _colour.rgb()); }
 
 	constexpr entityBase &entity::getParent() const noexcept
-	{ return *m_parentRef; }
+	{	return *m_parentRef; }
 }

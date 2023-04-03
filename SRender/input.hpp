@@ -183,8 +183,8 @@ namespace srender
 		static bool checkKeyState(const key _key, const state _state) noexcept;
 
 		static inline void addMouseCallback(callbackFunc _callback) noexcept
-		{ s_mouseCallbackFun = _callback; }
+		{	s_mouseCallbackFun = _callback; }
 		static inline void addSrollCallback(callbackFunc _callback) noexcept
-		{ s_scrollCallbackFun = _callback; }
+		{	s_scrollCallbackFun = _callback; }
 	};
 }

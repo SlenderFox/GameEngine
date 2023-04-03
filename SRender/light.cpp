@@ -18,54 +18,54 @@ namespace srender
 	{
 		transform::setTransform(&inTransform);
 		if (_type == lightType::Spot)
-		{ m_angle = cos(radians(m_angle)); }
+		{	m_angle = cos(radians(m_angle)); }
 	}
 
 	void light::setDirection (const glm::vec3 _direction) noexcept
-	{ transform::setForward(_direction); }
+	{	transform::setForward(_direction); }
 
 	void light::setType (lightType _type) noexcept
-	{ m_type = _type; }
+	{	m_type = _type; }
 
 	void light::setColour (colour _colour) noexcept
-	{ m_lightColour = _colour; }
+	{	m_lightColour = _colour; }
 
 	void light::setLinear (float _value) noexcept
-	{ m_linear = _value; }
+	{	m_linear = _value; }
 
 	void light::setQuadratic (float _value) noexcept
-	{ m_quadratic = _value; }
+	{	m_quadratic = _value; }
 
 	void light::setAngle (float _value) noexcept
-	{ m_angle = _value; }
+	{	m_angle = _value; }
 
 	void light::setBlur (float _value) noexcept
-	{ m_blur = _value; }
+	{	m_blur = _value; }
 
 	float light::getAngle() const noexcept
-	{ return cos(radians(m_angle)); }
+	{	return cos(radians(m_angle)); }
 
 	float light::getBlur() const noexcept
-	{ return sin(radians(90 * m_blur)); }
+	{	return sin(radians(90 * m_blur)); }
 
 	glm::vec4 light::getDirection()	const noexcept
-	{ return transform::getForward(); }
+	{	return transform::getForward(); }
 
 	lightType light::getType() const noexcept
-	{ return m_type; }
+	{	return m_type; }
 
 	colour light::getColour() const noexcept
-	{ return m_lightColour; }
+	{	return m_lightColour; }
 
 	float light::getLinear() const noexcept
-	{ return m_linear; }
+	{	return m_linear; }
 
 	float light::getQuadratic() const noexcept
-	{ return m_quadratic; }
+	{	return m_quadratic; }
 
 	float light::getAngleRaw() const noexcept
-	{ return m_angle; }
+	{	return m_angle; }
 
 	float light::getBlurRaw() const noexcept
-	{ return m_blur; }
+	{	return m_blur; }
 }

@@ -12,9 +12,10 @@ namespace srender
 		const bool loadGlad() noexcept
 		{
 			// Glad: load all OpenGL function pointers
-			l_gladLoaded = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-			if (!l_gladLoaded)
-			{ return false; }
+			if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+			{	return false; }
+
+			l_gladLoaded = true;
 
 			glEnable(GL_DEPTH_TEST);
 			//glEnable(GL_STENCIL_TEST);
@@ -22,17 +23,19 @@ namespace srender
 			return true;
 		}
 
-		const bool gladLoaded() noexcept
-		{
-			return l_gladLoaded;
-		}
+		const bool getGladLoaded() noexcept
+		{	return l_gladLoaded; }
 
 		void clear() noexcept
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 
-		void deleteMesh(uint32_t _idVAO, uint32_t _idVBO, uint32_t _idEBO) noexcept
+		void deleteMesh(
+			const uint32_t _idVAO,
+			const uint32_t _idVBO,
+			const uint32_t _idEBO
+		) noexcept
 		{
 			if (l_gladLoaded)
 			{
@@ -42,24 +45,24 @@ namespace srender
 			}
 		}
 
-		void deleteShader(uint32_t _idProgram) noexcept
+		void deleteShader(const uint32_t _idProgram) noexcept
 		{
 			if (l_gladLoaded)
-			{ glDeleteProgram(_idProgram); }
+			{	glDeleteProgram(_idProgram); }
 		}
 
-		void deleteTextures(uint32_t _textureCount, uint32_t *_textureIds) noexcept
+		void deleteTextures(const uint32_t _textureCount, const uint32_t *_textureIds) noexcept
 		{
 			if (l_gladLoaded)
-			{ glDeleteTextures(_textureCount, _textureIds); }
+			{	glDeleteTextures(_textureCount, _textureIds); }
 		}
 
-		void drawElements(uint32_t _idVAO, std::vector<uint32_t> *_indices) noexcept
+		void drawElements(const uint32_t _idVAO, const uint32_t _size) noexcept
 		{
 			glBindVertexArray(_idVAO);
 			glDrawElements(
 				GL_TRIANGLES,
-				(GLsizei)_indices->size(),
+				(GLsizei)_size,
 				GL_UNSIGNED_INT,
 				0
 			);
@@ -67,50 +70,40 @@ namespace srender
 		}
 
 		void setupMesh(
-			uint32_t *_idVAO,
-			uint32_t *_idVBO,
-			uint32_t *_idEBO,
-			float *_vertices,
-			uint32_t *_indices,
-			int _verticesByteSize,
-			int _indicesByteSize,
-			int _vertexSize,
-			int _normalOffset,
-			int _texCoordOffset
+			uint32_t *_outIdVAO,
+			uint32_t *_outIdVBO,
+			uint32_t *_outIdEBO,
+			const float *_vertices,
+			const uint32_t *_indices,
+			const uint32_t _verticesByteSize,
+			const uint32_t _indicesByteSize,
+			const uint32_t _vertexSize,
+			uint64_t _normalOffset,
+			uint64_t _texCoordOffset
 		) noexcept
 		{
 			// Creates and assigns to an id the Vertex Array Object, Vertex Buffer Object, and Element Buffer Object
 			// Arguments are number of objects to generate, and an array of uints to have the ids stored in
-			glGenVertexArrays(1, _idVAO);
-			glGenBuffers(1, _idVBO);
-			glGenBuffers(1, _idEBO);
+			glGenVertexArrays(1, _outIdVAO);
+			glGenBuffers(1, _outIdVBO);
+			glGenBuffers(1, _outIdEBO);
 
 			// Binds the vertex array so that the VBO and EBO are neatly stored within
-			glBindVertexArray(*_idVAO);
+			glBindVertexArray(*_outIdVAO);
 
 			// GL_ARRAY_BUFFER effectively works like a pointer, using the id provided to point to the buffer
-			glBindBuffer(GL_ARRAY_BUFFER, *_idVBO);
+			glBindBuffer(GL_ARRAY_BUFFER, *_outIdVBO);
 			// Loads the vertices to the VBO
-			glBufferData(
-				GL_ARRAY_BUFFER,
-				(GLsizei)_verticesByteSize,
-				_vertices,
-				GL_STATIC_DRAW
-			);
+			glBufferData(GL_ARRAY_BUFFER, (GLsizei)_verticesByteSize, _vertices, GL_STATIC_DRAW);
 
-			/*GL_STREA_DRAW: the data is set only once and used by the GPU at most a few times.
+			/*GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
 			* GL_STATIC_DRAW: the data is set only once and used many times.
 			*GL_DYNAMIC_DRAW: the data is changed a lot and used many times.
 			*/
 
 			// This buffer stores the indices that reference the elements of the VBO
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *_idEBO);
-			glBufferData(
-				GL_ELEMENT_ARRAY_BUFFER,
-				(GLsizei)_indicesByteSize,
-				_indices,
-				GL_STATIC_DRAW
-			);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *_outIdEBO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizei)_indicesByteSize, _indices, GL_STATIC_DRAW);
 
 			/*Tells the shader how to use the vertex data provided
 			* p1: Which vertex attribute we want to configure in the vertex shader (location = 0)
@@ -138,22 +131,18 @@ namespace srender
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 
-		void setClearColour(float _r, float _g, float _b) noexcept
-		{
-			glClearColor((GLfloat)_r, (GLfloat)_g, (GLfloat)_b, 1.0f);
-		}
+		void setClearColour(
+			const float _r,
+			const float _g,
+			const float _b,
+			const float _a
+		) noexcept
+		{	glClearColor((GLfloat)_r, (GLfloat)_g, (GLfloat)_b, (GLfloat)_a); }
 
 		void setRenderMode(const int _mode) noexcept
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + _mode);
-		}
+		{	glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + _mode); }
 
-		void setResolution(
-			const size_t _width,
-			const size_t _height
-		) noexcept
-		{
-			glViewport(0, 0, (GLsizei)_width, (GLsizei)_height);
-		}
+		void setResolution(const size_t _width, const size_t _height) noexcept
+		{	glViewport(0, 0, (GLsizei)_width, (GLsizei)_height); }
 	}
 }

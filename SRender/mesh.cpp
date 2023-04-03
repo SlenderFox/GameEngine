@@ -62,8 +62,8 @@ namespace srender
 			&m_idEBO,
 			&(*m_vertices)[0].position[0],
 			&(*m_indices)[0],
-			m_vertices->size() * sizeof(vertex),
-			m_indices->size() * sizeof(uint32_t),
+			(uint32_t)m_vertices->size() * sizeof(vertex),
+			(uint32_t)m_indices->size() * sizeof(uint32_t),
 			sizeof(vertex),
 			offsetof(vertex, normal),
 			offsetof(vertex, texCoords)
@@ -80,15 +80,15 @@ namespace srender
 
 	void mesh::draw() const noexcept
 	{
-		graphics::drawElements(m_idVAO, m_indices);
+		graphics::drawElements(m_idVAO, (uint32_t)m_indices->size());
 	}
 
 	uint32_t mesh::getVAO() const noexcept
-	{ return m_idVAO; }
+{	return m_idVAO; }
 
 	uint32_t mesh::getVBO() const noexcept
-	{ return m_idVBO; }
+{	return m_idVBO; }
 
 	uint32_t mesh::getEBO() const noexcept
-	{ return m_idEBO; }
+{	return m_idEBO; }
 }

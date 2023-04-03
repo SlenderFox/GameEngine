@@ -36,10 +36,10 @@ namespace srender
 		void terminate() noexcept
 		{
 			for (unsigned int i = 0; i < s_models.size(); ++i)
-			{ delete s_models[i]; }
+			{	delete s_models[i]; }
 
 			for (unsigned int i = 0; i < s_lights.size(); ++i)
-			{ delete s_lights[i]; }
+			{	delete s_lights[i]; }
 
 			// Destroy all textures
 			for (size_t i = 0; i < texture::s_loadedTextures.size(); ++i)
@@ -62,7 +62,7 @@ namespace srender
 			if (s_models.size() > 0)
 			{
 				for (uint8_t i = 0; i < s_models.size(); ++i)
-				{ getModelAt(i)->draw(); }
+				{	getModelAt(i)->draw(); }
 			}
 		}
 
@@ -215,7 +215,8 @@ namespace srender
 			uint8_t &_outId,
 			const string *_modelPath,
 			const string *_shaderPath,
-			const bool _loadTextures) noexcept
+			const bool _loadTextures
+		) noexcept
 		{
 			// Caps at 255
 			size_t currentAmount = s_models.size();
@@ -230,7 +231,8 @@ namespace srender
 		light *addNewLight(
 			uint8_t &_outId,
 			const lightType _type,
-			const colour _colour) noexcept
+			const colour _colour
+		) noexcept
 		{
 			// Caps at 255
 			size_t currentAmount = s_lights.size();
@@ -286,6 +288,6 @@ namespace srender
 		}
 
 		camera *getCamera() noexcept
-		{ return s_camera; }
+		{	return s_camera; }
 	}
 }

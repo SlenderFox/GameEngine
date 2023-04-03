@@ -13,10 +13,10 @@ using std::ifstream;
 namespace srender
 {
 	shader::shader(const string *_shaderPath)
-	{ load(_shaderPath); }
+	{	load(_shaderPath); }
 
 	shader::~shader()
-	{ destroy(); }
+	{	destroy(); }
 
 	void shader::destroy() noexcept
 	{
@@ -42,10 +42,10 @@ namespace srender
 	}
 
 	void shader::use() const noexcept
-	{ glUseProgram(m_idProgram); }
+	{	glUseProgram(m_idProgram); }
 
 	constexpr bool shader::isLoaded() const noexcept
-	{ return m_shaderLoaded; }
+	{	return m_shaderLoaded; }
 
 	inline void shader::loadShader(const shaderType _type)
 	{

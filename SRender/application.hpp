@@ -23,10 +23,7 @@ namespace srender
 		_NODISCARD static int run();
 		static void quit() noexcept;
 
-		static void setDimensions(
-			const uint16_t _width,
-			const uint16_t _height
-		) noexcept;
+		static void setDimensions(const uint16_t _width, const uint16_t _height) noexcept;
 		static void setTitle(const std::string _title) noexcept;
 		static void setFullscreen(const bool _fullscreen) noexcept;
 		/** Sets a string saving the location of the application
@@ -39,8 +36,8 @@ namespace srender
 		_NODISCARD static double getTime() noexcept;
 		_NODISCARD static double getDeltaTime() noexcept;
 		/** Should evaluate to 0.01666666666666666 */
-		_NODISCARD static constexpr double getFixedDeltaTime() { return 1.0 / 60.0; }
 		_NODISCARD static std::string getAppLocation() noexcept;
+		_NODISCARD static constexpr double getFixedDeltaTime() { return 1.0 / 60.0; }
 
 	protected:
 		application() noexcept;

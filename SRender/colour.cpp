@@ -124,10 +124,10 @@ namespace srender
 	}
 
 	vec3 colour::rgb() const noexcept
-	{ return m_RGB; }
+	{	return m_RGB; }
 
 	constexpr vec3 colour::hsv() const noexcept
-	{ return rgbToHsv(m_RGB); }
+	{	return rgbToHsv(m_RGB); }
 
 	colour::colour() noexcept
 	{}
@@ -145,42 +145,43 @@ namespace srender
 	{}
 
 	colour::colour(const colour &_other)
-	{ m_RGB = _other.m_RGB; }
+	{	m_RGB = _other.m_RGB; }
 
 	colour &colour::operator=(const colour &_other)
-	{ this->m_RGB = _other.m_RGB; return *this; }
+	{	this->m_RGB = _other.m_RGB; return *this; }
 
 	constexpr colour::colour(colour&& _other) noexcept
-	{ m_RGB = std::move(_other.m_RGB); }
+	{	m_RGB = std::move(_other.m_RGB); }
 
 	constexpr colour &colour::operator=(colour&& _other) noexcept
-	{ this->m_RGB = std::move(_other.m_RGB); return *this; }
+	{	this->m_RGB = std::move(_other.m_RGB); return *this; }
 
-	colour::operator glm::vec3() const { return m_RGB; }
+	colour::operator glm::vec3() const
+	{	return m_RGB; }
 
 	#define COL_OP_CONST_FLOAT_DEF(OPERAND) \
 	colour colour::operator OPERAND(const float &_other) const noexcept\
-	{ return colour(m_RGB OPERAND _other); }
+	{	return colour(m_RGB OPERAND _other); }
 
 	#define COL_OP_CONST_COL_DEF(OPERAND) \
 	colour colour::operator OPERAND(const colour &_other) const noexcept\
-	{ return colour(m_RGB OPERAND _other.m_RGB); }
+	{	return colour(m_RGB OPERAND _other.m_RGB); }
 
 	#define COL_OP_CONST_VEC3_DEF(OPERAND) \
 	colour colour::operator OPERAND(const vec3 &_other) const noexcept\
-	{ return colour(m_RGB OPERAND _other); }
+	{	return colour(m_RGB OPERAND _other); }
 
 	#define COL_OP_FLOAT_DEF(OPERAND) \
 	colour &colour::operator OPERAND(const float &_other) noexcept\
-	{ m_RGB OPERAND _other; return *this; }
+	{	m_RGB OPERAND _other; return *this; }
 
 	#define COL_OP_COL_DEF(OPERAND) \
 	colour &colour::operator OPERAND(const colour &_other) noexcept\
-	{ m_RGB OPERAND _other.m_RGB; return *this; }
+	{	m_RGB OPERAND _other.m_RGB; return *this; }
 
 	#define COL_OP_VEC3_DEF(OPERAND) \
 	colour &colour::operator OPERAND(const vec3 &_other) noexcept\
-	{ m_RGB OPERAND _other; return *this; }
+	{	m_RGB OPERAND _other; return *this; }
 
 	COL_OP_CONST_FLOAT_DEF(+)
 	COL_OP_CONST_FLOAT_DEF(-)

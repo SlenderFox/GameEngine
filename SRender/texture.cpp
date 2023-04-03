@@ -17,7 +17,7 @@ namespace srender
 	vector<texture*> texture::s_loadedTextures = vector<texture*>();
 
 	void texture::unloadAll() noexcept
-	{ graphics::deleteTextures(s_textureCount, s_textureIds); }
+	{	graphics::deleteTextures(s_textureCount, s_textureIds); }
 
 	int32_t texture::loadTextureFromFile(const string *_path) noexcept
 	{
@@ -114,7 +114,7 @@ namespace srender
 	}
 
 	uint32_t texture::getTexCount() noexcept
-	{ return s_textureCount; }
+	{	return s_textureCount; }
 
 	// Member
 
@@ -135,11 +135,11 @@ namespace srender
 	//}
 
 	int32_t texture::getId() const noexcept
-	{ return m_id; }
+	{	return m_id; }
 
 	texture::texType texture::getType() const noexcept
-	{ return m_type; }
+	{	return m_type; }
 
 	std::string texture::getFile() const noexcept
-	{ return m_file; }
+	{	return m_file; }
 }

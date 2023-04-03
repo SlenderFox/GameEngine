@@ -18,20 +18,20 @@ namespace srender
 
 	// Copy, takes lvalue
 	transform::transform(transform const &_other) noexcept
-	{ m_transform = _other.m_transform; }
+	{	m_transform = _other.m_transform; }
 
 	transform &transform::operator=(transform const &_other) noexcept
-	{ this->m_transform = _other.m_transform; return *this; }
+	{	this->m_transform = _other.m_transform; return *this; }
 
 	// Move, take rvalue
 	transform::transform(transform&& _other) noexcept
-	{ m_transform = std::move(_other.m_transform); }
+	{	m_transform = std::move(_other.m_transform); }
 
 	transform &transform::operator=(transform&& _other) noexcept
-	{ this->m_transform = std::move(_other.m_transform); return *this; }
+	{	this->m_transform = std::move(_other.m_transform); return *this; }
 
 	void transform::setTransform(const glm::mat4 *_value) noexcept
-	{ m_transform = *_value; }
+	{	m_transform = *_value; }
 
 	void transform::setPosition(const vec3 _value) noexcept
 	{
@@ -80,19 +80,19 @@ namespace srender
 	}
 
 	glm::mat4 transform::getTransform() const noexcept
-	{ return m_transform; }
+	{	return m_transform; }
 
 	glm::vec4 transform::getPosition() const noexcept
-	{ return m_transform[3]; }
+	{	return m_transform[3]; }
 
 	vec4 transform::getRight() const noexcept
 	// The transform is horizontally reversed
-	{ return -m_transform[0]; }
+	{	return -m_transform[0]; }
 
 	vec4 transform::getUp() const noexcept
-	{ return m_transform[1]; }
+	{	return m_transform[1]; }
 
 	vec4 transform::getForward() const noexcept
 	// The transform is horizontally reversed
-	{ return -m_transform[2]; }
+	{	return -m_transform[2]; }
 }

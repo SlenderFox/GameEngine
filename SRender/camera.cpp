@@ -139,10 +139,10 @@ namespace srender
 	}
 
 	void camera::setProjection(glm::mat4 *_value) noexcept
-	{ m_projection = *_value; }
+	{	m_projection = *_value; }
 
 	void camera::setAspectRatio(float _aspectRatio) noexcept
-	{ m_aspectRatio = _aspectRatio; }
+	{	m_aspectRatio = _aspectRatio; }
 
 	void camera::setPosition(vec3 _value) noexcept
 	{
@@ -187,11 +187,11 @@ namespace srender
 	}
 
 	mat4 camera::getWorldToCameraMatrix() const noexcept
-	{ return m_projection * m_view; }
+	{	return m_projection * m_view; }
 
 	constexpr glm::mat4 camera::getView() const noexcept
-	{ return m_view; }
+	{	return m_view; }
 
 	constexpr glm::mat4 camera::getProjection() const noexcept
-	{ return m_projection; }
+	{	return m_projection; }
 }

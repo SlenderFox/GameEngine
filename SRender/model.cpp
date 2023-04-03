@@ -40,7 +40,7 @@ namespace srender
 	model::~model()
 	{
 		for (unsigned int i = 0; i < m_meshes.size(); ++i)
-		{ delete m_meshes[i]; }
+		{	delete m_meshes[i]; }
 
 		delete m_shader;
 	}
@@ -61,7 +61,7 @@ namespace srender
 		}
 
 		for (uint16_t i = 0; i < m_meshes.size(); ++i)
-		{ getMeshAt(i)->draw(); }
+		{	getMeshAt(i)->draw(); }
 	}
 
 	inline void model::loadModel(const string *_path) noexcept
@@ -290,13 +290,13 @@ namespace srender
 	}
 
 	constexpr void model::setCameraRef(camera *_camera) noexcept
-	{ m_cameraRef = _camera; }
+	{	m_cameraRef = _camera; }
 
 	constexpr void model::setShaderRef(shader *_shader) noexcept
-	{ m_shader = _shader; }
+	{	m_shader = _shader; }
 
 	shader *model::getShaderRef() const noexcept
-	{ return m_shader; }
+	{	return m_shader; }
 
 	mesh *model::getMeshAt(const uint16_t _pos) const  noexcept
 	{
