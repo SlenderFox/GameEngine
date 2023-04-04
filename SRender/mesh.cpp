@@ -73,15 +73,12 @@ namespace srender
 	mesh::~mesh()
 	{
 		graphics::deleteMesh(m_idVAO, m_idVBO, m_idEBO);
-
 		delete m_vertices;
 		delete m_indices;
 	}
 
 	void mesh::draw() const noexcept
-	{
-		graphics::drawElements(m_idVAO, (uint32_t)m_indices->size());
-	}
+	{	graphics::drawElements(m_idVAO, (uint32_t)m_indices->size()); }
 
 	uint32_t mesh::getVAO() const noexcept
 {	return m_idVAO; }
