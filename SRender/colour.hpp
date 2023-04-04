@@ -75,24 +75,6 @@ namespace srender
 		 */
 		_NODISCARD static glm::vec3 hsvToRgb(const glm::vec3 _HSV) noexcept;
 
-		_NODISCARD static colour black()    noexcept { return colour(0.0f); }
-		_NODISCARD static colour white()    noexcept { return colour(1.0f); }
-		_NODISCARD static colour silver()   noexcept { return colour(0.75f, 0.75f, 0.75f ); }
-		_NODISCARD static colour grey()     noexcept { return colour(0.5f,  0.5f,  0.5f  ); }
-		_NODISCARD static colour darkGrey() noexcept { return colour(0.25f, 0.25f, 0.25f ); }
-		_NODISCARD static colour red()      noexcept { return colour(1.0f,  0.0f,  0.0f  ); }
-		_NODISCARD static colour lime()     noexcept { return colour(0.0f,  1.0f,  0.0f  ); }
-		_NODISCARD static colour blue()     noexcept { return colour(0.0f,  0.0f,  1.0f  ); }
-		_NODISCARD static colour yellow()   noexcept { return colour(1.0f,  1.0f,  0.0f  ); }
-		_NODISCARD static colour cyan()     noexcept { return colour(0.0f,  1.0f,  1.0f  ); }
-		_NODISCARD static colour magenta()  noexcept { return colour(1.0f,  0.0f,  1.0f  ); }
-		_NODISCARD static colour maroon()   noexcept { return colour(0.5f,  0.0f,  0.0f  ); }
-		_NODISCARD static colour green()    noexcept { return colour(0.0f,  0.5f,  0.0f  ); }
-		_NODISCARD static colour navy()     noexcept { return colour(0.0f,  0.0f,  0.5f  ); }
-		_NODISCARD static colour olive()    noexcept { return colour(0.5f,  0.5f,  0.0f  ); }
-		_NODISCARD static colour teal()     noexcept { return colour(0.0f,  0.5f,  0.5f  ); }
-		_NODISCARD static colour purple()   noexcept { return colour(0.5f,  0.0f,  0.5f  ); }
-
 		/** Get the colour as RGB stored in a vec3
 		 * @return [glm::vec3] 0-1 Red, 0-1 Green, 0-1 Blue
 		 */
@@ -116,6 +98,24 @@ namespace srender
 		// Move, take rvalue
 		constexpr colour(colour&& _other) noexcept;
 		constexpr colour &operator=(colour&& _other) noexcept;
+
+		_NODISCARD static colour black()    noexcept;
+		_NODISCARD static colour white()    noexcept;
+		_NODISCARD static colour silver()   noexcept;
+		_NODISCARD static colour grey()     noexcept;
+		_NODISCARD static colour darkGrey() noexcept;
+		_NODISCARD static colour red()      noexcept;
+		_NODISCARD static colour lime()     noexcept;
+		_NODISCARD static colour blue()     noexcept;
+		_NODISCARD static colour yellow()   noexcept;
+		_NODISCARD static colour cyan()     noexcept;
+		_NODISCARD static colour magenta()  noexcept;
+		_NODISCARD static colour maroon()   noexcept;
+		_NODISCARD static colour green()    noexcept;
+		_NODISCARD static colour navy()     noexcept;
+		_NODISCARD static colour olive()    noexcept;
+		_NODISCARD static colour teal()     noexcept;
+		_NODISCARD static colour purple()   noexcept;
 
 		operator glm::vec3() const;
 

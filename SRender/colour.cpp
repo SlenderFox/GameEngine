@@ -156,6 +156,24 @@ namespace srender
 	constexpr colour &colour::operator=(colour&& _other) noexcept
 	{	this->m_RGB = std::move(_other.m_RGB); return *this; }
 
+	colour black()    noexcept { return colour(0.0f); }
+	colour white()    noexcept { return colour(1.0f); }
+	colour silver()   noexcept { return colour(0.75f, 0.75f, 0.75f ); }
+	colour grey()     noexcept { return colour(0.5f,  0.5f,  0.5f  ); }
+	colour darkGrey() noexcept { return colour(0.25f, 0.25f, 0.25f ); }
+	colour red()      noexcept { return colour(1.0f,  0.0f,  0.0f  ); }
+	colour lime()     noexcept { return colour(0.0f,  1.0f,  0.0f  ); }
+	colour blue()     noexcept { return colour(0.0f,  0.0f,  1.0f  ); }
+	colour yellow()   noexcept { return colour(1.0f,  1.0f,  0.0f  ); }
+	colour cyan()     noexcept { return colour(0.0f,  1.0f,  1.0f  ); }
+	colour magenta()  noexcept { return colour(1.0f,  0.0f,  1.0f  ); }
+	colour maroon()   noexcept { return colour(0.5f,  0.0f,  0.0f  ); }
+	colour green()    noexcept { return colour(0.0f,  0.5f,  0.0f  ); }
+	colour navy()     noexcept { return colour(0.0f,  0.0f,  0.5f  ); }
+	colour olive()    noexcept { return colour(0.5f,  0.5f,  0.0f  ); }
+	colour teal()     noexcept { return colour(0.0f,  0.5f,  0.5f  ); }
+	colour purple()   noexcept { return colour(0.5f,  0.0f,  0.5f  ); }
+
 	colour::operator glm::vec3() const
 	{	return m_RGB; }
 
