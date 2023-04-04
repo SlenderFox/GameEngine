@@ -2,7 +2,6 @@
 #include <sstream>
 #include "shader.hpp"
 #include "graphics.hpp"
-#include "glad/glad.h"
 #include "glm/gtc/type_ptr.hpp"
 #include "debug.hpp"
 
@@ -22,7 +21,7 @@ namespace srender
 	{
 		if (m_shaderLoaded)
 		{
-			graphics::deleteShader(m_idProgram);
+			graphics::deleteShaderProgram(m_idProgram);
 			m_shaderLoaded = false;
 		}
 	}
@@ -42,7 +41,7 @@ namespace srender
 	}
 
 	void shader::use() const noexcept
-	{	glUseProgram(m_idProgram); }
+	{	graphics::useShaderProgram(m_idProgram); }
 
 	constexpr bool shader::isLoaded() const noexcept
 	{	return m_shaderLoaded; }
@@ -271,10 +270,10 @@ return;}";
 		switch (_type)
 		{
 		case shaderType::vertex:
-			*_id = glCreateShader(GL_VERTEX_SHADER);
+			*_id = graphics::createVertexShader();
 			break;
 		case shaderType::fragment:
-			*_id = glCreateShader(GL_FRAGMENT_SHADER);
+			*_id = graphics::createFragmentShader();
 			break;
 		default:
 			debug::send(
@@ -288,9 +287,9 @@ return;}";
 		}
 
 		// Loads the shader code into the shader object
-		glShaderSource(*_id, 1, &_code, NULL);
+		graphics::loadShaderSource(*_id, _code);
 		// Compiles the shader at run-time
-		glCompileShader(*_id);
+		graphics::compileShader(*_id);
 		// Performs error checking on the shader
 		return checkForErrors(_id, _type);
 	}
@@ -298,22 +297,18 @@ return;}";
 	inline void shader::createShaderProgram() noexcept
 	{
 		// Creates a shader program object assigned to id, this sets it as the active shader
-		m_idProgram = glCreateProgram();
-		// Link the vertex and fragment shaders
-		glAttachShader(m_idProgram, m_idVertex);
-		glAttachShader(m_idProgram, m_idFragment);
-		glLinkProgram(m_idProgram);
+		m_idProgram = graphics::createShaderProgram(m_idVertex, m_idFragment);
 		// Performs error checking on the shader program
 		if (!checkForErrors(&m_idProgram, shaderType::program))
 		{
-			glDeleteProgram(m_idProgram);
+			graphics::deleteShaderProgram(m_idProgram);
 			return;
 		}
 		// We no longer need the vertex and fragment shaders
-		glDeleteShader(m_idVertex);
-		glDeleteShader(m_idFragment);
+		graphics::deleteShader(m_idVertex);
+		graphics::deleteShader(m_idFragment);
 		// Sets the shader as the active one
-		glUseProgram(m_idProgram);
+		graphics::useShaderProgram(m_idProgram);
 		m_shaderLoaded = true;
 	}
 
@@ -329,11 +324,11 @@ return;}";
 		if (_type == shaderType::program)
 		{
 			// Retrieves the compile status of the given shader by id
-			glGetProgramiv(*_shaderID, GL_LINK_STATUS, &success);
+			graphics::getProgramiv(*_shaderID, &success);
 			if (!success)
 			{
 				// In the case of a failure it loads the log and outputs
-				glGetProgramInfoLog(*_shaderID, 512, NULL, infoLog);
+				graphics::getProgramInfoLog(*_shaderID, infoLog, 512);
 				debug::send(
 					"ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog),
 					debug::type::Note,
@@ -348,11 +343,11 @@ return;}";
 		else
 		{
 			// Retrieves the compile status of the given shader by id
-			glGetShaderiv(*_shaderID, GL_COMPILE_STATUS, &success);
+			graphics::getShaderiv(*_shaderID, &success);
 			if (!success)
 			{
 				// In the case of a failure it loads the log and outputs
-				glGetShaderInfoLog(*_shaderID, 512, NULL, infoLog);
+				graphics::getShaderInfoLog(*_shaderID, infoLog, 512);
 				string msg = "ERROR::SHADER::"
 					+ byType(_type, string("VERTEX"), string("FRAGMENT"))
 					+ "::COMPILATION_FAILED:\n"
@@ -384,88 +379,81 @@ return;}";
 
 	void shader::setBool(string _name, bool _value) const noexcept
 	{
-		glUseProgram(m_idProgram);
-		glUniform1i(
-			glGetUniformLocation(m_idProgram, _name.c_str()),
-			(int32_t)_value
+		graphics::setBool(
+			m_idProgram,
+			graphics::getUniformLocation(m_idProgram, _name),
+			_value
 		);
 	}
 
 	void shader::setInt(string _name, int32_t _value) const noexcept
 	{
-		glUseProgram(m_idProgram);
-		glUniform1i(glGetUniformLocation(
-			m_idProgram, _name.c_str()),
+		graphics::setInt(
+			m_idProgram,
+			graphics::getUniformLocation(m_idProgram, _name),
 			_value
 		);
 	}
 
 	void shader::setUint(string _name, uint32_t _value) const noexcept
 	{
-		glUseProgram(m_idProgram);
-		glUniform1ui(
-			glGetUniformLocation(m_idProgram, _name.c_str()),
+		graphics::setUint(
+			m_idProgram,
+			graphics::getUniformLocation(m_idProgram, _name),
 			_value
 		);
 	}
 
 	void shader::setFloat(string _name, float _value) const noexcept
 	{
-		glUseProgram(m_idProgram);
-		glUniform1f(
-			glGetUniformLocation(m_idProgram, _name.c_str()),
+		graphics::setFloat(
+			m_idProgram,
+			graphics::getUniformLocation(m_idProgram, _name),
 			_value
 		);
 	}
 
 	void shader::setFloat2(string _name, glm::vec2 _value) const noexcept
 	{
-		glUseProgram(m_idProgram);
-		glUniform2fv(
-			glGetUniformLocation(m_idProgram, _name.c_str()),
-			1,
+		graphics::setFloat2(
+			m_idProgram,
+			graphics::getUniformLocation(m_idProgram, _name),
 			&_value[0]
 		);
 	}
 
 	void shader::setFloat3(string _name, glm::vec3 _value) const noexcept
 	{
-		glUseProgram(m_idProgram);
-		glUniform3fv(
-			glGetUniformLocation(m_idProgram, _name.c_str()),
-			1,
+		graphics::setFloat3(
+			m_idProgram,
+			graphics::getUniformLocation(m_idProgram, _name),
 			&_value[0]
 		);
 	}
 
 	void shader::setFloat4(string _name, glm::vec4 _value) const noexcept
 	{
-		glUseProgram(m_idProgram);
-		glUniform4fv(
-			glGetUniformLocation(m_idProgram, _name.c_str()),
-			1,
+		graphics::setFloat4(
+			m_idProgram,
+			graphics::getUniformLocation(m_idProgram, _name),
 			&_value[0]
 		);
 	}
 
 	void shader::setMat3(string _name, glm::mat3 _value) const noexcept
 	{
-		glUseProgram(m_idProgram);
-		glUniformMatrix3fv(
-			glGetUniformLocation(m_idProgram, _name.c_str()),
-			1,
-			GL_FALSE,
+		graphics::setMat3(
+			m_idProgram,
+			graphics::getUniformLocation(m_idProgram, _name),
 			&_value[0][0]
 		);
 	}
 
 	void shader::setMat4(string _name, glm::mat4 _value) const noexcept
 	{
-		glUseProgram(m_idProgram);
-		glUniformMatrix4fv(
-			glGetUniformLocation(m_idProgram, _name.c_str()),
-			1,
-			GL_FALSE,
+		graphics::setMat4(
+			m_idProgram,
+			graphics::getUniformLocation(m_idProgram, _name),
 			&_value[0][0]
 		);
 	}

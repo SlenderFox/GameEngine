@@ -57,7 +57,7 @@ namespace srender
 		void draw() noexcept
 		{
 			// Clears to background colour
-			graphics::clear();
+			graphics::clearScreenBuffers();
 
 			if (s_models.size() > 0)
 			{
