@@ -20,7 +20,7 @@ namespace srender
 		bool init(const float _aspect) noexcept
 		{
 			// Default clear colour
-			graphics::setClearColour(0.1f, 0.1f, 0.1f);
+			setClearColour({0.1f, 0.1f, 0.1f});
 
 			// Initialise camera
 			s_camera = new camera(_aspect, 75.0f);
