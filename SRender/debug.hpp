@@ -6,7 +6,7 @@ struct GLFWwindow;
 namespace srender
 {
 	/** A way for developers to output important information during program execution
-	 * @todo: Make Debug use imgui - Can open an "event" then post whatever info to it and finally close it
+	 * @todo Make Debug use imgui - Can open an "event" then post whatever info to it and finally close it
 	 */
 	namespace debug
 	{

@@ -8,9 +8,9 @@ namespace srender
 	using callbackFunc = void(*)(double, double);
 
 	/** Pure static class for handling inputs
-	 * @todo: Overhaul
-	 * @todo: Track keystates
-	 * @todo: Key press callbacks
+	 * @todo Overhaul
+	 * @todo Track keystates
+	 * @todo Key press callbacks
 	*/
 	class input
 	{

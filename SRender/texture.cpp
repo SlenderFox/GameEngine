@@ -7,8 +7,6 @@
 using std::string;
 using std::vector;
 
-// TODO: Overhaul
-
 namespace srender
 {
 	// Static

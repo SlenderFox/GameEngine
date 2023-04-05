@@ -9,9 +9,9 @@
 namespace srender
 {
 	/** The texture object stores a reference to a texture on the gpu
-	 * @todo: Overhaul whole class
-	 * @todo: Overload equality operator
-	 * @todo: Allow destroying of a texture so that another one can replace it
+	 * @todo Overhaul whole class
+	 * @todo Overload equality operator
+	 * @todo Allow destroying of a texture so that another one can replace it
 	*/
 	struct texture
 	{
