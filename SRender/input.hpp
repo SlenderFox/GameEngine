@@ -7,7 +7,11 @@ namespace srender
 	/** The callback function used for mouse and scroll movement */
 	using callbackFunc = void(*)(double, double);
 
-	/** Pure static class for handling inputs */
+	/** Pure static class for handling inputs
+	 * @todo: Overhaul
+	 * @todo: Track keystates
+	 * @todo: Key press callbacks
+	*/
 	class input
 	{
 		friend class application;

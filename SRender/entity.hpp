@@ -26,7 +26,11 @@ namespace srender
 		_NODISCARD constexpr std::vector<entity*> getChildren() const noexcept;
 	};
 
-	/** An entity is any object in world space, each entity must have a parent*/
+	/** An entity is any object in world space, each entity must have a parent
+	 * @todo: Overload entity copy constructor to "load models better"
+	 * @todo: Use regular constructor to load with model
+	 * @todo: Look into ability to swap models
+	*/
 	class entity: public entityBase
 	{
 		friend struct entityLoader;

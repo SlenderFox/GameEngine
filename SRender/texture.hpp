@@ -8,7 +8,11 @@
 
 namespace srender
 {
-	/** The texture object stores a reference to a texture on the gpu */
+	/** The texture object stores a reference to a texture on the gpu
+	 * @todo: Overhaul whole class
+	 * @todo: Overload equality operator
+	 * @todo: Allow destroying of a texture so that another one can replace it
+	*/
 	struct texture
 	{
 		enum class texType: uint8_t
@@ -39,8 +43,6 @@ namespace srender
 			std::string _path,
 			texType _type = texType::diffuse
 		) noexcept;
-
-		// TODO: Destroy single texture
 
 		_NODISCARD int32_t getId() const noexcept;
 		_NODISCARD texType getType() const noexcept;

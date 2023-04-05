@@ -7,6 +7,14 @@
 
 namespace srender
 {
+	/** A light source
+	 * @todo: Overhaul, perhaps make it a component that can attach to an entity
+	 * @todo: Perhaps have all lights stored in a static vector here
+	 * @todo: Overhaul light rendering in shader
+	 * @todo: Min and max clipped brightness
+	 * @todo: Iris, instant brightness response
+	 * @todo: Retina, slower brightness response
+	 */
 	class light: public entity
 	{
 	public:

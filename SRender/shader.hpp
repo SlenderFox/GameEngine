@@ -8,7 +8,10 @@
 
 namespace srender
 {
-	/** A shader is used to render the given vertex and texture information to the screen */
+	/** A shader is used to render the given vertex and texture information to the screen
+	 * @todo Allow a new shader to be loaded in the same object
+	 * @todo Make loadShader() clearer to read
+	*/
 	struct shader
 	{
 	private:

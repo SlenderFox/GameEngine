@@ -8,6 +8,10 @@
 
 namespace srender
 {
+	/** The core of the engine, any project must inhert from this class to get started
+	 * @todo: Alt releases cursor
+	 * @todo: F11 toggles between fullscreen and windowed modes
+	 */
 	class application
 	{
 		// Delete copy/move so extra instances can't be created/moved.
