@@ -259,8 +259,8 @@ namespace srender
 		void deleteShader(const uint32_t _idShader) noexcept
 		{	glDeleteShader(_idShader); }
 
-		int32_t getUniformLocation(uint32_t _idProgram, std::string _name) noexcept
-		{	return glGetUniformLocation(_idProgram, _name.c_str()); }
+		int32_t getUniformLocation(uint32_t _idProgram, const char *_name) noexcept
+		{	return glGetUniformLocation(_idProgram, _name); }
 
 		void setBool(uint32_t _idProgram, int32_t _location, const bool _value) noexcept
 		{
