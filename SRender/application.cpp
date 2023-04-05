@@ -86,7 +86,6 @@ namespace srender
 
 	void processInput() noexcept
 	{
-		// TODO: Proper fullscreen toggle
 		//if (Input::GetKey(Input::Key::Key_F11, Input::State::Press))
 		//{
 		//	l_fullscreen = true;

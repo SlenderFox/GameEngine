@@ -95,22 +95,26 @@ namespace srender
 
 	// Member
 
-	texture::texture(
-		string _path,
-		texType _type
-	) noexcept
-		: m_file(_path)
-		, m_type(_type)
-	{
-		m_id = loadTextureFromFile(&m_file);
-	}
-
 	int32_t texture::getId() const noexcept
 	{	return m_id; }
 
-	texture::texType texture::getType() const noexcept
+	texture::type texture::getType() const noexcept
 	{	return m_type; }
 
 	std::string texture::getFile() const noexcept
 	{	return m_file; }
+
+	texture::texture(
+		string _path,
+		type _type
+	) noexcept
+		: m_file(_path)
+		, m_type(_type)
+	{	m_id = loadTextureFromFile(&m_file); }
+
+	bool texture::operator==(const string &_other) const noexcept
+	{	return m_file == _other; }
+
+	bool texture::operator!=(const string &_other) const noexcept
+	{	return m_file != _other; }
 }

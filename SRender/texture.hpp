@@ -10,12 +10,11 @@ namespace srender
 {
 	/** The texture object stores a reference to a texture on the gpu
 	 * @todo Overhaul whole class
-	 * @todo Overload equality operator
 	 * @todo Allow destroying of a texture so that another one can replace it
 	*/
 	struct texture
 	{
-		enum class texType: uint8_t
+		enum class type: uint8_t
 		{
 			diffuse,
 			specular
@@ -29,7 +28,7 @@ namespace srender
 
 		int32_t m_id = 0;
 		std::string m_file;
-		texType m_type = texType::diffuse;
+		type m_type = type::diffuse;
 
 	public:
 		// Memory handled by renderer
@@ -39,13 +38,18 @@ namespace srender
 		_NODISCARD static int32_t loadTextureFromFile(const std::string *_path) noexcept;
 		_NODISCARD static uint32_t getTexCount() noexcept;
 
+		_NODISCARD int32_t getId() const noexcept;
+		_NODISCARD type getType() const noexcept;
+		_NODISCARD std::string getFile() const noexcept;
+
 		texture(
 			std::string _path,
-			texType _type = texType::diffuse
+			type _type = type::diffuse
 		) noexcept;
 
-		_NODISCARD int32_t getId() const noexcept;
-		_NODISCARD texType getType() const noexcept;
-		_NODISCARD std::string getFile() const noexcept;
+		bool operator==(const int32_t &_other) const noexcept;
+		bool operator!=(const int32_t &_other) const noexcept;
+		bool operator==(const std::string &_other) const noexcept;
+		bool operator!=(const std::string &_other) const noexcept;
 	};
 }

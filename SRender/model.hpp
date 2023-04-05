@@ -36,8 +36,7 @@ namespace srender
 
 		_NODISCARD inline std::vector<texture*> loadMaterialTextures(
 			const aiMaterial *_material,
-			const aiTextureType _type,
-			const texture::texType _texType
+			const texture::type _texType
 		) const noexcept;
 
 		inline void loadTexturesToShader() const noexcept;

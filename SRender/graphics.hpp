@@ -77,7 +77,6 @@ namespace srender
 		void deleteShaderProgram(const uint32_t _idProgram) noexcept;
 		void deleteShader(const uint32_t _idShader) noexcept;
 
-		// TODO: Converted to char*
 		_NODISCARD int32_t getUniformLocation(uint32_t _idProgram, const char *_name) noexcept;
 		void setBool(uint32_t _idProgram, int32_t _location, const bool _value) noexcept;
 		void setInt(uint32_t _idProgram, int32_t _location, const int32_t _value) noexcept;

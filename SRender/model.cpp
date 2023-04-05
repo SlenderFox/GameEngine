@@ -172,14 +172,12 @@ namespace srender
 			aiMaterial *material = _scene->mMaterials[_mesh->mMaterialIndex];
 			vector<texture*> diffuseMaps = loadMaterialTextures(
 				material,
-				aiTextureType_DIFFUSE,
-				texture::texType::diffuse
+				texture::type::diffuse
 			);
 			m_textures.insert(m_textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 			vector<texture*> specularMaps = loadMaterialTextures(
 				material,
-				aiTextureType_SPECULAR,
-				texture::texType::specular
+				texture::type::specular
 			);
 			m_textures.insert(m_textures.end(), specularMaps.begin(), specularMaps.end());
 		}
@@ -189,29 +187,40 @@ namespace srender
 
 	inline vector<texture*> model::loadMaterialTextures(
 		const aiMaterial *_material,
-		const aiTextureType _type,
-		const texture::texType _texType
+		const texture::type _texType
 	) const noexcept
 	{
 		// Textures from this specific node being output
 		vector<texture*> texturesOut;
-		for (uint32_t i = 0; i < _material->GetTextureCount(_type); ++i)
+
+		aiTextureType aitextype;
+		switch (_texType)
+		{
+		case texture::type::diffuse:
+			aitextype = aiTextureType_DIFFUSE; break;
+		case texture::type::specular:
+			aitextype = aiTextureType_SPECULAR; break;
+		default:
+			assert(false && "Unknown texture type specified");
+		};
+
+		for (uint32_t i = 0; i < _material->GetTextureCount(aitextype); ++i)
 		{
 			aiString file;
-			_material->GetTexture(_type, i, &file);
+			_material->GetTexture(aitextype, i, &file);
 			bool loadTexture = true;
 			string path = m_directory + '/' + file.C_Str();
 
 			// First we check if the texture has already been loaded into memory
 			for (size_t j = 0; j < texture::s_loadedTextures.size(); ++j)
 			{
-				if (texture::s_loadedTextures[j]->getFile() != path) continue;
+				if (*texture::s_loadedTextures[j] != path) continue;
 
 				// If the texture has already been loaded into memory we check if it has been loaded into this model
 				bool reuseTexture = true;
 				for (size_t k = 0; k < m_textures.size(); ++k)
 				{
-					if (m_textures[k]->getFile() == path)
+					if (*m_textures[k] == path)
 					{
 						reuseTexture = false;
 						break;
@@ -220,12 +229,11 @@ namespace srender
 
 				if (reuseTexture)
 				{
-					string msg = "Reusing texture "
+					debug::send(
+						"Reusing texture "
 						+ std::to_string(texture::s_loadedTextures[j]->getId())
 						+ ": "
-						+ texture::s_loadedTextures[j]->getFile().data();
-					debug::send(
-						msg,
+						+ texture::s_loadedTextures[j]->getFile().c_str(),
 						debug::type::Note,
 						debug::impact::Small,
 						debug::stage::Mid
@@ -260,11 +268,11 @@ namespace srender
 			string number;
 			switch (m_textures[i]->getType())
 			{
-			case texture::texType::diffuse:
+			case texture::type::diffuse:
 				name = "texture_diffuse";
 				number = std::to_string(diffuseNr++);
 				break;
-			case texture::texType::specular:
+			case texture::type::specular:
 				name = "texture_specular";
 				number = std::to_string(specularNr++);
 				break;
