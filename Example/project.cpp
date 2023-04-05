@@ -13,15 +13,10 @@ using glm::radians;
 using namespace srender;
 
 /** Entry point of the project
- * @note Following: https://learnopengl.com/
+ * @note Following: https://learnopengl.com/, at https://learnopengl.com/Advanced-OpenGL/Depth-testing
  * @note Disable console through:
  * [Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)]
- * @note Resolutions:
- * 800, 600
- * 1280, 720
- * 1600, 900
- * 1920, 1080
- * @note Refer to Notes.md to see TODO and notes
+ * @note Resolutions: 800x600, 1280x720, 1600x900, 1920x1080
  */
 int main(int argc, char *args[])
 {
@@ -178,7 +173,7 @@ void project::createLights()
 	{
 		light = renderer::addNewLight(
 			ID,
-			lightType::Directional,
+			light::type::Directional,
 			colour(colour::hsvToRgb({0, 0.0f, 0.6f}))
 		);
 		light->setDirection(vec3(0, -1, 0));
@@ -190,7 +185,7 @@ void project::createLights()
 	{
 		light = renderer::addNewLight(
 			ID,
-			lightType::Point,
+			light::type::Point,
 			colour(colour::hsvToRgb({220, 0.6f, 1.0f}))
 		);
 		light->setPosition(vec4(-4, 2, -2, 1));
@@ -199,7 +194,7 @@ void project::createLights()
 	{
 		light = renderer::addNewLight(
 			ID,
-			lightType::Spot,
+			light::type::Spot,
 			colour(colour::hsvToRgb({97, 0.17f, 1.0f}))
 		);
 		light->setPosition(vec4(2.0f, 2.5f, 6.0f, 1));
@@ -219,15 +214,15 @@ void project::createLights()
 	{
 		light = renderer::getLightAt(i);
 
-		if (light->getType() == lightType::Point
-		 || light->getType() == lightType::Spot)
+		if (light->getType() == light::type::Point
+		 || light->getType() == light::type::Spot)
 		{
 			light->loadModel(
 				"assets/models/cube/cube.obj",
 				"assets/shaders/default",
 				model, shader, false
 			);
-			light->setScale(vec3(0.2f, 0.2f, (light->getType() == lightType::Spot) ? 0.4f : 0.2f));
+			light->setScale(vec3(0.2f, 0.2f, (light->getType() == light::type::Spot) ? 0.4f : 0.2f));
 			light->sentTint(light->getColour());
 			light->renderOnlyColour(true);
 			m_lightRefs.push_back(light);

@@ -40,7 +40,7 @@ namespace srender
 
 		light *addNewLight(
 			uint8_t &_outId,
-			const lightType _type,
+			const light::type _type,
 			const colour _colour = colour::white()) noexcept;
 
 		void setClearColour(const colour _colour) noexcept;

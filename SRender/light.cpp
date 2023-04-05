@@ -9,7 +9,7 @@ using glm::radians;
 namespace srender
 {
 	light::light(
-		const lightType _type,
+		const light::type _type,
 		const colour _colour,
 		mat4 inTransform
 	) noexcept
@@ -17,14 +17,14 @@ namespace srender
 		, m_lightColour(_colour)
 	{
 		transform::setTransform(&inTransform);
-		if (_type == lightType::Spot)
+		if (_type == light::type::Spot)
 		{	m_angle = cos(radians(m_angle)); }
 	}
 
 	void light::setDirection (const glm::vec3 _direction) noexcept
 	{	transform::setForward(_direction); }
 
-	void light::setType (lightType _type) noexcept
+	void light::setType (light::type _type) noexcept
 	{	m_type = _type; }
 
 	void light::setColour (colour _colour) noexcept
@@ -51,7 +51,7 @@ namespace srender
 	glm::vec4 light::getDirection()	const noexcept
 	{	return transform::getForward(); }
 
-	lightType light::getType() const noexcept
+	light::type light::getType() const noexcept
 	{	return m_type; }
 
 	colour light::getColour() const noexcept
