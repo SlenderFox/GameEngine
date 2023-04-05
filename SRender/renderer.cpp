@@ -50,7 +50,7 @@ namespace srender
 					delete texture::s_loadedTextures.at(i);
 			}
 			// Unload all textures from gl memory once finished
-			texture::unloadAll();
+			texture::deleteAll();
 
 			delete s_camera;
 		}

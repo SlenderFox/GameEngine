@@ -1,5 +1,4 @@
 /** Designed to be the one stop shop for swapping graphics libraries */
-#include <vector>
 #include <string>
 #include <cstdint>
 #include <cstddef>
@@ -47,6 +46,21 @@ namespace srender
 
 		// Texture
 
+		void setActiveTexture(uint8_t _num) noexcept;
+		void genTexture(uint32_t *_idText) noexcept;
+		void bindTexture2D(uint32_t _idTex) noexcept;
+		void setBorderColour(float *_arr) noexcept;
+		void setTex2DParamSWrapToEdge() noexcept;
+		void setTex2DParamTWrapTOBorder() noexcept;
+		void setTex2DParamMinFilterLinearMipMapLinear() noexcept;
+		void setTex2DParamMagFilterNearest() noexcept;
+		void loadTexture(
+			int _width,
+			int _height,
+			int _numComponents,
+			unsigned char *_imageData
+		) noexcept;
+		void genMipmap() noexcept;
 		void deleteTextures(const uint32_t _textureCount, const uint32_t *_textureIds) noexcept;
 
 		// Shader
@@ -64,6 +78,7 @@ namespace srender
 		void deleteShaderProgram(const uint32_t _idProgram) noexcept;
 		void deleteShader(const uint32_t _idShader) noexcept;
 
+		// TODO: Converted to char*
 		_NODISCARD int32_t getUniformLocation(uint32_t _idProgram, std::string _name) noexcept;
 		void setBool(uint32_t _idProgram, int32_t _location, const bool _value) noexcept;
 		void setInt(uint32_t _idProgram, int32_t _location, const int32_t _value) noexcept;

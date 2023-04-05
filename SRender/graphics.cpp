@@ -1,7 +1,6 @@
 #include "graphics.hpp"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-#include "glm/glm.hpp"
 
 namespace srender
 {
@@ -136,6 +135,67 @@ namespace srender
 		}
 
 		// Texture
+
+		void setActiveTexture(uint8_t _num) noexcept
+		{
+			if (_num > 31)
+			{	return; }
+
+			glActiveTexture(GL_TEXTURE0 + _num);
+		}
+
+		void genTexture(uint32_t *_idTex) noexcept
+		{	glGenTextures(1, _idTex); }
+
+		void bindTexture2D(uint32_t _idTex) noexcept
+		{	glBindTexture(GL_TEXTURE_2D, _idTex); }
+
+		void setBorderColour(float *_arr) noexcept
+		{	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, _arr); }
+
+		void setTex2DParamSWrapToEdge() noexcept
+		{	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); }
+
+		void setTex2DParamTWrapTOBorder() noexcept
+		{	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER); }
+
+		void setTex2DParamMinFilterLinearMipMapLinear() noexcept
+		{	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); }
+
+		void setTex2DParamMagFilterNearest() noexcept
+		{	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); }
+
+		void loadTexture(
+			int _width,
+			int _height,
+			int _numComponents,
+			unsigned char *_imageData
+		) noexcept
+		{
+			GLenum format;
+			switch (_numComponents)
+			{
+				case 1: format = GL_RED; break;
+				case 3: format = GL_RGB; break;
+				case 4: format = GL_RGBA; break;
+				default: return;
+			}
+
+			/*Applies the image to the texture object and creates the mipmaps
+			* p1: What object we are applying to
+			* p2: Specifies which mipmap level we are applying to (0 for base)
+			* p3: What format to store the texture as
+			* p4/5: The width and height of the texture
+			* p6: Border (legacy stuff, leave as 0)
+			* p7: What format the image is
+			* p8: The datatype being passed in (in this case a char)
+			* p9: The image data being passed in
+			*/
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, format, GL_UNSIGNED_BYTE, _imageData);
+		}
+
+		void genMipmap() noexcept
+		{	glGenerateMipmap(GL_TEXTURE_2D); }
 
 		void deleteTextures(const uint32_t _textureCount, const uint32_t *_textureIds) noexcept
 		{

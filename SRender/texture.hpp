@@ -31,9 +31,8 @@ namespace srender
 		// Memory handled by renderer
 		static std::vector<texture*> s_loadedTextures;
 
-		static void unloadAll() noexcept;
+		static void deleteAll() noexcept;
 		_NODISCARD static int32_t loadTextureFromFile(const std::string *_path) noexcept;
-
 		_NODISCARD static uint32_t getTexCount() noexcept;
 
 		texture(
@@ -41,7 +40,7 @@ namespace srender
 			texType _type = texType::diffuse
 		) noexcept;
 
-		//void destroy();
+		// TODO: Destroy single texture
 
 		_NODISCARD int32_t getId() const noexcept;
 		_NODISCARD texType getType() const noexcept;
