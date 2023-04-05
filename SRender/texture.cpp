@@ -18,10 +18,29 @@ namespace srender
 	void texture::deleteAll() noexcept
 	{	graphics::deleteTextures(s_textureCount, s_textureIds); }
 
-	int32_t texture::loadTextureFromFile(const string *_path) noexcept
+	uint32_t texture::getTexCount() noexcept
+	{	return s_textureCount; }
+
+	// Member
+
+	int32_t texture::getId() const noexcept
+	{	return m_id; }
+
+	texture::type texture::getType() const noexcept
+	{	return m_type; }
+
+	std::string texture::getFile() const noexcept
+	{	return m_file; }
+
+	texture::texture(
+		string _path,
+		type _type
+	) noexcept
+		: m_file(_path)
+		, m_type(_type)
 	{
 		debug::send(
-			"Loading texture " + std::to_string(s_textureCount) + ": \"" + *_path + "\"...",
+			"Loading texture " + std::to_string(s_textureCount) + ": \"" + m_file + "\"...",
 			debug::type::Process,
 			debug::impact::Large,
 			debug::stage::Mid,
@@ -38,7 +57,9 @@ namespace srender
 				debug::stage::Mid,
 				true
 			);
-			return -1;
+			// TODO: Throw
+			// https://isocpp.org/wiki/faq/exceptions#ctors-can-throw
+			return;
 		}
 
 		// Makes sure the images are oriented correctly when loaded
@@ -46,7 +67,7 @@ namespace srender
 
 		int texWidth = 0, texHeight = 0, numComponents = 0;
 		unsigned char *imageData = stbi_load(
-			_path->c_str(),
+			m_file.c_str(),
 			&texWidth,
 			&texHeight,
 			&numComponents,
@@ -62,7 +83,7 @@ namespace srender
 				debug::stage::Mid,
 				true
 			);
-			return -1;
+			return;
 		}
 
 		// Generates a texture object in vram
@@ -87,30 +108,8 @@ namespace srender
 		debug::send("Success!");
 
 		// Returns the id before incrementing for the next texture
-		return s_textureCount++;
+		m_id = s_textureCount++;
 	}
-
-	uint32_t texture::getTexCount() noexcept
-	{	return s_textureCount; }
-
-	// Member
-
-	int32_t texture::getId() const noexcept
-	{	return m_id; }
-
-	texture::type texture::getType() const noexcept
-	{	return m_type; }
-
-	std::string texture::getFile() const noexcept
-	{	return m_file; }
-
-	texture::texture(
-		string _path,
-		type _type
-	) noexcept
-		: m_file(_path)
-		, m_type(_type)
-	{	m_id = loadTextureFromFile(&m_file); }
 
 	bool texture::operator==(const string &_other) const noexcept
 	{	return m_file == _other; }

@@ -35,7 +35,6 @@ namespace srender
 		static std::vector<texture*> s_loadedTextures;
 
 		static void deleteAll() noexcept;
-		_NODISCARD static int32_t loadTextureFromFile(const std::string *_path) noexcept;
 		_NODISCARD static uint32_t getTexCount() noexcept;
 
 		_NODISCARD int32_t getId() const noexcept;
