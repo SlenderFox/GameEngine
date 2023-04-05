@@ -4,6 +4,7 @@
 #include "debug.hpp"
 
 using glm::vec3;
+using glm::vec4;
 using glm::mat3;
 using glm::mat4;
 using std::string;
@@ -87,30 +88,30 @@ namespace srender
 					);
 					_shader->setFloat3(
 						"u_dirLights[" + lightCount + "].colour.diffuse",
-						currentLight->getColour()
+						(vec3)currentLight->getColour()
 					);
 					_shader->setFloat3(
 						"u_dirLights[" + lightCount + "].colour.specular",
-						currentLight->getColour()
+						(vec3)currentLight->getColour()
 					);
 					_shader->setFloat4(
 						"u_dirLights[" + lightCount + "].direction",
-						currentLight->getDirection()
+						(vec4)currentLight->getDirection()
 					);
 					++numDirLights; break;
 				case lightType::Point:
 					lightCount = std::to_string(numPointLights);
 					_shader->setFloat3(
 						"u_pointLights[" + lightCount + "].colour.diffuse",
-						currentLight->getColour()
+						(vec3)currentLight->getColour()
 					);
 					_shader->setFloat3(
 						"u_pointLights[" + lightCount + "].colour.specular",
-						currentLight->getColour()
+						(vec3)currentLight->getColour()
 					);
 					_shader->setFloat4(
 						"u_pointLights[" + lightCount + "].position",
-						currentLight->getPosition()
+						(vec4)currentLight->getPosition()
 					);
 					_shader->setFloat(
 						"u_pointLights[" + lightCount + "].linear",
@@ -125,19 +126,19 @@ namespace srender
 					lightCount = std::to_string(numSpotLights);
 					_shader->setFloat3(
 						"u_spotLights[" + lightCount + "].colour.diffuse",
-						currentLight->getColour()
+						(vec3)currentLight->getColour()
 					);
 					_shader->setFloat3(
 						"u_spotLights[" + lightCount + "].colour.specular",
-						currentLight->getColour()
+						(vec3)currentLight->getColour()
 					);
 					_shader->setFloat4(
 						"u_spotLights[" + lightCount + "].position",
-						currentLight->getPosition()
+						(vec4)currentLight->getPosition()
 					);
 					_shader->setFloat4(
 						"u_spotLights[" + lightCount + "].direction",
-						currentLight->getDirection()
+						(vec4)currentLight->getDirection()
 					);
 					_shader->setFloat(
 						"u_spotLights[" + lightCount + "].linear",

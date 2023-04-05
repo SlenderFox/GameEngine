@@ -12,8 +12,8 @@ namespace srender
 {
 	namespace graphics
 	{
-		_NODISCARD const bool loadGlad() noexcept;
-		_NODISCARD const bool getGladLoaded() noexcept;
+		_NODISCARD bool loadGlad() noexcept;
+		_NODISCARD bool getGladLoaded() noexcept;
 		void clearScreenBuffers() noexcept;
 		void setClearColour(
 			const float _r,
@@ -51,11 +51,9 @@ namespace srender
 
 		// Shader
 
-		void deleteShaderProgram(const uint32_t _idProgram) noexcept;
-		void deleteShader(const uint32_t _idShader) noexcept;
-		uint32_t createVertexShader() noexcept;
-		uint32_t createFragmentShader() noexcept;
-		uint32_t createShaderProgram(uint32_t _idVertex, uint32_t _idFragment) noexcept;
+		_NODISCARD uint32_t createShaderProgram(uint32_t _idVertex, uint32_t _idFragment) noexcept;
+		_NODISCARD uint32_t createVertexShader() noexcept;
+		_NODISCARD uint32_t createFragmentShader() noexcept;
 		void useShaderProgram(uint32_t _idProgram) noexcept;
 		void loadShaderSource(uint32_t _idShader, const char *_code) noexcept;
 		void compileShader(uint32_t _idShader) noexcept;
@@ -63,17 +61,18 @@ namespace srender
 		void getProgramInfoLog(uint32_t _idShader, char *_infoLog, uint16_t _logSize) noexcept;
 		void getShaderiv(uint32_t _idShader, int32_t *_success) noexcept;
 		void getShaderInfoLog(uint32_t _idShader, char *_infoLog, uint16_t _logSize) noexcept;
+		void deleteShaderProgram(const uint32_t _idProgram) noexcept;
+		void deleteShader(const uint32_t _idShader) noexcept;
 
-		int32_t getUniformLocation(uint32_t _idProgram, std::string _name) noexcept;
-
-		void setBool(uint32_t _idProgram, int32_t _location, bool _value) noexcept;
-		void setInt(uint32_t _idProgram, int32_t _location, int32_t _value) noexcept;
-		void setUint(uint32_t _idProgram, int32_t _location, uint32_t _value) noexcept;
-		void setFloat(uint32_t _idProgram, int32_t _location, float _value) noexcept;
-		void setFloat2(uint32_t _idProgram, int32_t _location, float *_value) noexcept;
-		void setFloat3(uint32_t _idProgram, int32_t _location, float *_value) noexcept;
-		void setFloat4(uint32_t _idProgram, int32_t _location, float *_value) noexcept;
-		void setMat3(uint32_t _idProgram, int32_t _location, float *_value) noexcept;
-		void setMat4(uint32_t _idProgram, int32_t _location, float *_value) noexcept;
+		_NODISCARD int32_t getUniformLocation(uint32_t _idProgram, std::string _name) noexcept;
+		void setBool(uint32_t _idProgram, int32_t _location, const bool _value) noexcept;
+		void setInt(uint32_t _idProgram, int32_t _location, const int32_t _value) noexcept;
+		void setUint(uint32_t _idProgram, int32_t _location, const uint32_t _value) noexcept;
+		void setFloat(uint32_t _idProgram, int32_t _location, const float _value) noexcept;
+		void setFloat2(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
+		void setFloat3(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
+		void setFloat4(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
+		void setMat3(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
+		void setMat4(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
 	}
 }

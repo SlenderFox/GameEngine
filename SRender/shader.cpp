@@ -366,8 +366,8 @@ return;}";
 		return true;
 	}
 
-	template<typename T> inline
-	T shader::byType(
+	template<typename T>
+	inline T shader::byType(
 		const shaderType _type,
 		T _vertex,
 		T _fragment
@@ -377,84 +377,208 @@ return;}";
 		return (_type == shaderType::vertex ? _vertex : _fragment);
 	}
 
-	void shader::setBool(string _name, bool _value) const noexcept
+	void shader::setBool(string _name, const bool _value) const noexcept
 	{
-		graphics::setBool(
-			m_idProgram,
-			graphics::getUniformLocation(m_idProgram, _name),
-			_value
-		);
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setBool(m_idProgram, location, _value);
 	}
 
-	void shader::setInt(string _name, int32_t _value) const noexcept
+	void shader::setInt(string _name, const int32_t _value) const noexcept
 	{
-		graphics::setInt(
-			m_idProgram,
-			graphics::getUniformLocation(m_idProgram, _name),
-			_value
-		);
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setInt(m_idProgram, location, _value);
 	}
 
-	void shader::setUint(string _name, uint32_t _value) const noexcept
+	void shader::setUint(string _name, const uint32_t _value) const noexcept
 	{
-		graphics::setUint(
-			m_idProgram,
-			graphics::getUniformLocation(m_idProgram, _name),
-			_value
-		);
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setUint(m_idProgram, location, _value);
 	}
 
-	void shader::setFloat(string _name, float _value) const noexcept
+	void shader::setFloat(string _name, const float _value) const noexcept
 	{
-		graphics::setFloat(
-			m_idProgram,
-			graphics::getUniformLocation(m_idProgram, _name),
-			_value
-		);
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setFloat(m_idProgram, location, _value	);
 	}
 
-	void shader::setFloat2(string _name, glm::vec2 _value) const noexcept
+	void shader::setFloat2(string _name, const glm::vec2 _value) const noexcept
 	{
-		graphics::setFloat2(
-			m_idProgram,
-			graphics::getUniformLocation(m_idProgram, _name),
-			&_value[0]
-		);
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setFloat2(m_idProgram, location, &_value[0]);
+	}
+	void shader::setFloat2(string _name, const glm::vec2 *_value) const noexcept
+	{
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setFloat2(m_idProgram, location, &(*_value)[0]);
 	}
 
-	void shader::setFloat3(string _name, glm::vec3 _value) const noexcept
+	void shader::setFloat3(string _name, const glm::vec3 _value) const noexcept
 	{
-		graphics::setFloat3(
-			m_idProgram,
-			graphics::getUniformLocation(m_idProgram, _name),
-			&_value[0]
-		);
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setFloat3(m_idProgram, location, &_value[0]);
+	}
+	void shader::setFloat3(string _name, const glm::vec3 *_value) const noexcept
+	{
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setFloat3(m_idProgram, location, &(*_value)[0]);
 	}
 
-	void shader::setFloat4(string _name, glm::vec4 _value) const noexcept
+	void shader::setFloat4(string _name, const glm::vec4 _value) const noexcept
 	{
-		graphics::setFloat4(
-			m_idProgram,
-			graphics::getUniformLocation(m_idProgram, _name),
-			&_value[0]
-		);
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setFloat4(m_idProgram, location, &_value[0]);
+	}
+	void shader::setFloat4(string _name, const glm::vec4 *_value) const noexcept
+	{
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setFloat4(m_idProgram, location, &(*_value)[0]);
 	}
 
-	void shader::setMat3(string _name, glm::mat3 _value) const noexcept
+	void shader::setMat3(string _name, const glm::mat3 _value) const noexcept
 	{
-		graphics::setMat3(
-			m_idProgram,
-			graphics::getUniformLocation(m_idProgram, _name),
-			&_value[0][0]
-		);
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setMat3(m_idProgram, location, &_value[0][0]);
+	}
+	void shader::setMat3(string _name, const glm::mat3 *_value) const noexcept
+	{
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setMat3(m_idProgram, location, &(*_value)[0][0]);
 	}
 
-	void shader::setMat4(string _name, glm::mat4 _value) const noexcept
+	void shader::setMat4(string _name, const glm::mat4 _value) const noexcept
 	{
-		graphics::setMat4(
-			m_idProgram,
-			graphics::getUniformLocation(m_idProgram, _name),
-			&_value[0][0]
-		);
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setMat4(m_idProgram, location, &_value[0][0]);
+	}
+	void shader::setMat4(string _name, const glm::mat4 *_value) const noexcept
+	{
+		int32_t location = graphics::getUniformLocation(m_idProgram, _name);
+		if (location < 0)
+		{
+			debug::send("Attempting to set unknown uniform \""
+				+ _name
+				+ "\", location: "
+				+ std::to_string(location)
+			);
+			return;
+		}
+		graphics::setMat4(m_idProgram, location, &(*_value)[0][0]);
 	}
 }
