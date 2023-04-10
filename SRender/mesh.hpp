@@ -1,5 +1,7 @@
 #pragma once
-#include "shader.hpp"
+#include <vector>
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]

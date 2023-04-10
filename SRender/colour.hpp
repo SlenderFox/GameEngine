@@ -7,10 +7,7 @@
  */
 
 #pragma once
-#include "model.hpp"
-#if !__has_include("glm/glm.hpp")
-	#include "glm/glm.hpp"
-#endif
+#include "glm/vec3.hpp"
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]

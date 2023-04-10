@@ -1,4 +1,5 @@
 #pragma once
+#include "model.hpp"
 #include "colour.hpp"
 
 #ifndef _NODISCARD

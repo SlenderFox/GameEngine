@@ -1,6 +1,11 @@
 #pragma once
-#include "camera.hpp"
 #include "texture.hpp"
+// TODO: Remove ↓
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "glm/vec4.hpp"
+#include "glm/mat3x3.hpp"
+#include "glm/mat4x4.hpp"
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]
@@ -11,6 +16,7 @@ namespace srender
 	/** A shader is used to render the given vertex and texture information to the screen
 	 * @todo Allow a new shader to be loaded in the same object
 	 * @todo Make loadShader() clearer to read
+	 * @todo Remove glm include
 	*/
 	struct shader
 	{

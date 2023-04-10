@@ -1,5 +1,5 @@
 #include "light.hpp"
-#include <math.h>
+#include "glm/detail/func_trigonometric.inl"
 
 using glm::mat4;
 using glm::cos;

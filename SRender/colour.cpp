@@ -1,4 +1,6 @@
+#include <assert.h>
 #include "colour.hpp"
+#include "glm/common.hpp"
 
 using glm::vec3;
 

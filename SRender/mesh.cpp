@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <string>
 #include "mesh.hpp"
 #include "graphics.hpp"
 
