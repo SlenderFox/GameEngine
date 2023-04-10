@@ -12,3 +12,5 @@ Project originally started with me following https://learnopengl.com/
 - GLM ([Website](https://glm.g-truc.net/0.9.8/index.html))
 - stb_image.h ([Github](https://github.com/nothings/stb/blob/master/stb_image.h))
 - Assimp ([Github](https://github.com/assimp/assimp))
+
+I would like to have the libraries as a github dependancy but idk how to do that so this will suffice for now
