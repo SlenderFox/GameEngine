@@ -11,8 +11,10 @@ namespace srender
 {
 	// Static
 
-	uint32_t texture::s_textureIds[32];
-	uint32_t texture::s_textureCount = 0;
+	/** List of all texture ids */
+	uint32_t s_textureIds[32];
+	/** How many textures have been loaded */
+	uint32_t s_textureCount = 0;
 	vector<texture*> texture::s_loadedTextures = vector<texture*>();
 
 	void texture::deleteAll() noexcept
@@ -57,16 +59,16 @@ namespace srender
 				debug::stage::Mid,
 				true
 			);
-			// TODO: Throw
-			// https://isocpp.org/wiki/faq/exceptions#ctors-can-throw
-			return;
+
+			throw textureException("Exceeded max textures");
+			//return;
 		}
 
 		// Makes sure the images are oriented correctly when loaded
 		stbi_set_flip_vertically_on_load(true);
 
 		int texWidth = 0, texHeight = 0, numComponents = 0;
-		unsigned char *imageData = stbi_load(
+		uint8_t *imageData = stbi_load(
 			m_file.c_str(),
 			&texWidth,
 			&texHeight,
@@ -83,6 +85,8 @@ namespace srender
 				debug::stage::Mid,
 				true
 			);
+
+			throw textureException("No file found");
 			return;
 		}
 
@@ -107,7 +111,7 @@ namespace srender
 
 		debug::send("Success!");
 
-		// Returns the id before incrementing for the next texture
+		// Sets the id then increments, ready for the next texture
 		m_id = s_textureCount++;
 	}
 

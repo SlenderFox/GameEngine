@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <stdexcept>
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]
@@ -8,7 +9,16 @@
 
 namespace srender
 {
-	/** The texture object stores a reference to a texture on the gpu
+	/** Exceptions for the texture class
+	 * https://isocpp.org/wiki/faq/exceptions#ctors-can-throw
+	 */
+	class textureException : public std::runtime_error
+	{
+	public:
+		textureException(std::string _description) : std::runtime_error(_description) {}
+	};
+
+	/** The texture class is an encapsulation for a texture on the gpu
 	 * @todo Overhaul whole class
 	 * @todo Allow destroying of a texture so that another one can replace it
 	*/
@@ -21,17 +31,13 @@ namespace srender
 		};
 
 	private:
-		// List of all texture ids
-		static uint32_t s_textureIds[32];
-		// How many textures have been loaded
-		static uint32_t s_textureCount;
-
 		int32_t m_id = 0;
 		std::string m_file;
 		type m_type = type::diffuse;
 
 	public:
-		// Memory handled by renderer
+		/** TODO: This is a mess, the vector is only ever accessed
+		 * from model and is then cleaned up by renderer */
 		static std::vector<texture*> s_loadedTextures;
 
 		static void deleteAll() noexcept;

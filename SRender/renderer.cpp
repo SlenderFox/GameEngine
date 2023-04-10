@@ -47,7 +47,7 @@ namespace srender
 			{
 				// For safety
 				if (texture::s_loadedTextures.at(i))
-					delete texture::s_loadedTextures.at(i);
+				{	delete texture::s_loadedTextures.at(i); }
 			}
 			// Unload all textures from gl memory once finished
 			texture::deleteAll();
