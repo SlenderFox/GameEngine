@@ -7,6 +7,9 @@
 
 namespace srender
 {
+	/** The camera is the perspective where the virtual world is rendered from
+	 * @todo Perhaps derive from entity
+	 */
 	class camera: public transform
 	{
 	private:
