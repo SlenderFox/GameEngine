@@ -48,17 +48,11 @@ namespace srender
 	void model::draw(const camera *_camera) const noexcept
 	{
 		m_shader->use();
-		if (_camera)
-		{
-			m_shader->setMat4("u_camera", _camera->getWorldToCameraMatrix());
-			m_shader->setFloat3("u_viewPos", (vec3)_camera->getPosition());
-		}
-		else
-		{
-			assert(m_cameraRef);
-			m_shader->setMat4("u_camera", m_cameraRef->getWorldToCameraMatrix());
-			m_shader->setFloat3("u_viewPos", (vec3)m_cameraRef->getPosition());
-		}
+		if (!_camera)
+		{	_camera = m_cameraRef; }
+
+		m_shader->setMat4("u_camera", _camera->getWorldToCameraMatrix());
+		m_shader->setFloat3("u_viewPos", (vec3)_camera->getPosition());
 
 		for (uint16_t i = 0; i < m_meshes.size(); ++i)
 		{	getMeshAt(i)->draw(); }
