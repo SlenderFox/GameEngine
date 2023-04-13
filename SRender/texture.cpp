@@ -115,6 +115,12 @@ namespace srender
 		m_id = s_textureCount++;
 	}
 
+	bool texture::operator==(const int32_t &_other) const noexcept
+	{	return m_id == _other; }
+
+	bool texture::operator!=(const int32_t &_other) const noexcept
+	{	return m_id != _other; }
+
 	bool texture::operator==(const string &_other) const noexcept
 	{	return m_file == _other; }
 
