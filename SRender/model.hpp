@@ -24,22 +24,22 @@ namespace srender
 
 		bool m_loadTextures;
 
-		inline void loadModel(const std::string *_path) noexcept;
+		inline void loadModel(const std::string *_path);
 
 		inline void processNode(
 			const aiNode *_node,
 			const aiScene *_scene
-		) noexcept;
+		);
 
 		_NODISCARD inline mesh *processMesh(
 			const aiMesh *_mesh,
 			const aiScene *_scene
-		) noexcept;
+		);
 
 		_NODISCARD inline std::vector<texture*> loadMaterialTextures(
 			const aiMaterial *_material,
 			const texture::type _texType
-		) const noexcept;
+		) const;
 
 		inline void loadTexturesToShader() const noexcept;
 
@@ -49,7 +49,7 @@ namespace srender
 			const std::string *_shaderPath,
 			camera *_camera = nullptr,
 			const bool _loadTextures = true
-		) noexcept;
+		);
 
 		~model();
 

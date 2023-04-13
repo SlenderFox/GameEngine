@@ -23,7 +23,7 @@ namespace srender
 			string *_shaderPath,
 			entity *_entity,
 			const bool _loadTextures = true
-		) noexcept
+		)
 		{
 			uint8_t ID;
 			_entity->m_modelRef = renderer::addNewModel(ID, _modelPath, _shaderPath, _loadTextures);
@@ -58,7 +58,7 @@ namespace srender
 		model *&_outModel,
 		shader *&_outShader,
 		const bool _loadTextures
-	) noexcept
+	)
 	{
 		entity *result = new entity();
 		_modelPath = application::getAppLocation() + _modelPath;
@@ -93,10 +93,10 @@ namespace srender
 		model *&_outModel,
 		shader *&_outShader,
 		const bool _loadTextures
-	) noexcept
+	)
 	{
 		// Currently this does nothing about the previous model and shader
-		// but does not cause a memory leak as they are managed by renderer
+		// but only half causes a memory leak as they are managed by renderer
 		_modelPath = application::getAppLocation() + _modelPath;
 		_shaderPath = application::getAppLocation() + _shaderPath;
 		entityLoader::BackgroundLoadModel(&_modelPath, &_shaderPath, this, _loadTextures);

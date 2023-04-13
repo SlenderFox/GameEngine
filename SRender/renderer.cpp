@@ -217,7 +217,7 @@ namespace srender
 			const string *_modelPath,
 			const string *_shaderPath,
 			const bool _loadTextures
-		) noexcept
+		)
 		{
 			// Caps at 255
 			size_t currentAmount = s_models.size();

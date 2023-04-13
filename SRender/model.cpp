@@ -18,7 +18,7 @@ namespace srender
 		const string *_shaderPath,
 		camera *_camera,
 		const bool _loadTextures
-	) noexcept
+	)
 		: m_cameraRef(_camera)
 		, m_loadTextures(_loadTextures)
 	{
@@ -58,7 +58,7 @@ namespace srender
 		{	getMeshAt(i)->draw(); }
 	}
 
-	inline void model::loadModel(const string *_path) noexcept
+	inline void model::loadModel(const string *_path)
 	{
 		debug::send(
 			"Loading model \"" + *_path + "\"",
@@ -99,7 +99,7 @@ namespace srender
 	inline void model::processNode(
 		const aiNode *_node,
 		const aiScene *_scene
-	) noexcept
+	)
 	{
 		// Process all the node's meshes (if any)
 		for (uint32_t i = 0; i < _node->mNumMeshes; ++i)
@@ -117,7 +117,7 @@ namespace srender
 	inline mesh *model::processMesh(
 		const aiMesh *_mesh,
 		const aiScene *_scene
-	) noexcept
+	)
 	{
 		vector<vertex> vertices;
 		vector<uint32_t> indices;
@@ -182,7 +182,7 @@ namespace srender
 	inline vector<texture*> model::loadMaterialTextures(
 		const aiMaterial *_material,
 		const texture::type _texType
-	) const noexcept
+	) const
 	{
 		// Textures from this specific node being output
 		vector<texture*> texturesOut;

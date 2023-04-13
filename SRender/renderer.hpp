@@ -36,7 +36,7 @@ namespace srender
 			uint8_t &_outId,
 			const std::string *_modelPath,
 			const std::string *_shaderPath,
-			const bool _loadTextures = true) noexcept;
+			const bool _loadTextures = true);
 
 		light *addNewLight(
 			uint8_t &_outId,

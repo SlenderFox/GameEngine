@@ -43,7 +43,7 @@ namespace srender
 			model *&_outModel,
 			shader *&_outShader,
 			const bool _loadTextures = true
-		) noexcept;
+		);
 
 	private:
 		entityBase *m_parentRef = nullptr;
@@ -62,7 +62,7 @@ namespace srender
 			model *&_outModel,
 			shader *&_outShader,
 			const bool _loadTextures = true
-		) noexcept;
+		);
 
 		void setTransform(const glm::mat4 *_value) noexcept override;
 		void setPosition(const glm::vec3 _value) noexcept override;
