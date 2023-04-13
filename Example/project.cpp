@@ -138,7 +138,7 @@ void project::createScene()
 	// Place 9 cubes behind
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
-		entity *cube = entity::createWithModel(
+		entity *cube = new entity(
 			"assets/models/cube/cube.obj",
 			"assets/shaders/default",
 			model, shader
@@ -149,7 +149,7 @@ void project::createScene()
 	}
 
 	// Create a backpack in the centre
-	entity *backpack = entity::createWithModel(
+	entity *backpack = new entity(
 		"assets/models/backpack/backpack.obj",
 		"assets/shaders/default",
 		model, shader

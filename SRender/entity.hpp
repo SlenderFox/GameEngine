@@ -36,15 +36,6 @@ namespace srender
 	{
 		friend struct entityLoader;
 
-	public:
-		_NODISCARD static entity *createWithModel(
-			std::string _modelPath,
-			std::string _shaderPath,
-			model *&_outModel,
-			shader *&_outShader,
-			const bool _loadTextures = true
-		);
-
 	private:
 		entityBase *m_parentRef = nullptr;
 		model *m_modelRef = nullptr;
@@ -54,6 +45,13 @@ namespace srender
 	public:
 		entity();
 		entity(entityBase *_parent);
+		entity(
+			std::string _modelPath,
+			std::string _shaderPath,
+			model *&_outModel,
+			shader *&_outShader,
+			const bool _loadTextures = true
+		);
 		~entity() {}
 
 		void loadModel(

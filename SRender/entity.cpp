@@ -47,27 +47,8 @@ namespace srender
 		}
 	}
 
-	constexpr std::vector<entity*>entityBase::getChildren() const noexcept
+	constexpr std::vector<entity*> entityBase::getChildren() const noexcept
 	{	return m_childrenRef; }
-
-	// Static
-
-	entity *entity::createWithModel(
-		string _modelPath,
-		string _shaderPath,
-		model *&_outModel,
-		shader *&_outShader,
-		const bool _loadTextures
-	)
-	{
-		entity *result = new entity();
-		_modelPath = application::getAppLocation() + _modelPath;
-		_shaderPath = application::getAppLocation() + _shaderPath;
-		entityLoader::BackgroundLoadModel(&_modelPath, &_shaderPath, result, _loadTextures);
-		_outModel = result->m_modelRef;
-		_outShader = result->m_modelRef->getShaderRef();
-		return result;
-	}
 
 	// Member
 
@@ -78,6 +59,21 @@ namespace srender
 	entity::entity(entityBase *_parent)
 	: m_parentRef(_parent)
 	{ }
+
+	entity::entity(
+		std::string _modelPath,
+		std::string _shaderPath,
+		model *&_outModel,
+		shader *&_outShader,
+		const bool _loadTextures
+	)
+	{
+		_modelPath = application::getAppLocation() + _modelPath;
+		_shaderPath = application::getAppLocation() + _shaderPath;
+		entityLoader::BackgroundLoadModel(&_modelPath, &_shaderPath, this, _loadTextures);
+		_outModel = m_modelRef;
+		_outShader = m_modelRef->getShaderRef();
+	}
 
 	void entity::updateModel() const noexcept
 	{
