@@ -1,5 +1,6 @@
 #include "texture.hpp"
 #include "graphics.hpp"
+#include "exception.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 #include "debug.hpp"
@@ -61,7 +62,6 @@ namespace srender
 			);
 
 			throw textureException("Exceeded max textures");
-			//return;
 		}
 
 		// Makes sure the images are oriented correctly when loaded
@@ -87,7 +87,6 @@ namespace srender
 			);
 
 			throw textureException("No file found");
-			return;
 		}
 
 		// Generates a texture object in vram

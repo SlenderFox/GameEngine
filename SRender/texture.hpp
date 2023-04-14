@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <stdexcept>
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]
@@ -9,15 +8,6 @@
 
 namespace srender
 {
-	/** Exceptions for the texture class
-	 * https://isocpp.org/wiki/faq/exceptions#ctors-can-throw
-	 */
-	class textureException : public std::runtime_error
-	{
-	public:
-		textureException(std::string _description) : std::runtime_error(_description) {}
-	};
-
 	/** The texture class is an encapsulation for a texture on the gpu
 	 * @todo Overhaul whole class
 	 * @todo Allow destroying of a texture so that another one can replace it
