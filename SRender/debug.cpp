@@ -48,7 +48,8 @@ namespace srender
 
 		void init() noexcept
 		{
-			#if defined(_DEBUG) && defined(__WINDOWS__)
+			//#if defined(_DEBUG) && defined(__WINDOWS__)
+			#ifdef __WINDOWS__
 				// Allows utf16 output to console
 				_setmode(_fileno(stdout), _O_U16TEXT);
 			#endif
@@ -61,9 +62,11 @@ namespace srender
 		) noexcept
 		{
 			//#ifdef _DEBUG
-				if (_newline) wcout << '\n';
+				if (_newline)
+				{	wcout << '\n'; }
 				wcout << _msg.c_str();
-				if (_endline) wcout << endl;
+				if (_endline)
+				{	wcout << endl; }
 			//#endif
 		}
 
@@ -75,9 +78,11 @@ namespace srender
 		) noexcept
 		{
 			//#ifdef _DEBUG
-				if (_newline) wcout << '\n';
+				if (_newline)
+				{	wcout << '\n'; }
 				wcout << _prefix << _msg.c_str();
-				if (_endline) wcout << endl;
+				if (_endline)
+				{	wcout << endl; }
 			//#endif
 		}
 
@@ -96,9 +101,9 @@ namespace srender
 
 		void newLine() noexcept
 		{
-			#ifdef _DEBUG
+			//#ifdef _DEBUG
 				wcout << endl;
-			#endif
+			//#endif
 		}
 
 		#ifdef _DEBUG
