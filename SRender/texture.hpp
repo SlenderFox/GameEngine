@@ -14,6 +14,7 @@ namespace srender
 	*/
 	struct texture
 	{
+		/** Each texture has a different type for how it is used */
 		enum class type: uint8_t
 		{
 			diffuse,

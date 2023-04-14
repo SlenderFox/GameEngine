@@ -108,10 +108,12 @@ namespace srender
 		// Frees the image memory
 		stbi_image_free(imageData);
 
-		debug::send("Success!");
-
 		// Sets the id then increments, ready for the next texture
 		m_id = s_textureCount++;
+
+		s_loadedTextures.push_back(this);
+
+		debug::send("Success!");
 	}
 
 	bool texture::operator==(const int32_t &_other) const noexcept

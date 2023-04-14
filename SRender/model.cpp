@@ -107,11 +107,10 @@ namespace srender
 			aiMesh *mesh = _scene->mMeshes[_node->mMeshes[i]];
 			m_meshes.push_back(processMesh(mesh, _scene));
 		}
+
 		// Then do the same for each of it's children
 		for (uint32_t i = 0; i < _node->mNumChildren; ++i)
-		{
-			processNode(_node->mChildren[i], _scene);
-		}
+		{	processNode(_node->mChildren[i], _scene); }
 	}
 
 	inline mesh *model::processMesh(
@@ -119,9 +118,8 @@ namespace srender
 		const aiScene *_scene
 	)
 	{
-		vector<vertex> vertices;
-		vector<uint32_t> indices;
 		// Process vertex positions, normals, and texture coordinates
+		vector<vertex> vertices;
 		for (uint32_t i = 0; i < _mesh->mNumVertices; ++i)
 		{
 			vertex vertex;
@@ -140,24 +138,24 @@ namespace srender
 				vertex.normal = vector;
 			}
 			// TexCoords
+			vec2 vec(0, 0);
 			if (_mesh->mTextureCoords[0])	// Does the mesh have texture coords
 			{
-				vec2 vec;
 				vec.x = _mesh->mTextureCoords[0][i].x;
 				vec.y = _mesh->mTextureCoords[0][i].y;
-				vertex.texCoords = vec;
 			}
-			else
-				vertex.texCoords = vec2(0.0f, 0.0f);
+			vertex.texCoords = vec;
 
 			vertices.push_back(vertex);
 		}
+
 		// Process indices
+		vector<uint32_t> indices;
 		for (uint32_t i = 0; i < _mesh->mNumFaces; ++i)
 		{
 			aiFace face = _mesh->mFaces[i];
 			for (uint32_t j = 0; j < face.mNumIndices; ++j)
-				indices.push_back(face.mIndices[j]);
+			{	indices.push_back(face.mIndices[j]); }
 		}
 
 		// Process material
@@ -202,26 +200,31 @@ namespace srender
 		{
 			aiString file;
 			_material->GetTexture(aitextype, i, &file);
-			bool loadTexture = true;
 			string path = m_directory + '/' + file.C_Str();
 
 			// First we check if the texture has already been loaded into memory
+			bool loadNewTexture = true;
 			for (size_t j = 0; j < texture::s_loadedTextures.size(); ++j)
 			{
-				if (*texture::s_loadedTextures[j] != path) continue;
+				// Skip if not the same texture
+				if (*texture::s_loadedTextures[j] != path)
+				{	continue; }
 
-				// If the texture has already been loaded into memory we check if it has been loaded into this model
-				bool reuseTexture = true;
+				// Texture has already been loaded into memory
+				loadNewTexture = false;
+
+				// Then check if it has been loaded into this model
+				bool reuseExistingTexture = true;
 				for (size_t k = 0; k < m_textures.size(); ++k)
 				{
 					if (*m_textures[k] == path)
 					{
-						reuseTexture = false;
+						reuseExistingTexture = false;
 						break;
 					}
 				}
 
-				if (reuseTexture)
+				if (reuseExistingTexture)
 				{
 					debug::send(
 						"Reusing texture "
@@ -235,17 +238,14 @@ namespace srender
 					texturesOut.push_back(texture::s_loadedTextures[j]);
 				}
 
-				// Texture has already been loaded
-				loadTexture = false;
 				break;
 			}
 
 			// If texture has not been loaded before, load it for the first time
-			if (loadTexture)
+			if (loadNewTexture)
 			{
 				texture *tex = new texture(path, _texType);
 				texturesOut.push_back(tex);
-				texture::s_loadedTextures.push_back(tex);
 			}
 		}
 		return texturesOut;
