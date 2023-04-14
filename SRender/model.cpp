@@ -187,7 +187,7 @@ namespace srender
 		// Textures from this specific node being output
 		vector<texture*> texturesOut;
 
-		aiTextureType aitextype;
+		aiTextureType aitextype = aiTextureType_DIFFUSE;
 		switch (_texType)
 		{
 		case texture::type::diffuse:
