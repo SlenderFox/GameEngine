@@ -37,7 +37,7 @@ namespace srender
 	texture::texture(
 		string _path,
 		type _type
-	) noexcept
+	)
 		: m_file(_path)
 		, m_type(_type)
 	{

@@ -50,7 +50,7 @@ namespace srender
 		texture(
 			std::string _path,
 			type _type = type::diffuse
-		) noexcept;
+		);
 
 		bool operator==(const int32_t &_other) const noexcept;
 		bool operator!=(const int32_t &_other) const noexcept;
