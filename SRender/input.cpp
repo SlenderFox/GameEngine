@@ -19,7 +19,9 @@ namespace srender
 		int _action,
 		int _mods) noexcept
 	{
-		if (_action != GLFW_PRESS) return;
+		if (_action != GLFW_PRESS)
+		{	return; }
+
 		//srender::debug::send(std::to_string(_scancode) + " ", false, false);
 	}
 

@@ -204,7 +204,8 @@ void project::createLights()
 	}
 
 	// Don't bother if there are no lights
-	if (renderer::lightCount() == 0) return;
+	if (renderer::lightCount() == 0)
+	{	return; }
 
 	model *model = nullptr;
 	shader *shader = nullptr;

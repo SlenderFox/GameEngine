@@ -77,10 +77,13 @@ namespace srender
 
 	void entity::updateModel() const noexcept
 	{
-		if (!m_modelRef) return;
+		if (!m_modelRef)
+		{	return; }
+
 		m_modelRef->getShaderRef()->setMat4("u_model", getTransform());
 		m_modelRef->getShaderRef()->setMat3("u_transposeInverseOfModel",
-			(mat3)transpose(inverse(getTransform())));
+			(mat3)transpose(inverse(getTransform()))
+		);
 	}
 
 	void entity::loadModel(
