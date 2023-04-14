@@ -4,35 +4,16 @@ struct GLFWwindow;
 
 namespace srender
 {
-	/** The callback function used for mouse and scroll movement */
-	using callbackFunc = void(*)(double, double);
-
-	/** Pure static class for handling inputs
+	/** Namespace for handling inputs
 	 * @todo Overhaul
 	 * @todo Track keystates
 	 * @todo Key press callbacks
 	*/
-	class input
+	namespace input
 	{
-		friend class application;
-		// Does not need to be memory managed
-		static GLFWwindow *s_windowRef;
+		/** The callback function used for mouse and scroll movement */
+		using callbackFunc = void(*)(double, double);
 
-		static callbackFunc s_mouseCallbackFun;
-		static callbackFunc s_scrollCallbackFun;
-
-		static double s_mouseX, s_mouseY, s_mouseLastX, s_mouseLastY;
-
-		// Pure static class
-		input() = delete;
-		~input() = delete;
-		// Delete copy/move so extra instances can't be created/moved.
-		input(input const&) = delete;
-		input &operator=(input const&) = delete;
-		input(input&&) = delete;
-		input &operator=(input&&) = delete;
-
-	public:
 		enum class state: unsigned char
 		{
 			Release,
@@ -163,32 +144,52 @@ namespace srender
 			Key_Menu						= 348
 		};
 
-		static void key_callback(
+		/** Function that glfw expects for the callback
+		 * @param _window Reference to the active window
+		 * @param _key No clue sorry, I'll check some other time
+		 * @param _scancode Basically the id of the key on the keyboard
+		 * @param _action The state of the key
+		 * @param _mods Any modifiers
+		 */
+		void key_callback(
 			GLFWwindow *_window,
 			int _key,
 			int _scancode,
 			int _action,
-			int _mods) noexcept;
-		static void mouse_callback(
+			int _mods
+		) noexcept;
+
+		/** Function that glfw expects for the callback
+		 * @param _window Reference to the active window
+		 * @param _posX The horizontal position of the cursor in the window
+		 * @param _posY The vertical position of the cursor in the window
+		 */
+		void mouse_callback(
 			GLFWwindow *_window,
 			double _posX,
-			double _posY) noexcept;
-		static void scroll_callback(
+			double _posY
+		) noexcept;
+
+		/** Function that glfw expects for the callback
+		 * @param _window Reference to the active window
+		 * @param _offsetX The horizontal change of the scroll wheel since the last callback
+		 * @param _offsetY The vertical change of the scroll wheel since the last callback
+		 */
+		void scroll_callback(
 			GLFWwindow *_window,
 			double _offsetX,
-			double _offsetY) noexcept;
+			double _offsetY
+		) noexcept;
 
 		/** Initialise input with GLFW
 		 * @param _windowRef The active window
 		 * @return [bool] Success
 		 */
-		static bool init(GLFWwindow *_windowRef) noexcept;
-		static void process() noexcept;
-		static bool checkKeyState(const key _key, const state _state) noexcept;
+		bool init(GLFWwindow *_windowRef) noexcept;
+		void process() noexcept;
+		bool checkKeyState(const key _key, const state _state) noexcept;
 
-		static inline void addMouseCallback(callbackFunc _callback) noexcept
-		{	s_mouseCallbackFun = _callback; }
-		static inline void addSrollCallback(callbackFunc _callback) noexcept
-		{	s_scrollCallbackFun = _callback; }
-	};
+		void addMouseCallback(callbackFunc _callback) noexcept;
+		void addSrollCallback(callbackFunc _callback) noexcept;
+	}
 }
