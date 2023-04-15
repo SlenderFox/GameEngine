@@ -173,15 +173,22 @@ namespace srender
 			glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
 
 			#ifdef _DEBUG
-				// Moves the window to the left of the monitor
-				glfwSetWindowPos(l_windowRef,
-					2,
-					(int)((monHeight - l_wHeight) * 0.5f)
-				);
 				#ifdef _WIN32
+					// Moves the window to the left of the monitor
+					glfwSetWindowPos(l_windowRef,
+						2,
+						(int)((monHeight - l_wHeight) * 0.5f)
+					);
+					// And the console to the right
 					debug::moveConsole(l_wWidth);
+				#else
+					// Moves the window to the center of the workarea, slightly raised
+					glfwSetWindowPos(l_windowRef,
+						(int)((monWidth - l_wWidth) * 0.5f),
+						31
+					);
 				#endif
-			//#else
+			#else
 				// Moves the window to the center of the workarea
 				glfwSetWindowPos(l_windowRef,
 					(int)((monWidth - l_wWidth) * 0.5f),
