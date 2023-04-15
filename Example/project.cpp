@@ -21,7 +21,6 @@ using namespace srender;
 int main(int argc, char *args[])
 {
 	project *app = new project();
-	application::setAppLocation(args[0]);
 	application::setFullscreen(false);
 	#ifdef _DEBUG
 		application::setDimensions(1030, 650);
@@ -30,7 +29,7 @@ int main(int argc, char *args[])
 		application::setDimensions(1600, 900);
 		application::setTitle("SRender Example (RELEASE)");
 	#endif
-	int code = (int)application::run();
+	int code = (int)application::run(args[0]);
 	delete app;
 	return code;
 }

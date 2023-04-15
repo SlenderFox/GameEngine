@@ -251,8 +251,12 @@ namespace srender
 		delete root::getRoot();
 	}
 
-	int application::run()
+	int application::run(std::string _location)
 	{
+		size_t last_slash = _location.find_last_of("\\/");
+		l_appLocation = _location.substr(0, last_slash + 1);
+		//debug::send("App location set to: " + l_appLocation + "\nFrom source: " + _location);
+
 		if (init())
 		{
 			// Preloads currentTime with an earlier time to prevent first frame weirdness
@@ -332,13 +336,6 @@ namespace srender
 	{
 		l_fullscreen = _fullscreen;
 		//debug::send("Fullscreen set to " + string(l_fullscreen ? "true" : "false"));
-	}
-
-	void application::setAppLocation(string _location) noexcept
-	{
-		size_t last_slash = _location.find_last_of("\\/");
-		l_appLocation = _location.substr(0, last_slash + 1);
-		//debug::send("App location set to: " + l_appLocation + "\nFrom source: " + _location);
 	}
 
 	application *application::getApplication() noexcept

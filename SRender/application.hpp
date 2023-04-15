@@ -24,17 +24,16 @@ namespace srender
 		static void terminate() noexcept;
 
 	public:
-		_NODISCARD static int run();
+		/** Runs the app
+		 * @param _location The location of the application, arg[0]
+		 * @return int Return code
+		 */
+		_NODISCARD static int run(std::string _location);
 		static void quit() noexcept;
 
 		static void setDimensions(const uint16_t _width, const uint16_t _height) noexcept;
 		static void setTitle(const std::string _title) noexcept;
 		static void setFullscreen(const bool _fullscreen) noexcept;
-		/** Sets a string saving the location of the application
-		 * @param _location The first argument of main
-		 * @note This function will remove everything after the final slash, so don't bother processing the argument.
-		 */
-		static void setAppLocation(std::string _location) noexcept;
 
 		_NODISCARD static application *getApplication() noexcept;
 		_NODISCARD static double getTime() noexcept;
