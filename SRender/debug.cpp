@@ -2,7 +2,7 @@
 
 //#ifdef _DEBUG
 	#include "winclude.hpp"
-	#ifdef __WINDOWS__
+	#ifdef _WIN32
 		#include <io.h>
 		#include <fcntl.h>
 	#endif
@@ -48,8 +48,7 @@ namespace srender
 
 		void init() noexcept
 		{
-			//#if defined(_DEBUG) && defined(__WINDOWS__)
-			#ifdef __WINDOWS__
+			#if defined(_WIN32) && defined(_DEBUG)
 				// Allows utf16 output to console
 				_setmode(_fileno(stdout), _O_U16TEXT);
 			#endif
@@ -106,13 +105,11 @@ namespace srender
 			//#endif
 		}
 
-		#ifdef _DEBUG
+		#if defined(_WIN32) && defined(_DEBUG)
 			void moveConsole(const uint16_t _width) noexcept
 			{
-				#ifdef __WINDOWS__
-					// Moves the console to the right and resizes
-					MoveWindow(GetConsoleWindow(), _width - 3, 0, 900, 1040, TRUE);
-				#endif
+				// Moves the console to the right and resizes
+				MoveWindow(GetConsoleWindow(), _width - 3, 0, 900, 1040, TRUE);
 			}
 		#endif
 	}

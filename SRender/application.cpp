@@ -165,18 +165,28 @@ namespace srender
 		glfwSetWindowSizeLimits(l_windowRef, 320, 180, GLFW_DONT_CARE, GLFW_DONT_CARE);
 		//glfwSetWindowAspectRatio(l_windowRef, 16, 9);
 
+		// Move the window
 		if (!l_fullscreen)
 		{
+			// TODO: Validate window dimensions do not exceed monitor dimensions
 			int monPosX, monPosY, monWidth, monHeight;
 			glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &monPosX, &monPosY, &monWidth, &monHeight);
+
 			#ifdef _DEBUG
 				// Moves the window to the left of the monitor
-				glfwSetWindowPos(l_windowRef, 2, (int)((monHeight - l_wHeight) * 0.5f));
-				debug::moveConsole(l_wWidth);
-			#else
+				glfwSetWindowPos(l_windowRef,
+					2,
+					(int)((monHeight - l_wHeight) * 0.5f)
+				);
+				#ifdef _WIN32
+					debug::moveConsole(l_wWidth);
+				#endif
+			//#else
 				// Moves the window to the center of the workarea
-				glfwSetWindowPos(l_windowRef, (int)((monWidth - l_wWidth) * 0.5f),
-					(int)((monHeight - l_wHeight) * 0.5f));
+				glfwSetWindowPos(l_windowRef,
+					(int)((monWidth - l_wWidth) * 0.5f),
+					(int)((monHeight - l_wHeight) * 0.5f)
+				);
 			#endif
 		}
 

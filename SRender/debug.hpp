@@ -5,7 +5,7 @@ struct GLFWwindow;
 
 namespace srender
 {
-	/** A way for developers to output important information during program execution
+	/** For outputting important text-based information to the console during program execution
 	 * @todo Make Debug use imgui - Can open an "event" then post whatever info to it and finally close it
 	 */
 	namespace debug
@@ -53,7 +53,7 @@ namespace srender
 
 		void newLine() noexcept;
 
-		#ifdef _DEBUG
+		#if defined(_WIN32) && defined(_DEBUG)
 			void moveConsole(const uint16_t _width) noexcept;
 		#endif
 	};
