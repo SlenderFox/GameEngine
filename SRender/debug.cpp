@@ -1,15 +1,12 @@
 #include "debug.hpp"
-
-//#ifdef _DEBUG
-	#include "winclude.hpp"
-	#ifdef _WIN32
-		#include <io.h>
-		#include <fcntl.h>
-	#endif
-	#include <iostream>
-	using std::wcout;
-	using std::endl;
-//#endif
+#include "winclude.hpp"
+#ifdef _WIN32
+	#include <io.h>
+	#include <fcntl.h>
+#endif
+#include <iostream>
+using std::wcout;
+using std::endl;
 
 using std::string;
 
