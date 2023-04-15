@@ -24,6 +24,7 @@
     <ClCompile Include="colour.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="entity.cpp" />
+    <ClCompile Include="exception.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="light.cpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="colour.hpp" />
     <ClInclude Include="debug.hpp" />
     <ClInclude Include="entity.hpp" />
+    <ClInclude Include="exception.hpp" />
     <ClInclude Include="graphics.hpp" />
     <ClInclude Include="input.hpp" />
     <ClInclude Include="light.hpp" />
