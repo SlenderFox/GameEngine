@@ -1,6 +1,7 @@
 #pragma once
 #include "camera.hpp"
 #include "shader.hpp"
+#include "texture.hpp"
 #include "mesh.hpp"
 #include "assimp/material.h"
 #include "assimp/scene.h"

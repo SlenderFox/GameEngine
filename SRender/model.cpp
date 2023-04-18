@@ -48,6 +48,8 @@ namespace srender
 	void model::draw(const camera *_camera) const noexcept
 	{
 		m_shader->use();
+
+		// If no camera is passed in, use the stored camera reference
 		if (!_camera)
 		{	_camera = m_cameraRef; }
 

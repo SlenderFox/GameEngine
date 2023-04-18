@@ -1,6 +1,5 @@
 #pragma once
-#include "texture.hpp"
-// TODO: Remove ↓
+#include <string>
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
@@ -16,7 +15,7 @@ namespace srender
 	/** A shader is used to render the given vertex and texture information to the screen
 	 * @todo Allow a new shader to be loaded in the same object
 	 * @todo Make loadShader() clearer to read
-	 * @todo Remove glm include
+	 * @todo Remove glm include and have shader sets take an inbuilt type
 	*/
 	struct shader
 	{
