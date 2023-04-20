@@ -1,7 +1,7 @@
 #include <chrono>
 //#include <thread>
 #include "application.hpp"
-#include "graphics.hpp"
+#include "renderer.hpp"
 #include "GLFW/glfw3.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "debug.hpp"
@@ -80,8 +80,8 @@ namespace srender
 
 	void updateCamera() noexcept
 	{
-		renderer::getCamera()->setAspectRatio((float)l_wWidth / (float)l_wHeight);
-		renderer::getCamera()->updateFovV();
+		graphics::getCamera()->setAspectRatio((float)l_wWidth / (float)l_wHeight);
+		graphics::getCamera()->updateFovV();
 	}
 
 	void processInput() noexcept
@@ -120,7 +120,7 @@ namespace srender
 	) noexcept
 	{
 		application::setDimensions((const uint16_t)_width, (const uint16_t)_height);
-		graphics::setResolution(_width, _height);
+		renderer::setResolution(_width, _height);
 	}
 
 	_NODISCARD bool setupGLFW()
@@ -208,7 +208,7 @@ namespace srender
 
 		if (!setupGLFW()) return false;	// Sets own exit code
 
-		if (!graphics::loadGlad())
+		if (!renderer::loadGlad())
 		{
 			l_exitCode = exitCode::fail_Glad;
 			return false;
@@ -217,7 +217,7 @@ namespace srender
 		// Has to be initialised after glfw and glad
 		debug::init();
 
-		if (!renderer::init((float)l_wWidth / (float)l_wHeight))
+		if (!graphics::init((float)l_wWidth / (float)l_wHeight))
 		{
 			l_exitCode = exitCode::fail_Renderer;
 			return false;
@@ -246,7 +246,7 @@ namespace srender
 	void application::terminate() noexcept
 	{
 		getApplication()->shutdown();
-		renderer::terminate();
+		graphics::terminate();
 		glfwTerminate();
 		delete root::getRoot();
 	}
@@ -298,7 +298,7 @@ namespace srender
 
 				getApplication()->lateUpdate();
 
-				renderer::draw();
+				graphics::draw();
 
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(l_windowRef);
@@ -320,7 +320,7 @@ namespace srender
 		l_wWidth = _width;
 		l_wHeight = _height;
 
-		if (renderer::getCamera() && _width > 0 && _height > 0)
+		if (graphics::getCamera() && _width > 0 && _height > 0)
 		{	updateCamera(); }
 
 		//debug::send("Dimensions set to " + to_string(l_wWidth) + ", " + to_string(l_wHeight));

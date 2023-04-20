@@ -67,12 +67,12 @@ void project::mouseCallback(double _deltaX, double _deltaY) noexcept
 	forward.y = (float)sin(radians(s_camPitch));
 	forward.z = (float)(sin(radians(s_camYaw)) * cos(radians(s_camPitch)));
 	forward = normalize(forward);
-	renderer::getCamera()->setForward(forward);
+	graphics::getCamera()->setForward(forward);
 }
 
 void project::scrollCallback(double _offsetX, double _offsetY) noexcept
 {
-	renderer::getCamera()->modifyFovH((float)_offsetY * -3.0f);
+	graphics::getCamera()->modifyFovH((float)_offsetY * -3.0f);
 }
 
 // Member
@@ -170,19 +170,19 @@ void project::createLights()
 	light *light;
 	if (directional)
 	{
-		light = renderer::addNewLight(
+		light = graphics::addNewLight(
 			ID,
 			light::type::Directional,
 			colour(colour::hsvToRgb({0, 0.0f, 0.6f}))
 		);
 		light->setDirection(vec3(0, -1, 0));
-		renderer::setClearColour(
-			renderer::getLightAt(ID)->getColour() * renderer::getAmbience()
+		graphics::setClearColour(
+			graphics::getLightAt(ID)->getColour() * graphics::getAmbience()
 		);
 	}
 	if (point)
 	{
-		light = renderer::addNewLight(
+		light = graphics::addNewLight(
 			ID,
 			light::type::Point,
 			colour(colour::hsvToRgb({220, 0.6f, 1.0f}))
@@ -191,7 +191,7 @@ void project::createLights()
 	}
 	if (spot)
 	{
-		light = renderer::addNewLight(
+		light = graphics::addNewLight(
 			ID,
 			light::type::Spot,
 			colour(colour::hsvToRgb({97, 0.17f, 1.0f}))
@@ -203,16 +203,16 @@ void project::createLights()
 	}
 
 	// Don't bother if there are no lights
-	if (renderer::lightCount() == 0)
+	if (graphics::lightCount() == 0)
 	{	return; }
 
 	model *model = nullptr;
 	shader *shader = nullptr;
 
 	// Gives them physical form
-	for (uint8_t i = 0; i < renderer::lightCount(); ++i)
+	for (uint8_t i = 0; i < graphics::lightCount(); ++i)
 	{
-		light = renderer::getLightAt(i);
+		light = graphics::getLightAt(i);
 
 		if (light->getType() == light::type::Point
 		 || light->getType() == light::type::Spot)
@@ -234,24 +234,24 @@ void project::processInput() noexcept
 {
 	// Render triangles normally
 	if (input::checkKeyState(input::key::Key_F1, input::state::Press))
-		renderer::setRenderMode(renderer::mode::fill);
+		graphics::setRenderMode(graphics::mode::fill);
 	// Render triangles as lines
 	if (input::checkKeyState(input::key::Key_F2, input::state::Press))
-		renderer::setRenderMode(renderer::mode::line);
+		graphics::setRenderMode(graphics::mode::line);
 	// Render triangles as dots
 	if (input::checkKeyState(input::key::Key_F3, input::state::Press))
-		renderer::setRenderMode(renderer::mode::point);
+		graphics::setRenderMode(graphics::mode::point);
 
 	// Spotlight cone
 	if (input::checkKeyState(input::key::Key_T, input::state::Press))
-		renderer::modifyAllSpotlights(true, 0.05f);
+		graphics::modifyAllSpotlights(true, 0.05f);
 	if (input::checkKeyState(input::key::Key_G, input::state::Press))
-		renderer::modifyAllSpotlights(true, -0.05f);
+		graphics::modifyAllSpotlights(true, -0.05f);
 	// Spotlight blur
 	if (input::checkKeyState(input::key::Key_Y, input::state::Press))
-		renderer::modifyAllSpotlights(false, -0.005f);
+		graphics::modifyAllSpotlights(false, -0.005f);
 	if (input::checkKeyState(input::key::Key_H, input::state::Press))
-		renderer::modifyAllSpotlights(false, 0.005f);
+		graphics::modifyAllSpotlights(false, 0.005f);
 
 	vec3 translation = vec3();
 	float moveSpeed = 4;
@@ -265,22 +265,22 @@ void project::processInput() noexcept
 
 	// Forwards
 	if (input::checkKeyState(input::key::Key_W, input::state::Press))
-		translation += moveSpeed * (float)getDeltaTime() * (vec3)renderer::getCamera()->getForward();
+		translation += moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getForward();
 	// Backwards
 	if (input::checkKeyState(input::key::Key_S, input::state::Press))
-		translation -= moveSpeed * (float)getDeltaTime() * (vec3)renderer::getCamera()->getForward();
+		translation -= moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getForward();
 	// Left
 	if (input::checkKeyState(input::key::Key_A, input::state::Press))
-		translation += moveSpeed * (float)getDeltaTime() * (vec3)renderer::getCamera()->getRight();
+		translation += moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getRight();
 	// Right
 	if (input::checkKeyState(input::key::Key_D, input::state::Press))
-		translation -= moveSpeed * (float)getDeltaTime() * (vec3)renderer::getCamera()->getRight();
+		translation -= moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getRight();
 	// Up
 	if (input::checkKeyState(input::key::Key_Space, input::state::Press))
-		translation += moveSpeed * (float)getDeltaTime() * (vec3)renderer::getCamera()->getUp();
+		translation += moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getUp();
 	// Down
 	if (input::checkKeyState(input::key::Key_C, input::state::Press))
-		translation -= moveSpeed * (float)getDeltaTime() * (vec3)renderer::getCamera()->getUp();
+		translation -= moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getUp();
 
-	renderer::getCamera()->translate(translation);
+	graphics::getCamera()->translate(translation);
 }

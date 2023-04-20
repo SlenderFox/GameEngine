@@ -1,7 +1,7 @@
 #include <fstream>
 #include <sstream>
 #include "shader.hpp"
-#include "graphics.hpp"
+#include "renderer.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "debug.hpp"
 
@@ -21,7 +21,7 @@ namespace srender
 	{
 		if (m_shaderLoaded)
 		{
-			graphics::deleteShaderProgram(m_idProgram);
+			renderer::deleteShaderProgram(m_idProgram);
 			m_shaderLoaded = false;
 		}
 	}
@@ -41,7 +41,7 @@ namespace srender
 	}
 
 	void shader::use() const noexcept
-	{	graphics::useShaderProgram(m_idProgram); }
+	{	renderer::useShaderProgram(m_idProgram); }
 
 	constexpr bool shader::isLoaded() const noexcept
 	{	return m_shaderLoaded; }
@@ -270,10 +270,10 @@ return;}";
 		switch (_type)
 		{
 		case shaderType::vertex:
-			*_id = graphics::createVertexShader();
+			*_id = renderer::createVertexShader();
 			break;
 		case shaderType::fragment:
-			*_id = graphics::createFragmentShader();
+			*_id = renderer::createFragmentShader();
 			break;
 		default:
 			debug::send(
@@ -287,9 +287,9 @@ return;}";
 		}
 
 		// Loads the shader code into the shader object
-		graphics::loadShaderSource(*_id, _code);
+		renderer::loadShaderSource(*_id, _code);
 		// Compiles the shader at run-time
-		graphics::compileShader(*_id);
+		renderer::compileShader(*_id);
 		// Performs error checking on the shader
 		return checkForErrors(_id, _type);
 	}
@@ -297,18 +297,18 @@ return;}";
 	inline void shader::createShaderProgram() noexcept
 	{
 		// Creates a shader program object assigned to id, this sets it as the active shader
-		m_idProgram = graphics::createShaderProgram(m_idVertex, m_idFragment);
+		m_idProgram = renderer::createShaderProgram(m_idVertex, m_idFragment);
 		// Performs error checking on the shader program
 		if (!checkForErrors(&m_idProgram, shaderType::program))
 		{
-			graphics::deleteShaderProgram(m_idProgram);
+			renderer::deleteShaderProgram(m_idProgram);
 			return;
 		}
 		// We no longer need the vertex and fragment shaders
-		graphics::deleteShader(m_idVertex);
-		graphics::deleteShader(m_idFragment);
+		renderer::deleteShader(m_idVertex);
+		renderer::deleteShader(m_idFragment);
 		// Sets the shader as the active one
-		graphics::useShaderProgram(m_idProgram);
+		renderer::useShaderProgram(m_idProgram);
 		m_shaderLoaded = true;
 	}
 
@@ -324,11 +324,11 @@ return;}";
 		if (_type == shaderType::program)
 		{
 			// Retrieves the compile status of the given shader by id
-			graphics::getProgramiv(*_shaderID, &success);
+			renderer::getProgramiv(*_shaderID, &success);
 			if (!success)
 			{
 				// In the case of a failure it loads the log and outputs
-				graphics::getProgramInfoLog(*_shaderID, infoLog, 512);
+				renderer::getProgramInfoLog(*_shaderID, infoLog, 512);
 				debug::send(
 					"ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog),
 					debug::type::Note,
@@ -343,11 +343,11 @@ return;}";
 		else
 		{
 			// Retrieves the compile status of the given shader by id
-			graphics::getShaderiv(*_shaderID, &success);
+			renderer::getShaderiv(*_shaderID, &success);
 			if (!success)
 			{
 				// In the case of a failure it loads the log and outputs
-				graphics::getShaderInfoLog(*_shaderID, infoLog, 512);
+				renderer::getShaderInfoLog(*_shaderID, infoLog, 512);
 				string msg = "ERROR::SHADER::"
 					+ byType(_type, string("VERTEX"), string("FRAGMENT"))
 					+ "::COMPILATION_FAILED:\n"
@@ -379,7 +379,7 @@ return;}";
 
 	void shader::setBool(string _name, const bool _value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -389,12 +389,12 @@ return;}";
 			);
 			return;
 		}
-		graphics::setBool(m_idProgram, location, _value);
+		renderer::setBool(m_idProgram, location, _value);
 	}
 
 	void shader::setInt(string _name, const int32_t _value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -404,12 +404,12 @@ return;}";
 			);
 			return;
 		}
-		graphics::setInt(m_idProgram, location, _value);
+		renderer::setInt(m_idProgram, location, _value);
 	}
 
 	void shader::setUint(string _name, const uint32_t _value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -419,12 +419,12 @@ return;}";
 			);
 			return;
 		}
-		graphics::setUint(m_idProgram, location, _value);
+		renderer::setUint(m_idProgram, location, _value);
 	}
 
 	void shader::setFloat(string _name, const float _value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -434,12 +434,12 @@ return;}";
 			);
 			return;
 		}
-		graphics::setFloat(m_idProgram, location, _value	);
+		renderer::setFloat(m_idProgram, location, _value	);
 	}
 
 	void shader::setFloat2(string _name, const glm::vec2 _value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -449,11 +449,11 @@ return;}";
 			);
 			return;
 		}
-		graphics::setFloat2(m_idProgram, location, &_value[0]);
+		renderer::setFloat2(m_idProgram, location, &_value[0]);
 	}
 	void shader::setFloat2(string _name, const glm::vec2 *_value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -463,12 +463,12 @@ return;}";
 			);
 			return;
 		}
-		graphics::setFloat2(m_idProgram, location, &(*_value)[0]);
+		renderer::setFloat2(m_idProgram, location, &(*_value)[0]);
 	}
 
 	void shader::setFloat3(string _name, const glm::vec3 _value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -478,11 +478,11 @@ return;}";
 			);
 			return;
 		}
-		graphics::setFloat3(m_idProgram, location, &_value[0]);
+		renderer::setFloat3(m_idProgram, location, &_value[0]);
 	}
 	void shader::setFloat3(string _name, const glm::vec3 *_value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -492,12 +492,12 @@ return;}";
 			);
 			return;
 		}
-		graphics::setFloat3(m_idProgram, location, &(*_value)[0]);
+		renderer::setFloat3(m_idProgram, location, &(*_value)[0]);
 	}
 
 	void shader::setFloat4(string _name, const glm::vec4 _value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -507,11 +507,11 @@ return;}";
 			);
 			return;
 		}
-		graphics::setFloat4(m_idProgram, location, &_value[0]);
+		renderer::setFloat4(m_idProgram, location, &_value[0]);
 	}
 	void shader::setFloat4(string _name, const glm::vec4 *_value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -521,12 +521,12 @@ return;}";
 			);
 			return;
 		}
-		graphics::setFloat4(m_idProgram, location, &(*_value)[0]);
+		renderer::setFloat4(m_idProgram, location, &(*_value)[0]);
 	}
 
 	void shader::setMat3(string _name, const glm::mat3 _value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -536,11 +536,11 @@ return;}";
 			);
 			return;
 		}
-		graphics::setMat3(m_idProgram, location, &_value[0][0]);
+		renderer::setMat3(m_idProgram, location, &_value[0][0]);
 	}
 	void shader::setMat3(string _name, const glm::mat3 *_value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -550,12 +550,12 @@ return;}";
 			);
 			return;
 		}
-		graphics::setMat3(m_idProgram, location, &(*_value)[0][0]);
+		renderer::setMat3(m_idProgram, location, &(*_value)[0][0]);
 	}
 
 	void shader::setMat4(string _name, const glm::mat4 _value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -565,11 +565,11 @@ return;}";
 			);
 			return;
 		}
-		graphics::setMat4(m_idProgram, location, &_value[0][0]);
+		renderer::setMat4(m_idProgram, location, &_value[0][0]);
 	}
 	void shader::setMat4(string _name, const glm::mat4 *_value) const noexcept
 	{
-		int32_t location = graphics::getUniformLocation(m_idProgram, _name.c_str());
+		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 		if (location < 0)
 		{
 			debug::send("Attempting to set unknown uniform \""
@@ -579,6 +579,6 @@ return;}";
 			);
 			return;
 		}
-		graphics::setMat4(m_idProgram, location, &(*_value)[0][0]);
+		renderer::setMat4(m_idProgram, location, &(*_value)[0][0]);
 	}
 }

@@ -28,7 +28,7 @@ namespace srender
 
 	public:
 		/** TODO: This is a mess, the vector is only ever accessed
-		 * from model and is then cleaned up by renderer */
+		 * from model and is then cleaned up by graphics */
 		static std::vector<texture*> s_loadedTextures;
 
 		static void deleteAll() noexcept;

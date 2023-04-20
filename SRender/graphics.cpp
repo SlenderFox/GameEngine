@@ -1,319 +1,294 @@
 #include "graphics.hpp"
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
+#include "renderer.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "debug.hpp"
+
+using glm::vec3;
+using glm::vec4;
+using glm::mat3;
+using glm::mat4;
+using std::string;
+using std::vector;
 
 namespace srender
 {
 	namespace graphics
 	{
-		bool l_gladLoaded = false;
+		camera *s_camera = nullptr;
+		vector<model*> s_models;
+		vector<light*> s_lights;
 
-		bool loadGlad() noexcept
+		bool init(const float _aspect) noexcept
 		{
-			// Glad: load all OpenGL function pointers
-			if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-			{	return false; }
+			// Default clear colour
+			setClearColour({0.1f, 0.1f, 0.1f});
 
-			l_gladLoaded = true;
+			// Initialise camera
+			s_camera = new camera(_aspect, 75.0f);
+			s_camera->setPosition({ 0.0f, 0.0f, 6.0f });
 
-			glEnable(GL_DEPTH_TEST);
-			//glEnable(GL_STENCIL_TEST);
+			// Initialise arrays
+			s_models = vector<model*>();
+			s_lights = vector<light*>();
 
 			return true;
 		}
 
-		bool getGladLoaded() noexcept
-		{	return l_gladLoaded; }
-
-		void clearScreenBuffers() noexcept
+		void terminate() noexcept
 		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		}
+			for (unsigned int i = 0; i < s_models.size(); ++i)
+			{	delete s_models[i]; }
 
-		void setClearColour(
-			const float _r,
-			const float _g,
-			const float _b,
-			const float _a
-		) noexcept
-		{	glClearColor((GLfloat)_r, (GLfloat)_g, (GLfloat)_b, (GLfloat)_a); }
+			for (unsigned int i = 0; i < s_lights.size(); ++i)
+			{	delete s_lights[i]; }
 
-		void setRenderMode(const int _mode) noexcept
-		{	glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + _mode); }
-
-		void setResolution(const size_t _width, const size_t _height) noexcept
-		{	glViewport(0, 0, (GLsizei)_width, (GLsizei)_height); }
-
-		// Mesh
-
-		void setupMesh(
-			uint32_t *_outIdVAO,
-			uint32_t *_outIdVBO,
-			uint32_t *_outIdEBO,
-			const float *_vertices,
-			const uint32_t *_indices,
-			const uint32_t _verticesByteSize,
-			const uint32_t _indicesByteSize,
-			const uint32_t _vertexSize,
-			uint64_t _normalOffset,
-			uint64_t _texCoordOffset
-		) noexcept
-		{
-			// Creates and assigns to an id the Vertex Array Object, Vertex Buffer Object, and Element Buffer Object
-			// Arguments are number of objects to generate, and an array of uints to have the ids stored in
-			glGenVertexArrays(1, _outIdVAO);
-			glGenBuffers(1, _outIdVBO);
-			glGenBuffers(1, _outIdEBO);
-
-			// Binds the vertex array so that the VBO and EBO are neatly stored within
-			glBindVertexArray(*_outIdVAO);
-
-			// GL_ARRAY_BUFFER effectively works like a pointer, using the id provided to point to the buffer
-			glBindBuffer(GL_ARRAY_BUFFER, *_outIdVBO);
-			// Loads the vertices to the VBO
-			glBufferData(GL_ARRAY_BUFFER, (GLsizei)_verticesByteSize, _vertices, GL_STATIC_DRAW);
-
-			/*GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
-			* GL_STATIC_DRAW: the data is set only once and used many times.
-			*GL_DYNAMIC_DRAW: the data is changed a lot and used many times.
-			*/
-
-			// This buffer stores the indices that reference the elements of the VBO
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *_outIdEBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizei)_indicesByteSize, _indices, GL_STATIC_DRAW);
-
-			/*Tells the shader how to use the vertex data provided
-			* p1: Which vertex attribute we want to configure in the vertex shader (location = 0)
-			* p2: Vertex size (vec3)
-			* p3: The type of data (vec is using floats)
-			* p4: Whether we want to normalise the data
-			* p5: Stride, how big each chunk of data is
-			* p6: Offset, for some reason a void*
-			*/
-			// Position attribute
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, _vertexSize, (void*)0);
-			// Normal attribute
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, _vertexSize, (void*)_normalOffset);
-			// Texcoord attribute
-			glEnableVertexAttribArray(2);
-			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, _vertexSize, (void*)_texCoordOffset);
-
-			// Unbinds the vertex array
-			glBindVertexArray(0);
-			// Unbinds the GL_ARRAY_BUFFER
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			// Unbinds the GL_ELEMENT_ARRAY_BUFFER
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		}
-
-		void deleteMesh(
-			const uint32_t _idVAO,
-			const uint32_t _idVBO,
-			const uint32_t _idEBO
-		) noexcept
-		{
-			if (l_gladLoaded)
+			// Destroy all textures
+			for (size_t i = 0; i < texture::s_loadedTextures.size(); ++i)
 			{
-				glDeleteVertexArrays(1, &_idVAO);
-				glDeleteBuffers(1, &_idVBO);
-				glDeleteBuffers(1, &_idEBO);
+				// For safety
+				if (texture::s_loadedTextures.at(i))
+				{	delete texture::s_loadedTextures.at(i); }
+			}
+			// Unload all textures from gl memory once finished
+			texture::deleteAll();
+
+			delete s_camera;
+		}
+
+		void draw() noexcept
+		{
+			// Clears to background colour
+			renderer::clearScreenBuffers();
+
+			if (s_models.size() > 0)
+			{
+				for (uint8_t i = 0; i < s_models.size(); ++i)
+				{	getModelAt(i)->draw(); }
 			}
 		}
 
-		void drawElements(const uint32_t _idVAO, const uint32_t _size) noexcept
+		void loadLightsIntoShader(const shader *_shader) noexcept
 		{
-			glBindVertexArray(_idVAO);
-			glDrawElements(
-				GL_TRIANGLES,
-				(GLsizei)_size,
-				GL_UNSIGNED_INT,
-				0
-			);
-			glBindVertexArray(0);
+			_shader->setFloat("u_material.shininess", 32.0f);
+			uint8_t numDirLights = 0;
+			uint8_t numPointLights = 0;
+			uint8_t numSpotLights = 0;
+			string lightCount;
+
+			for (uint8_t i = 0; i < s_lights.size(); ++i)
+			{
+				light *currentLight = getLightAt(i);
+				switch (currentLight->getType())
+				{
+				case light::type::Directional:
+					lightCount = std::to_string(numDirLights);
+					_shader->setFloat3(
+						"u_dirLights[" + lightCount + "].colour.ambient",
+						(vec3)currentLight->getColour() * getAmbience()
+					);
+					_shader->setFloat3(
+						"u_dirLights[" + lightCount + "].colour.diffuse",
+						(vec3)currentLight->getColour()
+					);
+					_shader->setFloat3(
+						"u_dirLights[" + lightCount + "].colour.specular",
+						(vec3)currentLight->getColour()
+					);
+					_shader->setFloat4(
+						"u_dirLights[" + lightCount + "].direction",
+						(vec4)currentLight->getDirection()
+					);
+					++numDirLights; break;
+				case light::type::Point:
+					lightCount = std::to_string(numPointLights);
+					_shader->setFloat3(
+						"u_pointLights[" + lightCount + "].colour.diffuse",
+						(vec3)currentLight->getColour()
+					);
+					_shader->setFloat3(
+						"u_pointLights[" + lightCount + "].colour.specular",
+						(vec3)currentLight->getColour()
+					);
+					_shader->setFloat4(
+						"u_pointLights[" + lightCount + "].position",
+						(vec4)currentLight->getPosition()
+					);
+					_shader->setFloat(
+						"u_pointLights[" + lightCount + "].linear",
+						currentLight->getLinear()
+					);
+					_shader->setFloat(
+						"u_pointLights[" + lightCount + "].quadratic",
+						currentLight->getQuadratic()
+					);
+					++numPointLights; break;
+				case light::type::Spot:
+					lightCount = std::to_string(numSpotLights);
+					_shader->setFloat3(
+						"u_spotLights[" + lightCount + "].colour.diffuse",
+						(vec3)currentLight->getColour()
+					);
+					_shader->setFloat3(
+						"u_spotLights[" + lightCount + "].colour.specular",
+						(vec3)currentLight->getColour()
+					);
+					_shader->setFloat4(
+						"u_spotLights[" + lightCount + "].position",
+						(vec4)currentLight->getPosition()
+					);
+					_shader->setFloat4(
+						"u_spotLights[" + lightCount + "].direction",
+						(vec4)currentLight->getDirection()
+					);
+					_shader->setFloat(
+						"u_spotLights[" + lightCount + "].linear",
+						currentLight->getLinear()
+					);
+					_shader->setFloat(
+						"u_spotLights[" + lightCount + "].quadratic",
+						currentLight->getQuadratic()
+					);
+					_shader->setFloat(
+						"u_spotLights[" + lightCount + "].cutoff",
+						currentLight->getAngle()
+					);
+					_shader->setFloat(
+						"u_spotLights[" + lightCount + "].blur",
+						currentLight->getBlur()
+					);
+					++numSpotLights; break;
+				default:
+					debug::send("Incorrect light type"); return;
+				}
+			}
 		}
 
-		// Texture
-
-		void setActiveTexture(uint8_t _num) noexcept
-		{
-			if (_num > 31)
-			{	return; }
-
-			glActiveTexture(GL_TEXTURE0 + _num);
-		}
-
-		void genTexture(uint32_t *_idTex) noexcept
-		{	glGenTextures(1, _idTex); }
-
-		void bindTexture2D(uint32_t _idTex) noexcept
-		{	glBindTexture(GL_TEXTURE_2D, _idTex); }
-
-		void setBorderColour(float *_arr) noexcept
-		{	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, _arr); }
-
-		void setTex2DParamSWrapToEdge() noexcept
-		{	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); }
-
-		void setTex2DParamTWrapTOBorder() noexcept
-		{	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER); }
-
-		void setTex2DParamMinFilterLinearMipMapLinear() noexcept
-		{	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); }
-
-		void setTex2DParamMagFilterNearest() noexcept
-		{	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); }
-
-		void loadTexture(
-			int _width,
-			int _height,
-			int _numComponents,
-			unsigned char *_imageData
+		void modifyAllSpotlights(
+			const bool _isAngle,
+			const float _value
 		) noexcept
 		{
-			GLenum format;
-			switch (_numComponents)
+			for (uint8_t i = 0, count = 0; i < (uint8_t)s_lights.size(); ++i)
 			{
-				case 1: format = GL_RED; break;
-				case 3: format = GL_RGB; break;
-				case 4: format = GL_RGBA; break;
-				default: return;
+				light *currentlLight = getLightAt(i);
+
+				// We only want to modify the spotlights, ignore the others
+				if (currentlLight->getType() != light::type::Spot) continue;
+
+				string numLights = std::to_string(count);
+				float limit = _isAngle ? 90.0f : 1.0f;
+				float newValue = _isAngle ? currentlLight->getAngleRaw() : currentlLight->getBlurRaw();
+				newValue += _value;
+
+				if (newValue <= limit && newValue >= 0.0f)
+				{
+					// Update the value in the light
+					if (_isAngle)
+						currentlLight->setAngle(newValue);
+					else
+						currentlLight->setBlur(newValue);
+
+					// Update the shaders on all the models
+					for (uint8_t j = 0; j < s_models.size(); ++j)
+					{
+						if (_isAngle)
+						{
+							getModelAt(j)->getShaderRef()->setFloat(
+								"u_spotLights[" + numLights + "].cutoff",
+								currentlLight->getAngle()
+							);
+						}
+						else
+						{
+							getModelAt(j)->getShaderRef()->setFloat(
+								"u_spotLights[" + numLights + "].blur",
+								currentlLight->getBlur()
+							);
+						}
+					}
+				}
+				// Only incremented for a spotlight
+				++count;
+			}
+		}
+
+		model *addNewModel(
+			uint8_t &_outId,
+			const string *_modelPath,
+			const string *_shaderPath,
+			const bool _loadTextures
+		)
+		{
+			// Caps at 255
+			size_t currentAmount = s_models.size();
+			if (currentAmount > 255)
+				return nullptr;
+
+			_outId = (uint8_t)currentAmount;
+			s_models.push_back(new model(_modelPath, _shaderPath, s_camera, _loadTextures));
+			return getModelAt(_outId);
+		}
+
+		light *addNewLight(
+			uint8_t &_outId,
+			const light::type _type,
+			const colour _colour
+		) noexcept
+		{
+			// Caps at 255
+			size_t currentAmount = s_lights.size();
+			if (currentAmount > 255)
+				return nullptr;
+
+			_outId = (uint8_t)currentAmount;
+			s_lights.push_back(new light(_type, _colour));
+			return getLightAt(_outId);
+		}
+
+		void setClearColour(const colour _colour) noexcept
+		{
+			vec3 col = _colour.rgb();
+			renderer::setClearColour(col.r, col.g, col.b);
+		}
+
+		void setRenderMode(const mode _mode) noexcept
+		{
+			renderer::setRenderMode(int(_mode));
+		}
+
+		uint8_t modelCount() noexcept
+		{
+			return (uint8_t)s_models.size();
+		}
+
+		uint8_t lightCount() noexcept
+		{
+			return (uint8_t)s_lights.size();
+		}
+
+		model *getModelAt(const uint8_t _pos) noexcept
+		{
+			if (_pos > s_models.size() - 1)
+			{
+				debug::send("Attempting to access model outside array size");
+				return nullptr;
 			}
 
-			/*Applies the image to the texture object and creates the mipmaps
-			* p1: What object we are applying to
-			* p2: Specifies which mipmap level we are applying to (0 for base)
-			* p3: What format to store the texture as
-			* p4/5: The width and height of the texture
-			* p6: Border (legacy stuff, leave as 0)
-			* p7: What format the image is
-			* p8: The datatype being passed in (in this case a char)
-			* p9: The image data being passed in
-			*/
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, format, GL_UNSIGNED_BYTE, _imageData);
+			return s_models[_pos];
 		}
 
-		void genMipmap() noexcept
-		{	glGenerateMipmap(GL_TEXTURE_2D); }
-
-		void deleteTextures(const uint32_t _textureCount, const uint32_t *_textureIds) noexcept
+		light *getLightAt(const uint8_t _pos) noexcept
 		{
-			if (l_gladLoaded)
-			{	glDeleteTextures(_textureCount, _textureIds); }
+			if (_pos > s_lights.size() - 1)
+			{
+				debug::send("Attempting to access light outside array size");
+				return nullptr;
+			}
+
+			return s_lights[_pos];
 		}
 
-		// Shader
-
-		uint32_t createShaderProgram(uint32_t _idVertex, uint32_t _idFragment) noexcept
-		{
-			uint32_t idProgram = glCreateProgram();
-			// Link the vertex and fragment shaders
-			glAttachShader(idProgram, _idVertex);
-			glAttachShader(idProgram, _idFragment);
-			glLinkProgram(idProgram);
-			return idProgram;
-		}
-
-		uint32_t createVertexShader() noexcept
-		{	return glCreateShader(GL_VERTEX_SHADER); }
-
-		uint32_t createFragmentShader() noexcept
-		{	return glCreateShader(GL_FRAGMENT_SHADER); }
-
-		void useShaderProgram(uint32_t _idProgram) noexcept
-		{	glUseProgram(_idProgram); }
-
-		void loadShaderSource(uint32_t _idShader, const char *_code) noexcept
-		{	glShaderSource(_idShader, 1, &_code, NULL); }
-
-		void compileShader(uint32_t _idShader) noexcept
-		{	glCompileShader(_idShader); }
-
-		void getProgramiv(uint32_t _idShader, int32_t *_success) noexcept
-		{
-			glGetProgramiv(_idShader, GL_LINK_STATUS, _success);
-		}
-
-		void getProgramInfoLog(uint32_t _idShader, char *_infoLog, uint16_t _logSize) noexcept
-		{
-			glGetProgramInfoLog(_idShader, _logSize, NULL, _infoLog);
-		}
-
-		void getShaderiv(uint32_t _idShader, int32_t *_success) noexcept
-		{
-			glGetShaderiv(_idShader, GL_COMPILE_STATUS, _success);
-		}
-
-		void getShaderInfoLog(uint32_t _idShader, char *_infoLog, uint16_t _logSize) noexcept
-		{
-			glGetShaderInfoLog(_idShader, _logSize, NULL, _infoLog);
-		}
-
-		void deleteShaderProgram(const uint32_t _idProgram) noexcept
-		{
-			if (l_gladLoaded)
-			{	glDeleteProgram(_idProgram); }
-		}
-
-		void deleteShader(const uint32_t _idShader) noexcept
-		{	glDeleteShader(_idShader); }
-
-		int32_t getUniformLocation(uint32_t _idProgram, const char *_name) noexcept
-		{	return glGetUniformLocation(_idProgram, _name); }
-
-		void setBool(uint32_t _idProgram, int32_t _location, const bool _value) noexcept
-		{
-			useShaderProgram(_idProgram);
-			glUniform1i(_location, (int32_t)_value);
-		}
-
-		void setInt(uint32_t _idProgram, int32_t _location, const int32_t _value) noexcept
-		{
-			useShaderProgram(_idProgram);
-			glUniform1i(_location, (int32_t)_value);
-		}
-
-		void setUint(uint32_t _idProgram, int32_t _location, const uint32_t _value) noexcept
-		{
-			useShaderProgram(_idProgram);
-			glUniform1ui(_location, (int32_t)_value);
-		}
-
-		void setFloat(uint32_t _idProgram, int32_t _location, const float _value) noexcept
-		{
-			useShaderProgram(_idProgram);
-			glUniform1f(_location, _value);
-		}
-
-		void setFloat2(uint32_t _idProgram, int32_t _location, const float *_value) noexcept
-		{
-			useShaderProgram(_idProgram);
-			glUniform2fv(_location, 1, _value);
-		}
-
-		void setFloat3(uint32_t _idProgram, int32_t _location, const float *_value) noexcept
-		{
-			useShaderProgram(_idProgram);
-			glUniform3fv(_location, 1, _value);
-		}
-
-		void setFloat4(uint32_t _idProgram, int32_t _location, const float *_value) noexcept
-		{
-			useShaderProgram(_idProgram);
-			glUniform4fv(_location, 1, _value);
-		}
-
-		void setMat3(uint32_t _idProgram, int32_t _location, const float *_value) noexcept
-		{
-			useShaderProgram(_idProgram);
-			glUniformMatrix3fv(_location, 1, GL_FALSE, _value);
-		}
-
-		void setMat4(uint32_t _idProgram, int32_t _location, const float *_value) noexcept
-		{
-			useShaderProgram(_idProgram);
-			glUniformMatrix4fv(_location, 1, GL_FALSE, _value);
-		}
+		camera *getCamera() noexcept
+		{	return s_camera; }
 	}
 }

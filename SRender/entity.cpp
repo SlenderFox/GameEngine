@@ -1,5 +1,5 @@
-//#include "entity.hpp"	// Included upstream by renderer.hpp
-#include "renderer.hpp"
+//#include "entity.hpp"	// Included upstream by graphics.hpp
+#include "graphics.hpp"
 
 using std::string;
 using glm::vec3;
@@ -26,8 +26,8 @@ namespace srender
 		)
 		{
 			uint8_t ID;
-			_entity->m_modelRef = renderer::addNewModel(ID, _modelPath, _shaderPath, _loadTextures);
-			renderer::loadLightsIntoShader(_entity->m_modelRef->getShaderRef());
+			_entity->m_modelRef = graphics::addNewModel(ID, _modelPath, _shaderPath, _loadTextures);
+			graphics::loadLightsIntoShader(_entity->m_modelRef->getShaderRef());
 			_entity->updateModel();
 		}
 	};
@@ -95,7 +95,7 @@ namespace srender
 	)
 	{
 		// Currently this does nothing about the previous model and shader
-		// but only half causes a memory leak as they are managed by renderer
+		// but only half causes a memory leak as they are managed by graphics
 		_modelPath = application::getAppLocation() + _modelPath;
 		_shaderPath = application::getAppLocation() + _shaderPath;
 		entityLoader::BackgroundLoadModel(&_modelPath, &_shaderPath, this, _loadTextures);

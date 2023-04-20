@@ -1,5 +1,5 @@
 #pragma once
-#include "renderer.hpp"
+#include "graphics.hpp"
 #include "input.hpp"
 
 #ifndef _NODISCARD

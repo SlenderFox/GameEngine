@@ -1,6 +1,5 @@
-/** Designed to be the one stop shop for swapping graphics libraries */
-#include <cstdint>
-#include <cstddef>
+#pragma once
+#include "light.hpp"
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]
@@ -8,84 +7,54 @@
 
 namespace srender
 {
+	/** Graphics is the hub for the rendering side of the engine
+	 * @todo Look into changine includes up the chain
+	*/
 	namespace graphics
 	{
-		_NODISCARD bool loadGlad() noexcept;
-		_NODISCARD bool getGladLoaded() noexcept;
-		void clearScreenBuffers() noexcept;
-		void setClearColour(
-			const float _r,
-			const float _g,
-			const float _b,
-			const float _a = 1.0f
+		enum class mode: uint8_t
+		{
+			point,
+			line,
+			fill
+		};
+
+		bool init(const float _aspect) noexcept;
+		void draw() noexcept;
+
+		void terminate() noexcept;
+
+		void loadLightsIntoShader(const shader *_shader) noexcept;
+		/** Modifies either the angle or blur of all spotlights by a value
+		 * @note Max value is 90 for angle, 1 for blur, min for both is 0
+		 * @param _isAngle True to modify the angle, false to modify the blur of the spotlight
+		 * @param _value The amount to modify it by
+		 */
+		void modifyAllSpotlights(
+			const bool _isAngle,
+			const float _value
 		) noexcept;
-		void setRenderMode(const int _mode) noexcept;
-		void setResolution(const size_t _width, const size_t _height) noexcept;
 
-		// Mesh
+		model *addNewModel(
+			uint8_t &_outId,
+			const std::string *_modelPath,
+			const std::string *_shaderPath,
+			const bool _loadTextures = true);
 
-		void setupMesh(
-			uint32_t *_outIdVAO,
-			uint32_t *_outIdVBO,
-			uint32_t *_outIdEBO,
-			const float *_vertices,
-			const uint32_t *_indices,
-			const uint32_t _verticesByteSize,
-			const uint32_t _indicesByteSize,
-			const uint32_t _vertexSize,
-			uint64_t _normalOffset,
-			uint64_t _texCoordOffset
-		) noexcept;
-		void deleteMesh(
-			const uint32_t _idVAO,
-			const uint32_t _idVBO,
-			const uint32_t _idEBO
-		) noexcept;
-		void drawElements(const uint32_t _idVAO, const uint32_t _size) noexcept;
+		light *addNewLight(
+			uint8_t &_outId,
+			const light::type _type,
+			const colour _colour = colour::white()) noexcept;
 
-		// Texture
+		void setClearColour(const colour _colour) noexcept;
+		void setRenderMode(const mode _mode = mode::fill) noexcept;
 
-		void setActiveTexture(uint8_t _num) noexcept;
-		void genTexture(uint32_t *_idText) noexcept;
-		void bindTexture2D(uint32_t _idTex) noexcept;
-		void setBorderColour(float *_arr) noexcept;
-		void setTex2DParamSWrapToEdge() noexcept;
-		void setTex2DParamTWrapTOBorder() noexcept;
-		void setTex2DParamMinFilterLinearMipMapLinear() noexcept;
-		void setTex2DParamMagFilterNearest() noexcept;
-		void loadTexture(
-			int _width,
-			int _height,
-			int _numComponents,
-			unsigned char *_imageData
-		) noexcept;
-		void genMipmap() noexcept;
-		void deleteTextures(const uint32_t _textureCount, const uint32_t *_textureIds) noexcept;
+		_NODISCARD uint8_t modelCount() noexcept;
+		_NODISCARD uint8_t lightCount() noexcept;
+		_NODISCARD model *getModelAt(const uint8_t _pos) noexcept;
+		_NODISCARD light *getLightAt(const uint8_t _pos) noexcept;
+		_NODISCARD camera *getCamera() noexcept;
 
-		// Shader
-
-		_NODISCARD uint32_t createShaderProgram(uint32_t _idVertex, uint32_t _idFragment) noexcept;
-		_NODISCARD uint32_t createVertexShader() noexcept;
-		_NODISCARD uint32_t createFragmentShader() noexcept;
-		void useShaderProgram(uint32_t _idProgram) noexcept;
-		void loadShaderSource(uint32_t _idShader, const char *_code) noexcept;
-		void compileShader(uint32_t _idShader) noexcept;
-		void getProgramiv(uint32_t _idShader, int32_t *_success) noexcept;
-		void getProgramInfoLog(uint32_t _idShader, char *_infoLog, uint16_t _logSize) noexcept;
-		void getShaderiv(uint32_t _idShader, int32_t *_success) noexcept;
-		void getShaderInfoLog(uint32_t _idShader, char *_infoLog, uint16_t _logSize) noexcept;
-		void deleteShaderProgram(const uint32_t _idProgram) noexcept;
-		void deleteShader(const uint32_t _idShader) noexcept;
-
-		_NODISCARD int32_t getUniformLocation(uint32_t _idProgram, const char *_name) noexcept;
-		void setBool(uint32_t _idProgram, int32_t _location, const bool _value) noexcept;
-		void setInt(uint32_t _idProgram, int32_t _location, const int32_t _value) noexcept;
-		void setUint(uint32_t _idProgram, int32_t _location, const uint32_t _value) noexcept;
-		void setFloat(uint32_t _idProgram, int32_t _location, const float _value) noexcept;
-		void setFloat2(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
-		void setFloat3(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
-		void setFloat4(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
-		void setMat3(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
-		void setMat4(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
+		_NODISCARD constexpr float getAmbience() { return 0.15f; }
 	}
 }

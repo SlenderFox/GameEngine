@@ -1,5 +1,5 @@
 #include "texture.hpp"
-#include "graphics.hpp"
+#include "renderer.hpp"
 #include "exception.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
@@ -19,7 +19,7 @@ namespace srender
 	vector<texture*> texture::s_loadedTextures = vector<texture*>();
 
 	void texture::deleteAll() noexcept
-	{	graphics::deleteTextures(s_textureCount, s_textureIds); }
+	{	renderer::deleteTextures(s_textureCount, s_textureIds); }
 
 	uint32_t texture::getTexCount() noexcept
 	{	return s_textureCount; }
@@ -90,20 +90,20 @@ namespace srender
 		}
 
 		// Generates a texture object in vram
-		graphics::setActiveTexture(s_textureCount);
-		graphics::genTexture(&s_textureIds[s_textureCount]);
+		renderer::setActiveTexture(s_textureCount);
+		renderer::genTexture(&s_textureIds[s_textureCount]);
 		// Remember this works like a pointer to the object using the ID
-		graphics::bindTexture2D(s_textureIds[s_textureCount]);
+		renderer::bindTexture2D(s_textureIds[s_textureCount]);
 		// Sets some parameters to the currently bound texture object
 		//float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		//graphics::setBorderColour(borderColour);
-		graphics::setTex2DParamSWrapToEdge();
-		graphics::setTex2DParamTWrapTOBorder();
-		graphics::setTex2DParamMinFilterLinearMipMapLinear();
-		graphics::setTex2DParamMagFilterNearest();
+		//renderer::setBorderColour(borderColour);
+		renderer::setTex2DParamSWrapToEdge();
+		renderer::setTex2DParamTWrapTOBorder();
+		renderer::setTex2DParamMinFilterLinearMipMapLinear();
+		renderer::setTex2DParamMagFilterNearest();
 
-		graphics::loadTexture(texWidth, texHeight, numComponents, imageData);
-		graphics::genMipmap();
+		renderer::loadTexture(texWidth, texHeight, numComponents, imageData);
+		renderer::genMipmap();
 
 		// Frees the image memory
 		stbi_image_free(imageData);

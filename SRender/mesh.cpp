@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <string>
 #include "mesh.hpp"
-#include "graphics.hpp"
+#include "renderer.hpp"
 
 using std::string;
 using std::vector;
@@ -57,7 +57,7 @@ namespace srender
 	{
 		m_vertices = new vector<vertex>(_vertices ? *_vertices : generateVertices());
 		m_indices = new vector<uint32_t>(_indices ? *_indices : generateIndices());
-		graphics::setupMesh(
+		renderer::setupMesh(
 			&m_idVAO,
 			&m_idVBO,
 			&m_idEBO,
@@ -73,13 +73,13 @@ namespace srender
 
 	mesh::~mesh()
 	{
-		graphics::deleteMesh(m_idVAO, m_idVBO, m_idEBO);
+		renderer::deleteMesh(m_idVAO, m_idVBO, m_idEBO);
 		delete m_vertices;
 		delete m_indices;
 	}
 
 	void mesh::draw() const noexcept
-	{	graphics::drawElements(m_idVAO, (uint32_t)m_indices->size()); }
+	{	renderer::drawElements(m_idVAO, (uint32_t)m_indices->size()); }
 
 	uint32_t mesh::getVAO() const noexcept
 {	return m_idVAO; }
