@@ -29,12 +29,7 @@ namespace srender
 		m_shader = new shader(_shaderPath);
 		if (m_loadTextures) loadTexturesToShader();
 
-		debug::send(
-			"Done!",
-			debug::type::Note,
-			debug::impact::Small,
-			debug::stage::End
-		);
+		debug::send("Done!", debug::type::Note, debug::impact::Small, debug::stage::End);
 	}
 
 	model::~model()
@@ -64,18 +59,14 @@ namespace srender
 	{
 		debug::send(
 			"Loading model \"" + *_path + "\"",
-			debug::type::Process,
-			debug::impact::Large,
-			debug::stage::Begin
+			debug::type::Process, debug::impact::Large, debug::stage::Begin
 		);
 
 		if (!m_loadTextures)
 		{
 			debug::send(
 				"Ignoring textures",
-				debug::type::Note,
-				debug::impact::Small,
-				debug::stage::Mid
+				debug::type::Note, debug::impact::Small, debug::stage::Mid
 			);
 		}
 
@@ -86,9 +77,7 @@ namespace srender
 		{
 			debug::send(
 				"ERROR::ASSIMP::" + string(importer.GetErrorString()),
-				debug::type::Note,
-				debug::impact::Large,
-				debug::stage::Mid
+				debug::type::Note, debug::impact::Large, debug::stage::Mid
 			);
 			return;
 		}

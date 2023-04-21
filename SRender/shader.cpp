@@ -55,9 +55,7 @@ namespace srender
 		{
 			debug::send(
 				"ERROR::SHADER::LOADING_INCORRECT_SHADER_TYPE",
-				debug::type::Note,
-				debug::impact::Large,
-				debug::stage::Mid
+				debug::type::Note, debug::impact::Large, debug::stage::Mid
 			);
 			return;
 		}
@@ -73,11 +71,7 @@ namespace srender
 
 			debug::send(
 				"Compiling shader \"" + path + "\"...",
-				debug::type::Process,
-				debug::impact::Small,
-				debug::stage::Mid,
-				false,
-				false
+				debug::type::Process, debug::impact::Small, debug::stage::Mid, false, false
 			);
 
 			// Try to retrieve the vertex/fragment source code from filePath
@@ -102,13 +96,7 @@ namespace srender
 					+ "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE:\n"
 					+ string(e.what());
 
-				debug::send(
-					msg,
-					debug::type::Note,
-					debug::impact::Large,
-					debug::stage::Mid,
-					true
-				);
+				debug::send(msg, debug::type::Note, debug::impact::Large, debug::stage::Mid, true);
 
 				m_usingFallback = true;
 			}
@@ -133,11 +121,7 @@ namespace srender
 		{
 			debug::send(
 				"Compiling fallback code...",
-				debug::type::Process,
-				debug::impact::Small,
-				debug::stage::Mid,
-				false,
-				false
+				debug::type::Process, debug::impact::Small, debug::stage::Mid, false, false
 			);
 
 			bool result;
@@ -243,13 +227,7 @@ return;}";
 				string msg = "ERROR::SHADER::"
 					+ byType(_type, string("VERTEX"), string("FRAGMENT"))
 					+ "::FALLBACK_CODE_FAILURE";
-				debug::send(
-					msg,
-					debug::type::Note,
-					debug::impact::Large,
-					debug::stage::Mid,
-					true
-				);
+				debug::send(msg, debug::type::Note, debug::impact::Large, debug::stage::Mid, true);
 
 				exit(2);
 			}
@@ -278,10 +256,7 @@ return;}";
 		default:
 			debug::send(
 				"ERROR::SHADER::ATTEMPTING_TO_COMPILE_UNKNOWN_SHADER_TYPE",
-				debug::type::Note,
-				debug::impact::Large,
-				debug::stage::Mid,
-				true
+				debug::type::Note, debug::impact::Large, debug::stage::Mid, true
 			);
 			return false;
 		}
@@ -331,11 +306,7 @@ return;}";
 				renderer::getProgramInfoLog(*_shaderID, infoLog, 512);
 				debug::send(
 					"ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog),
-					debug::type::Note,
-					debug::impact::Large,
-					debug::stage::Mid,
-					true,
-					false
+					debug::type::Note, debug::impact::Large, debug::stage::Mid, true, false
 				);
 				return false;
 			}
@@ -352,14 +323,7 @@ return;}";
 					+ byType(_type, string("VERTEX"), string("FRAGMENT"))
 					+ "::COMPILATION_FAILED:\n"
 					+ string(infoLog);
-				debug::send(
-					msg,
-					debug::type::Note,
-					debug::impact::Large,
-					debug::stage::Mid,
-					true,
-					false
-				);
+				debug::send(msg, debug::type::Note,debug::impact::Large, debug::stage::Mid, true, false);
 				return false;
 			}
 		}
