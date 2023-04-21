@@ -86,7 +86,7 @@ namespace srender
 
 	void processInput() noexcept
 	{
-		//if (Input::GetKey(Input::Key::Key_F11, Input::State::Press))
+		//if (Input::GetKey(input::key::key_f11, input::state::press))
 		//{
 		//	l_fullscreen = true;
 		//	GLFWmonitor *primMon = glfwGetPrimaryMonitor();
@@ -96,7 +96,7 @@ namespace srender
 		//	glfwSetWindowMonitor(l_windowRef, primMon, xp, yp, vid->width, vid->height, vid->refreshRate);
 		//}
 		//
-		//if (Input::GetKey(Input::Key::Key_K, Input::State::Press))
+		//if (Input::GetKey(input::key::key_k, input::state::press))
 		//{
 		//	l_fullscreen = false;
 		//	int monPosX, monPosY, monWidth, monHeight;
@@ -107,7 +107,7 @@ namespace srender
 		//}
 
 		// End application
-		if (input::checkKeyState(input::key::Key_End, input::state::Press))
+		if (input::checkKeyState(input::key::key_end, input::state::press))
 		{
 			application::quit();
 		}

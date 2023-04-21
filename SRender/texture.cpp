@@ -44,14 +44,14 @@ namespace srender
 	{
 		debug::send(
 			"Loading texture " + std::to_string(s_textureCount) + ": \"" + m_file + "\"...",
-			debug::type::Process, debug::impact::Large, debug::stage::Mid, false, false
+			debug::type::process, debug::impact::large, debug::stage::mid, false, false
 		);
 
 		if (s_textureCount > 31)
 		{
 			debug::send(
 				"Failed to load texture: Exceeded max texture count (max = 32)",
-				debug::type::Note, debug::impact::Large, debug::stage::Mid, true
+				debug::type::note, debug::impact::large, debug::stage::mid, true
 			);
 
 			throw textureException("Exceeded max textures");
@@ -73,7 +73,7 @@ namespace srender
 		{
 			debug::send(
 				"Failed to load texture: No file found",
-				debug::type::Note, debug::impact::Large, debug::stage::Mid, true
+				debug::type::note, debug::impact::large, debug::stage::mid, true
 			);
 
 			throw textureException("No file found");

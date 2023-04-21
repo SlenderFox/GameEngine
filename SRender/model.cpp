@@ -29,7 +29,7 @@ namespace srender
 		m_shader = new shader(_shaderPath);
 		if (m_loadTextures) loadTexturesToShader();
 
-		debug::send("Done!", debug::type::Note, debug::impact::Small, debug::stage::End);
+		debug::send("Done!", debug::type::note, debug::impact::small, debug::stage::end);
 	}
 
 	model::~model()
@@ -59,14 +59,14 @@ namespace srender
 	{
 		debug::send(
 			"Loading model \"" + *_path + "\"",
-			debug::type::Process, debug::impact::Large, debug::stage::Begin
+			debug::type::process, debug::impact::large, debug::stage::begin
 		);
 
 		if (!m_loadTextures)
 		{
 			debug::send(
 				"Ignoring textures",
-				debug::type::Note, debug::impact::Small, debug::stage::Mid
+				debug::type::note, debug::impact::small, debug::stage::mid
 			);
 		}
 
@@ -77,7 +77,7 @@ namespace srender
 		{
 			debug::send(
 				"ERROR::ASSIMP::" + string(importer.GetErrorString()),
-				debug::type::Note, debug::impact::Large, debug::stage::Mid
+				debug::type::note, debug::impact::large, debug::stage::mid
 			);
 			return;
 		}
@@ -222,9 +222,9 @@ namespace srender
 						+ std::to_string(texture::s_loadedTextures[j]->getId())
 						+ ": "
 						+ texture::s_loadedTextures[j]->getFile().c_str(),
-						debug::type::Note,
-						debug::impact::Small,
-						debug::stage::Mid
+						debug::type::note,
+						debug::impact::small,
+						debug::stage::mid
 					);
 					texturesOut.push_back(texture::s_loadedTextures[j]);
 				}
@@ -275,9 +275,9 @@ namespace srender
 			};
 			debug::send(
 				msg,
-				debug::type::Note,
-				debug::impact::Small,
-				debug::stage::Mid
+				debug::type::note,
+				debug::impact::small,
+				debug::stage::mid
 			);
 		}
 	}

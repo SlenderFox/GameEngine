@@ -80,7 +80,7 @@ namespace srender
 				light *currentLight = getLightAt(i);
 				switch (currentLight->getType())
 				{
-				case light::type::Directional:
+				case light::type::directional:
 					lightCount = std::to_string(numDirLights);
 					_shader->setFloat3(
 						"u_dirLights[" + lightCount + "].colour.ambient",
@@ -99,7 +99,7 @@ namespace srender
 						(vec4)currentLight->getDirection()
 					);
 					++numDirLights; break;
-				case light::type::Point:
+				case light::type::point:
 					lightCount = std::to_string(numPointLights);
 					_shader->setFloat3(
 						"u_pointLights[" + lightCount + "].colour.diffuse",
@@ -122,7 +122,7 @@ namespace srender
 						currentLight->getQuadratic()
 					);
 					++numPointLights; break;
-				case light::type::Spot:
+				case light::type::spot:
 					lightCount = std::to_string(numSpotLights);
 					_shader->setFloat3(
 						"u_spotLights[" + lightCount + "].colour.diffuse",
@@ -173,7 +173,7 @@ namespace srender
 				light *currentlLight = getLightAt(i);
 
 				// We only want to modify the spotlights, ignore the others
-				if (currentlLight->getType() != light::type::Spot) continue;
+				if (currentlLight->getType() != light::type::spot) continue;
 
 				string numLights = std::to_string(count);
 				float limit = _isAngle ? 90.0f : 1.0f;

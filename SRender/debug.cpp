@@ -15,18 +15,18 @@ namespace srender
 	namespace debug
 	{
 		/** List of prefixes:
-		 * @note 00: Begin-Small-Note   : ┌ \xDA 218 \u250C
-		 * @note 01: Begin-Small-Process: ┬ \xC2 194 \u252C
-		 * @note 02: Begin-Large-Note   : ╒ \xD5 213 \u2552
-		 * @note 03: Begin-Large-Process: ╤ \xD1 209 \u2564
-		 * @note 04:   Mid-Small-Note   : ├ \xC3 195 \u251C
-		 * @note 05:   Mid-Small-Process: ┼ \xC5 197 \u253C
-		 * @note 06:   Mid-Large-Note   : ╞ \xC6 198 \u255E
-		 * @note 07:   Mid-Large-Process: ╪ \xD8 216 \u256A
-		 * @note 08:   End-Small-Note   : └ \xC0 192 \u2514
-		 * @note 09:   End-Small-Process: ┴ \xC1 193 \u2534
-		 * @note 10:   End-Large-Note   : ╘ \xD4 212 \u2558
-		 * @note 11:   End-Large-Process: ╧ \xCF 207 \u2567
+		 * @note 00: begin-small-note   : ┌ \xDA 218 \u250C
+		 * @note 01: begin-small-process: ┬ \xC2 194 \u252C
+		 * @note 02: begin-large-note   : ╒ \xD5 213 \u2552
+		 * @note 03: begin-large-process: ╤ \xD1 209 \u2564
+		 * @note 04:   mid-small-note   : ├ \xC3 195 \u251C
+		 * @note 05:   mid-small-process: ┼ \xC5 197 \u253C
+		 * @note 06:   mid-large-note   : ╞ \xC6 198 \u255E
+		 * @note 07:   mid-large-process: ╪ \xD8 216 \u256A
+		 * @note 08:   end-small-note   : └ \xC0 192 \u2514
+		 * @note 09:   end-small-process: ┴ \xC1 193 \u2534
+		 * @note 10:   end-large-note   : ╘ \xD4 212 \u2558
+		 * @note 11:   end-large-process: ╧ \xCF 207 \u2567
 		 */
 		const wchar_t *prefixes[12] = {
 			L"\u250C",

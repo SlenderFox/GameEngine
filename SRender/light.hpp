@@ -20,9 +20,9 @@ namespace srender
 	public:
 		enum class type: uint8_t
 		{
-			Directional,
-			Point,
-			Spot
+			directional,
+			point,
+			spot
 		};
 
 	private:
@@ -35,7 +35,7 @@ namespace srender
 
 	public:
 		light(
-			const type _type = type::Directional,
+			const type _type = type::directional,
 			const colour _colour = colour::white(),
 			glm::mat4 inTransform = glm::mat4(1)
 		) noexcept;

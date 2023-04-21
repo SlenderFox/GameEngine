@@ -12,21 +12,21 @@ namespace srender
 	{
 		enum class type: uint8_t
 		{
-			Note = 0,
-			Process = 1
+			note = 0,
+			process = 1
 		};
 
 		enum class impact: uint8_t
 		{
-			Small = 0,
-			Large = 2
+			small = 0,
+			large = 2
 		};
 
 		enum class stage: uint8_t
 		{
-			Begin = 0,
-			Mid = 4,
-			End = 8
+			begin = 0,
+			mid = 4,
+			end = 8
 		};
 
 		void init() noexcept;
