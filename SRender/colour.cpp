@@ -6,7 +6,8 @@ using glm::vec3;
 
 namespace srender
 {
-	constexpr float colour::fmod(float _x, float _y) noexcept
+	/** My own fmod function to have constexpr*/
+	constexpr float fmod(float _x, float _y) noexcept
 	{
 		// Error handling
 		assert(_y != 0.0f);

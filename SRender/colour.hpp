@@ -18,12 +18,10 @@ namespace srender
 	/** An object used to store and convert colour information
 	 * @note Filled to the brim with constexpr to try and calculate as much as possible at compile time
 	*/
-	class colour
+	struct colour
 	{
+	private:
 		glm::vec3 m_RGB = glm::vec3(0);	// Colour data stored as 0-1 for easy conversion
-
-		/** My own fmod function to have constexpr*/
-		_NODISCARD static constexpr float fmod(float _x, float _y) noexcept;
 
 	public:
 		/** Converts colour data from RGB to HSV
