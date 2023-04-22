@@ -110,10 +110,10 @@ namespace srender
 	)
 	{
 		// Process vertex positions, normals, and texture coordinates
-		vector<vertex> vertices;
+		vector<mesh::vertex> vertices;
 		for (uint32_t i = 0; i < _mesh->mNumVertices; ++i)
 		{
-			vertex vertex;
+			mesh::vertex vertex;
 			vec3 vector;
 			// Position
 			vector.x = _mesh->mVertices[i].x;
