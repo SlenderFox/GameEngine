@@ -15,7 +15,7 @@ namespace srender
 	 * @todo Iris, instant brightness response
 	 * @todo Retina, slower brightness response
 	 */
-	class light: public entity
+	class light : public entity
 	{
 	public:
 		enum class type: uint8_t

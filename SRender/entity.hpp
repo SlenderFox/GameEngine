@@ -11,7 +11,7 @@ namespace srender
 	class entity;
 
 	/** Entity base is used to allow root to work */
-	class entityBase: public transform
+	class entityBase : public transform
 	{
 	protected:
 		std::vector<entity*> m_childrenRef = std::vector<entity*>();
@@ -32,7 +32,7 @@ namespace srender
 	 * @todo Use regular constructor to load with model
 	 * @todo Look into ability to swap models
 	*/
-	class entity: public entityBase
+	class entity : public entityBase
 	{
 		friend struct entityLoader;
 
@@ -75,7 +75,7 @@ namespace srender
 	};
 
 	/** Root is a special, static entity that only has children */
-	class root: public entityBase
+	class root : public entityBase
 	{
 	public:
 		_NODISCARD static root *getRoot() noexcept
