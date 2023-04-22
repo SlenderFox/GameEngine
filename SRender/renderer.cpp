@@ -144,8 +144,8 @@ namespace srender
 			glActiveTexture(GL_TEXTURE0 + _num);
 		}
 
-		void genTexture(uint32_t *_idTex) noexcept
-		{	glGenTextures(1, _idTex); }
+		void genTexture(uint32_t *_outIdTex) noexcept
+		{	glGenTextures(1, _outIdTex); }
 
 		void bindTexture2D(uint32_t _idTex) noexcept
 		{	glBindTexture(GL_TEXTURE_2D, _idTex); }

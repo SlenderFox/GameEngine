@@ -47,7 +47,10 @@ namespace srender
 		// Texture
 
 		void setActiveTexture(uint8_t _num) noexcept;
-		void genTexture(uint32_t *_idText) noexcept;
+		/** Generates a GL texture object
+		 * @param _outIdTex OpenGL will place the texture id here
+		 */
+		void genTexture(uint32_t *_outIdTex) noexcept;
 		void bindTexture2D(uint32_t _idTex) noexcept;
 		void setBorderColour(float *_arr) noexcept;
 		void setTex2DParamSWrapToEdge() noexcept;
