@@ -8,7 +8,7 @@
 namespace srender
 {
 	/** Graphics is the hub for the rendering side of the engine
-	 * @todo Look into changine includes up the chain
+	 * @todo Look into changing includes up the chain
 	*/
 	namespace graphics
 	{
