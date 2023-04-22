@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <vector>
+#include <map>
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]
@@ -8,9 +8,10 @@
 
 namespace srender
 {
-	/** The texture class is an encapsulation for a texture on the gpu
-	 * @todo Overhaul whole class
-	 * @todo Allow destroying of a texture so that another one can replace it
+	/** The texture class is an encapsulation for a texture on the gpu  |
+	 * Textures are stored in key-value pairs where the key is from 0-31 correlating to
+	 * the GL texture objects on the gpu. Each texture also has an id which is given by
+	 * openGL and used for the deletion of the texture, annoyingly this number starts at 1.
 	*/
 	struct texture
 	{
@@ -21,30 +22,37 @@ namespace srender
 			specular
 		};
 
+		/** Deletes all loaded textures */
+		static void init() noexcept;
+		static void terminate() noexcept;
+		static texture *loadNew(std::string _path, type _type = type::diffuse);
+		_NODISCARD static uint8_t size() noexcept;
+		_NODISCARD static texture *at(uint8_t _val);
+
 	private:
-		int32_t m_id = 0;
+		bool m_loaded = false;
+		/** The id is the openGL supplied identifier used for deleting the texture */
+		uint32_t m_id = 0U;
+		/** This is the same as the key-value pair and is actually which texture this on the gpu */
+		uint8_t m_location = 0U;
+		/** Where the source of the image is located, used to prevent duplication */
 		std::string m_file;
+		/** The type of texture is used for how the texture is loaded into the shader */
 		type m_type = type::diffuse;
 
+		texture(uint8_t _location) noexcept;
+
 	public:
-		/** TODO: This is a mess, the vector is only ever accessed
-		 * from model and is then cleaned up by graphics */
-		static std::vector<texture*> s_loadedTextures;
+		void load(std::string _path, type _type = type::diffuse);
+		void destroy() noexcept;
 
-		static void deleteAll() noexcept;
-		_NODISCARD static uint32_t getTexCount() noexcept;
-
-		_NODISCARD int32_t getId() const noexcept;
-		_NODISCARD type getType() const noexcept;
+		_NODISCARD bool getLoaded() const noexcept;
+		_NODISCARD int32_t getLocation() const noexcept;
 		_NODISCARD std::string getFile() const noexcept;
+		_NODISCARD type getType() const noexcept;
 
-		texture(
-			std::string _path,
-			type _type = type::diffuse
-		);
-
-		bool operator==(const int32_t &_other) const noexcept;
-		bool operator!=(const int32_t &_other) const noexcept;
+		bool operator==(const uint8_t &_other) const noexcept;
+		bool operator!=(const uint8_t &_other) const noexcept;
 		bool operator==(const std::string &_other) const noexcept;
 		bool operator!=(const std::string &_other) const noexcept;
 	};

@@ -195,10 +195,10 @@ namespace srender
 
 			// First we check if the texture has already been loaded into memory
 			bool loadNewTexture = true;
-			for (size_t j = 0; j < texture::s_loadedTextures.size(); ++j)
+			for (uint8_t j = 0; j < texture::size(); ++j)
 			{
-				// Skip if not the same texture
-				if (*texture::s_loadedTextures[j] != path)
+				// Skip if not the same texture or not loaded
+				if (!texture::at(j)->getLoaded() || *texture::at(j) != path)
 				{	continue; }
 
 				// Texture has already been loaded into memory
@@ -219,14 +219,14 @@ namespace srender
 				{
 					debug::send(
 						"Reusing texture "
-						+ std::to_string(texture::s_loadedTextures[j]->getId())
+						+ std::to_string(texture::at(j)->getLocation())
 						+ ": "
-						+ texture::s_loadedTextures[j]->getFile().c_str(),
+						+ texture::at(j)->getFile().c_str(),
 						debug::type::note,
 						debug::impact::small,
 						debug::stage::mid
 					);
-					texturesOut.push_back(texture::s_loadedTextures[j]);
+					texturesOut.push_back(texture::at(j));
 				}
 
 				break;
@@ -235,7 +235,7 @@ namespace srender
 			// If texture has not been loaded before, load it for the first time
 			if (loadNewTexture)
 			{
-				texture *tex = new texture(path, _texType);
+				texture *tex = texture::loadNew(path, _texType);
 				texturesOut.push_back(tex);
 			}
 		}
@@ -266,12 +266,12 @@ namespace srender
 			}
 
 			string location = "u_material." + name + number;
-			m_shader->setInt(location.c_str(), (int32_t)m_textures[i]->getId());
+			m_shader->setInt(location.c_str(), (int32_t)m_textures[i]->getLocation());
 			string msg = {
 				"Setting "
 				+ location
 				+ " to "
-				+ std::to_string(m_textures[i]->getId())
+				+ std::to_string(m_textures[i]->getLocation())
 			};
 			debug::send(
 				msg,

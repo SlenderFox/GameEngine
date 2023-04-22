@@ -31,6 +31,8 @@ namespace srender
 			s_models = vector<model*>();
 			s_lights = vector<light*>();
 
+			texture::init();
+
 			return true;
 		}
 
@@ -42,15 +44,7 @@ namespace srender
 			for (unsigned int i = 0; i < s_lights.size(); ++i)
 			{	delete s_lights[i]; }
 
-			// Destroy all textures
-			for (size_t i = 0; i < texture::s_loadedTextures.size(); ++i)
-			{
-				// For safety
-				if (texture::s_loadedTextures.at(i))
-				{	delete texture::s_loadedTextures.at(i); }
-			}
-			// Unload all textures from gl memory once finished
-			texture::deleteAll();
+			texture::terminate();
 
 			delete s_camera;
 		}

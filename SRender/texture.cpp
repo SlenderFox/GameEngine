@@ -6,59 +6,78 @@
 #include "debug.hpp"
 
 using std::string;
-using std::vector;
-
 namespace srender
 {
 	// Static
+	std::map<uint8_t, texture*> s_loadedTextures = std::map<uint8_t, texture*>();
 
-	/** List of all texture ids */
-	uint32_t s_textureIds[32];
-	/** How many textures have been loaded */
-	uint32_t s_textureCount = 0;
-	vector<texture*> texture::s_loadedTextures = vector<texture*>();
+	void texture::init() noexcept
+	{
+		// Makes sure the images are oriented correctly when loaded
+		stbi_set_flip_vertically_on_load(true);
 
-	void texture::deleteAll() noexcept
-	{	renderer::deleteTextures(s_textureIds, s_textureCount); }
+		// Create 32 textures
+		for (uint8_t i = 0; i < 32; ++i)
+		{	s_loadedTextures[i] = new texture(i); }
+	}
 
-	uint32_t texture::getTexCount() noexcept
-	{	return s_textureCount; }
+	void texture::terminate() noexcept
+	{
+		for (auto &[key, value] : s_loadedTextures)
+		{	delete value; }
+		s_loadedTextures.clear();
+	}
+
+	texture *texture::loadNew(string _path, type _type)
+	{
+		// Look for a texture that has not been loaded into
+		for (auto &[key, value] : s_loadedTextures)
+		{
+			if (!value->m_loaded)
+			{
+				try
+				{	value->load(_path, _type); }
+				// Pass exception down
+				catch (textureException &e)
+				{	throw e; }
+				return value;
+			}
+		}
+		throw textureException("Run out of textures");
+	}
+
+	uint8_t texture::size() noexcept
+	{	return (uint8_t)s_loadedTextures.size(); }
+
+	texture *texture::at(uint8_t _val)
+	{	return s_loadedTextures[_val]; }
 
 	// Member
 
-	int32_t texture::getId() const noexcept
-	{	return m_id; }
+	texture::texture(uint8_t _location) noexcept : m_location(_location)
+	{}
 
-	texture::type texture::getType() const noexcept
-	{	return m_type; }
+	bool texture::getLoaded() const noexcept
+	{	return m_loaded; }
+
+	int32_t texture::getLocation() const noexcept
+	{	return m_location; }
 
 	std::string texture::getFile() const noexcept
 	{	return m_file; }
 
-	texture::texture(
-		string _path,
-		type _type
-	)
-		: m_file(_path)
-		, m_type(_type)
+	texture::type texture::getType() const noexcept
+	{	return m_type; }
+
+	void texture::load(string _path, type _type)
 	{
+		m_file = _path;
+		m_type = _type;
+
 		debug::send(
-			"Loading texture " + std::to_string(s_textureCount) + ": \"" + m_file + "\"...",
+			"Loading texture " + std::to_string(s_loadedTextures.size()) + ": \"" + m_file + "\"...",
 			debug::type::process, debug::impact::large, debug::stage::mid, false, false
 		);
-
-		if (s_textureCount > 31)
-		{
-			debug::send(
-				"Failed to load texture: Exceeded max texture count (max = 32)",
-				debug::type::note, debug::impact::large, debug::stage::mid, true
-			);
-
-			throw textureException("Exceeded max textures");
-		}
-
-		// Makes sure the images are oriented correctly when loaded
-		stbi_set_flip_vertically_on_load(true);
 
 		int texWidth = 0, texHeight = 0, numComponents = 0;
 		uint8_t *imageData = stbi_load(
@@ -72,25 +91,26 @@ namespace srender
 		if (!imageData)
 		{
 			debug::send(
-				"Failed to load texture: No file found",
-				debug::type::note, debug::impact::large, debug::stage::mid, true
+				"Failed! No file found",
+				debug::type::note, debug::impact::large, debug::stage::mid
 			);
 
 			throw textureException("No file found");
 		}
 
 		// Generates a texture object in vram
-		renderer::setActiveTexture(s_textureCount);
-		renderer::genTexture(&s_textureIds[s_textureCount]);
+		renderer::setActiveTexture(m_location);
+		renderer::genTexture(&m_id);
 		// Remember this works like a pointer to the object using the ID
-		renderer::bindTexture2D(s_textureIds[s_textureCount]);
+		renderer::bindTexture2D(m_id);
+
 		// Sets some parameters to the currently bound texture object
-		//float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		//renderer::setBorderColour(borderColour);
 		renderer::setTex2DParamSWrapToEdge();
 		renderer::setTex2DParamTWrapTOBorder();
 		renderer::setTex2DParamMinFilterLinearMipMapLinear();
 		renderer::setTex2DParamMagFilterNearest();
+		//float borderColour[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		//renderer::setBorderColour(borderColour);
 
 		renderer::loadTexture(texWidth, texHeight, numComponents, imageData);
 		renderer::genMipmap();
@@ -98,19 +118,21 @@ namespace srender
 		// Frees the image memory
 		stbi_image_free(imageData);
 
-		// Sets the id then increments, ready for the next texture
-		m_id = s_textureCount++;
-
-		s_loadedTextures.push_back(this);
-
+		m_loaded = true;
 		debug::send("Success!");
 	}
 
-	bool texture::operator==(const int32_t &_other) const noexcept
-	{	return m_id == _other; }
+	void texture::destroy() noexcept
+	{
+		m_loaded = false;
+		renderer::deleteTextures(&m_id);
+	}
 
-	bool texture::operator!=(const int32_t &_other) const noexcept
-	{	return m_id != _other; }
+	bool texture::operator==(const uint8_t &_other) const noexcept
+	{	return m_location == _other; }
+
+	bool texture::operator!=(const uint8_t &_other) const noexcept
+	{	return m_location != _other; }
 
 	bool texture::operator==(const string &_other) const noexcept
 	{	return m_file == _other; }
