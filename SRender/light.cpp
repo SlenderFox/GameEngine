@@ -17,7 +17,7 @@ namespace srender
 		, m_lightColour(_colour)
 	{
 		transform::setTransform(&inTransform);
-		if (_type == light::type::Spot)
+		if (_type == light::type::spot)
 		{	m_angle = cos(radians(m_angle)); }
 	}
 
