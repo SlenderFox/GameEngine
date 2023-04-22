@@ -61,7 +61,11 @@ namespace srender
 			unsigned char *_imageData
 		) noexcept;
 		void genMipmap() noexcept;
-		void deleteTextures(const uint32_t _textureCount, const uint32_t *_textureIds) noexcept;
+		/** Delete one or multiple textures at once
+		 * @param *_textureIds Pointer to the array of texture ids
+		 * @param _textureCount The amount of textures to delete, defaults as 1
+		 */
+		void deleteTextures(const uint32_t *_textureIds, const uint32_t _textureCount = 1U) noexcept;
 
 		// Shader
 

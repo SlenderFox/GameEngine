@@ -19,7 +19,7 @@ namespace srender
 	vector<texture*> texture::s_loadedTextures = vector<texture*>();
 
 	void texture::deleteAll() noexcept
-	{	renderer::deleteTextures(s_textureCount, s_textureIds); }
+	{	renderer::deleteTextures(s_textureIds, s_textureCount); }
 
 	uint32_t texture::getTexCount() noexcept
 	{	return s_textureCount; }

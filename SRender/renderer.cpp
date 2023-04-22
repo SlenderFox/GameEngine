@@ -197,7 +197,7 @@ namespace srender
 		void genMipmap() noexcept
 		{	glGenerateMipmap(GL_TEXTURE_2D); }
 
-		void deleteTextures(const uint32_t _textureCount, const uint32_t *_textureIds) noexcept
+		void deleteTextures(const uint32_t *_textureIds, const uint32_t _textureCount) noexcept
 		{
 			if (l_gladLoaded)
 			{	glDeleteTextures(_textureCount, _textureIds); }
