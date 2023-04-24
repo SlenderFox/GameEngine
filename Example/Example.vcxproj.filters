@@ -25,7 +25,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\assets\shaders\default.frag" />
-    <None Include="..\assets\shaders\default.vert" />
+    <None Include="assets\shaders\default.frag" />
+    <None Include="assets\shaders\default.vert" />
   </ItemGroup>
 </Project>
