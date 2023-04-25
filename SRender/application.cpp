@@ -176,6 +176,8 @@ namespace srender
 		glfwMakeContextCurrent(l_windowRef);
 		glfwSetWindowSizeLimits(l_windowRef, 320, 180, GLFW_DONT_CARE, GLFW_DONT_CARE);
 		//glfwSetWindowAspectRatio(l_windowRef, 16, 9);
+		// Disable v-sync
+		glfwSwapInterval(0);
 
 		// Move the window
 		if (!l_fullscreen)
