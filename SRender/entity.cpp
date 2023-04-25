@@ -15,23 +15,6 @@ namespace srender
 	// Forward declaration
 	class application { public: _NODISCARD static std::string getAppLocation() noexcept; };
 
-	// Blame https://stackoverflow.com/a/40937193/15035125 for this
-	// TODO: look into removing
-	struct entityLoader
-	{
-		static inline void BackgroundLoadModel(
-			string *_modelPath,
-			string *_shaderPath,
-			entity *_entity,
-			const bool _loadTextures = true
-		)
-		{
-			_entity->m_modelRef = graphics::addNewModel(_modelPath, _shaderPath, _loadTextures);
-			graphics::loadLightsIntoShader(_entity->m_modelRef->getShaderRef());
-			_entity->updateModel();
-		}
-	};
-
 	void entityBase::addChild(entity *_child) noexcept
 	{	m_childrenRef.push_back(_child); }
 
@@ -67,13 +50,7 @@ namespace srender
 		shader *&_outShader,
 		const bool _loadTextures
 	)
-	{
-		_modelPath = application::getAppLocation() + _modelPath;
-		_shaderPath = application::getAppLocation() + _shaderPath;
-		entityLoader::BackgroundLoadModel(&_modelPath, &_shaderPath, this, _loadTextures);
-		_outModel = m_modelRef;
-		_outShader = m_modelRef->getShaderRef();
-	}
+	{	loadModel(_modelPath, _shaderPath, _outModel, _outShader, _loadTextures); }
 
 	void entity::updateModel() const noexcept
 	{
@@ -81,7 +58,8 @@ namespace srender
 		{	return; }
 
 		m_modelRef->getShaderRef()->setMat4("u_model", getTransform());
-		m_modelRef->getShaderRef()->setMat3("u_transposeInverseOfModel",
+		m_modelRef->getShaderRef()->setMat3(
+			"u_transposeInverseOfModel",
 			(mat3)transpose(inverse(getTransform()))
 		);
 	}
@@ -98,7 +76,9 @@ namespace srender
 		// but only half causes a memory leak as they are managed by graphics
 		_modelPath = application::getAppLocation() + _modelPath;
 		_shaderPath = application::getAppLocation() + _shaderPath;
-		entityLoader::BackgroundLoadModel(&_modelPath, &_shaderPath, this, _loadTextures);
+		m_modelRef = graphics::addNewModel(&_modelPath, &_shaderPath, _loadTextures);
+		graphics::loadLightsIntoShader(m_modelRef->getShaderRef());
+		updateModel();
 		_outModel = m_modelRef;
 		_outShader = m_modelRef->getShaderRef();
 	}
