@@ -221,7 +221,7 @@ namespace srender
 						"Reusing texture "
 						+ std::to_string(texture::at(j)->getLocation())
 						+ ": "
-						+ texture::at(j)->getFile().c_str(),
+						+ texture::at(j)->getFilePath().c_str(),
 						debug::type::note,
 						debug::impact::small,
 						debug::stage::mid

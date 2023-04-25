@@ -54,34 +54,34 @@ namespace srender
 
 	// Member
 
-	texture::texture(uint8_t _location) noexcept : m_location(_location)
+	texture::texture(uint8_t _index) noexcept : m_index(_index)
 	{}
 
 	bool texture::getLoaded() const noexcept
 	{	return m_loaded; }
 
 	int32_t texture::getLocation() const noexcept
-	{	return m_location; }
+	{	return m_index; }
 
-	std::string texture::getFile() const noexcept
-	{	return m_file; }
+	std::string texture::getFilePath() const noexcept
+	{	return m_filePath; }
 
 	texture::type texture::getType() const noexcept
 	{	return m_type; }
 
-	void texture::load(string _path, type _type)
+	void texture::load(string _filePath, type _type)
 	{
-		m_file = _path;
+		m_filePath = _filePath;
 		m_type = _type;
 
 		debug::send(
-			"Loading texture " + std::to_string(s_loadedTextures.size()) + ": \"" + m_file + "\"...",
+			"Loading texture " + std::to_string(s_loadedTextures.size()) + ": \"" + m_filePath + "\"...",
 			debug::type::process, debug::impact::large, debug::stage::mid, false, false
 		);
 
 		int texWidth = 0, texHeight = 0, numComponents = 0;
 		uint8_t *imageData = stbi_load(
-			m_file.c_str(),
+			m_filePath.c_str(),
 			&texWidth,
 			&texHeight,
 			&numComponents,
@@ -99,7 +99,7 @@ namespace srender
 		}
 
 		// Generates a texture object in vram
-		renderer::setActiveTexture(m_location);
+		renderer::setActiveTexture(m_index);
 		renderer::genTexture(&m_id);
 		// Remember this works like a pointer to the object using the ID
 		renderer::bindTexture2D(m_id);
@@ -129,14 +129,14 @@ namespace srender
 	}
 
 	bool texture::operator==(const uint8_t &_other) const noexcept
-	{	return m_location == _other; }
+	{	return m_index == _other; }
 
 	bool texture::operator!=(const uint8_t &_other) const noexcept
-	{	return m_location != _other; }
+	{	return m_index != _other; }
 
 	bool texture::operator==(const string &_other) const noexcept
-	{	return m_file == _other; }
+	{	return m_filePath == _other; }
 
 	bool texture::operator!=(const string &_other) const noexcept
-	{	return m_file != _other; }
+	{	return m_filePath != _other; }
 }

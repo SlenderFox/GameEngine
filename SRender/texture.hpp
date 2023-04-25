@@ -34,21 +34,21 @@ namespace srender
 		/** The id is the openGL supplied identifier used for deleting the texture */
 		uint32_t m_id = 0U;
 		/** This is the same as the key-value pair and is actually which texture this on the gpu */
-		uint8_t m_location = 0U;
+		uint8_t m_index = 0U;
 		/** Where the source of the image is located, used to prevent duplication */
-		std::string m_file;
+		std::string m_filePath;
 		/** The type of texture is used for how the texture is loaded into the shader */
 		type m_type = type::diffuse;
 
-		texture(uint8_t _location) noexcept;
+		texture(uint8_t _index) noexcept;
 
 	public:
-		void load(std::string _path, type _type = type::diffuse);
+		void load(std::string _filePath, type _type = type::diffuse);
 		void destroy() noexcept;
 
 		_NODISCARD bool getLoaded() const noexcept;
 		_NODISCARD int32_t getLocation() const noexcept;
-		_NODISCARD std::string getFile() const noexcept;
+		_NODISCARD std::string getFilePath() const noexcept;
 		_NODISCARD type getType() const noexcept;
 
 		bool operator==(const uint8_t &_other) const noexcept;
