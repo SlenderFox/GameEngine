@@ -45,43 +45,13 @@ namespace srender
 	/** The error code returned by main */
 	exitCode l_exitCode = exitCode::okay;
 
-	void updateFrameTimeData() noexcept
-	{
-		l_prevTime = l_currentTime;
-		l_currentTime = glfwGetTime();
-		l_deltaTime = l_currentTime - l_prevTime;
-		l_fixedTimer += l_deltaTime;
-		l_frameTimer += l_deltaTime;
-		++l_totalFrames;
-		++l_perSecondFrameCount;
-
-		// Doing this allows me to updates fps as often as I want
-		static const double secondsPerUpdate = 0.5;
-		if (l_frameTimer >= secondsPerUpdate)
-		{
-			l_frameTimer -= secondsPerUpdate;
-			l_fps = (uint16_t)((double)l_perSecondFrameCount / secondsPerUpdate);
-			l_perSecondFrameCount = 0U;
-			string title = {
-				l_title
-				+ " | "
-				+ to_string(l_wWidth)
-				+ "x"
-				+ to_string(l_wHeight)
-				+ " | "
-				+ to_string(l_fps)
-			};
-			glfwSetWindowTitle(l_windowRef, title.c_str());
-		}
-	}
-
-	void updateCamera() noexcept
+	inline void updateCamera() noexcept
 	{
 		graphics::getCamera()->setAspectRatio((float)l_wWidth / (float)l_wHeight);
 		graphics::getCamera()->updateFovV();
 	}
 
-	void processInput() noexcept
+	inline void processInput() noexcept
 	{
 		//if (Input::GetKey(input::key::key_f11, input::state::press))
 		//{
@@ -120,7 +90,7 @@ namespace srender
 		renderer::setResolution(_width, _height);
 	}
 
-	_NODISCARD bool setupGLFW()
+	_NODISCARD inline bool setupGLFW()
 	{
 		// glfw: initialise and configure
 		if (!glfwInit())
@@ -213,7 +183,7 @@ namespace srender
 		return true;
 	}
 
-	bool application::init()
+	inline bool application::init()
 	{
 		auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -254,7 +224,7 @@ namespace srender
 		return true;
 	}
 
-	void application::terminate() noexcept
+	inline void application::terminate() noexcept
 	{
 		getApplication()->shutdown();
 		graphics::terminate();
@@ -276,7 +246,16 @@ namespace srender
 			// Render loop
 			while (!(bool)glfwWindowShouldClose(l_windowRef))
 			{
-				updateFrameTimeData();
+				auto frameStart = std::chrono::high_resolution_clock::now();
+
+				// TODO: Look into extracting into a timekeeping class
+				l_prevTime = l_currentTime;
+				l_currentTime = glfwGetTime();
+				l_deltaTime = l_currentTime - l_prevTime;
+				l_fixedTimer += l_deltaTime;
+				l_frameTimer += l_deltaTime;
+				++l_totalFrames;
+				++l_perSecondFrameCount;
 
 				// Input
 				glfwPollEvents();
@@ -292,6 +271,8 @@ namespace srender
 					getApplication()->fixedUpdate();
 				}
 
+				getApplication()->lateUpdate();
+
 				// Skip drawing if minimised, restricts fps to 15
 				if ((bool)glfwGetWindowAttrib(l_windowRef, GLFW_ICONIFIED))
 				{
@@ -301,18 +282,49 @@ namespace srender
 					// Waste time
 					double waster = 0.2893652150526226374;
 					while (glfwGetTime() < l_currentTime + 0.06666666666666666)
-					{
-						waster /= waster;
-					}
+					{	waster /= waster; }
 					continue;
 				}
 
-				getApplication()->lateUpdate();
-
+				auto drawStart = std::chrono::high_resolution_clock::now();
 				graphics::draw();
 
 				// Check and call events and swap the buffers
 				glfwSwapBuffers(l_windowRef);
+
+				auto frameEnd = std::chrono::high_resolution_clock::now();
+
+				std::chrono::duration<double> frameTime = frameEnd - frameStart;
+				std::chrono::duration<double> drawTime = frameEnd - drawStart;
+
+				// Doing this allows me to updates fps as often as I want
+				// TODO: Look into improving
+				static const double secondsPerUpdate = 1.0;
+				if (l_frameTimer >= secondsPerUpdate)
+				{
+					l_frameTimer -= secondsPerUpdate;
+					l_fps = (uint16_t)((double)l_perSecondFrameCount / secondsPerUpdate);
+					l_perSecondFrameCount = 0U;
+					string frameTimeMs = to_string(frameTime.count() * 1000);
+					frameTimeMs.resize(5);
+					string drawTimeMs = to_string(drawTime.count() * 1000);
+					drawTimeMs.resize(5);
+					string title = {
+						l_title
+						+ " | "
+						+ to_string(l_wWidth)
+						+ "x"
+						+ to_string(l_wHeight)
+						+ " | "
+						+ to_string(l_fps)
+						+ ", "
+						+ frameTimeMs
+						+ ", "
+						+ drawTimeMs
+					};
+					glfwSetWindowTitle(l_windowRef, title.c_str());
+				}
+
 			}
 		}
 
@@ -333,21 +345,13 @@ namespace srender
 
 		if (graphics::getCamera() && _width > 0 && _height > 0)
 		{	updateCamera(); }
-
-		//debug::send("Dimensions set to " + to_string(l_wWidth) + ", " + to_string(l_wHeight));
 	}
 
 	void application::setTitle(const string _title) noexcept
-	{
-		l_title = _title;
-		//debug::send("Title set to \"" + l_title + "\"");
-	}
+	{	l_title = _title; }
 
 	void application::setFullscreen(const bool _fullscreen) noexcept
-	{
-		l_fullscreen = _fullscreen;
-		//debug::send("Fullscreen set to " + string(l_fullscreen ? "true" : "false"));
-	}
+	{	l_fullscreen = _fullscreen; }
 
 	application *application::getApplication() noexcept
 	{	return l_application; }
