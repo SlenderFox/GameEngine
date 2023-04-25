@@ -83,15 +83,15 @@ namespace srender
 		void setInt    (const std::string _name, const int32_t    _value) const noexcept;
 		void setUint   (const std::string _name, const uint32_t   _value) const noexcept;
 		void setFloat  (const std::string _name, const float      _value) const noexcept;
-		void setFloat2 (const std::string _name, const glm::vec2  _value) const noexcept;
 		void setFloat2 (const std::string _name, const glm::vec2 *_value) const noexcept;
-		void setFloat3 (const std::string _name, const glm::vec3  _value) const noexcept;
+		void setFloat2 (const std::string _name, const glm::vec2  _value) const noexcept;
 		void setFloat3 (const std::string _name, const glm::vec3 *_value) const noexcept;
-		void setFloat4 (const std::string _name, const glm::vec4  _value) const noexcept;
+		void setFloat3 (const std::string _name, const glm::vec3  _value) const noexcept;
 		void setFloat4 (const std::string _name, const glm::vec4 *_value) const noexcept;
-		void setMat3   (const std::string _name, const glm::mat3  _value) const noexcept;
+		void setFloat4 (const std::string _name, const glm::vec4  _value) const noexcept;
 		void setMat3   (const std::string _name, const glm::mat3 *_value) const noexcept;
-		void setMat4   (const std::string _name, const glm::mat4  _value) const noexcept;
+		void setMat3   (const std::string _name, const glm::mat3  _value) const noexcept;
 		void setMat4   (const std::string _name, const glm::mat4 *_value) const noexcept;
+		void setMat4   (const std::string _name, const glm::mat4  _value) const noexcept;
 	};
 }

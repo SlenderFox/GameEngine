@@ -401,20 +401,6 @@ return;}";
 		renderer::setFloat(m_idProgram, location, _value	);
 	}
 
-	void shader::setFloat2(string _name, const glm::vec2 _value) const noexcept
-	{
-		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
-		if (location < 0)
-		{
-			debug::send("Attempting to set unknown uniform \""
-				+ _name
-				+ "\", location: "
-				+ std::to_string(location)
-			);
-			return;
-		}
-		renderer::setFloat2(m_idProgram, location, &_value[0]);
-	}
 	void shader::setFloat2(string _name, const glm::vec2 *_value) const noexcept
 	{
 		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
@@ -429,21 +415,9 @@ return;}";
 		}
 		renderer::setFloat2(m_idProgram, location, &(*_value)[0]);
 	}
+	void shader::setFloat2(string _name, const glm::vec2 _value) const noexcept
+	{	setFloat2(_name, &_value); }
 
-	void shader::setFloat3(string _name, const glm::vec3 _value) const noexcept
-	{
-		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
-		if (location < 0)
-		{
-			debug::send("Attempting to set unknown uniform \""
-				+ _name
-				+ "\", location: "
-				+ std::to_string(location)
-			);
-			return;
-		}
-		renderer::setFloat3(m_idProgram, location, &_value[0]);
-	}
 	void shader::setFloat3(string _name, const glm::vec3 *_value) const noexcept
 	{
 		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
@@ -458,21 +432,9 @@ return;}";
 		}
 		renderer::setFloat3(m_idProgram, location, &(*_value)[0]);
 	}
+	void shader::setFloat3(string _name, const glm::vec3 _value) const noexcept
+	{	setFloat3(_name, &_value); }
 
-	void shader::setFloat4(string _name, const glm::vec4 _value) const noexcept
-	{
-		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
-		if (location < 0)
-		{
-			debug::send("Attempting to set unknown uniform \""
-				+ _name
-				+ "\", location: "
-				+ std::to_string(location)
-			);
-			return;
-		}
-		renderer::setFloat4(m_idProgram, location, &_value[0]);
-	}
 	void shader::setFloat4(string _name, const glm::vec4 *_value) const noexcept
 	{
 		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
@@ -487,21 +449,9 @@ return;}";
 		}
 		renderer::setFloat4(m_idProgram, location, &(*_value)[0]);
 	}
+	void shader::setFloat4(string _name, const glm::vec4 _value) const noexcept
+	{	setFloat4(_name, &_value); }
 
-	void shader::setMat3(string _name, const glm::mat3 _value) const noexcept
-	{
-		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
-		if (location < 0)
-		{
-			debug::send("Attempting to set unknown uniform \""
-				+ _name
-				+ "\", location: "
-				+ std::to_string(location)
-			);
-			return;
-		}
-		renderer::setMat3(m_idProgram, location, &_value[0][0]);
-	}
 	void shader::setMat3(string _name, const glm::mat3 *_value) const noexcept
 	{
 		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
@@ -516,21 +466,9 @@ return;}";
 		}
 		renderer::setMat3(m_idProgram, location, &(*_value)[0][0]);
 	}
+	void shader::setMat3(string _name, const glm::mat3 _value) const noexcept
+	{	setMat3(_name, &_value); }
 
-	void shader::setMat4(string _name, const glm::mat4 _value) const noexcept
-	{
-		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
-		if (location < 0)
-		{
-			debug::send("Attempting to set unknown uniform \""
-				+ _name
-				+ "\", location: "
-				+ std::to_string(location)
-			);
-			return;
-		}
-		renderer::setMat4(m_idProgram, location, &_value[0][0]);
-	}
 	void shader::setMat4(string _name, const glm::mat4 *_value) const noexcept
 	{
 		int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
@@ -545,4 +483,6 @@ return;}";
 		}
 		renderer::setMat4(m_idProgram, location, &(*_value)[0][0]);
 	}
+	void shader::setMat4(string _name, const glm::mat4 _value) const noexcept
+	{	setMat4(_name, &_value); }
 }
