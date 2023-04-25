@@ -38,8 +38,8 @@ namespace srender
 		_NODISCARD static application *getApplication() noexcept;
 		_NODISCARD static double getTime() noexcept;
 		_NODISCARD static double getDeltaTime() noexcept;
-		/** Should evaluate to 0.01666666666666666 */
 		_NODISCARD static std::string getAppLocation() noexcept;
+		/** Should evaluate to 0.01666666666666666 */
 		_NODISCARD static constexpr double getFixedDeltaTime() { return 1.0 / 60.0; }
 
 	protected:
