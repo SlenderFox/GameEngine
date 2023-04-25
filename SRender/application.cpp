@@ -8,9 +8,6 @@
 
 using std::string;
 using std::to_string;
-using glm::vec3;
-using glm::radians;
-using glm::normalize;
 
 namespace srender
 {
