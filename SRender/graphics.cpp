@@ -2,6 +2,7 @@
 #include "renderer.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "debug.hpp"
+#include "exception.hpp"
 
 using glm::vec3;
 using glm::vec4;
@@ -207,7 +208,6 @@ namespace srender
 		}
 
 		model *addNewModel(
-			uint8_t &_outId,
 			const string *_modelPath,
 			const string *_shaderPath,
 			const bool _loadTextures
@@ -215,28 +215,25 @@ namespace srender
 		{
 			// Caps at 255
 			size_t currentAmount = s_models.size();
-			if (currentAmount > 255)
-				return nullptr;
+			if (currentAmount >= 255)
+			{	throw graphicsException("Reached max models"); }
 
-			_outId = (uint8_t)currentAmount;
 			s_models.push_back(new model(_modelPath, _shaderPath, s_camera, _loadTextures));
-			return getModelAt(_outId);
+			return getModelAt((uint8_t)currentAmount);
 		}
 
 		light *addNewLight(
-			uint8_t &_outId,
 			const light::type _type,
 			const colour _colour
-		) noexcept
+		)
 		{
 			// Caps at 255
 			size_t currentAmount = s_lights.size();
 			if (currentAmount > 255)
-				return nullptr;
+			{	throw graphicsException("Reached max lights"); }
 
-			_outId = (uint8_t)currentAmount;
 			s_lights.push_back(new light(_type, _colour));
-			return getLightAt(_outId);
+			return getLightAt((uint8_t)currentAmount);
 		}
 
 		void setClearColour(const colour _colour) noexcept

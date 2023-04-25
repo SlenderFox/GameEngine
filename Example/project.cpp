@@ -166,24 +166,21 @@ void project::createLights()
 		spot = true;
 
 	// Creates lights
-	uint8_t ID;
 	light *light;
 	if (directional)
 	{
 		light = graphics::addNewLight(
-			ID,
 			light::type::directional,
 			colour(colour::hsvToRgb({0, 0.0f, 0.6f}))
 		);
 		light->setDirection(vec3(0, -1, 0));
 		graphics::setClearColour(
-			graphics::getLightAt(ID)->getColour() * graphics::getAmbience()
+			light->getColour() * graphics::getAmbience()
 		);
 	}
 	if (point)
 	{
 		light = graphics::addNewLight(
-			ID,
 			light::type::point,
 			colour(colour::hsvToRgb({220, 0.6f, 1.0f}))
 		);
@@ -192,7 +189,6 @@ void project::createLights()
 	if (spot)
 	{
 		light = graphics::addNewLight(
-			ID,
 			light::type::spot,
 			colour(colour::hsvToRgb({97, 0.17f, 1.0f}))
 		);

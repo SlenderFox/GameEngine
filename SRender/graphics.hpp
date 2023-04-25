@@ -36,17 +36,15 @@ namespace srender
 		) noexcept;
 
 		model *addNewModel(
-			uint8_t &_outId,
 			const std::string *_modelPath,
 			const std::string *_shaderPath,
 			const bool _loadTextures = true
 		);
 
 		light *addNewLight(
-			uint8_t &_outId,
 			const light::type _type,
 			const colour _colour = colour::white()
-		) noexcept;
+		);
 
 		void setClearColour(const colour _colour) noexcept;
 		void setRenderMode(const mode _mode = mode::fill) noexcept;

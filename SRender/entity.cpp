@@ -16,6 +16,7 @@ namespace srender
 	class application { public: _NODISCARD static std::string getAppLocation() noexcept; };
 
 	// Blame https://stackoverflow.com/a/40937193/15035125 for this
+	// TODO: look into removing
 	struct entityLoader
 	{
 		static inline void BackgroundLoadModel(
@@ -25,8 +26,7 @@ namespace srender
 			const bool _loadTextures = true
 		)
 		{
-			uint8_t ID;
-			_entity->m_modelRef = graphics::addNewModel(ID, _modelPath, _shaderPath, _loadTextures);
+			_entity->m_modelRef = graphics::addNewModel(_modelPath, _shaderPath, _loadTextures);
 			graphics::loadLightsIntoShader(_entity->m_modelRef->getShaderRef());
 			_entity->updateModel();
 		}

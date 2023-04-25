@@ -9,6 +9,12 @@ namespace srender
 	class textureException : public std::runtime_error
 	{
 	public:
-		textureException(std::string _description) : std::runtime_error(_description) {}
+		textureException(std::string _description) noexcept : std::runtime_error(_description) {}
+	};
+
+	class graphicsException : public std::runtime_error
+	{
+	public:
+		graphicsException(std::string _description) noexcept : std::runtime_error(_description) {}
 	};
 }
