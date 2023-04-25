@@ -132,7 +132,13 @@ namespace srender
 			const char *description;
 			int code = glfwGetError(&description);
 			assert(description != nullptr);
-			debug::send("Code: " + std::to_string(code) + "\nDescription: " + description + "\n");
+			debug::send(
+				"Code: "
+				+ std::to_string(code)
+				+ "\nDescription: "
+				+ description
+				+ "\n"
+			);
 			return false;
 		}
 
@@ -153,7 +159,13 @@ namespace srender
 		glfwWindowHint(GLFW_BLUE_BITS, vid->blueBits);
 		glfwWindowHint(GLFW_REFRESH_RATE, vid->refreshRate);
 
-		l_windowRef = glfwCreateWindow(l_wWidth, l_wHeight, l_title.c_str(), monitor, nullptr);
+		l_windowRef = glfwCreateWindow(
+			l_wWidth,
+			l_wHeight,
+			l_title.c_str(),
+			monitor,
+			nullptr
+		);
 
 		if (!l_windowRef)
 		{
