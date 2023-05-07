@@ -79,7 +79,7 @@ namespace srender
 			key_insert               = 260,
 			key_delete               = 261,
 			key_right                = 262,
-			key_left						 = 263,
+			key_left                 = 263,
 			key_down                 = 264,
 			key_up                   = 265,
 			key_page_up              = 266,
