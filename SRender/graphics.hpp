@@ -26,7 +26,7 @@ namespace srender
 
 		void loadLightsIntoShader(const shader *_shader) noexcept;
 		/** Modifies either the angle or blur of all spotlights by a value
-		 * @note Max value is 90 for angle, 1 for blur, min for both is 0
+		 * @note Max value is 90 for angle and 1 for blur, min for both is 0
 		 * @param _isAngle True to modify the angle, false to modify the blur of the spotlight
 		 * @param _value The amount to modify it by
 		 */
