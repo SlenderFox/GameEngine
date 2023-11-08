@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <map>
+#include <stdint.h>
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]
