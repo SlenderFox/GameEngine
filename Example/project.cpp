@@ -58,9 +58,9 @@ void project::mouseCallback(double _deltaX, double _deltaY) noexcept
 	s_camYaw += _deltaX;
 	s_camPitch += _deltaY;
 	if (s_camPitch > 89.0f)
-		s_camPitch = 89.0f;
+	{	s_camPitch = 89.0f; }
 	else if (s_camPitch < -89.0f)
-		s_camPitch = -89.0f;
+	{	s_camPitch = -89.0f; }
 	// The forward direction of the camera
 	vec3 forward = vec3();
 	forward.x = (float)(cos(radians(s_camYaw)) * cos(radians(s_camPitch)));
@@ -81,7 +81,6 @@ project::project()
 {
 	m_lightRefs = vector<light*>();
 	m_cubes = vector<entity*>();
-
 	object_backpack = new entity();
 }
 
@@ -90,11 +89,11 @@ project::~project()
 	for (uint8_t i = 0; i < m_cubes.size(); ++i)
 	{
 		if (m_cubes[i])
-			delete m_cubes[i];
+		{	delete m_cubes[i]; }
 	}
 
 	if (object_backpack)
-		delete object_backpack;
+	{	delete object_backpack; }
 }
 
 bool project::startup()
@@ -230,53 +229,53 @@ void project::processInput() noexcept
 {
 	// Render triangles normally
 	if (input::checkKeyState(input::key::key_f1, input::state::press))
-		graphics::setRenderMode(graphics::mode::fill);
+	{	graphics::setRenderMode(graphics::mode::fill); }
 	// Render triangles as lines
 	if (input::checkKeyState(input::key::key_f2, input::state::press))
-		graphics::setRenderMode(graphics::mode::line);
+	{	graphics::setRenderMode(graphics::mode::line); }
 	// Render triangles as dots
 	if (input::checkKeyState(input::key::key_f3, input::state::press))
-		graphics::setRenderMode(graphics::mode::point);
+	{	graphics::setRenderMode(graphics::mode::point); }
 
 	// Spotlight cone
 	if (input::checkKeyState(input::key::key_t, input::state::press))
-		graphics::modifyAllSpotlights(true, 0.05f);
+	{	graphics::modifyAllSpotlights(true, 0.05f); }
 	if (input::checkKeyState(input::key::key_g, input::state::press))
-		graphics::modifyAllSpotlights(true, -0.05f);
+	{	graphics::modifyAllSpotlights(true, -0.05f); }
 	// Spotlight blur
 	if (input::checkKeyState(input::key::key_y, input::state::press))
-		graphics::modifyAllSpotlights(false, -0.005f);
+	{	graphics::modifyAllSpotlights(false, -0.005f); }
 	if (input::checkKeyState(input::key::key_h, input::state::press))
-		graphics::modifyAllSpotlights(false, 0.005f);
+	{	graphics::modifyAllSpotlights(false, 0.005f); }
 
 	vec3 translation = vec3();
 	float moveSpeed = 4;
 
 	// SlowDown
 	if (input::checkKeyState(input::key::key_left_control, input::state::press))
-		moveSpeed *= 0.1f;
+	{	moveSpeed *= 0.1f; }
 	// SpeedUp
 	else if (input::checkKeyState(input::key::key_left_shift, input::state::press))
-		moveSpeed *= 3;
+	{	moveSpeed *= 3; }
 
 	// Forwards
 	if (input::checkKeyState(input::key::key_w, input::state::press))
-		translation += moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getForward();
+	{	translation += moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getForward(); }
 	// Backwards
 	if (input::checkKeyState(input::key::key_s, input::state::press))
-		translation -= moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getForward();
+	{	translation -= moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getForward(); }
 	// Left
 	if (input::checkKeyState(input::key::key_a, input::state::press))
-		translation += moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getRight();
+	{	translation += moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getRight(); }
 	// Right
 	if (input::checkKeyState(input::key::key_d, input::state::press))
-		translation -= moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getRight();
+	{	translation -= moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getRight(); }
 	// Up
 	if (input::checkKeyState(input::key::key_space, input::state::press))
-		translation += moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getUp();
+	{	translation += moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getUp(); }
 	// Down
 	if (input::checkKeyState(input::key::key_c, input::state::press))
-		translation -= moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getUp();
+	{	translation -= moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getUp(); }
 
 	graphics::getCamera()->translate(translation);
 }

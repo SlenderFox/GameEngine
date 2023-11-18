@@ -26,7 +26,7 @@ namespace srender
 			if (_action != GLFW_PRESS)
 			{	return; }
 
-			//srender::debug::send(std::to_string(_scancode) + " ", false, false);
+			//debug::send(std::to_string(_scancode) + " ", false, false);
 		}
 
 		void mouse_callback(
