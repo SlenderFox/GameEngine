@@ -29,7 +29,7 @@ int main(int argc, char *args[])
 		application::setDimensions(1600, 900);
 		application::setTitle("SRender Example (RELEASE)");
 	#endif
-	int code = (int)application::run(args[0]);
+	int code = application::run(args[0]);
 	delete app;
 	return code;
 }
