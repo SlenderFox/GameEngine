@@ -87,3 +87,6 @@ example: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME) $(OBJ)/project.o $(BIN)/assets/
 # Making directories as needed
 $(BIN)/: ; mkdir -p $@
 $(OBJ)/: ; mkdir -p $@
+
+run:
+	$(BIN)/example
