@@ -5,7 +5,7 @@ Project originally started with me following https://learnopengl.com/
 Can be compiled on Windows with Visual Studio (msvc)
 Can be compiled on Linux with makefile (gcc)
 
-### Libraries used:
+## Libraries used:
 - OpenGL core 3.3 via glad ([Website](https://glad.dav1d.de/))
 - GLFW ([Website](https://www.glfw.org/download.html))
 - GLM ([Website](https://glm.g-truc.net/0.9.8/index.html))
@@ -16,3 +16,7 @@ It might be better to have the libraries as a github dependancy but idk how to d
 
 ## Notes
 Classes are used when inheritance is intended, structs are for when it is not
+Prefer composition over inheritance
+
+## Ideas
+- When application launches, don't steal focus and mouse
