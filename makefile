@@ -42,7 +42,7 @@ HEADERS:=$(wildcard $(SRC)/*.hpp)
 SOURCES:=$(wildcard $(SRC)/*.cpp)
 OBJECTS:=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.o,$(SOURCES))
 
-.PHONY: makefile help clear clean debug release build example
+.PHONY: makefile help clear clean debug release build example run
 
 # Default target simply tells you how to correctly use this makefile
 .DEFAULT_GOAL:=help
@@ -81,8 +81,10 @@ $(OBJ)/project.o:: Example/project.cpp Example/project.hpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCPATH) -ISRender/
 
 # Compile the example project using the SRender library
-example: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME) $(OBJ)/project.o $(BIN)/assets/
+$(BIN)/example: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME) $(OBJ)/project.o $(BIN)/assets/
 	$(CXX) $(CXXFLAGS) -o $(BIN)/example $(OBJ)/project.o $(LIBS) $(BIN)/$(NAME)
+
+example: $(BIN)/example
 
 # Making directories as needed
 $(BIN)/: ; mkdir -p $@
