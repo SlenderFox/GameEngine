@@ -187,6 +187,8 @@ inline bool application::init()
 {
 	auto startTime = std::chrono::high_resolution_clock::now();
 
+	debug::init();
+
 	if (!setupGLFW()) return false;	// Sets own exit code
 
 	if (!renderer::loadGlad())
@@ -194,9 +196,6 @@ inline bool application::init()
 		l_exitCode = exitCode::fail_Glad;
 		return false;
 	}
-
-	// Has to be initialised after glfw and glad
-	debug::init();
 
 	if (!graphics::init((float)l_wWidth / (float)l_wHeight))
 	{

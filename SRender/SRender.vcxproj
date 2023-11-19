@@ -24,7 +24,6 @@
     <ClCompile Include="colour.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="entity.cpp" />
-    <ClCompile Include="exception.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="light.cpp" />
