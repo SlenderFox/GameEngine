@@ -29,9 +29,7 @@ int main(int argc, char *args[])
 		application::setTitle("SRender Example (RELEASE)");
 	#endif
 	project *app = new project();
-	int code = app->run(args[0]);
-	delete app;
-	return code;
+	return app->run(args[0]);
 }
 
 // Static
