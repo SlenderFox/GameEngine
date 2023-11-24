@@ -2,8 +2,8 @@
 
 Project originally started with me following https://learnopengl.com/
 
-Can be compiled on Windows with Visual Studio (msvc)
-Can be compiled on Linux with makefile (gcc)
+Can be compiled on Windows with Visual Studio (msvc).  
+Can be compiled on Linux with makefile (gcc).
 
 ## Libraries used:
 - OpenGL core 3.3 via glad ([Website](https://glad.dav1d.de/))
@@ -12,11 +12,11 @@ Can be compiled on Linux with makefile (gcc)
 - stb_image.h ([Github](https://github.com/nothings/stb/blob/master/stb_image.h))
 - Assimp ([Github](https://github.com/assimp/assimp))
 
-It might be better to have the libraries as a github dependancy but idk how to do that so this will suffice for now
+It might be better to have the libraries as a github dependancy but idk how to do that so this will suffice for now.
 
 ## Notes
-Classes are used when inheritance is intended, structs are for when it is not
-Prefer composition over inheritance
+Classes are used when inheritance is intended, structs are for when it is not.  
+Prefer composition over inheritance.
 
 ## Ideas
-- When application launches, don't steal focus and mouse
+- When application launches, don't steal focus and mouse.
