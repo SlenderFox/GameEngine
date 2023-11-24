@@ -147,14 +147,13 @@ void project::createScene()
 	}
 
 	// Create a backpack in the centre
-	entity *backpack = new entity(
+	object_backpack = new entity(
 		"assets/models/backpack/backpack.obj",
 		"assets/shaders/default",
 		model, shader
 	);
-	backpack->translate(vec3(0.0f, 0.0f, 0.9f));
-	backpack->setScale(vec3(0.6f));
-	object_backpack = backpack;
+	object_backpack->translate(vec3(0.0f, 0.0f, 0.9f));
+	object_backpack->setScale(vec3(0.6f));
 }
 
 void project::createLights()
@@ -170,6 +169,7 @@ void project::createLights()
 	{
 		light = graphics::addNewLight(
 			light::type::directional,
+			/* White light */
 			colour(colour::hsvToRgb({0, 0.0f, 0.6f}))
 		);
 		light->setDirection(vec3(0, -1, 0));
@@ -181,7 +181,8 @@ void project::createLights()
 	{
 		light = graphics::addNewLight(
 			light::type::point,
-			colour(colour::hsvToRgb({220, 0.6f, 1.0f}))
+			/* Red light */
+			colour(colour::hsvToRgb({0, 0.6f, 0.8f}))
 		);
 		light->setPosition(vec4(-4, 2, -2, 1));
 	}
@@ -189,7 +190,8 @@ void project::createLights()
 	{
 		light = graphics::addNewLight(
 			light::type::spot,
-			colour(colour::hsvToRgb({97, 0.17f, 1.0f}))
+			/* Green light */
+			colour(colour::hsvToRgb({110, 0.3f, 1.0f}))
 		);
 		light->setPosition(vec4(2.0f, 2.5f, 6.0f, 1));
 		light->setDirection(vec3(-0.3f, -0.4f, -1));
@@ -217,7 +219,7 @@ void project::createLights()
 				"assets/shaders/default",
 				model, shader, false
 			);
-			light->setScale(vec3(0.2f, 0.2f, (light->getType() == light::type::spot) ? 0.4f : 0.2f));
+			light->setScale(vec3(0.1f, 0.1f, (light->getType() == light::type::spot) ? 0.2f : 0.1f));
 			light->sentTint(light->getColour());
 			light->renderOnlyColour(true);
 			m_lightRefs.push_back(light);
