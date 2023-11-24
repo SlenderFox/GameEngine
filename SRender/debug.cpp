@@ -57,13 +57,13 @@ namespace debug
 		const bool _endline
 	) noexcept
 	{
-		//#ifdef _DEBUG
+		#ifdef _DEBUG
 			if (_newline)
 			{	wcout << '\n'; }
 			wcout << _msg.c_str();
 			if (_endline)
 			{	wcout << endl; }
-		//#endif
+		#endif
 	}
 
 	void send(
@@ -73,13 +73,13 @@ namespace debug
 		const bool _endline
 	) noexcept
 	{
-		//#ifdef _DEBUG
+		#ifdef _DEBUG
 			if (_newline)
 			{	wcout << '\n'; }
 			wcout << _prefix << _msg.c_str();
 			if (_endline)
 			{	wcout << endl; }
-		//#endif
+		#endif
 	}
 
 	void send(
@@ -91,15 +91,17 @@ namespace debug
 		const bool _endline
 	) noexcept
 	{
-		uint8_t pre = (uint8_t)_type + (uint8_t)_impact + (uint8_t)_stage;
-		send(_msg, prefixes[pre], _newline, _endline);
+		#ifdef _DEBUG
+			uint8_t pre = (uint8_t)_type + (uint8_t)_impact + (uint8_t)_stage;
+			send(_msg, prefixes[pre], _newline, _endline);
+		#endif
 	}
 
 	void newLine() noexcept
 	{
-		//#ifdef _DEBUG
+		#ifdef _DEBUG
 			wcout << endl;
-		//#endif
+		#endif
 	}
 
 	#if defined(_WIN32) && defined(_DEBUG)
