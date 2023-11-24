@@ -187,8 +187,6 @@ inline bool application::init()
 {
 	auto startTime = std::chrono::high_resolution_clock::now();
 
-	debug::init();
-
 	if (!setupGLFW()) return false;	// Sets own exit code
 
 	if (!renderer::loadGlad())
@@ -320,16 +318,16 @@ inline void application::setAppLocation(std::string _path) noexcept
 {
 	size_t last_slash = _path.find_last_of("\\/");
 	l_appLocation = _path.substr(0, last_slash + 1);
+	//debug::send("App location set to: " + l_appLocation + "\nFrom source: " + _path);
 }
 
 int application::run(int _argc, char *_args[])
 {
+	debug::init();
 	setAppLocation(_args[0]);
 
 	if (init())
 	{
-		//debug::send("App location set to: " + l_appLocation + "\nFrom source: " + location);
-
 		// Preloads currentTime with an earlier time to prevent first frame weirdness
 		l_currentTime = glfwGetTime() - getFixedDeltaTime();
 
