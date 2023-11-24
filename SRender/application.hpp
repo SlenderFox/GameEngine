@@ -21,14 +21,18 @@ class application
 	application &operator=(application&&) = delete;
 
 	_NODISCARD static bool init();
+	static void loop();
 	static void terminate() noexcept;
+
+	static void setAppLocation(std::string _path) noexcept;
 
 public:
 	/** Runs the app
-	 * @param _location The location of the application, arg[0]
+	 * @param _argc The number of arguments
+	 * @param _args The arguments as an array of C strings
 	 * @return int Return code
 	 */
-	_NODISCARD int run(std::string _location);
+	_NODISCARD int run(int _argc, char *_args[]);
 	static void quit() noexcept;
 
 	static void setDimensions(const uint16_t _width, const uint16_t _height) noexcept;

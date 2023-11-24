@@ -18,7 +18,7 @@ using namespace srender;
  * [Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)]
  * @note Resolutions: 800x600, 1280x720, 1600x900, 1920x1080
  */
-int main(int argc, char *args[])
+int main(int _argc, char *_args[])
 {
 	application::setFullscreen(false);
 	#ifdef _DEBUG
@@ -29,7 +29,7 @@ int main(int argc, char *args[])
 		application::setTitle("SRender Example (RELEASE)");
 	#endif
 	project *app = new project();
-	return app->run(args[0]);
+	return app->run(_argc, _args);
 }
 
 // Static

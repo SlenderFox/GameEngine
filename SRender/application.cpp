@@ -223,6 +223,91 @@ inline bool application::init()
 	return true;
 }
 
+inline void application::loop()
+{
+	while (!(bool)glfwWindowShouldClose(l_windowRef))
+	{
+		auto frameStart = std::chrono::high_resolution_clock::now();
+
+		// TODO: Look into extracting into a timekeeping class
+		l_prevTime = l_currentTime;
+		l_currentTime = glfwGetTime();
+		l_deltaTime = l_currentTime - l_prevTime;
+		l_fixedTimer += l_deltaTime;
+		l_frameTimer += l_deltaTime;
+		++l_totalFrames;
+		++l_perSecondFrameCount;
+
+		// Input
+		glfwPollEvents();
+		processInput();
+		input::process();
+
+		getApplication()->update();
+
+		// Calls fixed update 60 times per second
+		if (l_fixedTimer >= getFixedDeltaTime())
+		{
+			l_fixedTimer -= getFixedDeltaTime();
+			getApplication()->fixedUpdate();
+		}
+
+		getApplication()->lateUpdate();
+
+		// Skip drawing if minimised, restricts fps to 15
+		if ((bool)glfwGetWindowAttrib(l_windowRef, GLFW_ICONIFIED))
+		{
+			// TODO: Figure out why sleeping the thread freezes when unminimised
+			//std::this_thread::sleep_for(std::chrono::milliseconds(66));
+
+			// Waste time
+			double waster = 0.2893652150526226374;
+			while (glfwGetTime() < l_currentTime + 0.06666666666666666)
+			{	waster /= waster; }
+			continue;
+		}
+
+		auto drawStart = std::chrono::high_resolution_clock::now();
+		graphics::draw();
+
+		// Check and call events and swap the buffers
+		glfwSwapBuffers(l_windowRef);
+
+		auto frameEnd = std::chrono::high_resolution_clock::now();
+
+		std::chrono::duration<double> frameTime = frameEnd - frameStart;
+		std::chrono::duration<double> drawTime = frameEnd - drawStart;
+
+		// Doing this allows me to updates fps as often as I want
+		// TODO: Look into improving
+		static const double secondsPerUpdate = 1.0;
+		if (l_frameTimer >= secondsPerUpdate)
+		{
+			l_frameTimer -= secondsPerUpdate;
+			l_fps = (uint16_t)((double)l_perSecondFrameCount / secondsPerUpdate);
+			l_perSecondFrameCount = 0U;
+			string frameTimeMs = to_string(frameTime.count() * 1000);
+			frameTimeMs.resize(5);
+			string drawTimeMs = to_string(drawTime.count() * 1000);
+			drawTimeMs.resize(5);
+			string title = {
+				l_title
+				+ " | "
+				+ to_string(l_wWidth)
+				+ "x"
+				+ to_string(l_wHeight)
+				+ " | "
+				+ to_string(l_fps)
+				+ ", "
+				+ frameTimeMs
+				+ ", "
+				+ drawTimeMs
+			};
+			glfwSetWindowTitle(l_windowRef, title.c_str());
+		}
+	}
+}
+
 inline void application::terminate() noexcept
 {
 	getApplication()->shutdown();
@@ -231,100 +316,25 @@ inline void application::terminate() noexcept
 	delete root::getRoot();
 }
 
-int application::run(std::string _location)
+inline void application::setAppLocation(std::string _path) noexcept
 {
-	size_t last_slash = _location.find_last_of("\\/");
-	l_appLocation = _location.substr(0, last_slash + 1);
-	//debug::send("App location set to: " + l_appLocation + "\nFrom source: " + _location);
+	size_t last_slash = _path.find_last_of("\\/");
+	l_appLocation = _path.substr(0, last_slash + 1);
+}
+
+int application::run(int _argc, char *_args[])
+{
+	setAppLocation(_args[0]);
 
 	if (init())
 	{
+		//debug::send("App location set to: " + l_appLocation + "\nFrom source: " + location);
+
 		// Preloads currentTime with an earlier time to prevent first frame weirdness
 		l_currentTime = glfwGetTime() - getFixedDeltaTime();
 
-		// Render loop
-		while (!(bool)glfwWindowShouldClose(l_windowRef))
-		{
-			auto frameStart = std::chrono::high_resolution_clock::now();
-
-			// TODO: Look into extracting into a timekeeping class
-			l_prevTime = l_currentTime;
-			l_currentTime = glfwGetTime();
-			l_deltaTime = l_currentTime - l_prevTime;
-			l_fixedTimer += l_deltaTime;
-			l_frameTimer += l_deltaTime;
-			++l_totalFrames;
-			++l_perSecondFrameCount;
-
-			// Input
-			glfwPollEvents();
-			processInput();
-			input::process();
-
-			getApplication()->update();
-
-			// Calls fixed update 60 times per second
-			if (l_fixedTimer >= getFixedDeltaTime())
-			{
-				l_fixedTimer -= getFixedDeltaTime();
-				getApplication()->fixedUpdate();
-			}
-
-			getApplication()->lateUpdate();
-
-			// Skip drawing if minimised, restricts fps to 15
-			if ((bool)glfwGetWindowAttrib(l_windowRef, GLFW_ICONIFIED))
-			{
-				// TODO: Figure out why sleeping the thread freezes when unminimised
-				//std::this_thread::sleep_for(std::chrono::milliseconds(66));
-
-				// Waste time
-				double waster = 0.2893652150526226374;
-				while (glfwGetTime() < l_currentTime + 0.06666666666666666)
-				{	waster /= waster; }
-				continue;
-			}
-
-			auto drawStart = std::chrono::high_resolution_clock::now();
-			graphics::draw();
-
-			// Check and call events and swap the buffers
-			glfwSwapBuffers(l_windowRef);
-
-			auto frameEnd = std::chrono::high_resolution_clock::now();
-
-			std::chrono::duration<double> frameTime = frameEnd - frameStart;
-			std::chrono::duration<double> drawTime = frameEnd - drawStart;
-
-			// Doing this allows me to updates fps as often as I want
-			// TODO: Look into improving
-			static const double secondsPerUpdate = 1.0;
-			if (l_frameTimer >= secondsPerUpdate)
-			{
-				l_frameTimer -= secondsPerUpdate;
-				l_fps = (uint16_t)((double)l_perSecondFrameCount / secondsPerUpdate);
-				l_perSecondFrameCount = 0U;
-				string frameTimeMs = to_string(frameTime.count() * 1000);
-				frameTimeMs.resize(5);
-				string drawTimeMs = to_string(drawTime.count() * 1000);
-				drawTimeMs.resize(5);
-				string title = {
-					l_title
-					+ " | "
-					+ to_string(l_wWidth)
-					+ "x"
-					+ to_string(l_wHeight)
-					+ " | "
-					+ to_string(l_fps)
-					+ ", "
-					+ frameTimeMs
-					+ ", "
-					+ drawTimeMs
-				};
-				glfwSetWindowTitle(l_windowRef, title.c_str());
-			}
-
-		}
+		// Update-Render loop
+		loop();
 	}
 
 	terminate();
