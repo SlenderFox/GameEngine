@@ -240,44 +240,50 @@ void project::processInput() noexcept
 	{	graphics::setRenderMode(graphics::mode::point); }
 
 	// Spotlight cone
+	const float coneSpeed = valueModKeys(6.0f) * (float)getDeltaTime();
 	if (input::checkKeyState(input::key::key_t, input::state::press))
-	{	graphics::modifyAllSpotlights(true, 0.05f); }
+	{	graphics::modifyAllSpotlights(true, coneSpeed); }
 	if (input::checkKeyState(input::key::key_g, input::state::press))
-	{	graphics::modifyAllSpotlights(true, -0.05f); }
+	{	graphics::modifyAllSpotlights(true, -coneSpeed); }
 	// Spotlight blur
+	const float blurSpeed = valueModKeys(0.5f) * (float)getDeltaTime();
 	if (input::checkKeyState(input::key::key_y, input::state::press))
-	{	graphics::modifyAllSpotlights(false, -0.005f); }
+	{	graphics::modifyAllSpotlights(false, -blurSpeed); }
 	if (input::checkKeyState(input::key::key_h, input::state::press))
-	{	graphics::modifyAllSpotlights(false, 0.005f); }
+	{	graphics::modifyAllSpotlights(false, blurSpeed); }
 
 	vec3 translation = vec3();
-	float moveSpeed = 4;
-
-	// SlowDown
-	if (input::checkKeyState(input::key::key_left_control, input::state::press))
-	{	moveSpeed *= 0.1f; }
-	// SpeedUp
-	else if (input::checkKeyState(input::key::key_left_shift, input::state::press))
-	{	moveSpeed *= 3; }
+	const float moveSpeed = valueModKeys(4.0f) * (float)getDeltaTime();
 
 	// Forwards
 	if (input::checkKeyState(input::key::key_w, input::state::press))
-	{	translation += moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getForward(); }
+	{	translation += (vec3)graphics::getCamera()->getForward() * moveSpeed; }
 	// Backwards
 	if (input::checkKeyState(input::key::key_s, input::state::press))
-	{	translation -= moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getForward(); }
+	{	translation -= (vec3)graphics::getCamera()->getForward() * moveSpeed; }
 	// Left
 	if (input::checkKeyState(input::key::key_a, input::state::press))
-	{	translation += moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getRight(); }
+	{	translation += (vec3)graphics::getCamera()->getRight() * moveSpeed; }
 	// Right
 	if (input::checkKeyState(input::key::key_d, input::state::press))
-	{	translation -= moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getRight(); }
+	{	translation -= (vec3)graphics::getCamera()->getRight() * moveSpeed; }
 	// Up
 	if (input::checkKeyState(input::key::key_space, input::state::press))
-	{	translation += moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getUp(); }
+	{	translation += (vec3)graphics::getCamera()->getUp() * moveSpeed; }
 	// Down
 	if (input::checkKeyState(input::key::key_c, input::state::press))
-	{	translation -= moveSpeed * (float)getDeltaTime() * (vec3)graphics::getCamera()->getUp(); }
+	{	translation -= (vec3)graphics::getCamera()->getUp() * moveSpeed; }
 
 	graphics::getCamera()->translate(translation);
+}
+
+float project::valueModKeys(float _value) noexcept
+{
+	// Reduce
+	if (input::checkKeyState(input::key::key_left_control, input::state::press))
+	{	_value *= 0.1f; }
+	// Increase
+	else if (input::checkKeyState(input::key::key_left_shift, input::state::press))
+	{	_value *= 3; }
+	return _value;
 }

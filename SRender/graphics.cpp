@@ -179,9 +179,9 @@ namespace graphics
 			{
 				// Update the value in the light
 				if (_isAngle)
-					currentlLight->setAngle(newValue);
+				{	currentlLight->setAngle(newValue); }
 				else
-					currentlLight->setBlur(newValue);
+				{	currentlLight->setBlur(newValue); }
 
 				// Update the shaders on all the models
 				for (uint8_t j = 0; j < s_models.size(); ++j)

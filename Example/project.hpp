@@ -36,6 +36,11 @@ class project : private srender::application
 
 	/** Crappy way to check input each frame */
 	void processInput() noexcept;
+	/** Modifies a value if shift or control are pressed
+	 * @param _value The input value
+	 * @return [float] The result
+	 */
+	float valueModKeys(float _value) noexcept;
 
 public:
 	project();
