@@ -27,12 +27,6 @@ class application
 	static void setAppLocation(std::string _path) noexcept;
 
 public:
-	/** Runs the app
-	 * @param _argc The number of arguments
-	 * @param _args The arguments as an array of C strings
-	 * @return int Return code
-	 */
-	_NODISCARD int run(int _argc, char *_args[]);
 	static void quit() noexcept;
 
 	static void setDimensions(const uint16_t _width, const uint16_t _height) noexcept;
@@ -45,6 +39,13 @@ public:
 	_NODISCARD static std::string getAppLocation() noexcept;
 	/** Should evaluate to 0.01666666666666666 */
 	_NODISCARD static constexpr double getFixedDeltaTime() { return 1.0 / 60.0; }
+
+	/** Runs the app
+	 * @param _argc The number of arguments
+	 * @param _args The arguments as an array of C strings
+	 * @return int Return code
+	 */
+	_NODISCARD int run(int _argc, char *_args[]);
 
 protected:
 	application() noexcept;

@@ -321,24 +321,6 @@ inline void application::setAppLocation(std::string _path) noexcept
 	//debug::send("App location set to: " + l_appLocation + "\nFrom source: " + _path);
 }
 
-int application::run(int _argc, char *_args[])
-{
-	debug::init();
-	setAppLocation(_args[0]);
-
-	if (init())
-	{
-		// Preloads currentTime with an earlier time to prevent first frame weirdness
-		l_currentTime = glfwGetTime() - getFixedDeltaTime();
-
-		// Update-Render loop
-		loop();
-	}
-
-	terminate();
-	return (int)l_exitCode;
-}
-
 void application::quit() noexcept
 {	glfwSetWindowShouldClose(l_windowRef, true); }
 
@@ -371,6 +353,24 @@ double application::getDeltaTime() noexcept
 
 std::string application::getAppLocation() noexcept
 {	return l_appLocation; }
+
+int application::run(int _argc, char *_args[])
+{
+	debug::init();
+	setAppLocation(_args[0]);
+
+	if (init())
+	{
+		// Preloads currentTime with an earlier time to prevent first frame weirdness
+		l_currentTime = glfwGetTime() - getFixedDeltaTime();
+
+		// Update-Render loop
+		loop();
+	}
+
+	terminate();
+	return (int)l_exitCode;
+}
 
 application::application() noexcept
 {
