@@ -367,7 +367,7 @@ std::string application::getAppLocation() noexcept
 application::application() noexcept
 {
 	// Prevents potential memory leak
-	assert(!l_application);
+	assert(!l_application && "You tried to make more than one application");
 
 	// Applies the static reference
 	l_application = this;

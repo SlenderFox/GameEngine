@@ -6,7 +6,7 @@
 #endif
 
 /** Example project */
-class project : private srender::application
+class project : public srender::application
 {
 	static double s_camYaw, s_camPitch;
 
