@@ -9,7 +9,7 @@ using std::string;
 namespace srender
 {
 // Static
-std::map<uint8_t, texture*> s_loadedTextures = std::map<uint8_t, texture*>();
+std::map<uint8_t, texture*> l_loadedTextures = std::map<uint8_t, texture*>();
 
 void texture::init() noexcept
 {
@@ -18,20 +18,20 @@ void texture::init() noexcept
 
 	// Create 32 textures
 	for (uint8_t i = 0; i < 32; ++i)
-	{	s_loadedTextures[i] = new texture(i); }
+	{	l_loadedTextures[i] = new texture(i); }
 }
 
 void texture::terminate() noexcept
 {
-	for (auto &[key, value] : s_loadedTextures)
+	for (auto &[key, value] : l_loadedTextures)
 	{	delete value; }
-	s_loadedTextures.clear();
+	l_loadedTextures.clear();
 }
 
 texture *texture::loadNew(string _path, type _type)
 {
 	// Look for a texture that has not been loaded into
-	for (auto &[key, value] : s_loadedTextures)
+	for (auto &[key, value] : l_loadedTextures)
 	{
 		if (!value->m_loaded)
 		{
@@ -47,10 +47,10 @@ texture *texture::loadNew(string _path, type _type)
 }
 
 uint8_t texture::size() noexcept
-{	return (uint8_t)s_loadedTextures.size(); }
+{	return (uint8_t)l_loadedTextures.size(); }
 
 texture *texture::at(uint8_t _val)
-{	return s_loadedTextures[_val]; }
+{	return l_loadedTextures[_val]; }
 
 // Member
 
@@ -75,7 +75,7 @@ void texture::load(string _filePath, type _type)
 	m_type = _type;
 
 	debug::send(
-		"Loading texture " + std::to_string(s_loadedTextures.size()) + ": \"" + m_filePath + "\"...",
+		"Loading texture " + std::to_string(l_loadedTextures.size()) + ": \"" + m_filePath + "\"...",
 		debug::type::process, debug::impact::large, debug::stage::mid, false, false
 	);
 

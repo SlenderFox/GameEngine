@@ -7,13 +7,13 @@ namespace srender
 namespace input
 {
 	// Does not need to be memory managed
-	GLFWwindow *s_windowRef = nullptr;
-	callbackFunc s_mouseCallbackFun = nullptr,
-		s_scrollCallbackFun = nullptr;
-	double s_mouseX = 0.0,
-		s_mouseY = 0.0,
-		s_mouseLastX = 0.0,
-		s_mouseLastY = 0.0;
+	GLFWwindow *l_windowRef = nullptr;
+	callbackFunc l_mouseCallbackFun = nullptr,
+		l_scrollCallbackFun = nullptr;
+	double l_mouseX = 0.0,
+		l_mouseY = 0.0,
+		l_mouseLastX = 0.0,
+		l_mouseLastY = 0.0;
 
 	void key_callback(
 		GLFWwindow *_window,
@@ -35,15 +35,15 @@ namespace input
 		double _posY
 	) noexcept
 	{
-		s_mouseLastX = s_mouseX;
-		s_mouseLastY = s_mouseY;
-		s_mouseX = _posX;
-		s_mouseY = _posY;
-		double deltaX = s_mouseX - s_mouseLastX;
-		double deltaY = s_mouseY - s_mouseLastY;
+		l_mouseLastX = l_mouseX;
+		l_mouseLastY = l_mouseY;
+		l_mouseX = _posX;
+		l_mouseY = _posY;
+		double deltaX = l_mouseX - l_mouseLastX;
+		double deltaY = l_mouseY - l_mouseLastY;
 
-		if (s_mouseCallbackFun)
-		{	s_mouseCallbackFun(deltaX, deltaY); }
+		if (l_mouseCallbackFun)
+		{	l_mouseCallbackFun(deltaX, deltaY); }
 	}
 
 	void scroll_callback(
@@ -52,25 +52,25 @@ namespace input
 		double _offsetY
 	) noexcept
 	{
-		if (s_scrollCallbackFun)
-		{	s_scrollCallbackFun(_offsetX, _offsetY); }
+		if (l_scrollCallbackFun)
+		{	l_scrollCallbackFun(_offsetX, _offsetY); }
 	}
 
 	bool init(GLFWwindow *_windowRef) noexcept
 	{
-		s_windowRef = _windowRef;
+		l_windowRef = _windowRef;
 
-		glfwGetCursorPos(s_windowRef, &s_mouseX, &s_mouseY);
-		s_mouseLastX = s_mouseX;
-		s_mouseLastY = s_mouseY;
+		glfwGetCursorPos(l_windowRef, &l_mouseX, &l_mouseY);
+		l_mouseLastX = l_mouseX;
+		l_mouseLastY = l_mouseY;
 
-		glfwSetInputMode(s_windowRef, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetInputMode(l_windowRef, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (glfwRawMouseMotionSupported())
-			glfwSetInputMode(s_windowRef, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+			glfwSetInputMode(l_windowRef, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
-		glfwSetKeyCallback(s_windowRef, key_callback);
-		glfwSetCursorPosCallback(s_windowRef, mouse_callback);
-		glfwSetScrollCallback(s_windowRef, scroll_callback);
+		glfwSetKeyCallback(l_windowRef, key_callback);
+		glfwSetCursorPosCallback(l_windowRef, mouse_callback);
+		glfwSetScrollCallback(l_windowRef, scroll_callback);
 
 		return true;
 	}
@@ -81,12 +81,12 @@ namespace input
 	}
 
 	bool checkKeyState(const key _key, const state _state) noexcept
-	{	return (int)_state == glfwGetKey(s_windowRef, (int)_key); }
+	{	return (int)_state == glfwGetKey(l_windowRef, (int)_key); }
 
 	void addMouseCallback(callbackFunc _callback) noexcept
-	{	s_mouseCallbackFun = _callback; }
+	{	l_mouseCallbackFun = _callback; }
 
 	void addSrollCallback(callbackFunc _callback) noexcept
-	{	s_scrollCallbackFun = _callback; }
+	{	l_scrollCallbackFun = _callback; }
 }
 }

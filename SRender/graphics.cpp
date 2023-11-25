@@ -163,6 +163,7 @@ namespace graphics
 		const float _value
 	) noexcept
 	{
+		// TODO Maybe flipping the for loops might improve speed
 		for (uint8_t i = 0, count = 0; i < (uint8_t)l_lights.size(); ++i)
 		{
 			light *currentlLight = getLightAt(i);

@@ -11,7 +11,7 @@ namespace srender
 /** Hard coded vertices for a cube
  * @deprecated No longer used since Model class
  */
-constexpr float s_cubeVerticesArr[288] = {
+constexpr float l_cubeVerticesArr[288] = {
 	// Positions				// Normals				  // Texture coords
 	-0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 0.0f,
 		0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    1.0f, 0.0f,
@@ -59,7 +59,7 @@ constexpr float s_cubeVerticesArr[288] = {
 /** Hard coded indices for a cube
  * @deprecated No longer used since Model class
  */
-constexpr uint32_t s_indicesArr[36] = {
+constexpr uint32_t l_indicesArr[36] = {
 	0U,	1U,	2U,	3U,	4U,	5U,	// Face 1
 	6U, 	7U,	8U,	9U,	10U,	11U,	// Face 2
 	12U,	13U,	14U,	15U,	16U,	17U,	// Face 3
@@ -82,14 +82,14 @@ vector<mesh::vertex> mesh::generateVertices() noexcept
 		{
 			switch (j)
 			{
-			case 0: vert.position.x  = s_cubeVerticesArr[i * 8 + j]; break;
-			case 1: vert.position.y  = s_cubeVerticesArr[i * 8 + j]; break;
-			case 2: vert.position.z  = s_cubeVerticesArr[i * 8 + j]; break;
-			case 3: vert.normal.x    = s_cubeVerticesArr[i * 8 + j]; break;
-			case 4: vert.normal.y    = s_cubeVerticesArr[i * 8 + j]; break;
-			case 5: vert.normal.z    = s_cubeVerticesArr[i * 8 + j]; break;
-			case 6: vert.texCoords.x = s_cubeVerticesArr[i * 8 + j]; break;
-			case 7: vert.texCoords.y = s_cubeVerticesArr[i * 8 + j]; break;
+			case 0: vert.position.x  = l_cubeVerticesArr[i * 8 + j]; break;
+			case 1: vert.position.y  = l_cubeVerticesArr[i * 8 + j]; break;
+			case 2: vert.position.z  = l_cubeVerticesArr[i * 8 + j]; break;
+			case 3: vert.normal.x    = l_cubeVerticesArr[i * 8 + j]; break;
+			case 4: vert.normal.y    = l_cubeVerticesArr[i * 8 + j]; break;
+			case 5: vert.normal.z    = l_cubeVerticesArr[i * 8 + j]; break;
+			case 6: vert.texCoords.x = l_cubeVerticesArr[i * 8 + j]; break;
+			case 7: vert.texCoords.y = l_cubeVerticesArr[i * 8 + j]; break;
 			}
 		}
 		verts.push_back(vert);
@@ -103,7 +103,7 @@ vector<uint32_t> mesh::generateIndices() noexcept
 	vector<uint32_t> inds = vector<uint32_t>();
 
 	for (uint8_t i = 0; i < 36; ++i)
-		inds.push_back(s_indicesArr[i]);
+	{	inds.push_back(l_indicesArr[i]); }
 	inds.shrink_to_fit();
 	return inds;
 }
