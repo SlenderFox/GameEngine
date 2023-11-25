@@ -311,7 +311,6 @@ inline void application::terminate() noexcept
 	getApplication()->shutdown();
 	graphics::terminate();
 	glfwTerminate();
-	delete root::getRoot();
 }
 
 inline void application::setAppLocation(std::string _path) noexcept
