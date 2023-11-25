@@ -48,6 +48,7 @@ void model::draw(const camera *_camera) const noexcept
 	if (!_camera)
 	{	_camera = m_cameraRef; }
 
+	// TODO This is dumb, just have the graphics class do this
 	m_shader->setMat4("u_camera", _camera->getWorldToCameraMatrix());
 	m_shader->setFloat3("u_viewPos", (vec3)_camera->getPosition());
 
