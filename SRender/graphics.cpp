@@ -15,9 +15,9 @@ namespace srender
 {
 namespace graphics
 {
-	camera *s_camera = nullptr;
-	vector<model*> s_models;
-	vector<light*> s_lights;
+	camera *l_camera = nullptr;
+	vector<model*> l_models;
+	vector<light*> l_lights;
 
 	bool init(const float _aspect) noexcept
 	{
@@ -25,12 +25,12 @@ namespace graphics
 		setClearColour({0.1f, 0.1f, 0.1f});
 
 		// Initialise camera
-		s_camera = new camera(_aspect, 75.0f);
-		s_camera->setPosition({ 0.0f, 0.0f, 6.0f });
+		l_camera = new camera(_aspect, 75.0f);
+		l_camera->setPosition({ 0.0f, 0.0f, 6.0f });
 
 		// Initialise arrays
-		s_models = vector<model*>();
-		s_lights = vector<light*>();
+		l_models = vector<model*>();
+		l_lights = vector<light*>();
 
 		texture::init();
 
@@ -39,15 +39,15 @@ namespace graphics
 
 	void terminate() noexcept
 	{
-		for (unsigned int i = 0; i < s_models.size(); ++i)
-		{	delete s_models[i]; }
+		for (unsigned int i = 0; i < l_models.size(); ++i)
+		{	delete l_models[i]; }
 
-		for (unsigned int i = 0; i < s_lights.size(); ++i)
-		{	delete s_lights[i]; }
+		for (unsigned int i = 0; i < l_lights.size(); ++i)
+		{	delete l_lights[i]; }
 
 		texture::terminate();
 
-		delete s_camera;
+		delete l_camera;
 	}
 
 	void draw() noexcept
@@ -55,9 +55,9 @@ namespace graphics
 		// Clears to background colour
 		renderer::clearScreenBuffers();
 
-		if (s_models.size() > 0)
+		if (l_models.size() > 0)
 		{
-			for (uint8_t i = 0; i < s_models.size(); ++i)
+			for (uint8_t i = 0; i < l_models.size(); ++i)
 			{	getModelAt(i)->draw(); }
 		}
 	}
@@ -70,7 +70,7 @@ namespace graphics
 		uint8_t numSpotLights = 0;
 		string lightCount;
 
-		for (uint8_t i = 0; i < s_lights.size(); ++i)
+		for (uint8_t i = 0; i < l_lights.size(); ++i)
 		{
 			light *currentLight = getLightAt(i);
 			switch (currentLight->getType())
@@ -163,7 +163,7 @@ namespace graphics
 		const float _value
 	) noexcept
 	{
-		for (uint8_t i = 0, count = 0; i < (uint8_t)s_lights.size(); ++i)
+		for (uint8_t i = 0, count = 0; i < (uint8_t)l_lights.size(); ++i)
 		{
 			light *currentlLight = getLightAt(i);
 
@@ -184,7 +184,7 @@ namespace graphics
 				{	currentlLight->setBlur(newValue); }
 
 				// Update the shaders on all the models
-				for (uint8_t j = 0; j < s_models.size(); ++j)
+				for (uint8_t j = 0; j < l_models.size(); ++j)
 				{
 					if (_isAngle)
 					{
@@ -214,11 +214,11 @@ namespace graphics
 	)
 	{
 		// Caps at 255
-		size_t currentAmount = s_models.size();
+		size_t currentAmount = l_models.size();
 		if (currentAmount >= 255)
 		{	throw graphicsException("Reached max models"); }
 
-		s_models.push_back(new model(_modelPath, _shaderPath, s_camera, _loadTextures));
+		l_models.push_back(new model(_modelPath, _shaderPath, l_camera, _loadTextures));
 		return getModelAt((uint8_t)currentAmount);
 	}
 
@@ -228,11 +228,11 @@ namespace graphics
 	)
 	{
 		// Caps at 255
-		size_t currentAmount = s_lights.size();
+		size_t currentAmount = l_lights.size();
 		if (currentAmount > 255)
 		{	throw graphicsException("Reached max lights"); }
 
-		s_lights.push_back(new light(_type, _colour));
+		l_lights.push_back(new light(_type, _colour));
 		return getLightAt((uint8_t)currentAmount);
 	}
 
@@ -249,37 +249,37 @@ namespace graphics
 
 	uint8_t modelCount() noexcept
 	{
-		return (uint8_t)s_models.size();
+		return (uint8_t)l_models.size();
 	}
 
 	uint8_t lightCount() noexcept
 	{
-		return (uint8_t)s_lights.size();
+		return (uint8_t)l_lights.size();
 	}
 
 	model *getModelAt(const uint8_t _pos) noexcept
 	{
-		if (_pos > s_models.size() - 1)
+		if (_pos > l_models.size() - 1)
 		{
 			debug::send("Attempting to access model outside array size");
 			return nullptr;
 		}
 
-		return s_models[_pos];
+		return l_models[_pos];
 	}
 
 	light *getLightAt(const uint8_t _pos) noexcept
 	{
-		if (_pos > s_lights.size() - 1)
+		if (_pos > l_lights.size() - 1)
 		{
 			debug::send("Attempting to access light outside array size");
 			return nullptr;
 		}
 
-		return s_lights[_pos];
+		return l_lights[_pos];
 	}
 
 	camera *getCamera() noexcept
-	{	return s_camera; }
+	{	return l_camera; }
 }
 }
