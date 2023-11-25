@@ -12,6 +12,9 @@ using std::string;
 
 namespace srender
 {
+/** For printing debug messages into console
+ * @todo Fix wcout not working some times for unknown reasons
+ */
 namespace debug
 {
 	/** List of prefixes:
