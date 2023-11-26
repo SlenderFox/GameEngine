@@ -1,7 +1,6 @@
 #include "graphics.hpp"
 #include "renderer.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-#include "debug.hpp"
 #include "exception.hpp"
 
 using glm::vec3;
@@ -17,20 +16,20 @@ namespace graphics
 {
 	camera *l_camera = nullptr;
 	vector<model*> l_models;
-	vector<light*> l_lights;
+	vector<entity*> l_lightRefs;
 
 	bool init(const float _aspect) noexcept
 	{
+		// Initialise arrays
+		l_models = vector<model*>();
+		l_lightRefs = vector<entity*>();
+
 		// Default clear colour
 		setClearColour({0.1f, 0.1f, 0.1f});
 
 		// Initialise camera
 		l_camera = new camera(_aspect, 75.0f);
 		l_camera->setPosition({ 0.0f, 0.0f, 6.0f });
-
-		// Initialise arrays
-		l_models = vector<model*>();
-		l_lights = vector<light*>();
 
 		texture::init();
 
@@ -42,15 +41,11 @@ namespace graphics
 		for (unsigned int i = 0; i < l_models.size(); ++i)
 		{	delete l_models[i]; }
 
-		for (unsigned int i = 0; i < l_lights.size(); ++i)
-		{	delete l_lights[i]; }
-
 		texture::terminate();
-
 		delete l_camera;
 	}
 
-	void draw() noexcept
+	void draw()
 	{
 		// Clears to background colour
 		renderer::clearScreenBuffers();
@@ -70,9 +65,10 @@ namespace graphics
 		uint8_t numSpotLights = 0;
 		string lightCount;
 
-		for (uint8_t i = 0; i < l_lights.size(); ++i)
+		for (uint8_t i = 0; i < l_lightRefs.size(); ++i)
 		{
-			light *currentLight = getLightAt(i);
+			entity *currentEntity = getLightAt(i);
+			light *currentLight = currentEntity->componentLightGet();
 			switch (currentLight->getType())
 			{
 			case light::type::directional:
@@ -91,7 +87,7 @@ namespace graphics
 				);
 				_shader->setFloat4(
 					"u_dirLights[" + lightCount + "].direction",
-					(vec4)currentLight->getDirection()
+					(vec4)currentEntity->getTransform().getForward()
 				);
 				++numDirLights; break;
 			case light::type::point:
@@ -106,7 +102,7 @@ namespace graphics
 				);
 				_shader->setFloat4(
 					"u_pointLights[" + lightCount + "].position",
-					(vec4)currentLight->getPosition()
+					(vec4)currentEntity->getTransform().getPosition()
 				);
 				_shader->setFloat(
 					"u_pointLights[" + lightCount + "].linear",
@@ -129,11 +125,11 @@ namespace graphics
 				);
 				_shader->setFloat4(
 					"u_spotLights[" + lightCount + "].position",
-					(vec4)currentLight->getPosition()
+					(vec4)currentEntity->getTransform().getPosition()
 				);
 				_shader->setFloat4(
 					"u_spotLights[" + lightCount + "].direction",
-					(vec4)currentLight->getDirection()
+					(vec4)currentEntity->getTransform().getForward()
 				);
 				_shader->setFloat(
 					"u_spotLights[" + lightCount + "].linear",
@@ -153,7 +149,8 @@ namespace graphics
 				);
 				++numSpotLights; break;
 			default:
-				debug::send("Incorrect light type"); return;
+				assert(false && "You forgot to add the light type to loadLightsIntoShader");
+				return;
 			}
 		}
 	}
@@ -161,12 +158,11 @@ namespace graphics
 	void modifyAllSpotlights(
 		const bool _isAngle,
 		const float _value
-	) noexcept
+	)
 	{
-		// TODO Maybe flipping the for loops might improve speed
-		for (uint8_t i = 0, count = 0; i < (uint8_t)l_lights.size(); ++i)
+		for (uint8_t i = 0, count = 0; i < (uint8_t)l_lightRefs.size(); ++i)
 		{
-			light *currentlLight = getLightAt(i);
+			light *currentlLight = getLightAt(i)->componentLightGet();
 
 			// We only want to modify the spotlights, ignore the others
 			if (currentlLight->getType() != light::type::spot) continue;
@@ -219,23 +215,13 @@ namespace graphics
 		if (currentAmount >= 255)
 		{	throw graphicsException("Reached max models"); }
 
-		l_models.push_back(new model(_modelPath, _shaderPath, l_camera, _loadTextures));
-		return getModelAt((uint8_t)currentAmount);
+		model *res = new model(_modelPath, _shaderPath, l_camera, _loadTextures);
+		l_models.push_back(res);
+		return res;
 	}
 
-	light *addNewLight(
-		const light::type _type,
-		const colour _colour
-	)
-	{
-		// Caps at 255
-		size_t currentAmount = l_lights.size();
-		if (currentAmount > 255)
-		{	throw graphicsException("Reached max lights"); }
-
-		l_lights.push_back(new light(_type, _colour));
-		return getLightAt((uint8_t)currentAmount);
-	}
+	void addNewLight(entity *_light)
+	{	l_lightRefs.push_back(_light); }
 
 	void setClearColour(const colour _colour) noexcept
 	{
@@ -244,40 +230,28 @@ namespace graphics
 	}
 
 	void setRenderMode(const mode _mode) noexcept
-	{
-		renderer::setRenderMode(int(_mode));
-	}
+	{	renderer::setRenderMode(int(_mode)); }
 
 	uint8_t modelCount() noexcept
-	{
-		return (uint8_t)l_models.size();
-	}
+	{	return (uint8_t)l_models.size(); }
 
 	uint8_t lightCount() noexcept
-	{
-		return (uint8_t)l_lights.size();
-	}
+	{	return (uint8_t)l_lightRefs.size(); }
 
-	model *getModelAt(const uint8_t _pos) noexcept
+	model *getModelAt(const uint8_t _pos)
 	{
 		if (_pos > l_models.size() - 1)
-		{
-			debug::send("Attempting to access model outside array size");
-			return nullptr;
-		}
+		{	throw graphicsException("Attempting to access model outside array size"); }
 
 		return l_models[_pos];
 	}
 
-	light *getLightAt(const uint8_t _pos) noexcept
+	entity *getLightAt(const uint8_t _pos)
 	{
-		if (_pos > l_lights.size() - 1)
-		{
-			debug::send("Attempting to access light outside array size");
-			return nullptr;
-		}
+		if (_pos > l_lightRefs.size() - 1)
+		{	throw graphicsException("Attempting to access light outside array size"); }
 
-		return l_lights[_pos];
+		return l_lightRefs[_pos];
 	}
 
 	camera *getCamera() noexcept

@@ -1,5 +1,5 @@
 #pragma once
-#include "light.hpp"
+#include "entity.hpp"
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]
@@ -7,8 +7,9 @@
 
 namespace srender
 {
-/** Graphics is the hub for the rendering side of the engine
+/** Graphics is responsible for all things visible in the virtual world
  * @todo Look into changing includes up the chain
+ * @todo No longer manage lights and models, just keep references
 */
 namespace graphics
 {
@@ -20,7 +21,7 @@ namespace graphics
 	};
 
 	bool init(const float _aspect) noexcept;
-	void draw() noexcept;
+	void draw();
 
 	void terminate() noexcept;
 
@@ -33,7 +34,7 @@ namespace graphics
 	void modifyAllSpotlights(
 		const bool _isAngle,
 		const float _value
-	) noexcept;
+	);
 
 	model *addNewModel(
 		const std::string *_modelPath,
@@ -41,18 +42,15 @@ namespace graphics
 		const bool _loadTextures = true
 	);
 
-	light *addNewLight(
-		const light::type _type,
-		const colour _colour = colour::white()
-	);
+	void addNewLight(entity *_light);
 
 	void setClearColour(const colour _colour) noexcept;
 	void setRenderMode(const mode _mode = mode::fill) noexcept;
 
 	_NODISCARD uint8_t modelCount() noexcept;
 	_NODISCARD uint8_t lightCount() noexcept;
-	_NODISCARD model *getModelAt(const uint8_t _pos) noexcept;
-	_NODISCARD light *getLightAt(const uint8_t _pos) noexcept;
+	_NODISCARD model *getModelAt(const uint8_t _pos);
+	_NODISCARD entity *getLightAt(const uint8_t _pos);
 	_NODISCARD camera *getCamera() noexcept;
 
 	_NODISCARD constexpr float getAmbience() { return 0.15f; }

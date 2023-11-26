@@ -77,9 +77,9 @@ void project::scrollCallback(double _offsetX, double _offsetY) noexcept
 
 project::project()
 {
-	m_lightRefs = vector<light*>();
+	m_backpack = new entity();
 	m_cubes = vector<entity*>();
-	object_backpack = new entity();
+	m_lights = vector<entity*>();
 }
 
 project::~project()
@@ -90,8 +90,8 @@ project::~project()
 		{	delete m_cubes[i]; }
 	}
 
-	if (object_backpack)
-	{	delete object_backpack; }
+	if (m_backpack)
+	{	delete m_backpack; }
 }
 
 bool project::startup()
@@ -113,8 +113,9 @@ void project::update()
 	for (uint8_t i = 0; i < s_numCubes; i++)
 	{
 		float angle = (float)getDeltaTime() * 5.0f * ((i + 1) / (i * 0.2f + 1));
+		// FIXME
 		mat4 rot = rotate(
-			m_cubes[i]->getTransform(),
+			m_cubes[i]->getTransform().getTransform(),
 			radians(angle),
 			glm::normalize(vec3(1.0f, 0.3f, 0.5f))
 		);
@@ -131,10 +132,21 @@ void project::createScene()
 	model *model = nullptr;
 	shader *shader = nullptr;
 
+	// Create a backpack in the centre
+	m_backpack = new entity();
+	m_backpack->componentModelLoad(
+		"assets/models/backpack/backpack.obj",
+		"assets/shaders/default",
+		model, shader
+	);
+	m_backpack->translate(vec3(0.0f, 0.0f, 0.9f));
+	m_backpack->setScale(vec3(0.6f));
+
 	// Place 9 cubes behind
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
-		entity *cube = new entity(
+		entity *cube = new entity();
+		cube->componentModelLoad(
 			"assets/models/cube/cube.obj",
 			"assets/shaders/default",
 			model, shader
@@ -143,15 +155,6 @@ void project::createScene()
 		cube->setScale(vec3(0.6f));
 		m_cubes.push_back(cube);
 	}
-
-	// Create a backpack in the centre
-	object_backpack = new entity(
-		"assets/models/backpack/backpack.obj",
-		"assets/shaders/default",
-		model, shader
-	);
-	object_backpack->translate(vec3(0.0f, 0.0f, 0.9f));
-	object_backpack->setScale(vec3(0.6f));
 }
 
 void project::createLights()
@@ -162,70 +165,71 @@ void project::createLights()
 		spot = true;
 
 	// Creates lights
-	light *light;
+	entity *entityRef = nullptr;
+	light *lightRef = nullptr;
+	model *model = nullptr;
+	shader *shader = nullptr;
 	if (directional)
 	{
-		light = graphics::addNewLight(
+		entityRef = new entity();
+		entityRef->componentLightLoad(
 			light::type::directional,
 			/* White light */
 			colour(colour::hsvToRgb({0, 0.0f, 0.6f}))
 		);
-		light->setDirection(vec3(0, -1, 0));
+		lightRef = entityRef->componentLightGet();
+		entityRef->setForward(vec3(0, -1, 0));
 		graphics::setClearColour(
-			light->getColour() * graphics::getAmbience()
+			lightRef->getColour() * graphics::getAmbience()
 		);
+		m_lights.push_back(entityRef);
 	}
 	if (point)
 	{
-		light = graphics::addNewLight(
+		entityRef = new entity();
+		entityRef->componentLightLoad(
 			light::type::point,
 			/* Red light */
 			colour(colour::hsvToRgb({0, 0.6f, 0.8f}))
 		);
-		light->setPosition(vec4(-4, 2, -2, 1));
+		lightRef = entityRef->componentLightGet();
+		entityRef->componentModelLoad(
+			"assets/models/cube/cube.obj",
+			"assets/shaders/default",
+			model, shader, false
+		);
+		entityRef->setPosition(vec4(-4, 2, -2, 1));
+		entityRef->setScale(vec3(0.1f, 0.1f, 0.1f));
+		entityRef->sentTint(lightRef->getColour());
+		entityRef->renderOnlyColour(true);
+		m_lights.push_back(entityRef);
 	}
 	if (spot)
 	{
-		light = graphics::addNewLight(
+		entityRef = new entity();
+		entityRef->componentLightLoad(
 			light::type::spot,
 			/* Green light */
 			colour(colour::hsvToRgb({110, 0.3f, 1.0f}))
 		);
-		light->setPosition(vec4(2.0f, 2.5f, 6.0f, 1));
-		light->setDirection(vec3(-0.3f, -0.4f, -1));
-		light->setAngle(13.0f);
-		light->setBlur(0.23f);
-	}
-
-	// Don't bother if there are no lights
-	if (graphics::lightCount() == 0)
-	{	return; }
-
-	model *model = nullptr;
-	shader *shader = nullptr;
-
-	// Gives them physical form
-	for (uint8_t i = 0; i < graphics::lightCount(); ++i)
-	{
-		light = graphics::getLightAt(i);
-
-		if (light->getType() == light::type::point
-		 || light->getType() == light::type::spot)
-		{
-			light->loadModel(
-				"assets/models/cube/cube.obj",
-				"assets/shaders/default",
-				model, shader, false
-			);
-			light->setScale(vec3(0.1f, 0.1f, (light->getType() == light::type::spot) ? 0.2f : 0.1f));
-			light->sentTint(light->getColour());
-			light->renderOnlyColour(true);
-			m_lightRefs.push_back(light);
-		}
+		lightRef = entityRef->componentLightGet();
+		entityRef->componentModelLoad(
+			"assets/models/cube/cube.obj",
+			"assets/shaders/default",
+			model, shader, false
+		);
+		entityRef->setScale(vec3(0.1f, 0.1f, 0.2f));
+		entityRef->sentTint(lightRef->getColour());
+		entityRef->renderOnlyColour(true);
+		entityRef->setPosition(vec4(2.0f, 2.5f, 6.0f, 1));
+		entityRef->setForward(vec3(-0.3f, -0.4f, -1));
+		lightRef->setAngle(13.0f);
+		lightRef->setBlur(0.23f);
+		m_lights.push_back(entityRef);
 	}
 }
 
-void project::processInput() noexcept
+void project::processInput()
 {
 	// Render triangles normally
 	if (input::checkKeyState(input::key::key_f1, input::state::press))

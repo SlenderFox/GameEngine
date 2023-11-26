@@ -1,7 +1,6 @@
 #include "light.hpp"
 #include "glm/detail/func_trigonometric.inl"
 
-using glm::mat4;
 using glm::cos;
 using glm::sin;
 using glm::radians;
@@ -10,19 +9,14 @@ namespace srender
 {
 light::light(
 	const light::type _type,
-	const colour _colour,
-	mat4 inTransform
+	const colour _colour
 ) noexcept
 	: m_type(_type)
 	, m_lightColour(_colour)
 {
-	transform::setTransform(&inTransform);
 	if (_type == light::type::spot)
 	{	m_angle = cos(radians(m_angle)); }
 }
-
-void light::setDirection (const glm::vec3 _direction) noexcept
-{	transform::setForward(_direction); }
 
 void light::setType (light::type _type) noexcept
 {	m_type = _type; }
@@ -47,9 +41,6 @@ float light::getAngle() const noexcept
 
 float light::getBlur() const noexcept
 {	return sin(radians(90 * m_blur)); }
-
-glm::vec4 light::getDirection()	const noexcept
-{	return transform::getForward(); }
 
 light::type light::getType() const noexcept
 {	return m_type; }

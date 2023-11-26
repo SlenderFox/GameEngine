@@ -6,6 +6,7 @@
 #include "debug.hpp"
 
 using std::string;
+
 namespace srender
 {
 // Static

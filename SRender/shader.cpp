@@ -266,7 +266,7 @@ inline bool shader::compileShader(
 	// Compiles the shader at run-time
 	renderer::compileShader(*_id);
 	// Performs error checking on the shader
-	return checkForErrors(_id, _type);
+	return checkForErrors(*_id, _type);
 }
 
 inline void shader::createShaderProgram() noexcept
@@ -274,7 +274,7 @@ inline void shader::createShaderProgram() noexcept
 	// Creates a shader program object assigned to id, this sets it as the active shader
 	m_idProgram = renderer::createShaderProgram(m_idVertex, m_idFragment);
 	// Performs error checking on the shader program
-	if (!checkForErrors(&m_idProgram, shaderType::program))
+	if (!checkForErrors(m_idProgram, shaderType::program))
 	{
 		renderer::deleteShaderProgram(m_idProgram);
 		return;
@@ -288,7 +288,7 @@ inline void shader::createShaderProgram() noexcept
 }
 
 inline bool shader::checkForErrors(
-	const uint32_t *_shaderID,
+	const uint32_t _shaderID,
 	const shaderType _type
 ) const noexcept
 {
@@ -299,11 +299,11 @@ inline bool shader::checkForErrors(
 	if (_type == shaderType::program)
 	{
 		// Retrieves the compile status of the given shader by id
-		renderer::getProgramiv(*_shaderID, &success);
+		renderer::getProgramiv(_shaderID, &success);
 		if (!success)
 		{
 			// In the case of a failure it loads the log and outputs
-			renderer::getProgramInfoLog(*_shaderID, infoLog, 512);
+			renderer::getProgramInfoLog(_shaderID, infoLog, 512);
 			debug::send(
 				"ERROR::SHADER::PROGRAM::LINKING_FAILED:\n" + string(infoLog),
 				debug::type::note, debug::impact::large, debug::stage::mid, true, false
@@ -314,11 +314,11 @@ inline bool shader::checkForErrors(
 	else
 	{
 		// Retrieves the compile status of the given shader by id
-		renderer::getShaderiv(*_shaderID, &success);
+		renderer::getShaderiv(_shaderID, &success);
 		if (!success)
 		{
 			// In the case of a failure it loads the log and outputs
-			renderer::getShaderInfoLog(*_shaderID, infoLog, 512);
+			renderer::getShaderInfoLog(_shaderID, infoLog, 512);
 			string msg = "ERROR::SHADER::"
 				+ byType(_type, string("VERTEX"), string("FRAGMENT"))
 				+ "::COMPILATION_FAILED:\n"

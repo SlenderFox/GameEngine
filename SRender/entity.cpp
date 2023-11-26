@@ -45,10 +45,10 @@ void entity::updateModel() const noexcept
 	if (!m_modelRef)
 	{	return; }
 
-	m_modelRef->getShaderRef()->setMat4("u_model", getTransform());
+	m_modelRef->getShaderRef()->setMat4("u_model", m_transform.getTransform());
 	m_modelRef->getShaderRef()->setMat3(
 		"u_transposeInverseOfModel",
-		(mat3)transpose(inverse(getTransform()))
+		(mat3)transpose(inverse(m_transform.getTransform()))
 	);
 }
 
@@ -58,65 +58,33 @@ entity::entity()
 entity::entity(entity *_parent)
 {	setParent(_parent); }
 
-entity::entity(
-	std::string _modelPath,
-	std::string _shaderPath,
-	model *&_outModel,
-	shader *&_outShader,
-	const bool _loadTextures
-)
+entity::~entity()
 {
-	setParent(nullptr);
-	loadModel(_modelPath, _shaderPath, _outModel, _outShader, _loadTextures);
-}
-
-entity::entity(
-	entity *_parent,
-	std::string _modelPath,
-	std::string _shaderPath,
-	model *&_outModel,
-	shader *&_outShader,
-	const bool _loadTextures
-)
-{
-	setParent(_parent);
-	loadModel(_modelPath, _shaderPath, _outModel, _outShader, _loadTextures);
-}
-
-void entity::loadModel(
-	string _modelPath,
-	string _shaderPath,
-	model *&_outModel,
-	shader *&_outShader,
-	const bool _loadTextures
-)
-{
-	// Currently this does nothing about the previous model and shader
-	// but only half causes a memory leak as they are managed by graphics
-	_modelPath = application::getAppLocation() + _modelPath;
-	_shaderPath = application::getAppLocation() + _shaderPath;
-	m_modelRef = graphics::addNewModel(&_modelPath, &_shaderPath, _loadTextures);
-	graphics::loadLightsIntoShader(m_modelRef->getShaderRef());
-	updateModel();
-	_outModel = m_modelRef;
-	_outShader = m_modelRef->getShaderRef();
+	if (m_light)
+	{	delete m_light; }
 }
 
 void entity::setTransform(const mat4 *_value) noexcept
 {
-	transform::setTransform(_value);
+	m_transform.setTransform(_value);
 	updateModel();
 }
 
 void entity::setPosition(const vec3 _value) noexcept
 {
-	transform::setPosition(_value);
+	m_transform.setPosition(_value);
+	updateModel();
+}
+
+void entity::setForward(const vec3 _value) noexcept
+{
+	m_transform.setForward(_value);
 	updateModel();
 }
 
 void entity::translate(const vec3 _value) noexcept
 {
-	transform::translate(_value);
+	m_transform.translate(_value);
 	updateModel();
 }
 
@@ -153,9 +121,47 @@ void entity::addChild(entity *_child) noexcept
 void entity::removeChild(const entity *_child) noexcept
 {	removeFromVector(m_childrenRef, _child); }
 
-constexpr entity &entity::getParent() const noexcept
+entity &entity::getParent() const noexcept
 {	return *m_parentRef; }
 
-constexpr std::vector<entity*> entity::getChildren() const noexcept
+std::vector<entity*> entity::getChildren() const noexcept
 {	return m_childrenRef; }
+
+const transform entity::getTransform() const noexcept
+{	return m_transform; }
+
+void entity::componentModelLoad(
+	string _modelPath,
+	string _shaderPath,
+	model *&_outModel,
+	shader *&_outShader,
+	const bool _loadTextures
+)
+{
+	// Currently this does nothing about the previous model and shader
+	// but only half causes a memory leak as they are managed by graphics
+	_modelPath = application::getAppLocation() + _modelPath;
+	_shaderPath = application::getAppLocation() + _shaderPath;
+	m_modelRef = graphics::addNewModel(&_modelPath, &_shaderPath, _loadTextures);
+	graphics::loadLightsIntoShader(m_modelRef->getShaderRef());
+	updateModel();
+	_outModel = m_modelRef;
+	_outShader = m_modelRef->getShaderRef();
+}
+
+void entity::componentLightLoad(
+	const light::type _type,
+	const colour _colour
+) noexcept
+{
+	assert(!m_light && "Entity already has a light component");
+	m_light = new light(_type, _colour);
+	graphics::addNewLight(this);
+}
+
+model *entity::componentModelGet() const noexcept
+{	return m_modelRef; }
+
+light *entity::componentLightGet() const noexcept
+{	return m_light; }
 }

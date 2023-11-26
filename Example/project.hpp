@@ -25,9 +25,9 @@ class project : public srender::application
 	static constexpr uint8_t s_numCubes = 9U;
 	static const glm::vec3 s_cubePositions[s_numCubes];
 
-	std::vector<srender::light*> m_lightRefs;
+	srender::entity *m_backpack;
 	std::vector<srender::entity*> m_cubes;
-	srender::entity *object_backpack;
+	std::vector<srender::entity*> m_lights;
 
 	/** Loads entities in to create the scene */
 	void createScene();
@@ -35,7 +35,7 @@ class project : public srender::application
 	void createLights();
 
 	/** Crappy way to check input each frame */
-	void processInput() noexcept;
+	void processInput();
 	/** Modifies a value if shift or control are pressed
 	 * @param _value The input value
 	 * @return [float] The result

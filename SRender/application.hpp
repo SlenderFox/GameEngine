@@ -21,6 +21,10 @@ class application
 	application &operator=(application&&) = delete;
 
 	_NODISCARD static bool init();
+	/**
+	 * Order is:
+	 * Process Input > Update > Fixed Update > Late Update > Draw
+	 */
 	static void loop();
 	static void terminate() noexcept;
 

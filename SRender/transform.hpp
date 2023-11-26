@@ -9,6 +9,7 @@
 
 namespace srender
 {
+/** A wrapper class for a 4x4 matrix, with a bunch of utility functions */
 class transform
 {
 	glm::mat4 m_transform;

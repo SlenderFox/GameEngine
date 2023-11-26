@@ -21,7 +21,7 @@ private:
 	std::string m_directory;
 
 	shader *m_shader;
-	camera *m_cameraRef;
+	camera *m_cameraRef; // TODO remove
 
 	bool m_loadTextures;
 

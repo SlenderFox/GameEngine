@@ -43,7 +43,7 @@ private:
 	inline void createShaderProgram() noexcept;
 
 	_NODISCARD inline bool checkForErrors(
-		const uint32_t *_shaderID,
+		const uint32_t _shaderID,
 		const shaderType _type
 	) const noexcept;
 
