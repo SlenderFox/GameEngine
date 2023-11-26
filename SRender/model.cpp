@@ -19,15 +19,13 @@ model::model(
 	camera *_camera,
 	const bool _loadTextures
 )
-	: m_cameraRef(_camera)
-	, m_loadTextures(_loadTextures)
 {
 	m_meshes = vector<mesh*>();
 	m_textures = vector<texture*>();
 
-	loadModel(_modelPath);
+	loadModel(_modelPath, _loadTextures);
 	m_shader = new shader(_shaderPath);
-	if (m_loadTextures) loadTexturesToShader();
+	if (_loadTextures) loadTexturesToShader();
 
 	debug::send("Done!", debug::type::note, debug::impact::small, debug::stage::end);
 }
@@ -44,10 +42,6 @@ void model::draw(const camera *_camera) const noexcept
 {
 	m_shader->use();
 
-	// If no camera is passed in, use the stored camera reference
-	if (!_camera)
-	{	_camera = m_cameraRef; }
-
 	// TODO This is dumb, just have the graphics class do this
 	m_shader->setMat4("u_camera", _camera->getWorldToCameraMatrix());
 	m_shader->setFloat3("u_viewPos", (vec3)_camera->getPosition());
@@ -56,14 +50,14 @@ void model::draw(const camera *_camera) const noexcept
 	{	getMeshAt(i)->draw(); }
 }
 
-inline void model::loadModel(const string *_path)
+void model::loadModel(const string *_path, const bool _loadTextures)
 {
 	debug::send(
 		"Loading model \"" + *_path + "\"",
 		debug::type::process, debug::impact::large, debug::stage::begin
 	);
 
-	if (!m_loadTextures)
+	if (!_loadTextures)
 	{
 		debug::send(
 			"Ignoring textures",
@@ -84,30 +78,34 @@ inline void model::loadModel(const string *_path)
 	}
 
 	size_t last_slash = (*_path).find_last_of("\\/");
-	m_directory = (*_path).substr(0, last_slash);
-	processNode(scene->mRootNode, scene);
+	string directory = (*_path).substr(0, last_slash);
+	processNode(scene->mRootNode, scene, directory, _loadTextures);
 }
 
-inline void model::processNode(
+void model::processNode(
 	const aiNode *_node,
-	const aiScene *_scene
+	const aiScene *_scene,
+	const string _directory,
+	const bool _loadTextures
 )
 {
 	// Process all the node's meshes (if any)
 	for (uint32_t i = 0; i < _node->mNumMeshes; ++i)
 	{
 		aiMesh *mesh = _scene->mMeshes[_node->mMeshes[i]];
-		m_meshes.push_back(processMesh(mesh, _scene));
+		m_meshes.push_back(processMesh(mesh, _scene, _directory, _loadTextures));
 	}
 
 	// Then do the same for each of it's children
 	for (uint32_t i = 0; i < _node->mNumChildren; ++i)
-	{	processNode(_node->mChildren[i], _scene); }
+	{	processNode(_node->mChildren[i], _scene, _directory, _loadTextures); }
 }
 
-inline mesh *model::processMesh(
+mesh *model::processMesh(
 	const aiMesh *_mesh,
-	const aiScene *_scene
+	const aiScene *_scene,
+	const string _directory,
+	const bool _loadTextures
 )
 {
 	// Process vertex positions, normals, and texture coordinates
@@ -151,17 +149,21 @@ inline mesh *model::processMesh(
 	}
 
 	// Process material
-	if (m_loadTextures && _mesh->mMaterialIndex >= 0U)
+	if (_loadTextures && _mesh->mMaterialIndex >= 0U)
 	{
 		aiMaterial *material = _scene->mMaterials[_mesh->mMaterialIndex];
 		vector<texture*> diffuseMaps = loadMaterialTextures(
 			material,
-			texture::type::diffuse
+			texture::type::diffuse,
+			_directory,
+			_loadTextures
 		);
 		m_textures.insert(m_textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 		vector<texture*> specularMaps = loadMaterialTextures(
 			material,
-			texture::type::specular
+			texture::type::specular,
+			_directory,
+			_loadTextures
 		);
 		m_textures.insert(m_textures.end(), specularMaps.begin(), specularMaps.end());
 	}
@@ -169,9 +171,11 @@ inline mesh *model::processMesh(
 	return new mesh(&vertices, &indices);
 }
 
-inline vector<texture*> model::loadMaterialTextures(
+vector<texture*> model::loadMaterialTextures(
 	const aiMaterial *_material,
-	const texture::type _texType
+	const texture::type _texType,
+	const string _directory,
+	const bool _loadTextures
 ) const
 {
 	// Textures from this specific node being output
@@ -192,7 +196,7 @@ inline vector<texture*> model::loadMaterialTextures(
 	{
 		aiString file;
 		_material->GetTexture(aitextype, i, &file);
-		string path = m_directory + '/' + file.C_Str();
+		string path = _directory + '/' + file.C_Str();
 
 		// First we check if the texture has already been loaded into memory
 		bool loadNewTexture = true;
@@ -243,7 +247,7 @@ inline vector<texture*> model::loadMaterialTextures(
 	return texturesOut;
 }
 
-inline void model::loadTexturesToShader() const noexcept
+void model::loadTexturesToShader() const noexcept
 {
 	uint8_t diffuseNr = 0;
 	uint8_t specularNr = 0;
@@ -282,12 +286,6 @@ inline void model::loadTexturesToShader() const noexcept
 		);
 	}
 }
-
-constexpr void model::setCameraRef(camera *_camera) noexcept
-{	m_cameraRef = _camera; }
-
-constexpr void model::setShaderRef(shader *_shader) noexcept
-{	m_shader = _shader; }
 
 shader *model::getShaderRef() const noexcept
 {	return m_shader; }

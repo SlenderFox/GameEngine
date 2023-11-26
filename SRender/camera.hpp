@@ -7,15 +7,14 @@
 
 namespace srender
 {
-/** The camera is the perspective where the virtual world is rendered from
- * @todo Perhaps derive from entity
- */
+/** The camera is the perspective where the virtual world is rendered from */
 class camera : public transform
 {
 private:
 	// The field of view of the camera in degrees, horizontal & vertical
 	float m_fovH = 0, m_fovV = 0;
 	float m_aspectRatio = 0;
+	// This is just the inverse of the transform
 	glm::mat4 m_view;
 	glm::mat4 m_projection;
 

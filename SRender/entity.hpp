@@ -14,9 +14,9 @@ namespace srender
 */
 class entity
 {
-	/* Components */
-	transform m_transform = transform(); // Currently mandatory
-	light *m_light = nullptr; // Optional
+	/* Components. */
+	transform m_transform = transform(); // Currently mandatory.
+	light *m_light = nullptr; // Optional.
 
 	entity *m_parentRef = nullptr;
 	model *m_modelRef = nullptr;
@@ -27,6 +27,9 @@ class entity
 	static void addToVector(std::vector<entity*> &_vector, entity *_child) noexcept;
 	static void removeFromVector(std::vector<entity*> &_vector, const entity *_child) noexcept;
 
+	/** Updates the shader information.
+	 * @todo Have this automatically called when anything in transform is changed.
+	 */
 	void updateModel() const noexcept;
 
 public:
@@ -36,20 +39,20 @@ public:
 	entity(entity *_parent);
 	~entity();
 
-	/** Directly sets the transform matrix, calls updateModel
-	 * @param _value The desired transform
+	/** Directly sets the transform matrix, calls updateModel.
+	 * @param _value The desired transform.
 	 */
 	void setTransform(const glm::mat4 *_value) noexcept;
-	/** Directly sets the position in the transform matrix, calls updateModel
-	 * @param _value The desired position
+	/** Directly sets the position in the transform matrix, calls updateModel.
+	 * @param _value The desired position.
 	 */
 	void setPosition(const glm::vec3 _value) noexcept;
-	/** Directly sets the forward in the transform matrix, calls updateModel
-	 * @param _value The desired forward
+	/** Directly sets the forward in the transform matrix, calls updateModel.
+	 * @param _value The desired forward.
 	 */
 	void setForward(const glm::vec3 _value) noexcept;
-	/** Applies a translation to the transform matrix, calls updateModel
-	 * @param _value The translation vector
+	/** Applies a translation to the transform matrix, calls updateModel.
+	 * @param _value The translation vector.
 	 */
 	void translate(const glm::vec3 _value) noexcept;
 

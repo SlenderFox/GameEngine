@@ -53,7 +53,7 @@ namespace graphics
 		if (l_models.size() > 0)
 		{
 			for (uint8_t i = 0; i < l_models.size(); ++i)
-			{	getModelAt(i)->draw(); }
+			{	getModelAt(i)->draw(l_camera); }
 		}
 	}
 
