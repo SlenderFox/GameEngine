@@ -46,7 +46,7 @@ void shader::use() const noexcept
 constexpr bool shader::isLoaded() const noexcept
 {	return m_shaderLoaded; }
 
-inline void shader::loadShader(const shaderType _type)
+void shader::loadShader(const shaderType _type)
 {
 	bool m_usingFallback = false;
 	string codeString;
@@ -236,7 +236,7 @@ return;}";
 	debug::send("Success!");
 }
 
-inline bool shader::compileShader(
+bool shader::compileShader(
 	uint32_t *_id,
 	shaderType _type,
 	const char *_code
@@ -269,7 +269,7 @@ inline bool shader::compileShader(
 	return checkForErrors(*_id, _type);
 }
 
-inline void shader::createShaderProgram() noexcept
+void shader::createShaderProgram() noexcept
 {
 	// Creates a shader program object assigned to id, this sets it as the active shader
 	m_idProgram = renderer::createShaderProgram(m_idVertex, m_idFragment);
@@ -287,7 +287,7 @@ inline void shader::createShaderProgram() noexcept
 	m_shaderLoaded = true;
 }
 
-inline bool shader::checkForErrors(
+bool shader::checkForErrors(
 	const uint32_t _shaderID,
 	const shaderType _type
 ) const noexcept

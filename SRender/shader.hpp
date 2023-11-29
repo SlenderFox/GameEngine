@@ -30,19 +30,19 @@ private:
 
 	bool m_shaderLoaded = false;
 	uint32_t m_idProgram, m_idVertex, m_idFragment;
-	std::string m_shaderPath;	// The file inath of the shaders
+	std::string m_shaderPath;	// The file path of the shaders
 
-	inline void loadShader(const shaderType _type);
+	void loadShader(const shaderType _type);
 
-	_NODISCARD inline bool compileShader(
+	_NODISCARD bool compileShader(
 		uint32_t *_id,
 		shaderType _type,
 		const char *_code
 	) noexcept;
 
-	inline void createShaderProgram() noexcept;
+	void createShaderProgram() noexcept;
 
-	_NODISCARD inline bool checkForErrors(
+	_NODISCARD bool checkForErrors(
 		const uint32_t _shaderID,
 		const shaderType _type
 	) const noexcept;
