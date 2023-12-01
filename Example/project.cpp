@@ -148,7 +148,7 @@ void project::createScene()
 		entity *cube = new entity();
 		cube->componentModelLoad(
 			"assets/models/cube/cube.obj",
-			"assets/shaders/default",
+			"",
 			model, shader
 		);
 		cube->translate(s_cubePositions[i]);

@@ -140,13 +140,16 @@ void entity::componentModelLoad(
 {
 	// Currently this does nothing about the previous model and shader
 	// but only half causes a memory leak as they are managed by graphics
-	_modelPath = application::getAppLocation() + _modelPath;
-	_shaderPath = application::getAppLocation() + _shaderPath;
-	m_modelRef = graphics::addNewModel(&_modelPath, &_shaderPath, _loadTextures);
-	graphics::loadLightsIntoShader(m_modelRef->getShaderRef());
-	updateModel();
+	string appLoc = application::getAppLocation();
+	_modelPath = appLoc + _modelPath;
+	_shaderPath = appLoc + _shaderPath;
+	string *modelPath_p = _modelPath == appLoc ? nullptr : &_modelPath;
+	string *shaderPath_p = _shaderPath == appLoc ? nullptr : &_shaderPath;
+	m_modelRef = graphics::addNewModel(modelPath_p, shaderPath_p, _loadTextures);
 	_outModel = m_modelRef;
 	_outShader = m_modelRef->getShaderRef();
+	graphics::loadLightsIntoShader(_outShader);
+	updateModel();
 }
 
 void entity::componentLightLoad(
