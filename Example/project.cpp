@@ -175,7 +175,7 @@ void project::createLights()
 		entityRef->componentLightLoad(
 			light::type::directional,
 			/* White light */
-			colour(colour::hsvToRgb({0, 0.0f, 0.6f}))
+			colour(colour::hsvToRgb(vec3(0, 0.0f, 0.6f)))
 		);
 		lightRef = entityRef->componentLightGet();
 		entityRef->setForward(vec3(0, -1, 0));
@@ -190,7 +190,7 @@ void project::createLights()
 		entityRef->componentLightLoad(
 			light::type::point,
 			/* Red light */
-			colour(colour::hsvToRgb({0, 0.6f, 0.8f}))
+			colour(colour::hsvToRgb(vec3(0, 0.6f, 0.8f)))
 		);
 		lightRef = entityRef->componentLightGet();
 		entityRef->componentModelLoad(
@@ -210,7 +210,7 @@ void project::createLights()
 		entityRef->componentLightLoad(
 			light::type::spot,
 			/* Green light */
-			colour(colour::hsvToRgb({110, 0.3f, 1.0f}))
+			colour(colour::hsvToRgb(vec3(110, 0.3f, 1.0f)))
 		);
 		lightRef = entityRef->componentLightGet();
 		entityRef->componentModelLoad(
