@@ -36,6 +36,7 @@ public:
 	virtual void setRight(const glm::vec3 _right) noexcept;
 	virtual void setUp(const glm::vec3 _up) noexcept;
 	virtual void setForward(const glm::vec3 _forward) noexcept;
+	virtual void setScale(const glm::vec3 _value) noexcept;
 
 	_NODISCARD glm::mat4 getTransform() const noexcept;
 	_NODISCARD glm::vec4 getPosition() const noexcept;

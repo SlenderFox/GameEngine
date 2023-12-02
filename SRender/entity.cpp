@@ -110,7 +110,10 @@ void entity::renderOnlyColour(const bool _state) noexcept
 {	m_modelRef->getShaderRef()->setBool("u_justColour", _state); }
 
 void entity::setScale(const vec3 _value) noexcept
-{	m_modelRef->getShaderRef()->setFloat3("u_scale", _value); }
+{
+	m_transform.setScale(_value);
+	updateModel();
+}
 
 void entity::sentTint(const colour _colour) noexcept
 {	m_modelRef->getShaderRef()->setFloat3("u_colour", _colour.rgb()); }

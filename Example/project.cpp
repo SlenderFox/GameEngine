@@ -218,11 +218,12 @@ void project::createLights()
 			"assets/shaders/default",
 			model, shader, false
 		);
-		entityRef->setScale(vec3(0.1f, 0.1f, 0.2f));
 		entityRef->sentTint(lightRef->getColour());
 		entityRef->renderOnlyColour(true);
 		entityRef->setPosition(vec4(2.0f, 2.5f, 6.0f, 1));
 		entityRef->setForward(vec3(-0.3f, -0.4f, -1));
+		// FIXME needs to be called after setForward
+		entityRef->setScale(vec3(0.1f, 0.1f, 0.2f));
 		lightRef->setAngle(13.0f);
 		lightRef->setBlur(0.23f);
 		m_lights.push_back(entityRef);

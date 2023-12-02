@@ -9,10 +9,10 @@ using glm::cross;
 namespace srender
 {
 transform::transform() noexcept
-: m_transform(glm::mat4(1))
+: m_transform(mat4(1))
 {}
 
-transform::transform(const glm::mat4 _value) noexcept
+transform::transform(const mat4 _value) noexcept
 : m_transform(_value)
 {}
 
@@ -30,7 +30,7 @@ transform::transform(transform&& _other) noexcept
 transform &transform::operator=(transform&& _other) noexcept
 {	this->m_transform = std::move(_other.m_transform); return *this; }
 
-void transform::setTransform(const glm::mat4 *_value) noexcept
+void transform::setTransform(const mat4 *_value) noexcept
 {	m_transform = *_value; }
 
 void transform::setPosition(const vec3 _value) noexcept
@@ -79,10 +79,19 @@ void transform::setForward(const vec3 _forward) noexcept
 	setAxes(right, up, _forward);
 }
 
-glm::mat4 transform::getTransform() const noexcept
+void transform::setScale(const vec3 _value) noexcept
+{
+	mat4 scaleMatrix = mat4(1);
+	scaleMatrix[0][0] = _value.x;
+	scaleMatrix[1][1] = _value.y;
+	scaleMatrix[2][2] = _value.z;
+	m_transform *= scaleMatrix;
+}
+
+mat4 transform::getTransform() const noexcept
 {	return m_transform; }
 
-glm::vec4 transform::getPosition() const noexcept
+vec4 transform::getPosition() const noexcept
 {	return m_transform[3]; }
 
 vec4 transform::getRight() const noexcept
