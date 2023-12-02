@@ -107,5 +107,8 @@
     <ClInclude Include="exception.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="default_shader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
