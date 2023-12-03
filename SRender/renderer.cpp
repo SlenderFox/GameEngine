@@ -1,6 +1,7 @@
 #include "renderer.hpp"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "assert.h"
 
 namespace srender
 {
@@ -39,7 +40,10 @@ namespace renderer
 	{	glClearColor((GLfloat)_r, (GLfloat)_g, (GLfloat)_b, (GLfloat)_a); }
 
 	void setRenderMode(const int _mode) noexcept
-	{	glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + _mode); }
+	{
+		assert(_mode < 3);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT + _mode);
+	}
 
 	void setResolution(const size_t _width, const size_t _height) noexcept
 	{	glViewport(0, 0, (GLsizei)_width, (GLsizei)_height); }
