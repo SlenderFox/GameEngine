@@ -98,6 +98,7 @@ bool project::startup()
 {
 	createLights();
 	createScene();
+	//graphics::setRenderDepthBuffer(true);
 	input::addMouseCallback(mouseCallback);
 	input::addSrollCallback(scrollCallback);
 	return true;

@@ -39,6 +39,7 @@ struct LightSpot{
 	float cutoff;
 	float blur;
 };
+uniform bool u_depthBuffer=false;
 uniform bool u_justColour=false;
 uniform vec3 u_viewPos;
 uniform vec3 u_colour=vec3(1.0);
@@ -48,10 +49,6 @@ uniform LightPoint[NR_POINT_LIGHTS] u_pointLights;
 uniform LightSpot[NR_SPOT_LIGHTS] u_spotLights;
 vec3 m_normal;
 vec3 m_viewDir;
-float LineariseDepth(float pDepth){
-	float z=pDepth*2.0-1.0;	// Back to ndc
-	return (2.0*near*far)/(far+near-z*(far-near));
-}
 vec3 PhongShading(LightColour _colour,vec3 _lightDir,float _intensity){
 	// Textures
 	vec3 diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;
@@ -104,11 +101,17 @@ vec3 CalculateSpotLight(LightSpot _light){
 	intensity=clamp((theta-_light.cutoff)/epsilon,0.0,1.0);
 	return PhongShading(_light.colour,lightDir,intensity)*attenuation;
 }
+float LineariseDepth(float pDepth){
+	float z=pDepth*2.0-1.0;	// Back to ndc
+	return (2.0*near*far)/(far+near-z*(far-near));
+}
 void main(){
-	if(u_justColour)
+	if (u_depthBuffer){
+		//FragCol=vec4(vec3(gl_FragCoord.z),1.0);
+		FragCol=vec4(vec3(LineariseDepth(gl_FragCoord.z)/far),1.0);
+	}else if(u_justColour){
 		FragCol=vec4(u_colour,1);
-	else
-	{
+	}else{
 		// Important vectors
 		m_normal=normalise(Normal);
 		m_viewDir=normalise(u_viewPos-FragPos);
@@ -120,7 +123,6 @@ void main(){
 		for(int i=0;i<NR_SPOT_LIGHTS;++i)
 			result+=CalculateSpotLight(u_spotLights[i]);
 		FragCol=vec4(result*u_colour,1);
-		//FragCol=vec4(vec3(LineariseDepth(gl_FragCoord.z)/far),1.0);
 	}
 	return;
 }

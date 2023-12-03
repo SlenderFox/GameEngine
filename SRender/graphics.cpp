@@ -232,6 +232,12 @@ namespace graphics
 	void setRenderMode(const mode _mode) noexcept
 	{	renderer::setRenderMode(int(_mode)); }
 
+	void setRenderDepthBuffer(const bool _state) noexcept
+	{
+		for (auto model : l_models)
+		{	model->getShaderRef()->setBool("u_depthBuffer", _state); }
+	}
+
 	uint8_t modelCount() noexcept
 	{	return (uint8_t)l_models.size(); }
 

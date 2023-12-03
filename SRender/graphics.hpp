@@ -46,6 +46,7 @@ namespace graphics
 
 	void setClearColour(const colour _colour) noexcept;
 	void setRenderMode(const mode _mode = mode::fill) noexcept;
+	void setRenderDepthBuffer(const bool _state) noexcept;
 
 	_NODISCARD uint8_t modelCount() noexcept;
 	_NODISCARD uint8_t lightCount() noexcept;

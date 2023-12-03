@@ -33,6 +33,7 @@ struct LightColour{vec3 ambient;vec3 diffuse;vec3 specular;};\
 struct LightDirectional{LightColour colour;vec4 direction;};\
 struct LightPoint{LightColour colour;vec4 position;float linear;float quadratic;};\
 struct LightSpot{LightColour colour;vec4 position;vec4 direction;float linear;float quadratic;float cutoff;float blur;};\
+uniform bool u_depthBuffer=false;\
 uniform bool u_justColour=false;\
 uniform vec3 u_viewPos;\
 uniform vec3 u_colour=vec3(1.0);\
@@ -42,9 +43,6 @@ uniform LightPoint[NR_POINT_LIGHTS] u_pointLights;\
 uniform LightSpot[NR_SPOT_LIGHTS] u_spotLights;\
 vec3 m_normal;\
 vec3 m_viewDir;\
-float LineariseDepth(float pDepth){\
-float z=pDepth*2.0-1.0;\
-return (2.0*near*far)/(far+near-z*(far-near));}\
 vec3 PhongShading(LightColour _colour,vec3 _lightDir,float _intensity){\
 vec3 diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;\
 vec3 specularTex=texture(u_material.texture_specular0,TexCoords).rgb;\
@@ -78,13 +76,23 @@ float theta=dot(lightDir,normalise(_light.direction.xyz));\
 float epsilon=(_light.blur*(1-_light.cutoff)+_light.cutoff)-_light.cutoff;\
 intensity=clamp((theta-_light.cutoff)/epsilon,0.0,1.0);\
 return PhongShading(_light.colour,lightDir,intensity)*attenuation;}\
+float LineariseDepth(float pDepth){\
+float z=pDepth*2.0-1.0;\
+return (2.0*near*far)/(far+near-z*(far-near));}\
 void main(){\
+if (u_depthBuffer){\
+FragCol=vec4(vec3(LineariseDepth(gl_FragCoord.z)/far),1.0);\
+}else if(u_justColour){\
+FragCol=vec4(u_colour,1);\
+}else{\
 m_normal=normalise(Normal);\
 m_viewDir=normalise(u_viewPos-FragPos);\
 vec3 result;\
-for(int i=0;i<NR_DIR_LIGHTS;++i)result+=CalculateDirectionalLighting(u_dirLights[i]);\
-for(int i=0;i<NR_POINT_LIGHTS;++i)result+=CalculatePointLight(u_pointLights[i]);\
-for(int i=0;i<NR_SPOT_LIGHTS;++i)result+=CalculateSpotLight(u_spotLights[i]);\
-if(u_justColour) FragCol=vec4(u_colour,1);\
-else FragCol=vec4(result*u_colour,1);\
+for(int i=0;i<NR_DIR_LIGHTS;++i)\
+result+=CalculateDirectionalLighting(u_dirLights[i]);\
+for(int i=0;i<NR_POINT_LIGHTS;++i)\
+result+=CalculatePointLight(u_pointLights[i]);\
+for(int i=0;i<NR_SPOT_LIGHTS;++i)\
+result+=CalculateSpotLight(u_spotLights[i]);\
+FragCol=vec4(result*u_colour,1);}\
 return;}"
