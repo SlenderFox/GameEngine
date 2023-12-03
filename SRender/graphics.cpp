@@ -25,11 +25,11 @@ namespace graphics
 		l_lightRefs = vector<entity*>();
 
 		// Default clear colour
-		setClearColour({0.1f, 0.1f, 0.1f});
+		setClearColour(vec3(0.1f, 0.1f, 0.1f));
 
 		// Initialise camera
 		l_camera = new camera(_aspect, 75.0f);
-		l_camera->setPosition({ 0.0f, 0.0f, 6.0f });
+		l_camera->setPosition(vec3(0.0f, 0.0f, 6.0f));
 
 		texture::init();
 
