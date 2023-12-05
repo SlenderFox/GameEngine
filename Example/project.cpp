@@ -13,7 +13,7 @@ using glm::radians;
 using namespace srender;
 
 /** Entry point of the project
- * @note Following: https://learnopengl.com/, at https://learnopengl.com/Advanced-OpenGL/Depth-testing
+ * @note Following: https://learnopengl.com/, at https://learnopengl.com/Advanced-OpenGL/Blending
  * @note Disable console through:
  * [Properties>Linker>System>Subsystem & Properties>Linker>Advanced>Entry Point (mainCRTStartup)]
  * @note Resolutions: 800x600, 1280x720, 1600x900, 1920x1080
