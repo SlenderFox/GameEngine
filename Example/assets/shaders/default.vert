@@ -15,7 +15,7 @@ void main()
 {
 	vec4 vertModel=u_model*vec4(aPos,1.0);
 	TexCoords=aTexCoords;
-	Normal=u_transposeInverseOfModel*aNormal;
+	Normal=normalize(u_transposeInverseOfModel*aNormal);
 	FragPos=vertModel.xyz; // Vertex position in world space
 	gl_Position=u_camera*vertModel;
 }

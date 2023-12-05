@@ -47,16 +47,15 @@ uniform Material u_material;
 uniform LightDirectional[NR_DIR_LIGHTS] u_dirLights;
 uniform LightPoint[NR_POINT_LIGHTS] u_pointLights;
 uniform LightSpot[NR_SPOT_LIGHTS] u_spotLights;
-vec3 m_normal;
 vec3 m_viewDir;
 vec3 PhongShading(LightColour _colour,vec3 _lightDir,float _intensity){
 	// Textures
 	vec3 diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;
 	vec3 specularTex=texture(u_material.texture_specular0,TexCoords).rgb;
 	// Diffuse shading
-	float diff=max(dot(m_normal,_lightDir),0.0);
+	float diff=max(dot(Normal,_lightDir),0.0);
 	// Specular shading
-	vec3 reflectDir=reflect(-_lightDir,m_normal);
+	vec3 reflectDir=reflect(-_lightDir,Normal);
 	float spec=pow(max(dot(m_viewDir,reflectDir),0.0),u_material.shininess);
 	// Combine results
 	vec3 ambient=_colour.ambient*diffuseTex;
@@ -113,7 +112,6 @@ void main(){
 		FragCol=vec4(u_colour,1);
 	}else{
 		// Important vectors
-		m_normal=normalise(Normal);
 		m_viewDir=normalise(u_viewPos-FragPos);
 		vec3 result;
 		for(int i=0;i<NR_DIR_LIGHTS;++i)

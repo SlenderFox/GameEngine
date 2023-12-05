@@ -109,7 +109,7 @@ mesh *model::processMesh(
 )
 {
 	// Process vertex positions, normals, and texture coordinates
-	vector<mesh::vertex> vertices;
+	vector<mesh::vertex> *vertices;
 	for (uint32_t i = 0; i < _mesh->mNumVertices; ++i)
 	{
 		mesh::vertex vertex;
@@ -136,16 +136,16 @@ mesh *model::processMesh(
 		}
 		vertex.texCoords = vec;
 
-		vertices.push_back(vertex);
+		vertices->push_back(vertex);
 	}
 
 	// Process indices
-	vector<uint32_t> indices;
+	vector<uint32_t> *indices;
 	for (uint32_t i = 0; i < _mesh->mNumFaces; ++i)
 	{
 		aiFace face = _mesh->mFaces[i];
 		for (uint32_t j = 0; j < face.mNumIndices; ++j)
-		{	indices.push_back(face.mIndices[j]); }
+		{	indices->push_back(face.mIndices[j]); }
 	}
 
 	// Process material
@@ -168,7 +168,7 @@ mesh *model::processMesh(
 		m_textures.insert(m_textures.end(), specularMaps.begin(), specularMaps.end());
 	}
 
-	return new mesh(&vertices, &indices);
+	return new mesh(vertices, indices);
 }
 
 vector<texture*> model::loadMaterialTextures(

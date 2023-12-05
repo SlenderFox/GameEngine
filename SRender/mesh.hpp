@@ -25,6 +25,7 @@ private:
 
 	std::vector<vertex> *m_vertices = nullptr;
 	std::vector<uint32_t> *m_indices = nullptr;
+	uint32_t m_count;
 
 public:
 	/** Takes the vertices array and places it in a vector
@@ -39,9 +40,15 @@ public:
 	 */
 	_NODISCARD static std::vector<uint32_t> generateIndices() noexcept;
 
+	/** Creates a mesh object
+	 * @param _vertices Vertex data to be used, should be on the heap
+	 * @param _indices Index data to be used, should be on the heap
+	 * @param _save Whether the vertex and index data is saved to the Mesh object
+	 */
 	mesh(
-		const std::vector<vertex> *_vertices = nullptr,
-		const std::vector<uint32_t> *_indices = nullptr
+		std::vector<vertex> *_vertices,
+		std::vector<uint32_t> *_indices,
+		bool _save = false
 	) noexcept;
 	~mesh();
 
