@@ -14,12 +14,8 @@ namespace renderer
 		// Glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{	return false; }
-
 		l_gladLoaded = true;
-
 		glEnable(GL_DEPTH_TEST);
-		//glEnable(GL_STENCIL_TEST);
-
 		return true;
 	}
 
