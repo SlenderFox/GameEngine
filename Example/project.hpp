@@ -26,8 +26,8 @@ class project : public srender::application
 	static const glm::vec3 s_cubePositions[s_numCubes];
 
 	srender::entity *m_backpack;
-	std::vector<srender::entity*> m_cubes;
-	std::vector<srender::entity*> m_lights;
+	std::vector<srender::entity*> m_cubes = std::vector<srender::entity*>();
+	std::vector<srender::entity*> m_lights = std::vector<srender::entity*>();
 
 	/** Loads entities in to create the scene */
 	void createScene();

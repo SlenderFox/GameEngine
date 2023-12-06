@@ -109,7 +109,7 @@ mesh *model::processMesh(
 )
 {
 	// Process vertex positions, normals, and texture coordinates
-	vector<mesh::vertex> *vertices;
+	vector<mesh::vertex> *vertices = new vector<mesh::vertex>();
 	for (uint32_t i = 0; i < _mesh->mNumVertices; ++i)
 	{
 		mesh::vertex vertex;
@@ -140,7 +140,7 @@ mesh *model::processMesh(
 	}
 
 	// Process indices
-	vector<uint32_t> *indices;
+	vector<uint32_t> *indices = new vector<uint32_t>();
 	for (uint32_t i = 0; i < _mesh->mNumFaces; ++i)
 	{
 		aiFace face = _mesh->mFaces[i];

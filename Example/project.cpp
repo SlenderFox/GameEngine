@@ -76,11 +76,7 @@ void project::scrollCallback(double _offsetX, double _offsetY) noexcept
 // Member
 
 project::project()
-{
-	m_backpack = new entity();
-	m_cubes = vector<entity*>();
-	m_lights = vector<entity*>();
-}
+{}
 
 project::~project()
 {
