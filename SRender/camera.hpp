@@ -7,7 +7,9 @@
 
 namespace srender
 {
-/** The camera is the perspective where the virtual world is rendered from */
+/** The camera is the perspective where the virtual world is rendered from.
+ * @todo Eventually turn this into a component to allow multiple cameras.
+*/
 class camera : public transform
 {
 private:
