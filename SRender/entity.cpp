@@ -136,8 +136,6 @@ const transform entity::getTransform() const noexcept
 void entity::componentModelLoad(
 	string _modelPath,
 	string _shaderPath,
-	model *&_outModel,
-	shader *&_outShader,
 	const bool _loadTextures
 )
 {
@@ -149,9 +147,7 @@ void entity::componentModelLoad(
 	string *modelPath_p = _modelPath == appLoc ? nullptr : &_modelPath;
 	string *shaderPath_p = _shaderPath == appLoc ? nullptr : &_shaderPath;
 	m_modelRef = graphics::addNewModel(modelPath_p, shaderPath_p, _loadTextures);
-	_outModel = m_modelRef;
-	_outShader = m_modelRef->getShaderRef();
-	graphics::loadLightsIntoShader(_outShader);
+	graphics::loadLightsIntoShader(m_modelRef->getShaderRef());
 	updateModel();
 }
 

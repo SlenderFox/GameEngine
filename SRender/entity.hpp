@@ -72,8 +72,6 @@ public:
 	void componentModelLoad(
 		std::string _modelPath,
 		std::string _shaderPath,
-		model *&_outModel,
-		shader *&_outShader,
 		const bool _loadTextures = true
 	);
 

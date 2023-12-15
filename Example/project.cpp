@@ -126,15 +126,11 @@ void project::lateUpdate() {}
 
 void project::createScene()
 {
-	model *model = nullptr;
-	shader *shader = nullptr;
-
 	// Create a backpack in the centre
 	m_backpack = new entity();
 	m_backpack->componentModelLoad(
 		"assets/models/backpack/backpack.obj",
-		"assets/shaders/default",
-		model, shader
+		"assets/shaders/default"
 	);
 	m_backpack->translate(vec3(0.0f, 0.0f, 0.9f));
 	m_backpack->setScale(vec3(0.6f));
@@ -145,8 +141,7 @@ void project::createScene()
 		entity *cube = new entity();
 		cube->componentModelLoad(
 			"assets/models/cube/cube.obj",
-			"",
-			model, shader
+			""
 		);
 		cube->translate(s_cubePositions[i]);
 		cube->setScale(vec3(0.6f));
@@ -164,8 +159,7 @@ void project::createLights()
 	// Creates lights
 	entity *entityRef = nullptr;
 	light *lightRef = nullptr;
-	model *model = nullptr;
-	shader *shader = nullptr;
+
 	if (directional)
 	{
 		entityRef = new entity();
@@ -181,6 +175,7 @@ void project::createLights()
 		);
 		m_lights.push_back(entityRef);
 	}
+
 	if (point)
 	{
 		entityRef = new entity();
@@ -193,7 +188,7 @@ void project::createLights()
 		entityRef->componentModelLoad(
 			"assets/models/cube/cube.obj",
 			"assets/shaders/default",
-			model, shader, false
+			false
 		);
 		entityRef->setPosition(vec4(-4, 2, -2, 1));
 		entityRef->setScale(vec3(0.1f, 0.1f, 0.1f));
@@ -201,6 +196,7 @@ void project::createLights()
 		entityRef->renderOnlyColour(true);
 		m_lights.push_back(entityRef);
 	}
+
 	if (spot)
 	{
 		entityRef = new entity();
@@ -213,7 +209,7 @@ void project::createLights()
 		entityRef->componentModelLoad(
 			"assets/models/cube/cube.obj",
 			"assets/shaders/default",
-			model, shader, false
+			false
 		);
 		entityRef->sentTint(lightRef->getColour());
 		entityRef->renderOnlyColour(true);
