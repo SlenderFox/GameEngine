@@ -134,7 +134,7 @@ mesh::mesh(
 		m_vertices = _vertices;
 		m_indices = _indices;
 	}
-	m_count = _indices->size();
+	m_count = (uint32_t)_indices->size();
 }
 
 mesh::~mesh()
