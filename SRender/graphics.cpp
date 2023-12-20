@@ -38,7 +38,7 @@ namespace graphics
 
 	void terminate() noexcept
 	{
-		for (unsigned int i = 0; i < l_models.size(); ++i)
+		for (unsigned int i = 0; i < modelCount(); ++i)
 		{	delete l_models[i]; }
 
 		texture::terminate();
@@ -50,9 +50,9 @@ namespace graphics
 		// Clears to background colour
 		renderer::clearScreenBuffers();
 
-		if (l_models.size() > 0)
+		if (modelCount() > 0)
 		{
-			for (uint8_t i = 0; i < l_models.size(); ++i)
+			for (uint8_t i = 0; i < modelCount(); ++i)
 			{	getModelAt(i)->draw(l_camera); }
 		}
 	}
@@ -181,7 +181,7 @@ namespace graphics
 				{	currentlLight->setBlur(newValue); }
 
 				// Update the shaders on all the models
-				for (uint8_t j = 0; j < l_models.size(); ++j)
+				for (uint8_t j = 0; j < modelCount(); ++j)
 				{
 					if (_isAngle)
 					{
@@ -211,7 +211,7 @@ namespace graphics
 	)
 	{
 		// Caps at 255
-		size_t currentAmount = l_models.size();
+		size_t currentAmount = modelCount();
 		if (currentAmount >= 255)
 		{	throw graphicsException("Reached max models"); }
 
@@ -246,7 +246,7 @@ namespace graphics
 
 	model *getModelAt(const uint8_t _pos)
 	{
-		if (_pos > l_models.size() - 1)
+		if (_pos > modelCount() - 1)
 		{	throw graphicsException("Attempting to access model outside array size"); }
 
 		return l_models[_pos];
