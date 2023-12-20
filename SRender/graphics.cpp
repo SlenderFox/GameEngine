@@ -15,15 +15,11 @@ namespace srender
 namespace graphics
 {
 	camera *l_camera = nullptr;
-	vector<model*> l_models;
-	vector<entity*> l_lightRefs;
+	vector<model*> l_models = vector<model*>();
+	vector<entity*> l_lightRefs = vector<entity*>();
 
 	bool init(const float _aspect) noexcept
 	{
-		// Initialise arrays
-		l_models = vector<model*>();
-		l_lightRefs = vector<entity*>();
-
 		// Default clear colour
 		setClearColour(vec3(0.1f, 0.1f, 0.1f));
 
