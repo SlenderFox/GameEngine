@@ -42,11 +42,11 @@ vector<entity*> entity::getRootChildren() noexcept
 
 void entity::updateModel() const noexcept
 {
-	if (!m_modelRef)
+	if (!m_model)
 	{	return; }
 
-	m_modelRef->getShaderRef()->setMat4("u_model", m_transform.getTransform());
-	m_modelRef->getShaderRef()->setMat3(
+	m_model->getShaderRef()->setMat4("u_model", m_transform.getTransform());
+	m_model->getShaderRef()->setMat3(
 		"u_transposeInverseOfModel",
 		(mat3)transpose(inverse(m_transform.getTransform()))
 	);
@@ -62,6 +62,9 @@ entity::~entity()
 {
 	if (m_light)
 	{	delete m_light; }
+
+	if (m_model)
+	{	delete m_model; }
 }
 
 void entity::setTransform(const mat4 *_value) noexcept
@@ -107,7 +110,7 @@ void entity::setParent(entity *_parent) noexcept
 }
 
 void entity::renderOnlyColour(const bool _state) noexcept
-{	m_modelRef->getShaderRef()->setBool("u_justColour", _state); }
+{	m_model->getShaderRef()->setBool("u_justColour", _state); }
 
 void entity::setScale(const vec3 _value) noexcept
 {
@@ -116,7 +119,7 @@ void entity::setScale(const vec3 _value) noexcept
 }
 
 void entity::sentTint(const colour _colour) noexcept
-{	m_modelRef->getShaderRef()->setFloat3("u_colour", _colour.rgb()); }
+{	m_model->getShaderRef()->setFloat3("u_colour", _colour.rgb()); }
 
 void entity::addChild(entity *_child) noexcept
 {	addToVector(m_childrenRef, _child); }
@@ -139,15 +142,14 @@ void entity::componentModelLoad(
 	const bool _loadTextures
 )
 {
-	// Currently this does nothing about the previous model and shader
-	// but only half causes a memory leak as they are managed by graphics
+	assert(!m_model && "Entity already has a model component");
 	string appLoc = application::getAppLocation();
 	_modelPath = appLoc + _modelPath;
 	_shaderPath = appLoc + _shaderPath;
 	string *modelPath_p = _modelPath == appLoc ? nullptr : &_modelPath;
 	string *shaderPath_p = _shaderPath == appLoc ? nullptr : &_shaderPath;
-	m_modelRef = graphics::addNewModel(modelPath_p, shaderPath_p, _loadTextures);
-	graphics::loadLightsIntoShader(m_modelRef->getShaderRef());
+	m_model = new model(modelPath_p, shaderPath_p, _loadTextures);
+	graphics::addNewModel(m_model);
 	updateModel();
 }
 
@@ -162,7 +164,7 @@ void entity::componentLightLoad(
 }
 
 model *entity::componentModelGet() const noexcept
-{	return m_modelRef; }
+{	return m_model; }
 
 light *entity::componentLightGet() const noexcept
 {	return m_light; }

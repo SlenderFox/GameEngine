@@ -9,7 +9,6 @@ namespace srender
 {
 /** Graphics is responsible for all things visible in the virtual world
  * @todo Look into changing includes up the chain
- * @todo No longer manage lights and models, just keep references
 */
 namespace graphics
 {
@@ -36,12 +35,7 @@ namespace graphics
 		const float _value
 	);
 
-	model *addNewModel(
-		const std::string *_modelPath,
-		const std::string *_shaderPath,
-		const bool _loadTextures = true
-	);
-
+	void addNewModel(model *_model);
 	void addNewLight(entity *_light);
 
 	void setClearColour(const colour _colour) noexcept;

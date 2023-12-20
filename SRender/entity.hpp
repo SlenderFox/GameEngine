@@ -17,9 +17,9 @@ class entity
 	/* Components. */
 	transform m_transform = transform(); // Currently mandatory.
 	light *m_light = nullptr; // Optional.
+	model *m_model = nullptr;
 
 	entity *m_parentRef = nullptr;
-	model *m_modelRef = nullptr;
 
 	/** Contains a list of all entities childed to this entity. */
 	std::vector<entity*> m_childrenRef = std::vector<entity*>();

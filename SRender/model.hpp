@@ -53,7 +53,6 @@ public:
 	model(
 		const std::string *_modelPath,
 		const std::string *_shaderPath,
-		camera *_camera,
 		const bool _loadTextures = true
 	);
 

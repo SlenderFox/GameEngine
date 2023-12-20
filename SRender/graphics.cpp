@@ -15,7 +15,8 @@ namespace srender
 namespace graphics
 {
 	camera *l_camera = nullptr;
-	vector<model*> l_models = vector<model*>();
+	// Has to be pointers for some weird vector reason
+	vector<model*> l_modelRefs = vector<model*>();
 	vector<entity*> l_lightRefs = vector<entity*>();
 
 	bool init(const float _aspect) noexcept
@@ -34,9 +35,6 @@ namespace graphics
 
 	void terminate() noexcept
 	{
-		for (unsigned int i = 0; i < modelCount(); ++i)
-		{	delete l_models[i]; }
-
 		texture::terminate();
 		delete l_camera;
 	}
@@ -200,20 +198,11 @@ namespace graphics
 		}
 	}
 
-	model *addNewModel(
-		const string *_modelPath,
-		const string *_shaderPath,
-		const bool _loadTextures
-	)
+	void addNewModel(model *_model)
 	{
-		// Caps at 255
-		size_t currentAmount = modelCount();
-		if (currentAmount >= 255)
-		{	throw graphicsException("Reached max models"); }
-
-		model *res = new model(_modelPath, _shaderPath, l_camera, _loadTextures);
-		l_models.push_back(res);
-		return res;
+		l_modelRefs.push_back(_model);
+		// FIXME assumes all lights have been created
+		loadLightsIntoShader(_model->getShaderRef());
 	}
 
 	void addNewLight(entity *_light)
@@ -230,12 +219,12 @@ namespace graphics
 
 	void setRenderDepthBuffer(const bool _state) noexcept
 	{
-		for (auto model : l_models)
+		for (auto model : l_modelRefs)
 		{	model->getShaderRef()->setBool("u_depthBuffer", _state); }
 	}
 
 	uint8_t modelCount() noexcept
-	{	return (uint8_t)l_models.size(); }
+	{	return (uint8_t)l_modelRefs.size(); }
 
 	uint8_t lightCount() noexcept
 	{	return (uint8_t)l_lightRefs.size(); }
@@ -245,7 +234,7 @@ namespace graphics
 		if (_pos > modelCount() - 1)
 		{	throw graphicsException("Attempting to access model outside array size"); }
 
-		return l_models[_pos];
+		return l_modelRefs[_pos];
 	}
 
 	entity *getLightAt(const uint8_t _pos)

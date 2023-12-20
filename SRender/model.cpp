@@ -16,13 +16,13 @@ namespace srender
 model::model(
 	const string *_modelPath,
 	const string *_shaderPath,
-	camera *_camera,
 	const bool _loadTextures
 )
 {
 	m_meshes = vector<mesh*>();
 	m_textures = vector<texture*>();
 
+	assert(_modelPath);
 	loadModel(_modelPath, _loadTextures);
 	m_shader = new shader(_shaderPath);
 	if (_loadTextures) loadTexturesToShader();
