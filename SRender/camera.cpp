@@ -91,8 +91,8 @@ void camera::lookAt(
 void camera::modifyFovH(float _value) noexcept
 {
 	m_fovH += _value;
-	if (m_fovH > 120.0f)
-		m_fovH = 120.0f;
+	if (m_fovH > 160.0f)
+		m_fovH = 160.0f;
 	else if (m_fovH < 1.0f)
 		m_fovH = 1.0f;
 	updateFovV();
@@ -101,8 +101,8 @@ void camera::modifyFovH(float _value) noexcept
 void camera::modifyFovV(float _value) noexcept
 {
 	m_fovV += _value;
-	if (m_fovV > 120.0f)
-		m_fovV = 120.0f;
+	if (m_fovV > 160.0f)
+		m_fovV = 160.0f;
 	else if (m_fovV < 1.0f)
 		m_fovV = 1.0f;
 	updateFovH();

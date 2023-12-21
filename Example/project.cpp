@@ -69,9 +69,7 @@ void project::mouseCallback(double _deltaX, double _deltaY) noexcept
 }
 
 void project::scrollCallback(double _offsetX, double _offsetY) noexcept
-{
-	graphics::getCamera()->modifyFovH((float)_offsetY * -3.0f);
-}
+{	graphics::getCamera()->modifyFovH((float)_offsetY * -3.0f); }
 
 // Member
 
