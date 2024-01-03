@@ -44,10 +44,13 @@ namespace graphics
 		// Clears to background colour
 		renderer::clearScreenBuffers();
 
-		if (modelCount() > 0)
+		for (uint8_t i = 0; i < modelCount(); ++i)
 		{
-			for (uint8_t i = 0; i < modelCount(); ++i)
-			{	getModelAt(i)->draw(l_camera); }
+			model *cur = getModelAt(i);
+			cur->getShaderRef()->use();
+			cur->getShaderRef()->setMat4("u_camera", l_camera->getWorldToCameraMatrix());
+			cur->getShaderRef()->setFloat3("u_viewPos", (vec3)l_camera->getPosition());
+			cur->draw();
 		}
 	}
 

@@ -1,5 +1,4 @@
 #pragma once
-#include "camera.hpp"
 #include "shader.hpp"
 #include "texture.hpp"
 #include "mesh.hpp"
@@ -58,7 +57,7 @@ public:
 
 	~model();
 
-	void draw(const camera *_camera) const noexcept;
+	void draw() const noexcept;
 
 	_NODISCARD shader *getShaderRef() const noexcept;
 	_NODISCARD mesh *getMeshAt(const uint16_t _pos) const noexcept;

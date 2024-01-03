@@ -1,6 +1,7 @@
 #pragma once
 #include "light.hpp"
 #include "model.hpp"
+#include "camera.hpp"
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]

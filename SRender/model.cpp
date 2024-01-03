@@ -38,13 +38,12 @@ model::~model()
 	delete m_shader;
 }
 
-void model::draw(const camera *_camera) const noexcept
+void model::draw() const noexcept
 {
-	m_shader->use();
-
-	// TODO This is dumb, just have the graphics class do this
-	m_shader->setMat4("u_camera", _camera->getWorldToCameraMatrix());
-	m_shader->setFloat3("u_viewPos", (vec3)_camera->getPosition());
+	// // TODO This is dumb, just have the graphics class do this
+	// m_shader->use();
+	// m_shader->setMat4("u_camera", _camera->getWorldToCameraMatrix());
+	// m_shader->setFloat3("u_viewPos", (vec3)_camera->getPosition());
 
 	for (uint16_t i = 0; i < m_meshes.size(); ++i)
 	{	getMeshAt(i)->draw(); }
