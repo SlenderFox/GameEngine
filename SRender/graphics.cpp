@@ -15,7 +15,7 @@ namespace srender
 namespace graphics
 {
 	camera *l_camera = nullptr;
-	// Has to be pointers for some weird vector reason
+	// Cannot be references for some weird vector reason
 	vector<model*> l_modelRefs = vector<model*>();
 	vector<entity*> l_lightRefs = vector<entity*>();
 
@@ -204,12 +204,16 @@ namespace graphics
 	void addNewModel(model *_model)
 	{
 		l_modelRefs.push_back(_model);
-		// FIXME assumes all lights have been created
 		loadLightsIntoShader(_model->getShaderRef());
 	}
 
 	void addNewLight(entity *_light)
-	{	l_lightRefs.push_back(_light); }
+	{
+		l_lightRefs.push_back(_light);
+		// Need to add the light in each of the shaders
+		for (auto model : l_modelRefs)
+		{	loadLightsIntoShader(model->getShaderRef()); }
+	}
 
 	void setClearColour(const colour _colour) noexcept
 	{
