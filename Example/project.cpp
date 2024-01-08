@@ -139,7 +139,7 @@ void project::createScene()
 		entity *cube = new entity();
 		cube->componentModelLoad(
 			"assets/models/cube/cube.obj",
-			""
+			"assets/shaders/default"
 		);
 		cube->translate(s_cubePositions[i]);
 		cube->setScale(vec3(0.6f));
