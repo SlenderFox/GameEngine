@@ -72,7 +72,7 @@ $(OBJ)/glad.o:: linking/include/glad/glad.c linking/include/glad/glad.h
 
 # Archive the file into a proper library
 $(BIN)/$(NAME): $(OBJ)/ $(BIN)/ $(OBJECTS) $(OBJ)/glad.o
-	ar rcs $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o $(LIBS)
+	ar rcs $(BIN)/$(NAME) $(OBJECTS) $(OBJ)/glad.o
 
 build: $(BIN)/$(NAME)
 debug: build
