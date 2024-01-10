@@ -126,7 +126,7 @@ void project::createScene()
 {
 	// Create a backpack in the centre
 	m_backpack = new entity();
-	m_backpack->componentModelLoad(
+	m_backpack->addComponent(
 		"assets/models/backpack/backpack.obj",
 		"assets/shaders/default"
 	);
@@ -137,7 +137,7 @@ void project::createScene()
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
 		entity *cube = new entity();
-		cube->componentModelLoad(
+		cube->addComponent(
 			"assets/models/cube/cube.obj",
 			"assets/shaders/default"
 		);
@@ -161,12 +161,12 @@ void project::createLights()
 	if (directional)
 	{
 		entityRef = new entity();
-		entityRef->componentLightLoad(
+		entityRef->addComponent(
 			light::type::directional,
 			/* White light */
 			colour(colour::hsvToRgb(vec3(0, 0.0f, 0.6f)))
 		);
-		lightRef = entityRef->componentLightGet();
+		lightRef = entityRef->getComponentLight();
 		entityRef->setForward(vec3(0, -1, 0));
 		graphics::setClearColour(
 			lightRef->getColour() * graphics::getAmbience()
@@ -177,13 +177,13 @@ void project::createLights()
 	if (point)
 	{
 		entityRef = new entity();
-		entityRef->componentLightLoad(
+		entityRef->addComponent(
 			light::type::point,
 			/* Red light */
 			colour(colour::hsvToRgb(vec3(0, 0.6f, 0.8f)))
 		);
-		lightRef = entityRef->componentLightGet();
-		entityRef->componentModelLoad(
+		lightRef = entityRef->getComponentLight();
+		entityRef->addComponent(
 			"assets/models/cube/cube.obj",
 			"assets/shaders/default",
 			false
@@ -198,13 +198,13 @@ void project::createLights()
 	if (spot)
 	{
 		entityRef = new entity();
-		entityRef->componentLightLoad(
+		entityRef->addComponent(
 			light::type::spot,
 			/* Green light */
 			colour(colour::hsvToRgb(vec3(110, 0.3f, 1.0f)))
 		);
-		lightRef = entityRef->componentLightGet();
-		entityRef->componentModelLoad(
+		lightRef = entityRef->getComponentLight();
+		entityRef->addComponent(
 			"assets/models/cube/cube.obj",
 			"assets/shaders/default",
 			false

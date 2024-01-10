@@ -70,18 +70,18 @@ public:
 
 	_NODISCARD const transform getTransform() const noexcept;
 
-	void componentModelLoad(
+	void addComponent(
 		std::string _modelPath,
 		std::string _shaderPath,
 		const bool _loadTextures = true
 	);
 
-	void componentLightLoad(
+	void addComponent(
 		const light::type _type,
 		const colour _colour = colour::white()
 	) noexcept;
 
-	_NODISCARD model *componentModelGet() const noexcept;
-	_NODISCARD light *componentLightGet() const noexcept;
+	_NODISCARD model *getComponentModel() const noexcept;
+	_NODISCARD light *getComponentLight() const noexcept;
 };
 }

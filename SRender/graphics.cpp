@@ -65,7 +65,7 @@ namespace graphics
 		for (uint8_t i = 0; i < lightCount(); ++i)
 		{
 			entity *currentEntity = getLightAt(i);
-			light *currentLight = currentEntity->componentLightGet();
+			light *currentLight = currentEntity->getComponentLight();
 			switch (currentLight->getType())
 			{
 			case light::type::directional:
@@ -159,7 +159,7 @@ namespace graphics
 	{
 		for (uint8_t i = 0, count = 0; i < (uint8_t)lightCount(); ++i)
 		{
-			light *currentlLight = getLightAt(i)->componentLightGet();
+			light *currentlLight = getLightAt(i)->getComponentLight();
 
 			// We only want to modify the spotlights, ignore the others
 			if (currentlLight->getType() != light::type::spot) continue;

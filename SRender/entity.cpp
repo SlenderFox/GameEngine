@@ -136,7 +136,7 @@ std::vector<entity*> entity::getChildren() const noexcept
 const transform entity::getTransform() const noexcept
 {	return m_transform; }
 
-void entity::componentModelLoad(
+void entity::addComponent(
 	string _modelPath,
 	string _shaderPath,
 	const bool _loadTextures
@@ -153,7 +153,7 @@ void entity::componentModelLoad(
 	updateModel();
 }
 
-void entity::componentLightLoad(
+void entity::addComponent(
 	const light::type _type,
 	const colour _colour
 ) noexcept
@@ -163,9 +163,9 @@ void entity::componentLightLoad(
 	graphics::addNewLight(this);
 }
 
-model *entity::componentModelGet() const noexcept
+model *entity::getComponentModel() const noexcept
 {	return m_model; }
 
-light *entity::componentLightGet() const noexcept
+light *entity::getComponentLight() const noexcept
 {	return m_light; }
 }
