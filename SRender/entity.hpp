@@ -25,9 +25,6 @@ class entity
 	/** Contains a list of all entities childed to this entity. */
 	std::vector<entity*> m_childrenRef = std::vector<entity*>();
 
-	static void addToVector(std::vector<entity*> &_vector, entity *_child) noexcept;
-	static void removeFromVector(std::vector<entity*> &_vector, const entity *_child) noexcept;
-
 	/** Updates the shader information.
 	 * @todo Have this automatically called when anything in transform is changed.
 	 */

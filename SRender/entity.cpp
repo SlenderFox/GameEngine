@@ -17,12 +17,10 @@ class application { public: _NODISCARD static std::string getAppLocation() noexc
 
 std::vector<entity*> l_rootChildrenRef;
 
-// Static
-
-void entity::addToVector(vector<entity*> &_vector, entity *_child) noexcept
+void addToVector(vector<entity*> &_vector, entity *_child) noexcept
 {	_vector.push_back(_child); }
 
-void entity::removeFromVector(vector<entity*> &_vector, const entity *_child) noexcept
+void removeFromVector(vector<entity*> &_vector, const entity *_child) noexcept
 {
 	// Linear search
 	for (auto it = _vector.begin(); it != _vector.end(); ++it)
@@ -34,6 +32,8 @@ void entity::removeFromVector(vector<entity*> &_vector, const entity *_child) no
 		}
 	}
 }
+
+// Static
 
 vector<entity*> entity::getRootChildren() noexcept
 {	return l_rootChildrenRef; }
