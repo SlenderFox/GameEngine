@@ -12,15 +12,11 @@
 
 namespace srender
 {
-/** A shader is used to render the given vertex and texture information to the screen
- * @todo Allow a new shader to be loaded in the same object
- * @todo Make loadShader() clearer to read
- * @todo Remove glm include and have shader sets take an inbuilt type
-*/
+/** A shader is used to render the given vertex and texture information to the screen. */
 struct shader
 {
 private:
-	/** Used for selecting which part of the shader to use for functions */
+	/** Used for selecting which part of the shader to use for functions. */
 	enum class shaderType: uint8_t
 	{
 		program,
@@ -33,6 +29,12 @@ private:
 	std::string m_shaderPath;	// The file path of the shaders
 
 	void loadShader(const shaderType _type);
+	/** Attempts to read a shader from a file, and if successful, attempts to compile it.
+	 * @param _type The type of shader being read in.
+	 * @return [bool] If reading and compiling was a success.
+	 */
+	bool readFile(const shaderType _type);
+	void loadFallback(const shaderType _type);
 
 	_NODISCARD bool compileShader(
 		uint32_t *_id,
@@ -47,13 +49,13 @@ private:
 		const shaderType _type
 	) const noexcept;
 
-	/** Select between two outputs based on the shadertype input
-	 * @tparam T Arbitrary type allows this function to select for many different types
-	 * @param _type The input shader type, must be either vertex or fragment
-	 * @param _vertex The output if the type is vertex
-	 * @param _fragment The output if the type is fragment
-	 * @return [T] One of the two given params
-	 * @note Will assert that _type is not shaderType::program
+	/** Select between two outputs based on the shadertype input.
+	 * @tparam T Arbitrary type allows this function to select for many different types.
+	 * @param _type The input shader type, must be either vertex or fragment.
+	 * @param _vertex The output if the type is vertex.
+	 * @param _fragment The output if the type is fragment.
+	 * @return [T] One of the two given params.
+	 * @note Will assert that _type is not shaderType::program.
 	 */
 	template<typename T>
 	_NODISCARD inline T byType(
@@ -63,18 +65,20 @@ private:
 	) const noexcept;
 
 public:
+	/** Just calls load.
+	 * @param _shaderPath The relative path of the vertex and fragment shader and their name.
+	 */
 	shader(const std::string *_shaderPath = nullptr);
 	~shader();
 
-	/** Deletes the currently used shader program */
+	/** Deletes the currently used shader program. */
 	void destroy() noexcept;
-	/** Given a path, will load and compile a shader
-	 * @param _shaderPath The relative path of the vertex and fragment shader and their name
-	 * @note The vertex and fragment shaders must have the same name,
-	 * the path does no require the extension
+	/** Given a path, will load and compile a shader.
+	 * @param _shaderPath The relative path of the vertex and fragment shader and their name.
+	 * @note The vertex and fragment shaders must have the same name, the path does not require the extension.
 	 */
 	void load(const std::string *_shaderPath = nullptr);
-	/** Makes this shader the active shader */
+	/** Makes this shader the active shader. */
 	void use() const noexcept;
 
 	_NODISCARD constexpr bool isLoaded() const noexcept;

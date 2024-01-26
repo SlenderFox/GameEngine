@@ -10,9 +10,7 @@
 
 namespace srender
 {
-/** Graphics is responsible for all things visible in the virtual world
- * @todo Look into changing includes up the chain
-*/
+/** Graphics is responsible for all things visible in the virtual world */
 namespace graphics
 {
 	enum class mode: uint8_t

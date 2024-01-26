@@ -49,9 +49,6 @@ constexpr bool shader::isLoaded() const noexcept
 
 void shader::loadShader(const shaderType _type)
 {
-	bool m_usingFallback = false;
-	string codeString;
-
 	if (_type == shaderType::program)
 	{
 		debug::send(
@@ -61,106 +58,113 @@ void shader::loadShader(const shaderType _type)
 		return;
 	}
 
-	if (m_shaderPath == "")
+	bool usingFallback = false;
+
+	if (m_shaderPath != "")
+	{	usingFallback = !readFile(_type); }
+	else
 	{
-		m_usingFallback = true;
+		usingFallback = true;
 		debug::send(
 			"SHADER::NO_PATH_PROVIDED::USING_FALLBACK_CODE",
 			debug::type::note, debug::impact::large, debug::stage::mid
 		);
 	}
-	else
-	{
-		string path = m_shaderPath + byType(_type, string(".vert"), string(".frag"));
 
-		#ifdef _VERBOSE
-			debug::send(
-				"Compiling shader \"" + path + "\"...",
-				debug::type::process, debug::impact::small, debug::stage::mid, false, false
-			);
-		#endif
-
-		// Try to retrieve the vertex/fragment source code from filePath
-		try
-		{
-			ifstream fileStream;
-			stringstream codeStream;
-			// Ensure ifstream objects can throw exceptions
-			fileStream.exceptions(ifstream::failbit | ifstream::badbit);
-
-			fileStream.open(path);
-			codeStream << fileStream.rdbuf();
-			fileStream.close();
-
-			// Convert stream into string
-			codeString = codeStream.str();
-		}
-		catch (ifstream::failure &e)
-		{
-			string msg = "ERROR::SHADER::"
-				+ byType(_type, string("VERTEX"), string("FRAGMENT"))
-				+ "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE:";
-
-			debug::send(msg, debug::type::note, debug::impact::large, debug::stage::mid, true);
-			debug::send(
-				"\"" + string(e.what()) + "\"",
-				debug::type::note, debug::impact::small, debug::stage::mid
-			);
-
-			m_usingFallback = true;
-		}
-	}
-
-	if (!m_usingFallback)
-	{
-		if (
-			!compileShader(
-				byType(_type, &m_idVertex, &m_idFragment),
-				_type,
-				codeString.c_str()
-			)
-		)
-		{
-			m_usingFallback = true;
-		}
-	}
-
-	// Separated to allow bool to potentially change
-	if (m_usingFallback)
-	{
-		#ifdef _VERBOSE
-			debug::send(
-				"Compiling fallback code...",
-				debug::type::process, debug::impact::small, debug::stage::mid, false, false
-			);
-		#endif
-
-		bool result;
-		{
-			const char *vertexFallback = VERTEX_FALLBACK;
-			const char *fragmentFallback = FRAGMENT_FALLBACK;
-
-			result = compileShader(
-				byType(_type, &m_idVertex, &m_idFragment),
-				_type,
-				byType<const char*&>(_type, vertexFallback, fragmentFallback)
-			);
-		}
-
-		if (!result)
-		{
-			string msg = "ERROR::SHADER::"
-				+ byType(_type, string("VERTEX"), string("FRAGMENT"))
-				+ "::FALLBACK_CODE_FAILURE";
-			debug::send(msg, debug::type::note, debug::impact::large, debug::stage::mid, true);
-
-			exit(2);
-		}
-	}
+	if (usingFallback)
+	{	loadFallback(_type); }
 
 	#ifdef _VERBOSE
 		debug::send("Success!");
 	#endif
+}
+
+bool shader::readFile(const shaderType _type)
+{
+	bool success = true;
+	string codeString;
+	string path = m_shaderPath + byType(_type, string(".vert"), string(".frag"));
+
+	#ifdef _VERBOSE
+		debug::send(
+			"Compiling shader \"" + path + "\"...",
+			debug::type::process, debug::impact::small, debug::stage::mid, false, false
+		);
+	#endif
+
+	// Try to retrieve the vertex/fragment source code from filePath
+	try
+	{
+		ifstream fileStream;
+		stringstream codeStream;
+		// Ensure ifstream objects can throw exceptions
+		fileStream.exceptions(ifstream::failbit | ifstream::badbit);
+
+		fileStream.open(path);
+		codeStream << fileStream.rdbuf();
+		fileStream.close();
+
+		// Convert stream into string
+		codeString = codeStream.str();
+	}
+	catch (ifstream::failure &e)
+	{
+		string msg = "ERROR::SHADER::"
+			+ byType(_type, string("VERTEX"), string("FRAGMENT"))
+			+ "::FAILURE_TO_READ_FILE::USING_FALLBACK_CODE:";
+
+		debug::send(msg, debug::type::note, debug::impact::large, debug::stage::mid, true);
+		debug::send(
+			"\"" + string(e.what()) + "\"",
+			debug::type::note, debug::impact::small, debug::stage::mid
+		);
+
+		success = false;
+	}
+
+	if (success)
+	{
+		success = !compileShader(
+			byType(_type, &m_idVertex, &m_idFragment),
+			_type,
+			codeString.c_str()
+		);
+	}
+
+	return success;
+}
+
+void shader::loadFallback(const shaderType _type)
+{
+	#ifdef _VERBOSE
+		debug::send(
+			"Compiling fallback code...",
+			debug::type::process, debug::impact::small, debug::stage::mid, false, false
+		);
+	#endif
+
+	bool result;
+	{
+		const char *vertexFallback = VERTEX_FALLBACK;
+		const char *fragmentFallback = FRAGMENT_FALLBACK;
+
+		result = compileShader(
+			byType(_type, &m_idVertex, &m_idFragment),
+			_type,
+			byType<const char*&>(_type, vertexFallback, fragmentFallback)
+		);
+	}
+
+	if (!result)
+	{
+		// Translation: You fucked up the fallback code you nong
+		string msg = "ERROR::SHADER::"
+			+ byType(_type, string("VERTEX"), string("FRAGMENT"))
+			+ "::FALLBACK_CODE_FAILURE";
+		debug::send(msg, debug::type::note, debug::impact::large, debug::stage::mid, true);
+
+		exit(2);
+	}
 }
 
 bool shader::compileShader(
