@@ -20,7 +20,7 @@ namespace graphics
 	camera *l_camera = nullptr;
 	// Cannot be references for some weird vector reason
 	vector<model*> l_models = vector<model*>();
-	vector<entity*> l_lightRefs = vector<entity*>();
+	vector<entity*> l_lights = vector<entity*>();
 
 	bool init(const float _aspect) noexcept
 	{
@@ -40,6 +40,8 @@ namespace graphics
 	{
 		for (auto model : l_models)
 		{	delete model; }
+		for (auto light : l_lights)
+		{	delete light; }
 		texture::terminate();
 		delete l_camera;
 	}
@@ -157,6 +159,13 @@ namespace graphics
 		}
 	}
 
+	void updateAllShaders() noexcept
+	{
+		// Need to add the light in each of the shaders
+		for (auto model : l_models)
+		{	loadLightsIntoShader(model->getShaderRef()); }
+	}
+
 	void modifyAllSpotlights(
 		const bool _isAngle,
 		const float _value
@@ -223,12 +232,15 @@ namespace graphics
 		return newModel;
 	}
 
-	void addNewLight(entity *_light)
+	light *addNewLight(
+		entity *_parent,
+		const light::type _type,
+		const colour _colour
+	)
 	{
-		l_lightRefs.push_back(_light);
-		// Need to add the light in each of the shaders
-		for (auto model : l_models)
-		{	loadLightsIntoShader(model->getShaderRef()); }
+		light *newLight = new light(_type, _colour);
+		l_lights.push_back(_parent);
+		return newLight;
 	}
 
 	void setClearColour(const colour _colour) noexcept
@@ -250,7 +262,7 @@ namespace graphics
 	{	return (uint8_t)l_models.size(); }
 
 	uint8_t lightCount() noexcept
-	{	return (uint8_t)l_lightRefs.size(); }
+	{	return (uint8_t)l_lights.size(); }
 
 	model *getModelAt(const uint8_t _pos)
 	{
@@ -265,7 +277,7 @@ namespace graphics
 		if (_pos > lightCount() - 1)
 		{	throw graphicsException("Attempting to access light outside array size"); }
 
-		return l_lightRefs[_pos];
+		return l_lights[_pos];
 	}
 
 	camera *getCamera() noexcept

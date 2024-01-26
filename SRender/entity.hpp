@@ -16,7 +16,7 @@ class entity
 {
 	/* Components. */
 	transform m_transform = transform(); // Currently mandatory.
-	light *m_light = nullptr; // Optional.
+	light *m_lightRef = nullptr; // Optional.
 	model *m_modelRef = nullptr; // Optional.
 
 	entity *m_parentRef = nullptr;

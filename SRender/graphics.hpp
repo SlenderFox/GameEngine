@@ -25,6 +25,7 @@ namespace graphics
 	void terminate() noexcept;
 
 	void loadLightsIntoShader(const shader *_shader) noexcept;
+	void updateAllShaders() noexcept;
 	/** Modifies either the angle or blur of all spotlights by a value
 	 * @note Max value is 90 for angle and 1 for blur, min for both is 0
 	 * @param _isAngle True to modify the angle, false to modify the blur of the spotlight
@@ -40,7 +41,11 @@ namespace graphics
 		std::string _shaderPath,
 		const bool _loadTextures = true
 	);
-	void addNewLight(entity *_light);
+	light *addNewLight(
+		entity *_parent,
+		const light::type _type,
+		const colour _colour = colour::white()
+	);
 
 	void setClearColour(const colour _colour) noexcept;
 	void setRenderMode(const mode _mode = mode::fill) noexcept;

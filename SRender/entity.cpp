@@ -56,10 +56,7 @@ entity::entity(entity *_parent)
 {	setParent(_parent); }
 
 entity::~entity()
-{
-	if (m_light)
-	{	delete m_light; }
-}
+{}
 
 void entity::setTransform(const mat4 *_value) noexcept
 {
@@ -130,6 +127,7 @@ void entity::addComponent(
 	const bool _loadTextures
 )
 {
+	// TODO finish reworking
 	assert(!m_modelRef && "Entity already has a model component");
 	m_modelRef = graphics::addNewModel(_modelPath, _shaderPath, _loadTextures);
 	updateModel();
@@ -140,14 +138,15 @@ void entity::addComponent(
 	const colour _colour
 ) noexcept
 {
-	assert(!m_light && "Entity already has a light component");
-	m_light = new light(_type, _colour);
-	graphics::addNewLight(this);
+	// TODO finish reworking
+	assert(!m_lightRef && "Entity already has a light component");
+	m_lightRef = graphics::addNewLight(this, _type, _colour);
+	graphics::updateAllShaders();
 }
 
 model *entity::getComponentModel() const noexcept
 {	return m_modelRef; }
 
 light *entity::getComponentLight() const noexcept
-{	return m_light; }
+{	return m_lightRef; }
 }
