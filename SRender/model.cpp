@@ -27,7 +27,9 @@ model::model(
 	m_shader = new shader(_shaderPath);
 	if (_loadTextures) loadTexturesToShader();
 
-	debug::send("Done!", debug::type::note, debug::impact::small, debug::stage::end);
+	#ifdef _VERBOSE
+		debug::send("Done!", debug::type::note, debug::impact::small, debug::stage::end);
+	#endif
 }
 
 model::~model()
@@ -51,28 +53,32 @@ void model::draw() const noexcept
 
 void model::loadModel(const string *_path, const bool _loadTextures)
 {
-	debug::send(
-		"Loading model \"" + *_path + "\"",
-		debug::type::process, debug::impact::large, debug::stage::begin
+	#ifdef _VERBOSE
+		debug::send(
+			"Loading model \"" + *_path + "\"",
+			debug::type::process, debug::impact::large, debug::stage::begin
 	);
 
-	if (!_loadTextures)
-	{
-		debug::send(
-			"Ignoring textures",
-			debug::type::note, debug::impact::small, debug::stage::mid
-		);
-	}
+		if (!_loadTextures)
+		{
+			debug::send(
+				"Ignoring textures",
+				debug::type::note, debug::impact::small, debug::stage::mid
+			);
+		}
+	#endif
 
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(*_path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
-		debug::send(
-			"ERROR::ASSIMP::" + string(importer.GetErrorString()),
-			debug::type::note, debug::impact::large, debug::stage::mid
-		);
+		#ifdef _VERBOSE
+			debug::send(
+				"ERROR::ASSIMP::" + string(importer.GetErrorString()),
+				debug::type::note, debug::impact::large, debug::stage::mid
+			);
+		#endif
 		return;
 	}
 
@@ -221,15 +227,17 @@ vector<texture*> model::loadMaterialTextures(
 
 			if (reuseExistingTexture)
 			{
-				debug::send(
-					"Reusing texture "
-					+ std::to_string(texture::at(j)->getLocation())
-					+ ": "
-					+ texture::at(j)->getFilePath().c_str(),
-					debug::type::note,
-					debug::impact::small,
-					debug::stage::mid
-				);
+				#ifdef _VERBOSE
+					debug::send(
+						"Reusing texture "
+						+ std::to_string(texture::at(j)->getLocation())
+						+ ": "
+						+ texture::at(j)->getFilePath().c_str(),
+						debug::type::note,
+						debug::impact::small,
+						debug::stage::mid
+					);
+				#endif
 				texturesOut.push_back(texture::at(j));
 			}
 
@@ -277,12 +285,14 @@ void model::loadTexturesToShader() const noexcept
 			+ " to "
 			+ std::to_string(m_textures[i]->getLocation())
 		};
-		debug::send(
-			msg,
-			debug::type::note,
-			debug::impact::small,
-			debug::stage::mid
-		);
+		#ifdef _VERBOSE
+			debug::send(
+				msg,
+				debug::type::note,
+				debug::impact::small,
+				debug::stage::mid
+			);
+		#endif
 	}
 }
 

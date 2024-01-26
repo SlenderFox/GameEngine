@@ -20,6 +20,10 @@ LIBS:=/lib/libglfw.so.3.3 /lib/libglib-2.0.so /lib/libassimp.so
 #CW:=x86_64-w64-mingw32-gcc
 
 # Dumb way to get variables specific to target
+ifneq (,$(filter verbose,$(MAKECMDGOALS)))
+	DFLAGS:=$(DFLAGS) -D_VERBOSE
+	RFLAGS:=$(RFLAGS) -D_VERBOSE
+endif
 ifneq (,$(filter debug,$(MAKECMDGOALS)))
 	CXXFLAGS:=$(CXXFLAGS) $(DFLAGS)
 	ifeq (,$(filter clean,$(MAKECMDGOALS)))
@@ -42,7 +46,7 @@ HEADERS:=$(wildcard $(SRC)/*.hpp)
 SOURCES:=$(wildcard $(SRC)/*.cpp)
 OBJECTS:=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.o,$(SOURCES))
 
-.PHONY: makefile help clear clean debug release build example run
+.PHONY: makefile help clear clean debug release build example run verbose
 
 # Default target simply tells you how to correctly use this makefile
 .DEFAULT_GOAL:=help
@@ -87,8 +91,13 @@ $(BIN)/example: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME) $(OBJ)/project.o $(BIN)/assets/
 example: $(BIN)/example
 
 # Making directories as needed
-$(BIN)/: ; mkdir -p $@
-$(OBJ)/: ; mkdir -p $@
+$(BIN)/:
+	mkdir -p $@
+$(OBJ)/:
+	mkdir -p $@
 
 run:
 	$(BIN)/example
+
+verbose:
+	@printf ""

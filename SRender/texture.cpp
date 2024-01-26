@@ -75,10 +75,12 @@ void texture::load(string _filePath, type _type)
 	m_filePath = _filePath;
 	m_type = _type;
 
-	debug::send(
-		"Loading texture " + std::to_string(l_loadedTextures.size()) + ": \"" + m_filePath + "\"...",
-		debug::type::process, debug::impact::large, debug::stage::mid, false, false
-	);
+	#ifdef _VERBOSE
+		debug::send(
+			"Loading texture " + std::to_string(l_loadedTextures.size()) + ": \"" + m_filePath + "\"...",
+			debug::type::process, debug::impact::large, debug::stage::mid, false, false
+		);
+	#endif
 
 	int texWidth = 0, texHeight = 0, numComponents = 0;
 	uint8_t *imageData = stbi_load(
@@ -120,7 +122,9 @@ void texture::load(string _filePath, type _type)
 	stbi_image_free(imageData);
 
 	m_loaded = true;
-	debug::send("Success!");
+	#ifdef _VERBOSE
+		debug::send("Success!");
+	#endif
 }
 
 void texture::destroy() noexcept

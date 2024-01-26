@@ -73,10 +73,12 @@ void shader::loadShader(const shaderType _type)
 	{
 		string path = m_shaderPath + byType(_type, string(".vert"), string(".frag"));
 
-		debug::send(
-			"Compiling shader \"" + path + "\"...",
-			debug::type::process, debug::impact::small, debug::stage::mid, false, false
-		);
+		#ifdef _VERBOSE
+			debug::send(
+				"Compiling shader \"" + path + "\"...",
+				debug::type::process, debug::impact::small, debug::stage::mid, false, false
+			);
+		#endif
 
 		// Try to retrieve the vertex/fragment source code from filePath
 		try
@@ -126,10 +128,12 @@ void shader::loadShader(const shaderType _type)
 	// Separated to allow bool to potentially change
 	if (m_usingFallback)
 	{
-		debug::send(
-			"Compiling fallback code...",
-			debug::type::process, debug::impact::small, debug::stage::mid, false, false
-		);
+		#ifdef _VERBOSE
+			debug::send(
+				"Compiling fallback code...",
+				debug::type::process, debug::impact::small, debug::stage::mid, false, false
+			);
+		#endif
 
 		bool result;
 		{
@@ -154,7 +158,9 @@ void shader::loadShader(const shaderType _type)
 		}
 	}
 
-	debug::send("Success!");
+	#ifdef _VERBOSE
+		debug::send("Success!");
+	#endif
 }
 
 bool shader::compileShader(

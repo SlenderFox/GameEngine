@@ -189,7 +189,6 @@ inline bool application::init()
 	auto startTime = std::chrono::high_resolution_clock::now();
 
 	if (!setupGLFW()) return false;	// Sets own exit code
-	debug::send("Initialising...");
 
 	if (!renderer::loadGlad())
 	{
@@ -319,7 +318,10 @@ inline void application::setAppLocation(std::string _path) noexcept
 {
 	size_t last_slash = _path.find_last_of("\\/");
 	l_appLocation = _path.substr(0, last_slash + 1);
-	//debug::send("App location set to: " + l_appLocation + "\nFrom source: " + _path);
+	// NOTE can uncomment when fixed wchar issue
+	//#ifdef _VERBOSE
+	//	debug::send("App location set to: " + l_appLocation + "\nFrom source: " + _path);
+	//#endif
 }
 
 void application::quit() noexcept
@@ -358,6 +360,8 @@ std::string application::getAppLocation() noexcept
 int application::run(int _argc, char *_args[])
 {
 	debug::init();
+	// NOTE can uncomment when fixed wchar issue
+	//debug::send("Initialising...");
 	setAppLocation(_args[0]);
 
 	if (init())
