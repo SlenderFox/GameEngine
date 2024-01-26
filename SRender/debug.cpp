@@ -5,9 +5,9 @@
 	#include <fcntl.h>
 #endif
 #include <iostream>
+
 using std::wcout;
 using std::endl;
-
 using std::string;
 
 namespace srender
@@ -28,7 +28,7 @@ namespace debug
 	 * @note 10:   end-large-note   : ╘ \xD4 212 \u2558
 	 * @note 11:   end-large-process: ╧ \xCF 207 \u2567
 	 */
-	const wchar_t *prefixes[12] = {
+	const wchar_t *l_prefixes[12] = {
 		L"\u250C",
 		L"\u252C",
 		L"\u2552",
@@ -92,8 +92,8 @@ namespace debug
 	) noexcept
 	{
 		#ifdef _DEBUG
-			uint8_t pre = (uint8_t)_type + (uint8_t)_impact + (uint8_t)_stage;
-			send(_msg, prefixes[pre], _newline, _endline);
+			uint8_t prefix = (uint8_t)_type + (uint8_t)_impact + (uint8_t)_stage;
+			send(_msg, l_prefixes[prefix], _newline, _endline);
 		#endif
 	}
 

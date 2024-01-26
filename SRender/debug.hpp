@@ -6,9 +6,10 @@ struct GLFWwindow;
 
 namespace srender
 {
-/** For outputting important text-based information to the console during program execution
- * @todo Make debug use imgui - Can open an "event" then post whatever info to it and finally close it
- * @todo Fix wcout not working some times for unknown reasons
+/** For outputting important text-based information to the console during program execution.
+ * Calls to all functions will be optimised out if _DEBUG is not defined.
+ * @todo Make debug use imgui - Can open an "event" then post whatever info to it and finally close it.
+ * @todo Fix wcout not working some times for unknown reasons.
  */
 namespace debug
 {
