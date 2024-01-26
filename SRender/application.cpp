@@ -295,12 +295,12 @@ inline void application::loop()
 				+ to_string(l_wWidth)
 				+ "x"
 				+ to_string(l_wHeight)
-				+ " | "
+				+ " | FPS: "
 				+ to_string(l_fps)
-				+ ", "
-				+ frameTimeMs
-				+ ", "
+				+ ", DT/FT: "
 				+ drawTimeMs
+				+ "/"
+				+ frameTimeMs
 			};
 			glfwSetWindowTitle(l_windowRef, title.c_str());
 		}
