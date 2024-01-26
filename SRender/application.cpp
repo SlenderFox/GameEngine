@@ -93,6 +93,7 @@ void framebufferSizeCallback(
 _NODISCARD inline bool setupGLFW()
 {
 	// glfw: initialise and configure
+	// NOTE Something in here causes output to work with wchar
 	if (!glfwInit())
 	{
 		l_exitCode = exitCode::fail_GLFW_Init;
@@ -188,6 +189,7 @@ inline bool application::init()
 	auto startTime = std::chrono::high_resolution_clock::now();
 
 	if (!setupGLFW()) return false;	// Sets own exit code
+	debug::send("Initialising...");
 
 	if (!renderer::loadGlad())
 	{
@@ -216,7 +218,7 @@ inline bool application::init()
 	// Calculates the time it took to start up
 	auto endTime = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> elapsedTime = endTime - startTime;
-	debug::send("Started in " + to_string(elapsedTime.count()) + " seconds");
+	debug::send("Initialised in " + to_string(elapsedTime.count()) + " seconds");
 
 	return true;
 }
