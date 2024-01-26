@@ -5,6 +5,7 @@
 #include "assimp/material.h"
 #include "assimp/scene.h"
 #include "assimp/mesh.h"
+#include "colour.hpp"
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]
@@ -12,6 +13,9 @@
 
 namespace srender
 {
+/** A model is a collection of meshes, textures, and a shader.
+ * @todo Arbitrary mesh loading.
+ */
 struct model
 {
 private:
@@ -58,6 +62,9 @@ public:
 	~model();
 
 	void draw() const noexcept;
+
+	void renderOnlyColour(const bool _state) noexcept;
+	void sentTint(const colour _colour) noexcept;
 
 	_NODISCARD shader *getShaderRef() const noexcept;
 	_NODISCARD mesh *getMeshAt(const uint16_t _pos) const noexcept;

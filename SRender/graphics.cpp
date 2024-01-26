@@ -12,11 +12,14 @@ using std::vector;
 
 namespace srender
 {
+// Forward declaration
+class application { public: _NODISCARD static std::string getAppLocation() noexcept; };
+
 namespace graphics
 {
 	camera *l_camera = nullptr;
 	// Cannot be references for some weird vector reason
-	vector<model*> l_modelRefs = vector<model*>();
+	vector<model*> l_models = vector<model*>();
 	vector<entity*> l_lightRefs = vector<entity*>();
 
 	bool init(const float _aspect) noexcept
@@ -35,6 +38,8 @@ namespace graphics
 
 	void terminate() noexcept
 	{
+		for (auto model : l_models)
+		{	delete model; }
 		texture::terminate();
 		delete l_camera;
 	}
@@ -201,17 +206,28 @@ namespace graphics
 		}
 	}
 
-	void addNewModel(model *_model)
+	model *addNewModel(
+		string _modelPath,
+		string _shaderPath,
+		const bool _loadTextures
+	)
 	{
-		l_modelRefs.push_back(_model);
-		loadLightsIntoShader(_model->getShaderRef());
+		string appLoc = application::getAppLocation();
+		_modelPath = appLoc + _modelPath;
+		_shaderPath = appLoc + _shaderPath;
+		string *modelPath_p = _modelPath == appLoc ? nullptr : &_modelPath;
+		string *shaderPath_p = _shaderPath == appLoc ? nullptr : &_shaderPath;
+		model *newModel = new model(modelPath_p, shaderPath_p, _loadTextures);
+		l_models.push_back(newModel);
+		loadLightsIntoShader(newModel->getShaderRef());
+		return newModel;
 	}
 
 	void addNewLight(entity *_light)
 	{
 		l_lightRefs.push_back(_light);
 		// Need to add the light in each of the shaders
-		for (auto model : l_modelRefs)
+		for (auto model : l_models)
 		{	loadLightsIntoShader(model->getShaderRef()); }
 	}
 
@@ -226,12 +242,12 @@ namespace graphics
 
 	void setRenderDepthBuffer(const bool _state) noexcept
 	{
-		for (auto model : l_modelRefs)
+		for (auto model : l_models)
 		{	model->getShaderRef()->setBool("u_depthBuffer", _state); }
 	}
 
 	uint8_t modelCount() noexcept
-	{	return (uint8_t)l_modelRefs.size(); }
+	{	return (uint8_t)l_models.size(); }
 
 	uint8_t lightCount() noexcept
 	{	return (uint8_t)l_lightRefs.size(); }
@@ -241,7 +257,7 @@ namespace graphics
 		if (_pos > modelCount() - 1)
 		{	throw graphicsException("Attempting to access model outside array size"); }
 
-		return l_modelRefs[_pos];
+		return l_models[_pos];
 	}
 
 	entity *getLightAt(const uint8_t _pos)

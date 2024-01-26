@@ -13,44 +13,6 @@ using std::vector;
 
 namespace srender
 {
-model::model(
-	const string *_modelPath,
-	const string *_shaderPath,
-	const bool _loadTextures
-)
-{
-	m_meshes = vector<mesh*>();
-	m_textures = vector<texture*>();
-
-	assert(_modelPath);
-	loadModel(_modelPath, _loadTextures);
-	m_shader = new shader(_shaderPath);
-	if (_loadTextures) loadTexturesToShader();
-
-	#ifdef _VERBOSE
-		debug::send("Done!", debug::type::note, debug::impact::small, debug::stage::end);
-	#endif
-}
-
-model::~model()
-{
-	for (unsigned int i = 0; i < m_meshes.size(); ++i)
-	{	delete m_meshes[i]; }
-
-	delete m_shader;
-}
-
-void model::draw() const noexcept
-{
-	// // TODO This is dumb, just have the graphics class do this
-	// m_shader->use();
-	// m_shader->setMat4("u_camera", _camera->getWorldToCameraMatrix());
-	// m_shader->setFloat3("u_viewPos", (vec3)_camera->getPosition());
-
-	for (uint16_t i = 0; i < m_meshes.size(); ++i)
-	{	getMeshAt(i)->draw(); }
-}
-
 void model::loadModel(const string *_path, const bool _loadTextures)
 {
 	#ifdef _VERBOSE
@@ -295,6 +257,45 @@ void model::loadTexturesToShader() const noexcept
 		#endif
 	}
 }
+
+model::model(
+	const string *_modelPath,
+	const string *_shaderPath,
+	const bool _loadTextures
+)
+{
+	m_meshes = vector<mesh*>();
+	m_textures = vector<texture*>();
+
+	assert(_modelPath);
+	loadModel(_modelPath, _loadTextures);
+	m_shader = new shader(_shaderPath);
+	if (_loadTextures) loadTexturesToShader();
+
+	#ifdef _VERBOSE
+		debug::send("Done!", debug::type::note, debug::impact::small, debug::stage::end);
+	#endif
+}
+
+model::~model()
+{
+	for (unsigned int i = 0; i < m_meshes.size(); ++i)
+	{	delete m_meshes[i]; }
+
+	delete m_shader;
+}
+
+void model::draw() const noexcept
+{
+	for (uint16_t i = 0; i < m_meshes.size(); ++i)
+	{	getMeshAt(i)->draw(); }
+}
+
+void model::renderOnlyColour(const bool _state) noexcept
+{	m_shader->setBool("u_justColour", _state); }
+
+void model::sentTint(const colour _colour) noexcept
+{	m_shader->setFloat3("u_colour", _colour.rgb()); }
 
 shader *model::getShaderRef() const noexcept
 {	return m_shader; }

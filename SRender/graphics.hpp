@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #include "entity.hpp"
 
 #ifndef _NODISCARD
@@ -35,7 +35,11 @@ namespace graphics
 		const float _value
 	);
 
-	void addNewModel(model *_model);
+	model *addNewModel(
+		std::string _modelPath,
+		std::string _shaderPath,
+		const bool _loadTextures = true
+	);
 	void addNewLight(entity *_light);
 
 	void setClearColour(const colour _colour) noexcept;

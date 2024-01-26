@@ -190,8 +190,8 @@ void project::createLights()
 		);
 		entityRef->setPosition(vec4(-4, 2, -2, 1));
 		entityRef->setScale(vec3(0.1f, 0.1f, 0.1f));
-		entityRef->sentTint(lightRef->getColour());
-		entityRef->renderOnlyColour(true);
+		entityRef->getComponentModel()->sentTint(lightRef->getColour());
+		entityRef->getComponentModel()->renderOnlyColour(true);
 		m_lights.push_back(entityRef);
 	}
 
@@ -209,8 +209,8 @@ void project::createLights()
 			"assets/shaders/default",
 			false
 		);
-		entityRef->sentTint(lightRef->getColour());
-		entityRef->renderOnlyColour(true);
+		entityRef->getComponentModel()->sentTint(lightRef->getColour());
+		entityRef->getComponentModel()->renderOnlyColour(true);
 		entityRef->setPosition(vec4(2.0f, 2.5f, 6.0f, 1));
 		entityRef->setForward(vec3(-0.3f, -0.4f, -1));
 		// FIXME needs to be called after setForward

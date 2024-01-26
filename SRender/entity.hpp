@@ -11,14 +11,13 @@ namespace srender
 {
 /** An entity is any object in world space, each entity must have a parent.
  * @todo Add a component system to attach things like model, camera, or light.
- * @todo Look into ability to swap models.
 */
 class entity
 {
 	/* Components. */
 	transform m_transform = transform(); // Currently mandatory.
 	light *m_light = nullptr; // Optional.
-	model *m_model = nullptr;
+	model *m_modelRef = nullptr; // Optional.
 
 	entity *m_parentRef = nullptr;
 
@@ -55,9 +54,7 @@ public:
 	void translate(const glm::vec3 _value) noexcept;
 
 	void setParent(entity *_parent) noexcept;
-	void renderOnlyColour(const bool _state) noexcept;
 	void setScale(const glm::vec3 _value) noexcept;
-	void sentTint(const colour _colour) noexcept;
 
 	void addChild(entity *_child) noexcept;
 	void removeChild(const entity *_child) noexcept;
