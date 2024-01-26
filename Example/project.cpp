@@ -108,7 +108,6 @@ void project::update()
 	for (uint8_t i = 0; i < s_numCubes; i++)
 	{
 		float angle = (float)getDeltaTime() * 5.0f * ((i + 1) / (i * 0.2f + 1));
-		// FIXME
 		mat4 rot = rotate(
 			m_cubes[i]->getTransform().getTransform(),
 			radians(angle),

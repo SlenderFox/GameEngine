@@ -45,6 +45,8 @@ std::string l_appLocation = "";
 /** The error code returned by main */
 exitCode l_exitCode = exitCode::okay;
 
+constexpr double secondsPerUpdate() { return 0.5; }
+
 inline void updateCamera() noexcept
 {
 	graphics::getCamera()->setAspectRatio((float)l_wWidth / (float)l_wHeight);
@@ -257,6 +259,7 @@ inline void application::loop()
 		if ((bool)glfwGetWindowAttrib(l_windowRef, GLFW_ICONIFIED))
 		{
 			// TODO: Figure out why sleeping the thread freezes when unminimised
+			// Probably doesn't realised it has unminimised lol
 			//std::this_thread::sleep_for(std::chrono::milliseconds(66));
 
 			// Waste time
@@ -278,12 +281,10 @@ inline void application::loop()
 		std::chrono::duration<double> drawTime = frameEnd - drawStart;
 
 		// Doing this allows me to updates fps as often as I want
-		// TODO: Look into improving
-		static const double secondsPerUpdate = 1.0;
-		if (l_frameTimer >= secondsPerUpdate)
+		if (l_frameTimer >= secondsPerUpdate())
 		{
-			l_frameTimer -= secondsPerUpdate;
-			l_fps = (uint16_t)((double)l_perSecondFrameCount / secondsPerUpdate);
+			l_frameTimer -= secondsPerUpdate();
+			l_fps = (uint16_t)((double)l_perSecondFrameCount / secondsPerUpdate());
 			l_perSecondFrameCount = 0U;
 			string frameTimeMs = to_string(frameTime.count() * 1000);
 			frameTimeMs.resize(5);
@@ -368,6 +369,7 @@ int application::run(int _argc, char *_args[])
 	{
 		// Preloads currentTime with an earlier time to prevent first frame weirdness
 		l_currentTime = glfwGetTime() - getFixedDeltaTime();
+		l_frameTimer = secondsPerUpdate();
 
 		// Update-Render loop
 		loop();
