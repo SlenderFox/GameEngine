@@ -1,4 +1,4 @@
-//#include "entity.hpp"	// Included upstream by graphics.hpp
+#include "entity.hpp"
 #include "graphics.hpp"
 
 using std::string;
@@ -55,9 +55,6 @@ entity::entity()
 entity::entity(entity *_parent)
 {	setParent(_parent); }
 
-entity::~entity()
-{}
-
 void entity::setTransform(const mat4 *_value) noexcept
 {
 	m_transform.setTransform(_value);
@@ -67,12 +64,15 @@ void entity::setTransform(const mat4 *_value) noexcept
 void entity::setPosition(const vec3 _value) noexcept
 {
 	m_transform.setPosition(_value);
+	m_lightRef->setPosition(m_transform.getPosition());
 	updateModel();
 }
 
 void entity::setForward(const vec3 _value) noexcept
 {
 	m_transform.setForward(_value);
+	// Do this because the forward is not exactly _value
+	m_lightRef->setForward(m_transform.getForward());
 	updateModel();
 }
 
@@ -140,7 +140,7 @@ void entity::addComponent(
 {
 	// TODO finish reworking
 	assert(!m_lightRef && "Entity already has a light component");
-	m_lightRef = graphics::addNewLight(this, _type, _colour);
+	m_lightRef = graphics::addNewLight(_type, _colour);
 	graphics::updateAllShaders();
 }
 

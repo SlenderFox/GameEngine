@@ -1,6 +1,7 @@
 #include "light.hpp"
 #include "glm/detail/func_trigonometric.inl"
 
+using glm::vec4;
 using glm::cos;
 using glm::sin;
 using glm::radians;
@@ -36,6 +37,12 @@ void light::setAngle (float _value) noexcept
 void light::setBlur (float _value) noexcept
 {	m_blur = _value; }
 
+void light::setPosition(vec4 _value) noexcept
+{	m_position = _value; }
+
+void light::setForward(vec4 _value) noexcept
+{	m_forward = _value; }
+
 float light::getAngle() const noexcept
 {	return cos(radians(m_angle)); }
 
@@ -59,4 +66,10 @@ float light::getAngleRaw() const noexcept
 
 float light::getBlurRaw() const noexcept
 {	return m_blur; }
+
+vec4 light::getPosition() const noexcept
+{	return m_position; }
+
+vec4 light::getForward() const noexcept
+{	return m_forward; }
 }

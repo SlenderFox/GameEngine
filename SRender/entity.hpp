@@ -34,7 +34,6 @@ public:
 
 	entity();
 	entity(entity *_parent);
-	~entity();
 
 	/** Directly sets the transform matrix, calls updateModel.
 	 * @param _value The desired transform.

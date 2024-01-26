@@ -1,5 +1,8 @@
- #pragma once
-#include "entity.hpp"
+#pragma once
+#include <string>
+#include "light.hpp"
+#include "model.hpp"
+#include "camera.hpp"
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]
@@ -42,7 +45,6 @@ namespace graphics
 		const bool _loadTextures = true
 	);
 	light *addNewLight(
-		entity *_parent,
 		const light::type _type,
 		const colour _colour = colour::white()
 	);
@@ -54,7 +56,7 @@ namespace graphics
 	_NODISCARD uint8_t modelCount() noexcept;
 	_NODISCARD uint8_t lightCount() noexcept;
 	_NODISCARD model *getModelAt(const uint8_t _pos);
-	_NODISCARD entity *getLightAt(const uint8_t _pos);
+	_NODISCARD light *getLightAt(const uint8_t _pos);
 	_NODISCARD camera *getCamera() noexcept;
 
 	_NODISCARD constexpr float getAmbience() { return 0.15f; }

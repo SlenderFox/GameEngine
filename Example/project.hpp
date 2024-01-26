@@ -1,5 +1,6 @@
 #pragma once
 #include "application.hpp"
+#include "entity.hpp"
 
 #ifndef _NODISCARD
 #define _NODISCARD [[nodiscard]]

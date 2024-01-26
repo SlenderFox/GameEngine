@@ -2,6 +2,7 @@
 #include "renderer.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "exception.hpp"
+#include "debug.hpp"
 
 using glm::vec3;
 using glm::vec4;
@@ -9,6 +10,7 @@ using glm::mat3;
 using glm::mat4;
 using std::string;
 using std::vector;
+using std::to_string;
 
 namespace srender
 {
@@ -20,7 +22,7 @@ namespace graphics
 	camera *l_camera = nullptr;
 	// Cannot be references for some weird vector reason
 	vector<model*> l_models = vector<model*>();
-	vector<entity*> l_lights = vector<entity*>();
+	vector<light*> l_lights = vector<light*>();
 
 	bool init(const float _aspect) noexcept
 	{
@@ -71,42 +73,41 @@ namespace graphics
 
 		for (uint8_t i = 0; i < lightCount(); ++i)
 		{
-			entity *currentEntity = getLightAt(i);
-			light *currentLight = currentEntity->getComponentLight();
+			light *currentLight = getLightAt(i);
 			switch (currentLight->getType())
 			{
 			case light::type::directional:
-				lightNum = std::to_string(numDirLights);
+				lightNum = to_string(numDirLights);
 				_shader->setFloat3(
 					"u_dirLights[" + lightNum + "].colour.ambient",
-					(vec3)currentLight->getColour() * getAmbience()
+					currentLight->getColour() * getAmbience()
 				);
 				_shader->setFloat3(
 					"u_dirLights[" + lightNum + "].colour.diffuse",
-					(vec3)currentLight->getColour()
+					currentLight->getColour()
 				);
 				_shader->setFloat3(
 					"u_dirLights[" + lightNum + "].colour.specular",
-					(vec3)currentLight->getColour()
+					currentLight->getColour()
 				);
 				_shader->setFloat4(
 					"u_dirLights[" + lightNum + "].direction",
-					(vec4)currentEntity->getTransform().getForward()
+					currentLight->getForward()
 				);
 				++numDirLights; break;
 			case light::type::point:
-				lightNum = std::to_string(numPointLights);
+				lightNum = to_string(numPointLights);
 				_shader->setFloat3(
 					"u_pointLights[" + lightNum + "].colour.diffuse",
-					(vec3)currentLight->getColour()
+					currentLight->getColour()
 				);
 				_shader->setFloat3(
 					"u_pointLights[" + lightNum + "].colour.specular",
-					(vec3)currentLight->getColour()
+					currentLight->getColour()
 				);
 				_shader->setFloat4(
 					"u_pointLights[" + lightNum + "].position",
-					(vec4)currentEntity->getTransform().getPosition()
+					currentLight->getPosition()
 				);
 				_shader->setFloat(
 					"u_pointLights[" + lightNum + "].linear",
@@ -118,22 +119,22 @@ namespace graphics
 				);
 				++numPointLights; break;
 			case light::type::spot:
-				lightNum = std::to_string(numSpotLights);
+				lightNum = to_string(numSpotLights);
 				_shader->setFloat3(
 					"u_spotLights[" + lightNum + "].colour.diffuse",
-					(vec3)currentLight->getColour()
+					currentLight->getColour()
 				);
 				_shader->setFloat3(
 					"u_spotLights[" + lightNum + "].colour.specular",
-					(vec3)currentLight->getColour()
+					currentLight->getColour()
 				);
 				_shader->setFloat4(
 					"u_spotLights[" + lightNum + "].position",
-					(vec4)currentEntity->getTransform().getPosition()
+					currentLight->getPosition()
 				);
 				_shader->setFloat4(
 					"u_spotLights[" + lightNum + "].direction",
-					(vec4)currentEntity->getTransform().getForward()
+					currentLight->getForward()
 				);
 				_shader->setFloat(
 					"u_spotLights[" + lightNum + "].linear",
@@ -173,12 +174,12 @@ namespace graphics
 	{
 		for (uint8_t i = 0, count = 0; i < (uint8_t)lightCount(); ++i)
 		{
-			light *currentlLight = getLightAt(i)->getComponentLight();
+			light *currentlLight = getLightAt(i);
 
 			// We only want to modify the spotlights, ignore the others
 			if (currentlLight->getType() != light::type::spot) continue;
 
-			string numLights = std::to_string(count);
+			string numLights = to_string(count);
 			float limit = _isAngle ? 90.0f : 1.0f;
 			float newValue = _isAngle ? currentlLight->getAngleRaw() : currentlLight->getBlurRaw();
 			newValue += _value;
@@ -233,13 +234,12 @@ namespace graphics
 	}
 
 	light *addNewLight(
-		entity *_parent,
 		const light::type _type,
 		const colour _colour
 	)
 	{
 		light *newLight = new light(_type, _colour);
-		l_lights.push_back(_parent);
+		l_lights.push_back(newLight);
 		return newLight;
 	}
 
@@ -272,7 +272,7 @@ namespace graphics
 		return l_models[_pos];
 	}
 
-	entity *getLightAt(const uint8_t _pos)
+	light *getLightAt(const uint8_t _pos)
 	{
 		if (_pos > lightCount() - 1)
 		{	throw graphicsException("Attempting to access light outside array size"); }
