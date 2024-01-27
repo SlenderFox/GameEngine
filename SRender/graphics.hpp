@@ -38,10 +38,7 @@ namespace graphics
 	);
 
 	void addNewModel(model *_model);
-	light *addNewLight(
-		const light::type _type,
-		const colour _colour = colour::white()
-	);
+	void addNewLight(light *_light);
 
 	void setClearColour(const colour _colour) noexcept;
 	void setRenderMode(const mode _mode = mode::fill) noexcept;

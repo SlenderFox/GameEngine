@@ -212,14 +212,10 @@ namespace graphics
 	void addNewModel(model *_model)
 	{	l_modelRefs.push_back(_model); }
 
-	light *addNewLight(
-		const light::type _type,
-		const colour _colour
-	)
+	void addNewLight(light *_light)
 	{
-		light *newLight = new light(_type, _colour);
-		l_lightRefs.push_back(newLight);
-		return newLight;
+		l_lightRefs.push_back(_light);
+		updateAllShaders();
 	}
 
 	void setClearColour(const colour _colour) noexcept

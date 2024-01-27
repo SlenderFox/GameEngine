@@ -135,18 +135,16 @@ void entity::addComponent(model *_model)
 	//= Maybe instead, the current model is deleted and a new one is loaded
 	assert(!m_model && "Entity already has a model component");
 	m_model = _model;
+	graphics::addNewModel(_model);
 	updateModel();
 }
 
 // TODO finish reworking
-void entity::addComponent(
-	const light::type _type,
-	const colour _colour
-) noexcept
+void entity::addComponent(light *_light) noexcept
 {
 	assert(!m_light && "Entity already has a light component");
-	m_light = graphics::addNewLight(_type, _colour);
-	graphics::updateAllShaders();
+	m_light = _light;
+	graphics::addNewLight(_light);
 }
 
 model *entity::getComponentModel() const noexcept

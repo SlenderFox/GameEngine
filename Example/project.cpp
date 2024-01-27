@@ -174,11 +174,11 @@ void project::createLights()
 	if (directional)
 	{
 		entityRef = new entity();
-		entityRef->addComponent(
+		entityRef->addComponent(new light(
 			light::type::directional,
 			/* White light */
 			colour(colour::hsvToRgb(vec3(0, 0.0f, 0.6f)))
-		);
+		));
 		lightRef = entityRef->getComponentLight();
 		entityRef->setForward(vec3(0, -1, 0));
 		graphics::setClearColour(
@@ -190,11 +190,11 @@ void project::createLights()
 	if (point)
 	{
 		entityRef = new entity();
-		entityRef->addComponent(
+		entityRef->addComponent(new light(
 			light::type::point,
 			/* Red light */
 			colour(colour::hsvToRgb(vec3(0, 0.6f, 0.8f)))
-		);
+		));
 		lightRef = entityRef->getComponentLight();
 		entityRef->addComponent(new model(
 			"assets/models/cube/cube.obj",
@@ -211,11 +211,11 @@ void project::createLights()
 	if (spot)
 	{
 		entityRef = new entity();
-		entityRef->addComponent(
+		entityRef->addComponent(new light(
 			light::type::spot,
 			/* Green light */
 			colour(colour::hsvToRgb(vec3(110, 0.3f, 1.0f)))
-		);
+		));
 		lightRef = entityRef->getComponentLight();
 		entityRef->addComponent(new model(
 			"assets/models/cube/cube.obj",

@@ -65,11 +65,7 @@ public:
 	_NODISCARD const transform getTransform() const noexcept;
 
 	void addComponent(model *_model);
-
-	void addComponent(
-		const light::type _type,
-		const colour _colour = colour::white()
-	) noexcept;
+	void addComponent(light *_light) noexcept;
 
 	_NODISCARD model *getComponentModel() const noexcept;
 	_NODISCARD light *getComponentLight() const noexcept;

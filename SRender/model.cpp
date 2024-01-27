@@ -245,7 +245,7 @@ void model::loadTexturesToShader() const noexcept
 }
 
 model::model()
-{	graphics::addNewModel(this); }
+{}
 
 model::model(
 	string _modelPath,
@@ -260,7 +260,6 @@ model::model(
 	// Needs to be done after shader is loaded
 	if (_loadTextures)
 	{	loadTexturesToShader(); }
-	graphics::addNewModel(this);
 
 	#ifdef _VERBOSE
 		debug::send("Done!", debug::type::note, debug::impact::small, debug::stage::end);
