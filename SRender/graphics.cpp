@@ -14,15 +14,12 @@ using std::to_string;
 
 namespace srender
 {
-// Forward declaration
-class application { public: _NODISCARD static std::string getAppLocation() noexcept; };
-
 namespace graphics
 {
 	camera *l_camera = nullptr;
 	// Cannot be references for some weird vector reason
-	vector<model*> l_models = vector<model*>();
-	vector<light*> l_lights = vector<light*>();
+	vector<model*> l_modelRefs = vector<model*>();
+	vector<light*> l_lightRefs = vector<light*>();
 
 	bool init(const float _aspect) noexcept
 	{
@@ -40,10 +37,6 @@ namespace graphics
 
 	void terminate() noexcept
 	{
-		for (auto model : l_models)
-		{	delete model; }
-		for (auto light : l_lights)
-		{	delete light; }
 		texture::terminate();
 		delete l_camera;
 	}
@@ -163,7 +156,7 @@ namespace graphics
 	void updateAllShaders() noexcept
 	{
 		// Need to add the light in each of the shaders
-		for (auto model : l_models)
+		for (auto model : l_modelRefs)
 		{	loadLightsIntoShader(model->getShaderRef()); }
 	}
 
@@ -216,22 +209,8 @@ namespace graphics
 		}
 	}
 
-	model *addNewModel(
-		string _modelPath,
-		string _shaderPath,
-		const bool _loadTextures
-	)
-	{
-		string appLoc = application::getAppLocation();
-		_modelPath = appLoc + _modelPath;
-		_shaderPath = appLoc + _shaderPath;
-		string *modelPath_p = _modelPath == appLoc ? nullptr : &_modelPath;
-		string *shaderPath_p = _shaderPath == appLoc ? nullptr : &_shaderPath;
-		model *newModel = new model(modelPath_p, shaderPath_p, _loadTextures);
-		l_models.push_back(newModel);
-		loadLightsIntoShader(newModel->getShaderRef());
-		return newModel;
-	}
+	void addNewModel(model *_model)
+	{	l_modelRefs.push_back(_model); }
 
 	light *addNewLight(
 		const light::type _type,
@@ -239,7 +218,7 @@ namespace graphics
 	)
 	{
 		light *newLight = new light(_type, _colour);
-		l_lights.push_back(newLight);
+		l_lightRefs.push_back(newLight);
 		return newLight;
 	}
 
@@ -254,22 +233,22 @@ namespace graphics
 
 	void setRenderDepthBuffer(const bool _state) noexcept
 	{
-		for (auto model : l_models)
+		for (auto model : l_modelRefs)
 		{	model->getShaderRef()->setBool("u_depthBuffer", _state); }
 	}
 
 	uint8_t modelCount() noexcept
-	{	return (uint8_t)l_models.size(); }
+	{	return (uint8_t)l_modelRefs.size(); }
 
 	uint8_t lightCount() noexcept
-	{	return (uint8_t)l_lights.size(); }
+	{	return (uint8_t)l_lightRefs.size(); }
 
 	model *getModelAt(const uint8_t _pos)
 	{
 		if (_pos > modelCount() - 1)
 		{	throw graphicsException("Attempting to access model outside array size"); }
 
-		return l_models[_pos];
+		return l_modelRefs[_pos];
 	}
 
 	light *getLightAt(const uint8_t _pos)
@@ -277,7 +256,7 @@ namespace graphics
 		if (_pos > lightCount() - 1)
 		{	throw graphicsException("Attempting to access light outside array size"); }
 
-		return l_lights[_pos];
+		return l_lightRefs[_pos];
 	}
 
 	camera *getCamera() noexcept

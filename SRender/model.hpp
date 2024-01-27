@@ -15,23 +15,13 @@ namespace srender
 {
 /** A model is a collection of meshes, textures, and a shader.
  * @todo Arbitrary mesh loading.
- * ^
- * clearMesh()
- * addMesh()
- * setMesh() (does both)
  */
 struct model
 {
 private:
-	std::vector<mesh*> m_meshes;
-	std::vector<texture*> m_textures;
-
-	shader *m_shader;
-
-	void loadFromFile(
-		const std::string *_path,
-		const bool _loadTextures
-	);
+	std::vector<mesh*> m_meshes = std::vector<mesh*>();
+	std::vector<texture*> m_textures = std::vector<texture*>();
+	shader *m_shader = nullptr;
 
 	void processNode(
 		const aiNode *_node,
@@ -57,20 +47,32 @@ private:
 	void loadTexturesToShader() const noexcept;
 
 public:
+	model();
 	model(
-		const std::string *_modelPath,
-		const std::string *_shaderPath,
+		std::string _modelPath,
+		std::string _shaderPath,
 		const bool _loadTextures = true
 	);
-
 	~model();
+
+	void loadFromFile(
+		const std::string *_path,
+		const bool _loadTextures
+	);
 
 	void draw() const noexcept;
 
-	void renderOnlyColour(const bool _state) noexcept;
-	void sentTint(const colour _colour) noexcept;
+	void addShader(shader *_shader);
+
+	void clearMeshes();
+	void addMesh(mesh *_mesh);
+	void setMesh(mesh *_mesh);
+
+	void renderOnlyColour(const bool _state);
+	void sentTint(const colour _colour);
 
 	_NODISCARD shader *getShaderRef() const noexcept;
 	_NODISCARD mesh *getMeshAt(const uint16_t _pos) const noexcept;
+	_NODISCARD texture *getTextureAt(const uint16_t _pos) const noexcept;
 };
 }

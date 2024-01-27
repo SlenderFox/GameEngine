@@ -10,7 +10,7 @@
 
 namespace srender
 {
-/** Graphics is responsible for all things visible in the virtual world */
+/** Graphics is responsible for all things visible in the virtual world. */
 namespace graphics
 {
 	enum class mode: uint8_t
@@ -27,21 +27,17 @@ namespace graphics
 
 	void loadLightsIntoShader(const shader *_shader) noexcept;
 	void updateAllShaders() noexcept;
-	/** Modifies either the angle or blur of all spotlights by a value
-	 * @note Max value is 90 for angle and 1 for blur, min for both is 0
-	 * @param _isAngle True to modify the angle, false to modify the blur of the spotlight
-	 * @param _value The amount to modify it by
+	/** Modifies either the angle or blur of all spotlights by a value.
+	 * @note Max value is 90 for angle and 1 for blur, min for both is 0.
+	 * @param _isAngle True to modify the angle, false to modify the blur of the spotlight.
+	 * @param _value The amount to modify it by.
 	 */
 	void modifyAllSpotlights(
 		const bool _isAngle,
 		const float _value
 	);
 
-	model *addNewModel(
-		std::string _modelPath,
-		std::string _shaderPath,
-		const bool _loadTextures = true
-	);
+	void addNewModel(model *_model);
 	light *addNewLight(
 		const light::type _type,
 		const colour _colour = colour::white()

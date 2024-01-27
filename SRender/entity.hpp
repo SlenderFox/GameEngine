@@ -16,8 +16,8 @@ class entity
 {
 	/* Components. */
 	transform m_transform = transform(); // Currently mandatory.
-	light *m_lightRef = nullptr; // Optional.
-	model *m_modelRef = nullptr; // Optional.
+	light *m_light = nullptr; // Optional.
+	model *m_model = nullptr; // Optional.
 
 	entity *m_parentRef = nullptr;
 
@@ -34,6 +34,7 @@ public:
 
 	entity();
 	entity(entity *_parent);
+	~entity();
 
 	/** Directly sets the transform matrix, calls updateModel.
 	 * @param _value The desired transform.
@@ -63,11 +64,7 @@ public:
 
 	_NODISCARD const transform getTransform() const noexcept;
 
-	void addComponent(
-		std::string _modelPath,
-		std::string _shaderPath,
-		const bool _loadTextures = true
-	);
+	void addComponent(model *_model);
 
 	void addComponent(
 		const light::type _type,

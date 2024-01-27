@@ -123,12 +123,26 @@ void project::lateUpdate() {}
 
 void project::createScene()
 {
+	// Create the ground
+	m_ground = new entity();
+	model *groundModel = new model();
+	groundModel->addShader(new shader());
+	vector<mesh::vertex> verts = mesh::generateVertices();
+	vector<uint32_t> inds = mesh::generateIndices();
+	mesh *square = new mesh(&verts, &inds);
+	groundModel->addMesh(square);
+	groundModel->sentTint(colour(0.2f, 0.3f, 0.15f));
+	groundModel->renderOnlyColour(true);
+	m_ground->addComponent(groundModel);
+	m_ground->translate(vec3(0, -3.5f, 0));
+	m_ground->setScale(vec3(50, 1, 50));
+
 	// Create a backpack in the centre
 	m_backpack = new entity();
-	m_backpack->addComponent(
+	m_backpack->addComponent(new model(
 		"assets/models/backpack/backpack.obj",
 		"assets/shaders/default"
-	);
+	));
 	m_backpack->translate(vec3(0.0f, 0.0f, 0.9f));
 	m_backpack->setScale(vec3(0.6f));
 
@@ -136,10 +150,10 @@ void project::createScene()
 	for (uint8_t i = 0; i < s_numCubes; ++i)
 	{
 		entity *cube = new entity();
-		cube->addComponent(
+		cube->addComponent(new model(
 			"assets/models/cube/cube.obj",
 			"assets/shaders/default"
-		);
+		));
 		cube->translate(s_cubePositions[i]);
 		cube->setScale(vec3(0.6f));
 		m_cubes.push_back(cube);
@@ -182,11 +196,11 @@ void project::createLights()
 			colour(colour::hsvToRgb(vec3(0, 0.6f, 0.8f)))
 		);
 		lightRef = entityRef->getComponentLight();
-		entityRef->addComponent(
+		entityRef->addComponent(new model(
 			"assets/models/cube/cube.obj",
 			"assets/shaders/default",
 			false
-		);
+		));
 		entityRef->setPosition(vec4(-4, 2, -2, 1));
 		entityRef->setScale(vec3(0.1f, 0.1f, 0.1f));
 		entityRef->getComponentModel()->sentTint(lightRef->getColour());
@@ -203,11 +217,11 @@ void project::createLights()
 			colour(colour::hsvToRgb(vec3(110, 0.3f, 1.0f)))
 		);
 		lightRef = entityRef->getComponentLight();
-		entityRef->addComponent(
+		entityRef->addComponent(new model(
 			"assets/models/cube/cube.obj",
 			"assets/shaders/default",
 			false
-		);
+		));
 		entityRef->getComponentModel()->sentTint(lightRef->getColour());
 		entityRef->getComponentModel()->renderOnlyColour(true);
 		entityRef->setPosition(vec4(2.0f, 2.5f, 6.0f, 1));

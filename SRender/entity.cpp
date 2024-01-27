@@ -39,11 +39,11 @@ vector<entity*> entity::getRootChildren() noexcept
 
 void entity::updateModel() const noexcept
 {
-	if (!m_modelRef)
+	if (!m_model)
 	{	return; }
 
-	m_modelRef->getShaderRef()->setMat4("u_model", m_transform.getTransform());
-	m_modelRef->getShaderRef()->setMat3(
+	m_model->getShaderRef()->setMat4("u_model", m_transform.getTransform());
+	m_model->getShaderRef()->setMat3(
 		"u_transposeInverseOfModel",
 		(mat3)transpose(inverse(m_transform.getTransform()))
 	);
@@ -55,6 +55,14 @@ entity::entity()
 entity::entity(entity *_parent)
 {	setParent(_parent); }
 
+entity::~entity()
+{
+	if (m_model)
+	{	delete m_model; }
+	if (m_light)
+	{	delete m_light; }
+}
+
 void entity::setTransform(const mat4 *_value) noexcept
 {
 	m_transform.setTransform(_value);
@@ -64,7 +72,7 @@ void entity::setTransform(const mat4 *_value) noexcept
 void entity::setPosition(const vec3 _value) noexcept
 {
 	m_transform.setPosition(_value);
-	m_lightRef->setPosition(m_transform.getPosition());
+	m_light->setPosition(m_transform.getPosition());
 	updateModel();
 }
 
@@ -72,7 +80,7 @@ void entity::setForward(const vec3 _value) noexcept
 {
 	m_transform.setForward(_value);
 	// Do this because the forward is not exactly _value
-	m_lightRef->setForward(m_transform.getForward());
+	m_light->setForward(m_transform.getForward());
 	updateModel();
 }
 
@@ -121,32 +129,29 @@ std::vector<entity*> entity::getChildren() const noexcept
 const transform entity::getTransform() const noexcept
 {	return m_transform; }
 
-void entity::addComponent(
-	string _modelPath,
-	string _shaderPath,
-	const bool _loadTextures
-)
+// TODO finish reworking
+void entity::addComponent(model *_model)
 {
-	// TODO finish reworking
-	assert(!m_modelRef && "Entity already has a model component");
-	m_modelRef = graphics::addNewModel(_modelPath, _shaderPath, _loadTextures);
+	//= Maybe instead, the current model is deleted and a new one is loaded
+	assert(!m_model && "Entity already has a model component");
+	m_model = _model;
 	updateModel();
 }
 
+// TODO finish reworking
 void entity::addComponent(
 	const light::type _type,
 	const colour _colour
 ) noexcept
 {
-	// TODO finish reworking
-	assert(!m_lightRef && "Entity already has a light component");
-	m_lightRef = graphics::addNewLight(_type, _colour);
+	assert(!m_light && "Entity already has a light component");
+	m_light = graphics::addNewLight(_type, _colour);
 	graphics::updateAllShaders();
 }
 
 model *entity::getComponentModel() const noexcept
-{	return m_modelRef; }
+{	return m_model; }
 
 light *entity::getComponentLight() const noexcept
-{	return m_lightRef; }
+{	return m_light; }
 }

@@ -6,6 +6,7 @@
 #include "assert.h"
 #include "debug.hpp"
 #include "exception.hpp"
+#include "graphics.hpp"
 
 using glm::vec2;
 using glm::vec3;
@@ -14,40 +15,18 @@ using std::vector;
 
 namespace srender
 {
-void model::loadFromFile(const string *_path, const bool _loadTextures)
+// Forward declaration
+class application { public: _NODISCARD static std::string getAppLocation() noexcept; };
+
+void makePathAbsolute(string *_path)
 {
-	#ifdef _VERBOSE
-		debug::send(
-			"Loading model \"" + *_path + "\"",
-			debug::type::process, debug::impact::large, debug::stage::begin
-	);
-
-		if (!_loadTextures)
-		{
-			debug::send(
-				"Ignoring textures",
-				debug::type::note, debug::impact::small, debug::stage::mid
-			);
-		}
-	#endif
-
-	Assimp::Importer importer;
-	const aiScene *scene = importer.ReadFile(*_path, aiProcess_Triangulate | aiProcess_FlipUVs);
-
-	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	if (*_path == "")
 	{
-		#ifdef _VERBOSE
-			debug::send(
-				"ERROR::ASSIMP::" + string(importer.GetErrorString()),
-				debug::type::note, debug::impact::large, debug::stage::mid
-			);
-		#endif
+		_path = nullptr;
 		return;
 	}
 
-	size_t last_slash = (*_path).find_last_of("\\/");
-	string directory = (*_path).substr(0, last_slash);
-	processNode(scene->mRootNode, scene, directory, _loadTextures);
+	*_path = application::getAppLocation() + *_path;
 }
 
 void model::processNode(
@@ -96,13 +75,11 @@ mesh *model::processMesh(
 			vertex.normal = vector;
 		}
 		// TexCoords
-		vec2 vec(0, 0);
 		if (_mesh->mTextureCoords[0])	// Does the mesh have texture coords
 		{
-			vec.x = _mesh->mTextureCoords[0][i].x;
-			vec.y = _mesh->mTextureCoords[0][i].y;
+			vertex.texCoords.x = _mesh->mTextureCoords[0][i].x;
+			vertex.texCoords.y = _mesh->mTextureCoords[0][i].y;
 		}
-		vertex.texCoords = vec;
 
 		vertices->push_back(vertex);
 	}
@@ -267,19 +244,23 @@ void model::loadTexturesToShader() const noexcept
 	}
 }
 
+model::model()
+{	graphics::addNewModel(this); }
+
 model::model(
-	const string *_modelPath,
-	const string *_shaderPath,
+	string _modelPath,
+	string _shaderPath,
 	const bool _loadTextures
 )
 {
-	m_meshes = vector<mesh*>();
-	m_textures = vector<texture*>();
-
-	assert(_modelPath);
-	loadFromFile(_modelPath, _loadTextures);
-	m_shader = new shader(_shaderPath);
-	if (_loadTextures) loadTexturesToShader();
+	makePathAbsolute(&_modelPath);
+	makePathAbsolute(&_shaderPath);
+	loadFromFile(&_modelPath, _loadTextures);
+	addShader(new shader(&_shaderPath));
+	// Needs to be done after shader is loaded
+	if (_loadTextures)
+	{	loadTexturesToShader(); }
+	graphics::addNewModel(this);
 
 	#ifdef _VERBOSE
 		debug::send("Done!", debug::type::note, debug::impact::small, debug::stage::end);
@@ -294,20 +275,91 @@ model::~model()
 	delete m_shader;
 }
 
+void model::loadFromFile(const string *_path, const bool _loadTextures)
+{
+	assert(_path && m_meshes.empty() && m_textures.empty());
+
+	#ifdef _VERBOSE
+		debug::send(
+			"Loading model \"" + *_path + "\"",
+			debug::type::process, debug::impact::large, debug::stage::begin
+		);
+
+		if (!_loadTextures)
+		{
+			debug::send(
+				"Ignoring textures",
+				debug::type::note, debug::impact::small, debug::stage::mid
+			);
+		}
+	#endif
+
+	Assimp::Importer importer;
+	const aiScene *scene = importer.ReadFile(*_path, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	{
+		#ifdef _VERBOSE
+			debug::send(
+				"ERROR::ASSIMP::" + string(importer.GetErrorString()),
+				debug::type::note, debug::impact::large, debug::stage::mid
+			);
+		#endif
+		return;
+	}
+
+	size_t last_slash = (*_path).find_last_of("\\/");
+	string directory = (*_path).substr(0, last_slash);
+	processNode(scene->mRootNode, scene, directory, _loadTextures);
+}
+
 void model::draw() const noexcept
 {
 	for (uint16_t i = 0; i < m_meshes.size(); ++i)
 	{	getMeshAt(i)->draw(); }
 }
 
-void model::renderOnlyColour(const bool _state) noexcept
-{	m_shader->setBool("u_justColour", _state); }
+void model::addShader(shader *_shader)
+{
+	if (m_shader)
+	{	delete m_shader; }
+	m_shader = _shader;
+	graphics::loadLightsIntoShader(m_shader);
+}
 
-void model::sentTint(const colour _colour) noexcept
-{	m_shader->setFloat3("u_colour", _colour.rgb()); }
+void model::clearMeshes()
+{
+	for (auto mesh : m_meshes)
+	{	delete mesh; }
+	m_meshes = vector<mesh*>();
+}
+
+void model::addMesh(mesh *_mesh)
+{	m_meshes.push_back(_mesh); }
+
+void model::setMesh(mesh *_mesh)
+{
+	clearMeshes();
+	addMesh(_mesh);
+}
+
+void model::renderOnlyColour(const bool _state)
+{
+	//= Throw exception if no shader
+	m_shader->setBool("u_justColour", _state);
+}
+
+void model::sentTint(const colour _colour)
+{
+	//= Throw exception if no shader
+	m_shader->setFloat3("u_colour", _colour.rgb());
+}
 
 shader *model::getShaderRef() const noexcept
-{	return m_shader; }
+{
+	//= Throw exception if no shader
+	return m_shader;
+}
 
 mesh *model::getMeshAt(const uint16_t _pos) const  noexcept
 {
@@ -318,5 +370,16 @@ mesh *model::getMeshAt(const uint16_t _pos) const  noexcept
 	}
 
 	return m_meshes[_pos];
+}
+
+texture *model::getTextureAt(const uint16_t _pos) const  noexcept
+{
+	if (_pos > m_textures.size() - 1)
+	{
+		debug::send("Attempting to access texture outside array size");
+		return nullptr;
+	}
+
+	return m_textures[_pos];
 }
 }
