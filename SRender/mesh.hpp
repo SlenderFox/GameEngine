@@ -29,13 +29,11 @@ private:
 
 public:
 	/** Takes the vertices array and places it in a vector.
-	 * @deprecated No longer used since Model class.
 	 * @return [std::vector<Vertex>] The vertex vector.
 	 */
 	_NODISCARD static std::vector<vertex> generateVertices() noexcept;
 
 	/** Takes the indices array and places it in a vector.
-	 * @deprecated No longer used since Model class.
 	 * @return [std::vector<uint32_t>] The indices vector.
 	 */
 	_NODISCARD static std::vector<uint32_t> generateIndices() noexcept;

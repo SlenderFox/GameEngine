@@ -8,64 +8,19 @@ using std::vector;
 
 namespace srender
 {
-/** Hard coded vertices for a cube
- * @deprecated No longer used since Model class
- */
-constexpr float l_cubeVerticesArr[288] = {
-	// Positions				// Normals				  // Texture coords
-	-0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,    0.0f, 0.0f,
-
-	-0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,    0.0f, 0.0f,
-
-	-0.5f,  0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,    1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,    1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,    0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,    0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,    0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,    1.0f, 0.0f,
-
-	 0.5f,  0.5f,  0.5f,    1.0f,  0.0f,  0.0f,    1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,    1.0f,  0.0f,  0.0f,    1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,    1.0f,  0.0f,  0.0f,    0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,    1.0f,  0.0f,  0.0f,    0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,    1.0f,  0.0f,  0.0f,    0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,    1.0f,  0.0f,  0.0f,    1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,    0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,    1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,    0.0f, -1.0f,  0.0f,    1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,    0.0f, -1.0f,  0.0f,    1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,    0.0f, -1.0f,  0.0f,    0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,    0.0f, 1.0f,
-
-	-0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,    0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,    1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,    1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,    1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,    0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,    0.0f, 1.0f
+/** Hard coded vertices for a square face. */
+constexpr float l_VerticesArr[32] = {
+	// Positions          // Normals          // Texture coords
+	-0.5f, 0.0f, -0.5f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
+	-0.5f, 0.0f,  0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+	 0.5f, 0.0f,  0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 1.0f,
+	 0.5f, 0.0f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 1.0f
 };
 
-/** Hard coded indices for a cube
- * @deprecated No longer used since Model class
- */
-constexpr uint32_t l_indicesArr[36] = {
-	0U,	1U,	2U,	3U,	4U,	5U,	// Face 1
-	6U, 	7U,	8U,	9U,	10U,	11U,	// Face 2
-	12U,	13U,	14U,	15U,	16U,	17U,	// Face 3
-	18U,	19U,	20U,	21U,	22U,	23U,	// Face 4
-	24U,	25U,	26U,	27U,	28U,	29U,	// Face 5
-	30U,	31U,	32U,	33U,	34U,	35U	// Face 6
+/** Hard coded indices for a square face. */
+constexpr uint32_t l_indicesArr[6] = {
+	0U, 1U, 2U, // Tri one
+	2U, 3U, 0U  // Tri two
 };
 
 //Static
@@ -73,23 +28,22 @@ constexpr uint32_t l_indicesArr[36] = {
 vector<mesh::vertex> mesh::generateVertices() noexcept
 {
 	vector<vertex> verts = vector<vertex>();
-
 	// Makes cube with pos, normal, and texcoord
-	for (uint8_t i = 0; i < 36; ++i)
+	for (uint8_t i = 0; i < 4; ++i)
 	{
 		vertex vert;
 		for (uint8_t j = 0; j < 8; ++j)
 		{
 			switch (j)
 			{
-			case 0: vert.position.x  = l_cubeVerticesArr[i * 8 + j]; break;
-			case 1: vert.position.y  = l_cubeVerticesArr[i * 8 + j]; break;
-			case 2: vert.position.z  = l_cubeVerticesArr[i * 8 + j]; break;
-			case 3: vert.normal.x    = l_cubeVerticesArr[i * 8 + j]; break;
-			case 4: vert.normal.y    = l_cubeVerticesArr[i * 8 + j]; break;
-			case 5: vert.normal.z    = l_cubeVerticesArr[i * 8 + j]; break;
-			case 6: vert.texCoords.x = l_cubeVerticesArr[i * 8 + j]; break;
-			case 7: vert.texCoords.y = l_cubeVerticesArr[i * 8 + j]; break;
+			case 0: vert.position.x  = l_VerticesArr[i * 8 + j]; break;
+			case 1: vert.position.y  = l_VerticesArr[i * 8 + j]; break;
+			case 2: vert.position.z  = l_VerticesArr[i * 8 + j]; break;
+			case 3: vert.normal.x    = l_VerticesArr[i * 8 + j]; break;
+			case 4: vert.normal.y    = l_VerticesArr[i * 8 + j]; break;
+			case 5: vert.normal.z    = l_VerticesArr[i * 8 + j]; break;
+			case 6: vert.texCoords.x = l_VerticesArr[i * 8 + j]; break;
+			case 7: vert.texCoords.y = l_VerticesArr[i * 8 + j]; break;
 			}
 		}
 		verts.push_back(vert);
@@ -101,8 +55,7 @@ vector<mesh::vertex> mesh::generateVertices() noexcept
 vector<uint32_t> mesh::generateIndices() noexcept
 {
 	vector<uint32_t> inds = vector<uint32_t>();
-
-	for (uint8_t i = 0; i < 36; ++i)
+	for (uint8_t i = 0; i < 6; ++i)
 	{	inds.push_back(l_indicesArr[i]); }
 	inds.shrink_to_fit();
 	return inds;
