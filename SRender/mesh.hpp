@@ -9,7 +9,7 @@
 
 namespace srender
 {
-/** A mesh is a collection of vertices used to draw shapes */
+/** A mesh is a collection of vertices used to draw shapes. */
 struct mesh
 {
 	struct vertex {
@@ -28,15 +28,15 @@ private:
 	uint32_t m_count;
 
 public:
-	/** Takes the vertices array and places it in a vector
-	 * @deprecated No longer used since Model class
-	 * @return [std::vector<Vertex>] The vertex vector
+	/** Takes the vertices array and places it in a vector.
+	 * @deprecated No longer used since Model class.
+	 * @return [std::vector<Vertex>] The vertex vector.
 	 */
 	_NODISCARD static std::vector<vertex> generateVertices() noexcept;
 
-	/** Takes the indices array and places it in a vector
-	 * @deprecated No longer used since Model class
-	 * @return [std::vector<uint32_t>] The indices vector
+	/** Takes the indices array and places it in a vector.
+	 * @deprecated No longer used since Model class.
+	 * @return [std::vector<uint32_t>] The indices vector.
 	 */
 	_NODISCARD static std::vector<uint32_t> generateIndices() noexcept;
 
@@ -54,16 +54,16 @@ public:
 
 	void draw() const noexcept;
 
-	/** Get the id for the vertex attribute object
-	 * @return [uint32_t] The id of the vertex attribute object
+	/** Get the id for the vertex attribute object.
+	 * @return [uint32_t] The id of the vertex attribute object.
 	 */
 	_NODISCARD uint32_t getVAO() const noexcept;
-	/** Get the id for the vertex buffer object
-	 * @return [uint32_t] The id of the vertex buffer object
+	/** Get the id for the vertex buffer object.
+	 * @return [uint32_t] The id of the vertex buffer object.
 	 */
 	_NODISCARD uint32_t getVBO() const noexcept;
-	/** Get the id for the element buffer object
-	 * @return [uint32_t] The id of the element buffer object
+	/** Get the id for the element buffer object.
+	 * @return [uint32_t] The id of the element buffer object.
 	 */
 	_NODISCARD uint32_t getEBO() const noexcept;
 };

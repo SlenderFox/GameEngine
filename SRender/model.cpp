@@ -5,6 +5,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "assert.h"
 #include "debug.hpp"
+#include "exception.hpp"
 
 using glm::vec2;
 using glm::vec3;
@@ -13,7 +14,7 @@ using std::vector;
 
 namespace srender
 {
-void model::loadModel(const string *_path, const bool _loadTextures)
+void model::loadFromFile(const string *_path, const bool _loadTextures)
 {
 	#ifdef _VERBOSE
 		debug::send(
@@ -209,8 +210,16 @@ vector<texture*> model::loadMaterialTextures(
 		// If texture has not been loaded before, load it for the first time
 		if (loadNewTexture)
 		{
-			texture *tex = texture::loadNew(path, _texType);
-			texturesOut.push_back(tex);
+			try
+			{
+				texture *tex = texture::loadNew(path, _texType);
+				texturesOut.push_back(tex);
+			}
+			catch (textureException &e)
+			{
+				string reason = e.what();
+				debug::send("Error loading texture at \"" + path +  "\" with reason: \"" + reason + "\"");
+			}
 		}
 	}
 	return texturesOut;
@@ -268,7 +277,7 @@ model::model(
 	m_textures = vector<texture*>();
 
 	assert(_modelPath);
-	loadModel(_modelPath, _loadTextures);
+	loadFromFile(_modelPath, _loadTextures);
 	m_shader = new shader(_shaderPath);
 	if (_loadTextures) loadTexturesToShader();
 

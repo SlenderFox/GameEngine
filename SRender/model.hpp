@@ -15,6 +15,10 @@ namespace srender
 {
 /** A model is a collection of meshes, textures, and a shader.
  * @todo Arbitrary mesh loading.
+ * ^
+ * clearMesh()
+ * addMesh()
+ * setMesh() (does both)
  */
 struct model
 {
@@ -24,7 +28,7 @@ private:
 
 	shader *m_shader;
 
-	void loadModel(
+	void loadFromFile(
 		const std::string *_path,
 		const bool _loadTextures
 	);

@@ -4,6 +4,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 #include "debug.hpp"
+#include <map>
 
 using std::string;
 
@@ -32,16 +33,16 @@ void texture::terminate() noexcept
 texture *texture::loadNew(string _path, type _type)
 {
 	// Look for a texture that has not been loaded into
-	for (auto &[key, value] : l_loadedTextures)
+	for (auto &[id, tex] : l_loadedTextures)
 	{
-		if (!value->m_loaded)
+		if (!tex->m_loaded)
 		{
 			try
-			{	value->load(_path, _type); }
-			// Pass exception down
+			{	tex->load(_path, _type); }
+			// Pass exception up
 			catch (textureException &e)
 			{	throw e; }
-			return value;
+			return tex;
 		}
 	}
 	throw textureException("Run out of textures");
@@ -51,7 +52,10 @@ uint8_t texture::size() noexcept
 {	return (uint8_t)l_loadedTextures.size(); }
 
 texture *texture::at(uint8_t _val)
-{	return l_loadedTextures[_val]; }
+{
+	assert(_val < 32);
+	return l_loadedTextures[_val];
+}
 
 // Member
 
