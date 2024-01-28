@@ -44,7 +44,7 @@ private:
 		const bool _loadTextures
 	) const;
 
-	void loadTexturesToShader() const noexcept;
+	void loadTexturesToShader() const;
 
 public:
 	model();
@@ -68,8 +68,9 @@ public:
 	void addMesh(mesh *_mesh);
 	void setMesh(mesh *_mesh);
 
-	void renderOnlyColour(const bool _state);
-	void sentTint(const colour _colour);
+	void useTextures(const bool _state) const;
+	void fullbright(const bool _state) const;
+	void sentTint(const colour _colour) const;
 
 	_NODISCARD shader *getShaderRef() const noexcept;
 	_NODISCARD mesh *getMeshAt(const uint16_t _pos) const noexcept;

@@ -202,8 +202,9 @@ vector<texture*> model::loadMaterialTextures(
 	return texturesOut;
 }
 
-void model::loadTexturesToShader() const noexcept
+void model::loadTexturesToShader() const
 {
+	bool loaded = false;
 	uint8_t diffuseNr = 0;
 	uint8_t specularNr = 0;
 	for (size_t i = 0; i < m_textures.size(); ++i)
@@ -216,10 +217,12 @@ void model::loadTexturesToShader() const noexcept
 		case texture::type::diffuse:
 			name = "texture_diffuse";
 			number = std::to_string(diffuseNr++);
+			loaded = true;
 			break;
 		case texture::type::specular:
 			name = "texture_specular";
 			number = std::to_string(specularNr++);
+			loaded = true;
 			break;
 		default:
 			return;
@@ -242,6 +245,9 @@ void model::loadTexturesToShader() const noexcept
 			);
 		#endif
 	}
+
+	if (loaded)
+	{ useTextures(true); }
 }
 
 model::model()
@@ -342,13 +348,19 @@ void model::setMesh(mesh *_mesh)
 	addMesh(_mesh);
 }
 
-void model::renderOnlyColour(const bool _state)
+void model::useTextures(const bool _state) const
 {
 	//= Throw exception if no shader
-	m_shader->setBool("u_justColour", _state);
+	m_shader->setBool("u_useTextures", _state);
 }
 
-void model::sentTint(const colour _colour)
+void model::fullbright(const bool _state) const
+{
+	//= Throw exception if no shader
+	m_shader->setBool("u_fullbright", _state);
+}
+
+void model::sentTint(const colour _colour) const
 {
 	//= Throw exception if no shader
 	m_shader->setFloat3("u_colour", _colour.rgb());

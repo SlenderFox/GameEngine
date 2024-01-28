@@ -40,7 +40,8 @@ struct LightSpot{
 	float blur;
 };
 uniform bool u_depthBuffer=false;
-uniform bool u_justColour=false;
+uniform bool u_useTextures=false;
+uniform bool u_fullbright=false;
 uniform vec3 u_viewPos;
 uniform vec3 u_colour=vec3(1.0);
 uniform Material u_material;
@@ -50,8 +51,12 @@ uniform LightSpot[NR_SPOT_LIGHTS] u_spotLights;
 vec3 m_viewDir;
 vec3 PhongShading(LightColour _colour,vec3 _lightDir,float _intensity){
 	// Textures
-	vec3 diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;
-	vec3 specularTex=texture(u_material.texture_specular0,TexCoords).rgb;
+	vec3 diffuseTex=vec3(1.0);
+	vec3 specularTex=vec3(1.0);
+	if(u_useTextures){
+		vec3 diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;
+		vec3 specularTex=texture(u_material.texture_specular0,TexCoords).rgb;
+	}
 	// Diffuse shading
 	float diff=max(dot(Normal,_lightDir),0.0);
 	// Specular shading
@@ -105,10 +110,10 @@ float LineariseDepth(float pDepth){
 	return (2.0*near*far)/(far+near-z*(far-near));
 }
 void main(){
-	if (u_depthBuffer){
+	if(u_depthBuffer){
 		//FragCol=vec4(vec3(gl_FragCoord.z),1.0);
 		FragCol=vec4(vec3(LineariseDepth(gl_FragCoord.z)/far),1.0);
-	}else if(u_justColour){
+	}else if(u_fullbright){
 		FragCol=vec4(u_colour,1);
 	}else{
 		// Important vectors

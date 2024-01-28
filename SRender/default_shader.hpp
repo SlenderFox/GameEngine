@@ -34,7 +34,8 @@ struct LightDirectional{LightColour colour;vec4 direction;};\
 struct LightPoint{LightColour colour;vec4 position;float linear;float quadratic;};\
 struct LightSpot{LightColour colour;vec4 position;vec4 direction;float linear;float quadratic;float cutoff;float blur;};\
 uniform bool u_depthBuffer=false;\
-uniform bool u_justColour=false;\
+uniform bool u_useTextures=false;\
+uniform bool u_fullbright=false;\
 uniform vec3 u_viewPos;\
 uniform vec3 u_colour=vec3(1.0);\
 uniform Material u_material;\
@@ -44,8 +45,11 @@ uniform LightSpot[NR_SPOT_LIGHTS] u_spotLights;\
 vec3 m_normal;\
 vec3 m_viewDir;\
 vec3 PhongShading(LightColour _colour,vec3 _lightDir,float _intensity){\
-vec3 diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;\
-vec3 specularTex=texture(u_material.texture_specular0,TexCoords).rgb;\
+vec3 diffuseTex=vec3(1.0);\
+vec3 specularTex=vec3(1.0);\
+if(u_useTextures){\
+diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;\
+specularTex=texture(u_material.texture_specular0,TexCoords).rgb;}\
 float diff=max(dot(m_normal,_lightDir),0.0);\
 vec3 reflectDir=reflect(-_lightDir,m_normal);\
 float spec=pow(max(dot(m_viewDir,reflectDir),0.0),u_material.shininess);\
@@ -80,9 +84,9 @@ float LineariseDepth(float pDepth){\
 float z=pDepth*2.0-1.0;\
 return (2.0*near*far)/(far+near-z*(far-near));}\
 void main(){\
-if (u_depthBuffer){\
+if(u_depthBuffer){\
 FragCol=vec4(vec3(LineariseDepth(gl_FragCoord.z)/far),1.0);\
-}else if(u_justColour){\
+}else if(u_fullbright){\
 FragCol=vec4(u_colour,1);\
 }else{\
 m_normal=normalise(Normal);\

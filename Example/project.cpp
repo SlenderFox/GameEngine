@@ -131,8 +131,7 @@ void project::createScene()
 	vector<uint32_t> inds = mesh::generateIndices();
 	mesh *square = new mesh(&verts, &inds);
 	groundModel->addMesh(square);
-	groundModel->sentTint(colour(0.2f, 0.3f, 0.15f));
-	groundModel->renderOnlyColour(true);
+	groundModel->sentTint(colour(0.25f, 0.4f, 0.18f));
 	m_ground->addComponent(groundModel);
 	m_ground->translate(vec3(0, -3.5f, 0));
 	m_ground->setScale(vec3(50, 1, 50));
@@ -204,7 +203,7 @@ void project::createLights()
 		entityRef->setPosition(vec4(-4, 2, -2, 1));
 		entityRef->setScale(vec3(0.1f, 0.1f, 0.1f));
 		entityRef->getComponentModel()->sentTint(lightRef->getColour());
-		entityRef->getComponentModel()->renderOnlyColour(true);
+		entityRef->getComponentModel()->fullbright(true);
 		m_lights.push_back(entityRef);
 	}
 
@@ -223,7 +222,7 @@ void project::createLights()
 			false
 		));
 		entityRef->getComponentModel()->sentTint(lightRef->getColour());
-		entityRef->getComponentModel()->renderOnlyColour(true);
+		entityRef->getComponentModel()->fullbright(true);
 		entityRef->setPosition(vec4(2.0f, 2.5f, 6.0f, 1));
 		entityRef->setForward(vec3(-0.3f, -0.4f, -1));
 		// FIXME needs to be called after setForward
