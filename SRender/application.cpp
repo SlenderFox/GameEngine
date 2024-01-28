@@ -45,7 +45,7 @@ std::string l_appLocation = "";
 /** The error code returned by main */
 exitCode l_exitCode = exitCode::okay;
 
-constexpr double secondsPerUpdate() { return 0.5; }
+constexpr double titleUpdateInterval() { return 0.5; }
 
 inline void updateCamera() noexcept
 {
@@ -281,10 +281,10 @@ inline void application::loop()
 		std::chrono::duration<double> drawTime = frameEnd - drawStart;
 
 		// Doing this allows me to updates fps as often as I want
-		if (l_frameTimer >= secondsPerUpdate())
+		if (l_frameTimer >= titleUpdateInterval())
 		{
-			l_frameTimer -= secondsPerUpdate();
-			l_fps = (uint16_t)((double)l_perSecondFrameCount / secondsPerUpdate());
+			l_frameTimer -= titleUpdateInterval();
+			l_fps = (uint16_t)((double)l_perSecondFrameCount / titleUpdateInterval());
 			l_perSecondFrameCount = 0U;
 			string frameTimeMs = to_string(frameTime.count() * 1000);
 			frameTimeMs.resize(5);
@@ -369,7 +369,7 @@ int application::run(int _argc, char *_args[])
 	{
 		// Preloads currentTime with an earlier time to prevent first frame weirdness
 		l_currentTime = glfwGetTime() - getFixedDeltaTime();
-		l_frameTimer = secondsPerUpdate();
+		l_frameTimer = titleUpdateInterval();
 
 		// Update-Render loop
 		loop();
