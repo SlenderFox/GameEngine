@@ -31,11 +31,19 @@ void shader::load(const std::string *_shaderPath)
 {
 	if (m_shaderLoaded)
 	{
-		debug::send("ERROR::SHADER::ATTEMPTING_TO_OVERLOAD_SHADER");
-		return;
+		debug::send("SHADER::OVERWRITING_SHADER");
+		destroy();
 	}
 	// If no path is given, will use fallback shader
 	m_shaderPath = _shaderPath ? *_shaderPath : "";
+	if (m_shaderPath == "")
+	{
+		m_usingFallback = true;
+		debug::send(
+			"SHADER::NO_PATH_PROVIDED::USING_FALLBACK_CODE",
+			debug::type::note, debug::impact::large, debug::stage::mid
+		);
+	}
 	loadShader(shaderType::vertex);
 	loadShader(shaderType::fragment);
 	createShaderProgram();
@@ -58,20 +66,10 @@ void shader::loadShader(const shaderType _type)
 		return;
 	}
 
-	bool usingFallback = false;
+	if (!m_usingFallback)
+	{	m_usingFallback = !readFile(_type); }
 
-	if (m_shaderPath != "")
-	{	usingFallback = !readFile(_type); }
-	else
-	{
-		usingFallback = true;
-		debug::send(
-			"SHADER::NO_PATH_PROVIDED::USING_FALLBACK_CODE",
-			debug::type::note, debug::impact::large, debug::stage::mid
-		);
-	}
-
-	if (usingFallback)
+	if (m_usingFallback)
 	{	loadFallback(_type); }
 
 	#ifdef _VERBOSE

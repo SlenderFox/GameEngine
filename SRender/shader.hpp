@@ -25,6 +25,7 @@ private:
 	};
 
 	bool m_shaderLoaded = false;
+	bool m_usingFallback = false;
 	uint32_t m_idProgram, m_idVertex, m_idFragment;
 	std::string m_shaderPath;	// The file path of the shaders
 
