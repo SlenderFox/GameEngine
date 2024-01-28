@@ -8,9 +8,9 @@
 
 namespace srender
 {
-/** A light source
- * @todo Overhaul, perhaps make it a component that can attach to an entity
- * @todo Perhaps have all lights stored in a static vector here
+/** A light source.
+ * @todo Overhaul, perhaps make it a component that can attach to an entity.
+ * @todo Perhaps have all lights stored in a static vector here.
  */
 class light
 {
