@@ -228,7 +228,7 @@ inline void application::loop()
 {
 	while (!(bool)glfwWindowShouldClose(l_windowRef))
 	{
-		auto frameStart = std::chrono::high_resolution_clock::now();
+		auto updateStart = std::chrono::high_resolution_clock::now();
 
 		// TODO: Look into extracting into a timekeeping class
 		l_prevTime = l_currentTime;
@@ -269,16 +269,16 @@ inline void application::loop()
 			continue;
 		}
 
-		auto drawStart = std::chrono::high_resolution_clock::now();
+		auto frameStart = std::chrono::high_resolution_clock::now();
 		graphics::draw();
 
 		// Check and call events and swap the buffers
 		glfwSwapBuffers(l_windowRef);
 
-		auto frameEnd = std::chrono::high_resolution_clock::now();
+		auto updateEnd = std::chrono::high_resolution_clock::now();
 
-		std::chrono::duration<double> frameTime = frameEnd - frameStart;
-		std::chrono::duration<double> drawTime = frameEnd - drawStart;
+		std::chrono::duration<double> updateTime = updateEnd - updateStart;
+		std::chrono::duration<double> frameTime = updateEnd - frameStart;
 
 		// Doing this allows me to updates fps as often as I want
 		if (l_frameTimer >= titleUpdateInterval())
@@ -286,10 +286,10 @@ inline void application::loop()
 			l_frameTimer -= titleUpdateInterval();
 			l_fps = (uint16_t)((double)l_perSecondFrameCount / titleUpdateInterval());
 			l_perSecondFrameCount = 0U;
+			string updateTimeMs = to_string(updateTime.count() * 1000);
+			updateTimeMs.resize(5);
 			string frameTimeMs = to_string(frameTime.count() * 1000);
 			frameTimeMs.resize(5);
-			string drawTimeMs = to_string(drawTime.count() * 1000);
-			drawTimeMs.resize(5);
 			string title = {
 				l_title
 				+ " | "
@@ -298,10 +298,10 @@ inline void application::loop()
 				+ to_string(l_wHeight)
 				+ " | FPS: "
 				+ to_string(l_fps)
-				+ ", DT/FT: "
-				+ drawTimeMs
-				+ "/"
+				+ ", FT/UT: "
 				+ frameTimeMs
+				+ "/"
+				+ updateTimeMs
 			};
 			glfwSetWindowTitle(l_windowRef, title.c_str());
 		}
