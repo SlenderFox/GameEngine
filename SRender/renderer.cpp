@@ -262,55 +262,55 @@ namespace renderer
 	int32_t getUniformLocation(uint32_t _idProgram, const char *_name) noexcept
 	{	return glGetUniformLocation(_idProgram, _name); }
 
-	void setBool(uint32_t _idProgram, int32_t _location, const bool _value) noexcept
+	void setBool(uint32_t _idProgram, int32_t _location, bool _value) noexcept
 	{
 		useShaderProgram(_idProgram);
 		glUniform1i(_location, (int32_t)_value);
 	}
 
-	void setInt(uint32_t _idProgram, int32_t _location, const int32_t _value) noexcept
+	void setInt(uint32_t _idProgram, int32_t _location, int32_t _value) noexcept
 	{
 		useShaderProgram(_idProgram);
 		glUniform1i(_location, (int32_t)_value);
 	}
 
-	void setUint(uint32_t _idProgram, int32_t _location, const uint32_t _value) noexcept
+	void setUint(uint32_t _idProgram, int32_t _location, uint32_t _value) noexcept
 	{
 		useShaderProgram(_idProgram);
 		glUniform1ui(_location, (int32_t)_value);
 	}
 
-	void setFloat(uint32_t _idProgram, int32_t _location, const float _value) noexcept
+	void setFloat(uint32_t _idProgram, int32_t _location, float _value) noexcept
 	{
 		useShaderProgram(_idProgram);
 		glUniform1f(_location, _value);
 	}
 
-	void setFloat2(uint32_t _idProgram, int32_t _location, const float *_value) noexcept
+	void setFloat2(uint32_t _idProgram, int32_t _location, float *_value) noexcept
 	{
 		useShaderProgram(_idProgram);
 		glUniform2fv(_location, 1, _value);
 	}
 
-	void setFloat3(uint32_t _idProgram, int32_t _location, const float *_value) noexcept
+	void setFloat3(uint32_t _idProgram, int32_t _location, float *_value) noexcept
 	{
 		useShaderProgram(_idProgram);
 		glUniform3fv(_location, 1, _value);
 	}
 
-	void setFloat4(uint32_t _idProgram, int32_t _location, const float *_value) noexcept
+	void setFloat4(uint32_t _idProgram, int32_t _location, float *_value) noexcept
 	{
 		useShaderProgram(_idProgram);
 		glUniform4fv(_location, 1, _value);
 	}
 
-	void setMat3(uint32_t _idProgram, int32_t _location, const float *_value) noexcept
+	void setMat3(uint32_t _idProgram, int32_t _location, float *_value) noexcept
 	{
 		useShaderProgram(_idProgram);
 		glUniformMatrix3fv(_location, 1, GL_FALSE, _value);
 	}
 
-	void setMat4(uint32_t _idProgram, int32_t _location, const float *_value) noexcept
+	void setMat4(uint32_t _idProgram, int32_t _location, float *_value) noexcept
 	{
 		useShaderProgram(_idProgram);
 		glUniformMatrix4fv(_location, 1, GL_FALSE, _value);

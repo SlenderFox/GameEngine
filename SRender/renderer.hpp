@@ -86,14 +86,14 @@ namespace renderer
 	void deleteShader(const uint32_t _idShader) noexcept;
 
 	_NODISCARD int32_t getUniformLocation(uint32_t _idProgram, const char *_name) noexcept;
-	void setBool(uint32_t _idProgram, int32_t _location, const bool _value) noexcept;
-	void setInt(uint32_t _idProgram, int32_t _location, const int32_t _value) noexcept;
-	void setUint(uint32_t _idProgram, int32_t _location, const uint32_t _value) noexcept;
-	void setFloat(uint32_t _idProgram, int32_t _location, const float _value) noexcept;
-	void setFloat2(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
-	void setFloat3(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
-	void setFloat4(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
-	void setMat3(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
-	void setMat4(uint32_t _idProgram, int32_t _location, const float *_value) noexcept;
+	void setBool(uint32_t _idProgram, int32_t _location, bool _value) noexcept;
+	void setInt(uint32_t _idProgram, int32_t _location, int32_t _value) noexcept;
+	void setUint(uint32_t _idProgram, int32_t _location, uint32_t _value) noexcept;
+	void setFloat(uint32_t _idProgram, int32_t _location, float _value) noexcept;
+	void setFloat2(uint32_t _idProgram, int32_t _location, float *_value) noexcept;
+	void setFloat3(uint32_t _idProgram, int32_t _location, float *_value) noexcept;
+	void setFloat4(uint32_t _idProgram, int32_t _location, float *_value) noexcept;
+	void setMat3(uint32_t _idProgram, int32_t _location, float *_value) noexcept;
+	void setMat4(uint32_t _idProgram, int32_t _location, float *_value) noexcept;
 }
 }

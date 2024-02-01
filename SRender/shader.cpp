@@ -283,7 +283,7 @@ inline T shader::byType(
 	return (_type == shaderType::vertex ? _vertex : _fragment);
 }
 
-bool shader::setBool(string _name, const bool _value, string &_msg) const noexcept
+bool shader::setBool(string _name, bool _value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
@@ -295,7 +295,7 @@ bool shader::setBool(string _name, const bool _value, string &_msg) const noexce
 	return true;
 }
 
-bool shader::setInt(string _name, const int32_t _value, string &_msg) const noexcept
+bool shader::setInt(string _name, int32_t _value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
@@ -307,7 +307,7 @@ bool shader::setInt(string _name, const int32_t _value, string &_msg) const noex
 	return true;
 }
 
-bool shader::setUint(string _name, const uint32_t _value, string &_msg) const noexcept
+bool shader::setUint(string _name, uint32_t _value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
@@ -319,7 +319,7 @@ bool shader::setUint(string _name, const uint32_t _value, string &_msg) const no
 	return true;
 }
 
-bool shader::setFloat(string _name, const float _value, string &_msg) const noexcept
+bool shader::setFloat(string _name, float _value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
@@ -331,7 +331,7 @@ bool shader::setFloat(string _name, const float _value, string &_msg) const noex
 	return true;
 }
 
-bool shader::setFloat2(string _name, const glm::vec2 *_value, string &_msg) const noexcept
+bool shader::setFloat2(string _name, glm::vec2 *_value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
@@ -342,10 +342,10 @@ bool shader::setFloat2(string _name, const glm::vec2 *_value, string &_msg) cons
 	renderer::setFloat2(m_idProgram, location, &(*_value)[0]);
 	return true;
 }
-bool shader::setFloat2(string _name, const glm::vec2 _value, string &_msg) const noexcept
+bool shader::setFloat2(string _name, glm::vec2 _value, string &_msg) const noexcept
 {	return setFloat2(_name, &_value, _msg); }
 
-bool shader::setFloat3(string _name, const glm::vec3 *_value, string &_msg) const noexcept
+bool shader::setFloat3(string _name, glm::vec3 *_value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
@@ -356,10 +356,10 @@ bool shader::setFloat3(string _name, const glm::vec3 *_value, string &_msg) cons
 	renderer::setFloat3(m_idProgram, location, &(*_value)[0]);
 	return true;
 }
-bool shader::setFloat3(string _name, const glm::vec3 _value, string &_msg) const noexcept
+bool shader::setFloat3(string _name, glm::vec3 _value, string &_msg) const noexcept
 {	return setFloat3(_name, &_value, _msg); }
 
-bool shader::setFloat4(string _name, const glm::vec4 *_value, string &_msg) const noexcept
+bool shader::setFloat4(string _name, glm::vec4 *_value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
@@ -370,10 +370,10 @@ bool shader::setFloat4(string _name, const glm::vec4 *_value, string &_msg) cons
 	renderer::setFloat4(m_idProgram, location, &(*_value)[0]);
 	return true;
 }
-bool shader::setFloat4(string _name, const glm::vec4 _value, string &_msg) const noexcept
+bool shader::setFloat4(string _name, glm::vec4 _value, string &_msg) const noexcept
 {	return setFloat4(_name, &_value, _msg); }
 
-bool shader::setMat3(string _name, const glm::mat3 *_value, string &_msg) const noexcept
+bool shader::setMat3(string _name, glm::mat3 *_value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
@@ -384,10 +384,10 @@ bool shader::setMat3(string _name, const glm::mat3 *_value, string &_msg) const 
 	renderer::setMat3(m_idProgram, location, &(*_value)[0][0]);
 	return true;
 }
-bool shader::setMat3(string _name, const glm::mat3 _value, string &_msg) const noexcept
+bool shader::setMat3(string _name, glm::mat3 _value, string &_msg) const noexcept
 {	return setMat3(_name, &_value, _msg); }
 
-bool shader::setMat4(string _name, const glm::mat4 *_value, string &_msg) const noexcept
+bool shader::setMat4(string _name, glm::mat4 *_value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
@@ -398,6 +398,6 @@ bool shader::setMat4(string _name, const glm::mat4 *_value, string &_msg) const 
 	renderer::setMat4(m_idProgram, location, &(*_value)[0][0]);
 	return true;
 }
-bool shader::setMat4(string _name, const glm::mat4 _value, string &_msg) const noexcept
+bool shader::setMat4(string _name, glm::mat4 _value, string &_msg) const noexcept
 {	return setMat4(_name, &_value, _msg); }
 }

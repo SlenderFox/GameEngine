@@ -83,19 +83,19 @@ public:
 
 	_NODISCARD constexpr bool isLoaded() const noexcept;
 
-	bool setBool   (const std::string _name, const bool       _value, std::string &_msg) const noexcept;
-	bool setInt    (const std::string _name, const int32_t    _value, std::string &_msg) const noexcept;
-	bool setUint   (const std::string _name, const uint32_t   _value, std::string &_msg) const noexcept;
-	bool setFloat  (const std::string _name, const float      _value, std::string &_msg) const noexcept;
-	bool setFloat2 (const std::string _name, const glm::vec2 *_value, std::string &_msg) const noexcept;
-	bool setFloat2 (const std::string _name, const glm::vec2  _value, std::string &_msg) const noexcept;
-	bool setFloat3 (const std::string _name, const glm::vec3 *_value, std::string &_msg) const noexcept;
-	bool setFloat3 (const std::string _name, const glm::vec3  _value, std::string &_msg) const noexcept;
-	bool setFloat4 (const std::string _name, const glm::vec4 *_value, std::string &_msg) const noexcept;
-	bool setFloat4 (const std::string _name, const glm::vec4  _value, std::string &_msg) const noexcept;
-	bool setMat3   (const std::string _name, const glm::mat3 *_value, std::string &_msg) const noexcept;
-	bool setMat3   (const std::string _name, const glm::mat3  _value, std::string &_msg) const noexcept;
-	bool setMat4   (const std::string _name, const glm::mat4 *_value, std::string &_msg) const noexcept;
-	bool setMat4   (const std::string _name, const glm::mat4  _value, std::string &_msg) const noexcept;
+	bool setBool   (const std::string _name, bool       _value, std::string &_msg) const noexcept;
+	bool setInt    (const std::string _name, int32_t    _value, std::string &_msg) const noexcept;
+	bool setUint   (const std::string _name, uint32_t   _value, std::string &_msg) const noexcept;
+	bool setFloat  (const std::string _name, float      _value, std::string &_msg) const noexcept;
+	bool setFloat2 (const std::string _name, glm::vec2 *_value, std::string &_msg) const noexcept;
+	bool setFloat2 (const std::string _name, glm::vec2  _value, std::string &_msg) const noexcept;
+	bool setFloat3 (const std::string _name, glm::vec3 *_value, std::string &_msg) const noexcept;
+	bool setFloat3 (const std::string _name, glm::vec3  _value, std::string &_msg) const noexcept;
+	bool setFloat4 (const std::string _name, glm::vec4 *_value, std::string &_msg) const noexcept;
+	bool setFloat4 (const std::string _name, glm::vec4  _value, std::string &_msg) const noexcept;
+	bool setMat3   (const std::string _name, glm::mat3 *_value, std::string &_msg) const noexcept;
+	bool setMat3   (const std::string _name, glm::mat3  _value, std::string &_msg) const noexcept;
+	bool setMat4   (const std::string _name, glm::mat4 *_value, std::string &_msg) const noexcept;
+	bool setMat4   (const std::string _name, glm::mat4  _value, std::string &_msg) const noexcept;
 };
 }
