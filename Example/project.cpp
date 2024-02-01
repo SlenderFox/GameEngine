@@ -37,15 +37,15 @@ int main(int _argc, char *_args[])
 double project::s_camYaw = 90.0;
 double project::s_camPitch = 0.0;
 const vec3 project::s_cubePositions[project::s_numCubes] = {
-	glm::vec3( 2.0f,  5.0f, -15.0f),
-	glm::vec3(-1.5f, -2.2f,  -2.5f),
-	glm::vec3(-3.8f, -2.0f, -12.3f),
-	glm::vec3( 2.4f, -0.4f,  -3.5f),
-	glm::vec3(-1.7f,  3.0f,  -7.5f),
-	glm::vec3( 1.3f, -2.0f,  -2.5f),
-	glm::vec3( 1.5f,  2.0f,  -2.5f),
-	glm::vec3( 1.5f,  0.2f,  -1.5f),
-	glm::vec3(-1.3f,  1.0f,  -1.5f)
+	glm::vec3( 2.0f,  8.5f, -15.0f),
+	glm::vec3(-1.5f,  1.3f,  -2.5f),
+	glm::vec3(-3.8f,  1.5f, -12.3f),
+	glm::vec3( 2.4f,  3.1f,  -3.5f),
+	glm::vec3(-1.7f,  6.5f,  -7.5f),
+	glm::vec3( 1.3f,  1.5f,  -2.5f),
+	glm::vec3( 1.5f,  5.5f,  -2.5f),
+	glm::vec3( 1.5f,  3.7f,  -1.5f),
+	glm::vec3(-1.3f,  4.5f,  -1.5f)
 };
 
 void project::mouseCallback(double _deltaX, double _deltaY) noexcept
@@ -133,7 +133,7 @@ void project::createScene()
 	groundModel->addMesh(square);
 	groundModel->sentTint(colour(0.25f, 0.4f, 0.18f));
 	m_ground->addComponent(groundModel);
-	m_ground->translate(vec3(0, -3.5f, 0));
+	m_ground->translate(vec3(0, 0, 0));
 	m_ground->setScale(vec3(50, 1, 50));
 
 	// Create a backpack in the centre
@@ -142,7 +142,7 @@ void project::createScene()
 		"assets/models/backpack/backpack.obj",
 		"assets/shaders/default"
 	));
-	m_backpack->translate(vec3(0.0f, 0.0f, 0.9f));
+	m_backpack->translate(vec3(0.0f, 3.5f, 0.9f));
 	m_backpack->setScale(vec3(0.6f));
 
 	// Place 9 cubes behind
@@ -179,7 +179,7 @@ void project::createLights()
 			colour(colour::hsvToRgb(vec3(0, 0.0f, 0.6f)))
 		));
 		lightRef = entityRef->getComponentLight();
-		entityRef->setForward(vec3(0, -1, 0));
+		entityRef->setForward(vec3(0.0f, -1.0f, 0.0f));
 		graphics::setClearColour(
 			lightRef->getColour() * graphics::getAmbience()
 		);
@@ -200,7 +200,7 @@ void project::createLights()
 			"assets/shaders/default",
 			false
 		));
-		entityRef->setPosition(vec4(-4, 2, -2, 1));
+		entityRef->setPosition(vec3(-4.0f, 5.5f, -2.0f));
 		entityRef->setScale(vec3(0.1f, 0.1f, 0.1f));
 		entityRef->getComponentModel()->sentTint(lightRef->getColour());
 		entityRef->getComponentModel()->fullbright(true);
@@ -223,7 +223,7 @@ void project::createLights()
 		));
 		entityRef->getComponentModel()->sentTint(lightRef->getColour());
 		entityRef->getComponentModel()->fullbright(true);
-		entityRef->setPosition(vec4(2.0f, 2.5f, 6.0f, 1));
+		entityRef->setPosition(vec3(2.0f, 6.0f, 6.0f));
 		entityRef->setForward(vec3(-0.3f, -0.4f, -1));
 		// FIXME needs to be called after setForward
 		entityRef->setScale(vec3(0.1f, 0.1f, 0.2f));

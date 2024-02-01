@@ -28,7 +28,7 @@ namespace graphics
 
 		// Initialise camera
 		l_camera = new camera(_aspect, 75.0f);
-		l_camera->setPosition(vec3(0.0f, 0.0f, 6.0f));
+		l_camera->setPosition(vec3(0.0f, 3.5f, 6.0f));
 
 		texture::init();
 
