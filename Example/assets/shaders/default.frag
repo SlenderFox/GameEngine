@@ -54,8 +54,8 @@ vec3 PhongShading(LightColour _colour,vec3 _lightDir,float _intensity){
 	vec3 diffuseTex=vec3(1.0);
 	vec3 specularTex=vec3(1.0);
 	if(u_useTextures){
-		vec3 diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;
-		vec3 specularTex=texture(u_material.texture_specular0,TexCoords).rgb;
+		diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;
+		specularTex=texture(u_material.texture_specular0,TexCoords).rgb;
 	}
 	// Diffuse shading
 	float diff=max(dot(Normal,_lightDir),0.0);

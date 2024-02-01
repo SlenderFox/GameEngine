@@ -13,8 +13,8 @@ uniform mat3 u_transposeInverseOfModel;\
 void main(){\
 vec4 vertModel=u_model*vec4(aPos,1.0);\
 TexCoords=aTexCoords;\
-Normal=u_transposeInverseOfModel*aNormal;\
-FragPos=vec3(vertModel);\
+Normal=normalize(u_transposeInverseOfModel*aNormal);\
+FragPos=vertModel.xyz;\
 gl_Position=u_camera*vertModel;}"
 
 #define FRAGMENT_FALLBACK "#version 330 core\n\
@@ -42,7 +42,6 @@ uniform Material u_material;\
 uniform LightDirectional[NR_DIR_LIGHTS] u_dirLights;\
 uniform LightPoint[NR_POINT_LIGHTS] u_pointLights;\
 uniform LightSpot[NR_SPOT_LIGHTS] u_spotLights;\
-vec3 m_normal;\
 vec3 m_viewDir;\
 vec3 PhongShading(LightColour _colour,vec3 _lightDir,float _intensity){\
 vec3 diffuseTex=vec3(1.0);\
@@ -50,8 +49,8 @@ vec3 specularTex=vec3(1.0);\
 if(u_useTextures){\
 diffuseTex=texture(u_material.texture_diffuse0,TexCoords).rgb;\
 specularTex=texture(u_material.texture_specular0,TexCoords).rgb;}\
-float diff=max(dot(m_normal,_lightDir),0.0);\
-vec3 reflectDir=reflect(-_lightDir,m_normal);\
+float diff=max(dot(Normal,_lightDir),0.0);\
+vec3 reflectDir=reflect(-_lightDir,Normal);\
 float spec=pow(max(dot(m_viewDir,reflectDir),0.0),u_material.shininess);\
 vec3 ambient=_colour.ambient*diffuseTex;\
 vec3 diffuse=_colour.diffuse*diffuseTex*diff*_intensity;\
@@ -89,7 +88,6 @@ FragCol=vec4(vec3(LineariseDepth(gl_FragCoord.z)/far),1.0);\
 }else if(u_fullbright){\
 FragCol=vec4(u_colour,1);\
 }else{\
-m_normal=normalise(Normal);\
 m_viewDir=normalise(u_viewPos-FragPos);\
 vec3 result;\
 for(int i=0;i<NR_DIR_LIGHTS;++i)\

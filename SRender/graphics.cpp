@@ -50,19 +50,23 @@ namespace graphics
 		{
 			model *cur = getModelAt(i);
 			cur->getShaderRef()->use();
-			cur->getShaderRef()->setMat4("u_camera", l_camera->getWorldToCameraMatrix());
-			cur->getShaderRef()->setFloat3("u_viewPos", (vec3)l_camera->getPosition());
+			// TODO flesh out
+			string errorMsg;
+			cur->getShaderRef()->setMat4("u_camera", l_camera->getWorldToCameraMatrix(), errorMsg);
+			cur->getShaderRef()->setFloat3("u_viewPos", (vec3)l_camera->getPosition(), errorMsg);
 			cur->draw();
 		}
 	}
 
 	void loadLightsIntoShader(const shader *_shader) noexcept
 	{
-		_shader->setFloat("u_material.shininess", 32.0f);
+		// TODO flesh out
+		string errorMsg;
 		uint8_t numDirLights = 0;
 		uint8_t numPointLights = 0;
 		uint8_t numSpotLights = 0;
 		string lightNum;
+		_shader->setFloat("u_material.shininess", 32.0f, errorMsg);
 
 		for (uint8_t i = 0; i < lightCount(); ++i)
 		{
@@ -73,77 +77,94 @@ namespace graphics
 				lightNum = to_string(numDirLights);
 				_shader->setFloat3(
 					"u_dirLights[" + lightNum + "].colour.ambient",
-					currentLight->getColour() * getAmbience()
+					currentLight->getColour() * getAmbience(),
+					errorMsg
 				);
 				_shader->setFloat3(
 					"u_dirLights[" + lightNum + "].colour.diffuse",
-					currentLight->getColour()
+					currentLight->getColour(),
+					errorMsg
 				);
 				_shader->setFloat3(
 					"u_dirLights[" + lightNum + "].colour.specular",
-					currentLight->getColour()
+					currentLight->getColour(),
+					errorMsg
 				);
 				_shader->setFloat4(
 					"u_dirLights[" + lightNum + "].direction",
-					currentLight->getForward()
+					currentLight->getForward(),
+					errorMsg
 				);
 				++numDirLights; break;
 			case light::type::point:
 				lightNum = to_string(numPointLights);
 				_shader->setFloat3(
 					"u_pointLights[" + lightNum + "].colour.diffuse",
-					currentLight->getColour()
+					currentLight->getColour(),
+					errorMsg
 				);
 				_shader->setFloat3(
 					"u_pointLights[" + lightNum + "].colour.specular",
-					currentLight->getColour()
+					currentLight->getColour(),
+					errorMsg
 				);
 				_shader->setFloat4(
 					"u_pointLights[" + lightNum + "].position",
-					currentLight->getPosition()
+					currentLight->getPosition(),
+					errorMsg
 				);
 				_shader->setFloat(
 					"u_pointLights[" + lightNum + "].linear",
-					currentLight->getLinear()
+					currentLight->getLinear(),
+					errorMsg
 				);
 				_shader->setFloat(
 					"u_pointLights[" + lightNum + "].quadratic",
-					currentLight->getQuadratic()
+					currentLight->getQuadratic(),
+					errorMsg
 				);
 				++numPointLights; break;
 			case light::type::spot:
 				lightNum = to_string(numSpotLights);
 				_shader->setFloat3(
 					"u_spotLights[" + lightNum + "].colour.diffuse",
-					currentLight->getColour()
+					currentLight->getColour(),
+					errorMsg
 				);
 				_shader->setFloat3(
 					"u_spotLights[" + lightNum + "].colour.specular",
-					currentLight->getColour()
+					currentLight->getColour(),
+					errorMsg
 				);
 				_shader->setFloat4(
 					"u_spotLights[" + lightNum + "].position",
-					currentLight->getPosition()
+					currentLight->getPosition(),
+					errorMsg
 				);
 				_shader->setFloat4(
 					"u_spotLights[" + lightNum + "].direction",
-					currentLight->getForward()
+					currentLight->getForward(),
+					errorMsg
 				);
 				_shader->setFloat(
 					"u_spotLights[" + lightNum + "].linear",
-					currentLight->getLinear()
+					currentLight->getLinear(),
+					errorMsg
 				);
 				_shader->setFloat(
 					"u_spotLights[" + lightNum + "].quadratic",
-					currentLight->getQuadratic()
+					currentLight->getQuadratic(),
+					errorMsg
 				);
 				_shader->setFloat(
 					"u_spotLights[" + lightNum + "].cutoff",
-					currentLight->getAngle()
+					currentLight->getAngle(),
+					errorMsg
 				);
 				_shader->setFloat(
 					"u_spotLights[" + lightNum + "].blur",
-					currentLight->getBlur()
+					currentLight->getBlur(),
+					errorMsg
 				);
 				++numSpotLights; break;
 			default:
@@ -188,18 +209,22 @@ namespace graphics
 				// Update the shaders on all the models
 				for (uint8_t j = 0; j < modelCount(); ++j)
 				{
+					// TODO flesh out
+					string errorMsg;
 					if (_isAngle)
 					{
 						getModelAt(j)->getShaderRef()->setFloat(
 							"u_spotLights[" + numLights + "].cutoff",
-							currentlLight->getAngle()
+							currentlLight->getAngle(),
+							errorMsg
 						);
 					}
 					else
 					{
 						getModelAt(j)->getShaderRef()->setFloat(
 							"u_spotLights[" + numLights + "].blur",
-							currentlLight->getBlur()
+							currentlLight->getBlur(),
+							errorMsg
 						);
 					}
 				}
@@ -229,8 +254,10 @@ namespace graphics
 
 	void setRenderDepthBuffer(const bool _state) noexcept
 	{
+		// TODO flesh out
+		string errorMsg;
 		for (auto model : l_modelRefs)
-		{	model->getShaderRef()->setBool("u_depthBuffer", _state); }
+		{	model->getShaderRef()->setBool("u_depthBuffer", _state, errorMsg); }
 	}
 
 	uint8_t modelCount() noexcept

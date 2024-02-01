@@ -25,11 +25,10 @@ private:
 	};
 
 	bool m_shaderLoaded = false;
-	bool m_usingFallback = false;
 	uint32_t m_idProgram, m_idVertex, m_idFragment;
-	std::string m_shaderPath;	// The file path of the shaders
+	std::string m_shaderPath = "";	// The file path of the shaders
 
-	void loadShader(const shaderType _type);
+	void loadShader(const shaderType _type, bool _useFallback = false);
 	/** Attempts to read a shader from a file, and if successful, attempts to compile it.
 	 * @param _type The type of shader being read in.
 	 * @return [bool] If reading and compiling was a success.
@@ -84,19 +83,19 @@ public:
 
 	_NODISCARD constexpr bool isLoaded() const noexcept;
 
-	void setBool   (const std::string _name, const bool       _value) const noexcept;
-	void setInt    (const std::string _name, const int32_t    _value) const noexcept;
-	void setUint   (const std::string _name, const uint32_t   _value) const noexcept;
-	void setFloat  (const std::string _name, const float      _value) const noexcept;
-	void setFloat2 (const std::string _name, const glm::vec2 *_value) const noexcept;
-	void setFloat2 (const std::string _name, const glm::vec2  _value) const noexcept;
-	void setFloat3 (const std::string _name, const glm::vec3 *_value) const noexcept;
-	void setFloat3 (const std::string _name, const glm::vec3  _value) const noexcept;
-	void setFloat4 (const std::string _name, const glm::vec4 *_value) const noexcept;
-	void setFloat4 (const std::string _name, const glm::vec4  _value) const noexcept;
-	void setMat3   (const std::string _name, const glm::mat3 *_value) const noexcept;
-	void setMat3   (const std::string _name, const glm::mat3  _value) const noexcept;
-	void setMat4   (const std::string _name, const glm::mat4 *_value) const noexcept;
-	void setMat4   (const std::string _name, const glm::mat4  _value) const noexcept;
+	bool setBool   (const std::string _name, const bool       _value, std::string &_msg) const noexcept;
+	bool setInt    (const std::string _name, const int32_t    _value, std::string &_msg) const noexcept;
+	bool setUint   (const std::string _name, const uint32_t   _value, std::string &_msg) const noexcept;
+	bool setFloat  (const std::string _name, const float      _value, std::string &_msg) const noexcept;
+	bool setFloat2 (const std::string _name, const glm::vec2 *_value, std::string &_msg) const noexcept;
+	bool setFloat2 (const std::string _name, const glm::vec2  _value, std::string &_msg) const noexcept;
+	bool setFloat3 (const std::string _name, const glm::vec3 *_value, std::string &_msg) const noexcept;
+	bool setFloat3 (const std::string _name, const glm::vec3  _value, std::string &_msg) const noexcept;
+	bool setFloat4 (const std::string _name, const glm::vec4 *_value, std::string &_msg) const noexcept;
+	bool setFloat4 (const std::string _name, const glm::vec4  _value, std::string &_msg) const noexcept;
+	bool setMat3   (const std::string _name, const glm::mat3 *_value, std::string &_msg) const noexcept;
+	bool setMat3   (const std::string _name, const glm::mat3  _value, std::string &_msg) const noexcept;
+	bool setMat4   (const std::string _name, const glm::mat4 *_value, std::string &_msg) const noexcept;
+	bool setMat4   (const std::string _name, const glm::mat4  _value, std::string &_msg) const noexcept;
 };
 }

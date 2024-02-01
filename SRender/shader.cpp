@@ -34,18 +34,25 @@ void shader::load(const std::string *_shaderPath)
 		debug::send("SHADER::OVERWRITING_SHADER");
 		destroy();
 	}
+
 	// If no path is given, will use fallback shader
 	m_shaderPath = _shaderPath ? *_shaderPath : "";
-	if (m_shaderPath == "")
+	if (m_shaderPath != "")
 	{
-		m_usingFallback = true;
+		m_shaderPath = *_shaderPath;
+		loadShader(shaderType::vertex);
+		loadShader(shaderType::fragment);
+	}
+	else
+	{
 		debug::send(
 			"SHADER::NO_PATH_PROVIDED::USING_FALLBACK_CODE",
 			debug::type::note, debug::impact::large, debug::stage::mid
 		);
+		loadShader(shaderType::vertex, true);
+		loadShader(shaderType::fragment, true);
 	}
-	loadShader(shaderType::vertex);
-	loadShader(shaderType::fragment);
+
 	createShaderProgram();
 }
 
@@ -55,7 +62,7 @@ void shader::use() const noexcept
 constexpr bool shader::isLoaded() const noexcept
 {	return m_shaderLoaded; }
 
-void shader::loadShader(const shaderType _type)
+void shader::loadShader(const shaderType _type, bool _useFallback)
 {
 	if (_type == shaderType::program)
 	{
@@ -66,10 +73,10 @@ void shader::loadShader(const shaderType _type)
 		return;
 	}
 
-	if (!m_usingFallback)
-	{	m_usingFallback = !readFile(_type); }
+	if (!_useFallback)
+	{	_useFallback = !readFile(_type); }
 
-	if (m_usingFallback)
+	if (_useFallback)
 	{	loadFallback(_type); }
 
 	#ifdef _VERBOSE
@@ -85,7 +92,11 @@ bool shader::readFile(const shaderType _type)
 
 	#ifdef _VERBOSE
 		debug::send(
-			"Compiling shader \"" + path + "\"...",
+			"Compiling "
+			+ byType(_type, string("vertex"), string("fragment"))
+			+ " shader \""
+			+ path
+			+ "\"...",
 			debug::type::process, debug::impact::small, debug::stage::mid, false, false
 		);
 	#endif
@@ -122,7 +133,7 @@ bool shader::readFile(const shaderType _type)
 
 	if (success)
 	{
-		success = !compileShader(
+		success = compileShader(
 			byType(_type, &m_idVertex, &m_idFragment),
 			_type,
 			codeString.c_str()
@@ -136,7 +147,9 @@ void shader::loadFallback(const shaderType _type)
 {
 	#ifdef _VERBOSE
 		debug::send(
-			"Compiling fallback code...",
+			"Compiling fallback "
+			+ byType(_type, string("vertex"), string("fragment"))
+			+ " shader...",
 			debug::type::process, debug::impact::small, debug::stage::mid, false, false
 		);
 	#endif
@@ -270,148 +283,121 @@ inline T shader::byType(
 	return (_type == shaderType::vertex ? _vertex : _fragment);
 }
 
-void shader::setBool(string _name, const bool _value) const noexcept
+bool shader::setBool(string _name, const bool _value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
 	{
-		debug::send("Attempting to set unknown uniform \""
-			+ _name
-			+ "\", location: "
-			+ std::to_string(location)
-		);
-		return;
+		_msg = "Attempting to set unknown uniform \"" + _name + "\"";
+		return false;
 	}
 	renderer::setBool(m_idProgram, location, _value);
+	return true;
 }
 
-void shader::setInt(string _name, const int32_t _value) const noexcept
+bool shader::setInt(string _name, const int32_t _value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
 	{
-		debug::send("Attempting to set unknown uniform \""
-			+ _name
-			+ "\", location: "
-			+ std::to_string(location)
-		);
-		return;
+		_msg = "Attempting to set unknown uniform \"" + _name + "\"";
+		return false;
 	}
 	renderer::setInt(m_idProgram, location, _value);
+	return true;
 }
 
-void shader::setUint(string _name, const uint32_t _value) const noexcept
+bool shader::setUint(string _name, const uint32_t _value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
 	{
-		debug::send("Attempting to set unknown uniform \""
-			+ _name
-			+ "\", location: "
-			+ std::to_string(location)
-		);
-		return;
+		_msg = "Attempting to set unknown uniform \"" + _name + "\"";
+		return false;
 	}
 	renderer::setUint(m_idProgram, location, _value);
+	return true;
 }
 
-void shader::setFloat(string _name, const float _value) const noexcept
+bool shader::setFloat(string _name, const float _value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
 	{
-		debug::send("Attempting to set unknown uniform \""
-			+ _name
-			+ "\", location: "
-			+ std::to_string(location)
-		);
-		return;
+		_msg = "Attempting to set unknown uniform \"" + _name + "\"";
+		return false;
 	}
-	renderer::setFloat(m_idProgram, location, _value	);
+	renderer::setFloat(m_idProgram, location, _value);
+	return true;
 }
 
-void shader::setFloat2(string _name, const glm::vec2 *_value) const noexcept
+bool shader::setFloat2(string _name, const glm::vec2 *_value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
 	{
-		debug::send("Attempting to set unknown uniform \""
-			+ _name
-			+ "\", location: "
-			+ std::to_string(location)
-		);
-		return;
+		_msg = "Attempting to set unknown uniform \"" + _name + "\"";
+		return false;
 	}
 	renderer::setFloat2(m_idProgram, location, &(*_value)[0]);
+	return true;
 }
-void shader::setFloat2(string _name, const glm::vec2 _value) const noexcept
-{	setFloat2(_name, &_value); }
+bool shader::setFloat2(string _name, const glm::vec2 _value, string &_msg) const noexcept
+{	return setFloat2(_name, &_value, _msg); }
 
-void shader::setFloat3(string _name, const glm::vec3 *_value) const noexcept
+bool shader::setFloat3(string _name, const glm::vec3 *_value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
 	{
-		debug::send("Attempting to set unknown uniform \""
-			+ _name
-			+ "\", location: "
-			+ std::to_string(location)
-		);
-		return;
+		_msg = "Attempting to set unknown uniform \"" + _name + "\"";
+		return false;
 	}
 	renderer::setFloat3(m_idProgram, location, &(*_value)[0]);
+	return true;
 }
-void shader::setFloat3(string _name, const glm::vec3 _value) const noexcept
-{	setFloat3(_name, &_value); }
+bool shader::setFloat3(string _name, const glm::vec3 _value, string &_msg) const noexcept
+{	return setFloat3(_name, &_value, _msg); }
 
-void shader::setFloat4(string _name, const glm::vec4 *_value) const noexcept
+bool shader::setFloat4(string _name, const glm::vec4 *_value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
 	{
-		debug::send("Attempting to set unknown uniform \""
-			+ _name
-			+ "\", location: "
-			+ std::to_string(location)
-		);
-		return;
+		_msg = "Attempting to set unknown uniform \"" + _name + "\"";
+		return false;
 	}
 	renderer::setFloat4(m_idProgram, location, &(*_value)[0]);
+	return true;
 }
-void shader::setFloat4(string _name, const glm::vec4 _value) const noexcept
-{	setFloat4(_name, &_value); }
+bool shader::setFloat4(string _name, const glm::vec4 _value, string &_msg) const noexcept
+{	return setFloat4(_name, &_value, _msg); }
 
-void shader::setMat3(string _name, const glm::mat3 *_value) const noexcept
+bool shader::setMat3(string _name, const glm::mat3 *_value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
 	{
-		debug::send("Attempting to set unknown uniform \""
-			+ _name
-			+ "\", location: "
-			+ std::to_string(location)
-		);
-		return;
+		_msg = "Attempting to set unknown uniform \"" + _name + "\"";
+		return false;
 	}
 	renderer::setMat3(m_idProgram, location, &(*_value)[0][0]);
+	return true;
 }
-void shader::setMat3(string _name, const glm::mat3 _value) const noexcept
-{	setMat3(_name, &_value); }
+bool shader::setMat3(string _name, const glm::mat3 _value, string &_msg) const noexcept
+{	return setMat3(_name, &_value, _msg); }
 
-void shader::setMat4(string _name, const glm::mat4 *_value) const noexcept
+bool shader::setMat4(string _name, const glm::mat4 *_value, string &_msg) const noexcept
 {
 	int32_t location = renderer::getUniformLocation(m_idProgram, _name.c_str());
 	if (location < 0)
 	{
-		debug::send("Attempting to set unknown uniform \""
-			+ _name
-			+ "\", location: "
-			+ std::to_string(location)
-		);
-		return;
+		_msg = "Attempting to set unknown uniform \"" + _name + "\"";
+		return false;
 	}
 	renderer::setMat4(m_idProgram, location, &(*_value)[0][0]);
+	return true;
 }
-void shader::setMat4(string _name, const glm::mat4 _value) const noexcept
-{	setMat4(_name, &_value); }
+bool shader::setMat4(string _name, const glm::mat4 _value, string &_msg) const noexcept
+{	return setMat4(_name, &_value, _msg); }
 }

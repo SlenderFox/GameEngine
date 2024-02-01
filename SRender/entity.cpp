@@ -42,10 +42,13 @@ void entity::updateModel() const noexcept
 	if (!m_model)
 	{	return; }
 
-	m_model->getShaderRef()->setMat4("u_model", m_transform.getTransform());
+	// TODO flesh out
+	string errorMsg;
+	m_model->getShaderRef()->setMat4("u_model", m_transform.getTransform(), errorMsg);
 	m_model->getShaderRef()->setMat3(
 		"u_transposeInverseOfModel",
-		(mat3)transpose(inverse(m_transform.getTransform()))
+		(mat3)transpose(inverse(m_transform.getTransform())),
+		errorMsg
 	);
 }
 

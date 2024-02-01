@@ -229,21 +229,35 @@ void model::loadTexturesToShader() const
 		}
 
 		string location = "u_material." + name + number;
-		m_shader->setInt(location.c_str(), (int32_t)m_textures[i]->getLocation());
-		string msg = {
-			"Setting "
-			+ location
-			+ " to "
-			+ std::to_string(m_textures[i]->getLocation())
-		};
-		#ifdef _VERBOSE
-			debug::send(
-				msg,
-				debug::type::note,
-				debug::impact::small,
-				debug::stage::mid
-			);
-		#endif
+		string errorMsg;
+		if (m_shader->setInt(location.c_str(), (int32_t)m_textures[i]->getLocation(), errorMsg))
+		{
+			#ifdef _VERBOSE
+				string msg = {
+					"Setting "
+					+ location
+					+ " to "
+					+ std::to_string(m_textures[i]->getLocation())
+				};
+				debug::send(
+					msg,
+					debug::type::note,
+					debug::impact::small,
+					debug::stage::mid
+				);
+			#endif
+		}
+		else
+		{
+			#ifdef _VERBOSE
+				debug::send(
+					errorMsg,
+					debug::type::note,
+					debug::impact::large,
+					debug::stage::mid
+				);
+			#endif
+		}
 	}
 
 	if (loaded)
@@ -351,19 +365,22 @@ void model::setMesh(mesh *_mesh)
 void model::useTextures(const bool _state) const
 {
 	//= Throw exception if no shader
-	m_shader->setBool("u_useTextures", _state);
+	string errorMsg;
+	m_shader->setBool("u_useTextures", _state, errorMsg);
 }
 
 void model::fullbright(const bool _state) const
 {
 	//= Throw exception if no shader
-	m_shader->setBool("u_fullbright", _state);
+	string errorMsg;
+	m_shader->setBool("u_fullbright", _state, errorMsg);
 }
 
 void model::sentTint(const colour _colour) const
 {
 	//= Throw exception if no shader
-	m_shader->setFloat3("u_colour", _colour.rgb());
+	string errorMsg;
+	m_shader->setFloat3("u_colour", _colour.rgb(), errorMsg);
 }
 
 shader *model::getShaderRef() const noexcept

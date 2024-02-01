@@ -38,7 +38,15 @@ texture *texture::loadNew(string _path, type _type)
 		if (!tex->m_loaded)
 		{
 			try
-			{	tex->load(_path, _type); }
+			{
+				#ifdef _VERBOSE
+					debug::send(
+						"Loading texture " + std::to_string(id) + ": \"" + _path + "\"...",
+						debug::type::process, debug::impact::large, debug::stage::mid, false, false
+					);
+				#endif
+				tex->load(_path, _type);
+			}
 			// Pass exception up
 			catch (textureException &e)
 			{	throw e; }
@@ -78,13 +86,6 @@ void texture::load(string _filePath, type _type)
 {
 	m_filePath = _filePath;
 	m_type = _type;
-
-	#ifdef _VERBOSE
-		debug::send(
-			"Loading texture " + std::to_string(l_loadedTextures.size()) + ": \"" + m_filePath + "\"...",
-			debug::type::process, debug::impact::large, debug::stage::mid, false, false
-		);
-	#endif
 
 	int texWidth = 0, texHeight = 0, numComponents = 0;
 	uint8_t *imageData = stbi_load(
