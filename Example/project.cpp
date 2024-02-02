@@ -133,7 +133,6 @@ void project::createScene()
 	groundModel->addMesh(square);
 	groundModel->sentTint(colour(0.25f, 0.4f, 0.18f));
 	m_ground->addComponent(groundModel);
-	m_ground->translate(vec3(0, 0, 0));
 	m_ground->setScale(vec3(50, 1, 50));
 
 	// Create a backpack in the centre
