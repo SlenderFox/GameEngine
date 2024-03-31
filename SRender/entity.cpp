@@ -135,7 +135,7 @@ const transform entity::getTransform() const noexcept
 // TODO finish reworking
 void entity::addComponent(model *_model)
 {
-	//= Maybe instead, the current model is deleted and a new one is loaded
+	//> Maybe instead, the current model is deleted and a new one is loaded
 	assert(!m_model && "Entity already has a model component");
 	m_model = _model;
 	graphics::addNewModel(_model);
