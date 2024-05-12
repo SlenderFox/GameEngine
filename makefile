@@ -1,23 +1,18 @@
 # MAKEFILE
 
 NAME:=libsrender.a
-CXXFLAGS:=-std=c++20 -Wall
-DFLAGS:=-Og -DDEBUG -D_DEBUG
-RFLAGS:=-O3 -DNDEBUG -D_RELEASE
-
 SRC:=SRender
 OBJ:=temp/gcc
 BIN:=build/gcc
 DEBUG:=debug
 RELEASE:=release
 
-# For native comiling
 CXX:=g++
+CXXFLAGS:=-std=c++20 -Wall
+DFLAGS:=-Og -DDEBUG -D_DEBUG
+RFLAGS:=-O3 -DNDEBUG -D_RELEASE
 INCPATH:=-Ilinking/include/
-LIBS:=/lib/libglfw.so.3.3 /lib/libglib-2.0.so /lib/libassimp.so
-
-# For compiling windows builds on linux
-#CW:=x86_64-w64-mingw32-gcc
+LDFLAGS:=-lglfw -lglib-2.0 -lassimp
 
 # Dumb way to get variables specific to target
 ifneq (,$(filter verbose,$(MAKECMDGOALS)))
@@ -86,7 +81,7 @@ $(OBJ)/project.o:: Example/project.cpp Example/project.hpp
 
 # Compile the example project using the SRender library
 $(BIN)/example: $(OBJ)/ $(BIN)/ $(BIN)/$(NAME) $(OBJ)/project.o $(BIN)/assets/
-	$(CXX) $(CXXFLAGS) -o $(BIN)/example $(OBJ)/project.o $(LIBS) $(BIN)/$(NAME)
+	$(CXX) $(CXXFLAGS) -o $(BIN)/example $(OBJ)/project.o $(LDFLAGS) $(BIN)/$(NAME)
 
 example: $(BIN)/example
 
@@ -99,5 +94,6 @@ $(OBJ)/:
 run:
 	$(BIN)/example
 
+# Dummy command
 verbose:
 	@printf ""
