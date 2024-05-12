@@ -95,7 +95,7 @@ void framebufferSizeCallback(
 _NODISCARD inline bool setupGLFW()
 {
 	// glfw: initialise and configure
-	//= Something in here causes output to work with wchar
+	//> Something in here causes output to work with wchar
 	if (!glfwInit())
 	{
 		l_exitCode = exitCode::fail_GLFW_Init;
@@ -319,7 +319,7 @@ inline void application::setAppLocation(std::string _path) noexcept
 {
 	size_t last_slash = _path.find_last_of("\\/");
 	l_appLocation = _path.substr(0, last_slash + 1);
-	//= can uncomment when fixed wchar issue
+	//> can uncomment when fixed wchar issue
 	//#ifdef _VERBOSE
 	//	debug::send("App location set to: " + l_appLocation + "\nFrom source: " + _path);
 	//#endif
@@ -361,7 +361,7 @@ std::string application::getAppLocation() noexcept
 int application::run(int _argc, char *_args[])
 {
 	debug::init();
-	//= can uncomment when fixed wchar issue
+	//> can uncomment when fixed wchar issue
 	//debug::send("Initialising...");
 	setAppLocation(_args[0]);
 

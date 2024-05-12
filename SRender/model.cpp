@@ -364,28 +364,28 @@ void model::setMesh(mesh *_mesh)
 
 void model::useTextures(const bool _state) const
 {
-	//= Throw exception if no shader
+	//> Throw exception if no shader
 	string errorMsg;
 	m_shader->setBool("u_useTextures", _state, errorMsg);
 }
 
 void model::fullbright(const bool _state) const
 {
-	//= Throw exception if no shader
+	//> Throw exception if no shader
 	string errorMsg;
 	m_shader->setBool("u_fullbright", _state, errorMsg);
 }
 
 void model::sentTint(const colour _colour) const
 {
-	//= Throw exception if no shader
+	//> Throw exception if no shader
 	string errorMsg;
 	m_shader->setFloat3("u_colour", _colour.rgb(), errorMsg);
 }
 
 shader *model::getShaderRef() const noexcept
 {
-	//= Throw exception if no shader
+	//> Throw exception if no shader
 	return m_shader;
 }
 
