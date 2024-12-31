@@ -140,6 +140,16 @@ _NODISCARD inline bool setupGLFW()
 	if (!l_windowRef)
 	{
 		l_exitCode = exitCode::fail_GLFW_Window;
+		const char *description;
+		int code = glfwGetError(&description);
+		assert(description != nullptr);
+		debug::send(
+			"Code: "
+			+ std::to_string(code)
+			+ "\nDescription: "
+			+ description
+			+ "\n"
+		);
 		return false;
 	}
 
