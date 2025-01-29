@@ -1,9 +1,9 @@
 # SRender
-Barely functional, bug-ridden mess.  
+Barely functional, bug-ridden mess.
 Project originally started with me following https://learnopengl.com/
 
 # Compiling
-Can be compiled on Windows with Visual Studio (msvc).  
+Can be compiled on Windows with Visual Studio (msvc).
 Can be compiled on Linux with makefile (gcc).
 
 ## Libraries used:
@@ -14,8 +14,10 @@ Can be compiled on Linux with makefile (gcc).
 - Assimp ([Github](https://github.com/assimp/assimp))
 
 ## Notes
-Classes are used when inheritance is intended, structs are for when it is not.  
+Classes are used when inheritance is intended, structs are for when it is not.
 Prefer composition over inheritance.
 
 ## Ideas
 - When application launches, don't steal focus and mouse.
+- Instead of window automatically launching, project can request to create a window and then apply callbacks to the window.
+- Make things more static.

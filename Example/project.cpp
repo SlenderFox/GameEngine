@@ -28,267 +28,276 @@ int main(int _argc, char *_args[])
 		application::setDimensions(1600, 900);
 		application::setTitle("SRender Example (RELEASE)");
 	#endif
-	project *app = new project();
-	return app->run(_argc, _args);
+	return project::run(_argc, _args);
 }
 
-// Static
-
-double project::s_camYaw = 90.0;
-double project::s_camPitch = 0.0;
-const vec3 project::s_cubePositions[project::s_numCubes] = {
-	glm::vec3( 2.0f,  8.5f, -15.0f),
-	glm::vec3(-1.5f,  1.3f,  -2.5f),
-	glm::vec3(-3.8f,  1.5f, -12.3f),
-	glm::vec3( 2.4f,  3.1f,  -3.5f),
-	glm::vec3(-1.7f,  6.5f,  -7.5f),
-	glm::vec3( 1.3f,  1.5f,  -2.5f),
-	glm::vec3( 1.5f,  5.5f,  -2.5f),
-	glm::vec3( 1.5f,  3.7f,  -1.5f),
-	glm::vec3(-1.3f,  4.5f,  -1.5f)
-};
-
-void project::mouseCallback(double _deltaX, double _deltaY) noexcept
+namespace project
 {
-	const double sens = 0.05f;
-	_deltaX *= sens;
-	_deltaY *= sens;
-	s_camYaw += _deltaX;
-	s_camPitch += _deltaY;
-	if (s_camPitch > 89.0f)
-	{	s_camPitch = 89.0f; }
-	else if (s_camPitch < -89.0f)
-	{	s_camPitch = -89.0f; }
-	// The forward direction of the camera
-	vec3 forward = vec3();
-	forward.x = (float)(cos(radians(s_camYaw)) * cos(radians(s_camPitch)));
-	forward.y = (float)sin(radians(s_camPitch));
-	forward.z = (float)(sin(radians(s_camYaw)) * cos(radians(s_camPitch)));
-	forward = normalize(forward);
-	graphics::getCamera()->setForward(forward);
-}
+	double s_camYaw = 90.0;
+	double s_camPitch = 0.0;
+	constexpr uint8_t s_numCubes = 9U;
 
-void project::scrollCallback(double _offsetX, double _offsetY) noexcept
-{	graphics::getCamera()->modifyFovH((float)_offsetY * -3.0f); }
+	const vec3 s_cubePositions[s_numCubes] = {
+		glm::vec3( 2.0f,  8.5f, -15.0f),
+		glm::vec3(-1.5f,  1.3f,  -2.5f),
+		glm::vec3(-3.8f,  1.5f, -12.3f),
+		glm::vec3( 2.4f,  3.1f,  -3.5f),
+		glm::vec3(-1.7f,  6.5f,  -7.5f),
+		glm::vec3( 1.3f,  1.5f,  -2.5f),
+		glm::vec3( 1.5f,  5.5f,  -2.5f),
+		glm::vec3( 1.5f,  3.7f,  -1.5f),
+		glm::vec3(-1.3f,  4.5f,  -1.5f)
+	};
 
-// Member
+	srender::entity *m_ground;
+	srender::entity *m_backpack;
+	std::vector<srender::entity*> m_cubes = std::vector<srender::entity*>();
+	std::vector<srender::entity*> m_lights = std::vector<srender::entity*>();
 
-project::project()
-{}
-
-project::~project()
-{
-	for (uint8_t i = 0; i < m_cubes.size(); ++i)
+	void mouseCallback(double _deltaX, double _deltaY) noexcept
 	{
-		if (m_cubes[i])
-		{	delete m_cubes[i]; }
+		const double sens = 0.05f;
+		_deltaX *= sens;
+		_deltaY *= sens;
+		s_camYaw += _deltaX;
+		s_camPitch += _deltaY;
+		if (s_camPitch > 89.0f)
+		{	s_camPitch = 89.0f; }
+		else if (s_camPitch < -89.0f)
+		{	s_camPitch = -89.0f; }
+		// The forward direction of the camera
+		vec3 forward = vec3();
+		forward.x = (float)(cos(radians(s_camYaw)) * cos(radians(s_camPitch)));
+		forward.y = (float)sin(radians(s_camPitch));
+		forward.z = (float)(sin(radians(s_camYaw)) * cos(radians(s_camPitch)));
+		forward = normalize(forward);
+		graphics::getCamera()->setForward(forward);
 	}
 
-	if (m_backpack)
-	{	delete m_backpack; }
-}
+	void scrollCallback(double _offsetX, double _offsetY) noexcept
+	{	graphics::getCamera()->modifyFovH((float)_offsetY * -3.0f); }
 
-bool project::startup()
-{
-	createLights();
-	createScene();
-	//graphics::setRenderDepthBuffer(true);
-	input::addMouseCallback(mouseCallback);
-	input::addSrollCallback(scrollCallback);
-	return true;
-}
-
-void project::shutdown() {}
-
-void project::update()
-{
-	processInput();
-
-	// Rotates the cubes
-	for (uint8_t i = 0; i < s_numCubes; i++)
+	int run(int _argc, char *_args[])
 	{
-		float angle = (float)getDeltaTime() * 5.0f * ((i + 1) / (i * 0.2f + 1));
-		mat4 rot = rotate(
-			m_cubes[i]->getTransform().getTransform(),
-			radians(angle),
-			glm::normalize(vec3(1.0f, 0.3f, 0.5f))
-		);
-		m_cubes[i]->setTransform(&rot);
+		application::setStartupCallback(startup);
+		application::setShutdownCallback(shutdown);
+		application::setUpdateCallback(update);
+		application::setFixedUpdateCallback(fixedUpdate);
+		application::setLateUpdateCallback(lateUpdate);
+		return application::run(_argc, _args);
 	}
-}
 
-void project::fixedUpdate() {}
-
-void project::lateUpdate() {}
-
-void project::createScene()
-{
-	// Create the ground
-	m_ground = new entity();
-	model *groundModel = new model();
-	groundModel->addShader(new shader());
-	vector<mesh::vertex> verts = mesh::generateVertices();
-	vector<uint32_t> inds = mesh::generateIndices();
-	mesh *square = new mesh(&verts, &inds);
-	groundModel->addMesh(square);
-	groundModel->sentTint(colour(0.25f, 0.4f, 0.18f));
-	m_ground->addComponent(groundModel);
-	m_ground->setScale(vec3(50, 1, 50));
-
-	// Create a backpack in the centre
-	m_backpack = new entity();
-	m_backpack->addComponent(new model(
-		"assets/models/backpack/backpack.obj",
-		"assets/shaders/default"
-	));
-	m_backpack->translate(vec3(0.0f, 3.5f, 0.9f));
-	m_backpack->setScale(vec3(0.6f));
-
-	// Place 9 cubes behind
-	for (uint8_t i = 0; i < s_numCubes; ++i)
+	void startup()
 	{
-		entity *cube = new entity();
-		cube->addComponent(new model(
-			"assets/models/cube/cube.obj",
+		createLights();
+		createScene();
+		//graphics::setRenderDepthBuffer(true);
+		input::addMouseCallback(mouseCallback);
+		input::addSrollCallback(scrollCallback);
+	}
+
+	void shutdown()
+	{
+		for (uint8_t i = 0; i < m_cubes.size(); ++i)
+		{
+			if (m_cubes[i])
+			{	delete m_cubes[i]; }
+		}
+
+		if (m_backpack)
+		{	delete m_backpack; }
+	}
+
+	void update()
+	{
+		processInput();
+
+		// Rotates the cubes
+		for (uint8_t i = 0; i < s_numCubes; i++)
+		{
+			float angle = (float)application::getDeltaTime() * 5.0f * ((i + 1) / (i * 0.2f + 1));
+			mat4 rot = rotate(
+				m_cubes[i]->getTransform().getTransform(),
+				radians(angle),
+				glm::normalize(vec3(1.0f, 0.3f, 0.5f))
+			);
+			m_cubes[i]->setTransform(&rot);
+		}
+	}
+
+	void fixedUpdate() {}
+
+	void lateUpdate() {}
+
+	void createScene()
+	{
+		// Create the ground
+		m_ground = new entity();
+		model *groundModel = new model();
+		groundModel->addShader(new shader());
+		vector<mesh::vertex> verts = mesh::generateVertices();
+		vector<uint32_t> inds = mesh::generateIndices();
+		mesh *square = new mesh(&verts, &inds);
+		groundModel->addMesh(square);
+		groundModel->sentTint(colour(0.25f, 0.4f, 0.18f));
+		m_ground->addComponent(groundModel);
+		m_ground->setScale(vec3(50, 1, 50));
+
+		// Create a backpack in the centre
+		m_backpack = new entity();
+		m_backpack->addComponent(new model(
+			"assets/models/backpack/backpack.obj",
 			"assets/shaders/default"
 		));
-		cube->translate(s_cubePositions[i]);
-		cube->setScale(vec3(0.6f));
-		m_cubes.push_back(cube);
+		m_backpack->translate(vec3(0.0f, 3.5f, 0.9f));
+		m_backpack->setScale(vec3(0.6f));
+
+		// Place 9 cubes behind
+		for (uint8_t i = 0; i < s_numCubes; ++i)
+		{
+			entity *cube = new entity();
+			cube->addComponent(new model(
+				"assets/models/cube/cube.obj",
+				"assets/shaders/default"
+			));
+			cube->translate(s_cubePositions[i]);
+			cube->setScale(vec3(0.6f));
+			m_cubes.push_back(cube);
+		}
 	}
-}
 
-void project::createLights()
-{
-	// Allows me to toggle at will
-	const bool directional = true,
-		point = true,
-		spot = true;
-
-	// Creates lights
-	entity *entityRef = nullptr;
-	light *lightRef = nullptr;
-
-	if (directional)
+	void createLights()
 	{
-		entityRef = new entity();
-		entityRef->addComponent(new light(
-			light::type::directional,
-			/* White light */
-			colour(colour::hsvToRgb(vec3(0, 0.0f, 0.6f)))
-		));
-		lightRef = entityRef->getComponentLight();
-		entityRef->setForward(vec3(0.0f, -1.0f, 0.0f));
-		graphics::setClearColour(
-			lightRef->getColour() * graphics::getAmbience()
-		);
-		m_lights.push_back(entityRef);
+		// Allows me to toggle at will
+		const bool directional = true,
+			point = true,
+			spot = true;
+
+		// Creates lights
+		entity *entityRef = nullptr;
+		light *lightRef = nullptr;
+
+		if (directional)
+		{
+			entityRef = new entity();
+			entityRef->addComponent(new light(
+				light::type::directional,
+				/* White light */
+				colour(colour::hsvToRgb(vec3(0, 0.0f, 0.6f)))
+			));
+			lightRef = entityRef->getComponentLight();
+			entityRef->setForward(vec3(0.0f, -1.0f, 0.0f));
+			graphics::setClearColour(
+				lightRef->getColour() * graphics::getAmbience()
+			);
+			m_lights.push_back(entityRef);
+		}
+
+		if (point)
+		{
+			entityRef = new entity();
+			entityRef->addComponent(new light(
+				light::type::point,
+				/* Red light */
+				colour(colour::hsvToRgb(vec3(0, 0.6f, 0.8f)))
+			));
+			lightRef = entityRef->getComponentLight();
+			entityRef->addComponent(new model(
+				"assets/models/cube/cube.obj",
+				"assets/shaders/default",
+				false
+			));
+			entityRef->setPosition(vec3(-4.0f, 5.5f, -2.0f));
+			entityRef->setScale(vec3(0.1f, 0.1f, 0.1f));
+			entityRef->getComponentModel()->sentTint(lightRef->getColour());
+			entityRef->getComponentModel()->fullbright(true);
+			m_lights.push_back(entityRef);
+		}
+
+		if (spot)
+		{
+			entityRef = new entity();
+			entityRef->addComponent(new light(
+				light::type::spot,
+				/* Green light */
+				colour(colour::hsvToRgb(vec3(110, 0.3f, 1.0f)))
+			));
+			lightRef = entityRef->getComponentLight();
+			entityRef->addComponent(new model(
+				"assets/models/cube/cube.obj",
+				"assets/shaders/default",
+				false
+			));
+			entityRef->getComponentModel()->sentTint(lightRef->getColour());
+			entityRef->getComponentModel()->fullbright(true);
+			entityRef->setPosition(vec3(2.0f, 6.0f, 6.0f));
+			entityRef->setForward(vec3(-0.3f, -0.4f, -1));
+			// FIXME needs to be called after setForward
+			entityRef->setScale(vec3(0.1f, 0.1f, 0.2f));
+			lightRef->setAngle(13.0f);
+			lightRef->setBlur(0.23f);
+			m_lights.push_back(entityRef);
+		}
 	}
 
-	if (point)
+	void processInput()
 	{
-		entityRef = new entity();
-		entityRef->addComponent(new light(
-			light::type::point,
-			/* Red light */
-			colour(colour::hsvToRgb(vec3(0, 0.6f, 0.8f)))
-		));
-		lightRef = entityRef->getComponentLight();
-		entityRef->addComponent(new model(
-			"assets/models/cube/cube.obj",
-			"assets/shaders/default",
-			false
-		));
-		entityRef->setPosition(vec3(-4.0f, 5.5f, -2.0f));
-		entityRef->setScale(vec3(0.1f, 0.1f, 0.1f));
-		entityRef->getComponentModel()->sentTint(lightRef->getColour());
-		entityRef->getComponentModel()->fullbright(true);
-		m_lights.push_back(entityRef);
+		// Render triangles normally
+		if (input::checkKeyState(input::key::key_f1, input::state::press))
+		{	graphics::setRenderMode(graphics::mode::fill); }
+		// Render triangles as lines
+		if (input::checkKeyState(input::key::key_f2, input::state::press))
+		{	graphics::setRenderMode(graphics::mode::line); }
+		// Render triangles as dots
+		if (input::checkKeyState(input::key::key_f3, input::state::press))
+		{	graphics::setRenderMode(graphics::mode::point); }
+
+		// Spotlight cone
+		const float coneSpeed = valueModKeys(6.0f) * (float)application::getDeltaTime();
+		if (input::checkKeyState(input::key::key_t, input::state::press))
+		{	graphics::modifyAllSpotlights(true, coneSpeed); }
+		if (input::checkKeyState(input::key::key_g, input::state::press))
+		{	graphics::modifyAllSpotlights(true, -coneSpeed); }
+		// Spotlight blur
+		const float blurSpeed = valueModKeys(0.5f) * (float)application::getDeltaTime();
+		if (input::checkKeyState(input::key::key_y, input::state::press))
+		{	graphics::modifyAllSpotlights(false, -blurSpeed); }
+		if (input::checkKeyState(input::key::key_h, input::state::press))
+		{	graphics::modifyAllSpotlights(false, blurSpeed); }
+
+		vec3 translation = vec3();
+		const float moveSpeed = valueModKeys(4.0f) * (float)application::getDeltaTime();
+
+		// Forwards
+		if (input::checkKeyState(input::key::key_w, input::state::press))
+		{	translation += (vec3)graphics::getCamera()->getForward() * moveSpeed; }
+		// Backwards
+		if (input::checkKeyState(input::key::key_s, input::state::press))
+		{	translation -= (vec3)graphics::getCamera()->getForward() * moveSpeed; }
+		// Left
+		if (input::checkKeyState(input::key::key_a, input::state::press))
+		{	translation += (vec3)graphics::getCamera()->getRight() * moveSpeed; }
+		// Right
+		if (input::checkKeyState(input::key::key_d, input::state::press))
+		{	translation -= (vec3)graphics::getCamera()->getRight() * moveSpeed; }
+		// Up
+		if (input::checkKeyState(input::key::key_space, input::state::press))
+		{	translation += (vec3)graphics::getCamera()->getUp() * moveSpeed; }
+		// Down
+		if (input::checkKeyState(input::key::key_c, input::state::press))
+		{	translation -= (vec3)graphics::getCamera()->getUp() * moveSpeed; }
+
+		graphics::getCamera()->translate(translation);
 	}
 
-	if (spot)
+	float valueModKeys(float _value) noexcept
 	{
-		entityRef = new entity();
-		entityRef->addComponent(new light(
-			light::type::spot,
-			/* Green light */
-			colour(colour::hsvToRgb(vec3(110, 0.3f, 1.0f)))
-		));
-		lightRef = entityRef->getComponentLight();
-		entityRef->addComponent(new model(
-			"assets/models/cube/cube.obj",
-			"assets/shaders/default",
-			false
-		));
-		entityRef->getComponentModel()->sentTint(lightRef->getColour());
-		entityRef->getComponentModel()->fullbright(true);
-		entityRef->setPosition(vec3(2.0f, 6.0f, 6.0f));
-		entityRef->setForward(vec3(-0.3f, -0.4f, -1));
-		// FIXME needs to be called after setForward
-		entityRef->setScale(vec3(0.1f, 0.1f, 0.2f));
-		lightRef->setAngle(13.0f);
-		lightRef->setBlur(0.23f);
-		m_lights.push_back(entityRef);
+		// Reduce
+		if (input::checkKeyState(input::key::key_left_control, input::state::press))
+		{	_value *= 0.1f; }
+		// Increase
+		else if (input::checkKeyState(input::key::key_left_shift, input::state::press))
+		{	_value *= 3; }
+		return _value;
 	}
-}
-
-void project::processInput()
-{
-	// Render triangles normally
-	if (input::checkKeyState(input::key::key_f1, input::state::press))
-	{	graphics::setRenderMode(graphics::mode::fill); }
-	// Render triangles as lines
-	if (input::checkKeyState(input::key::key_f2, input::state::press))
-	{	graphics::setRenderMode(graphics::mode::line); }
-	// Render triangles as dots
-	if (input::checkKeyState(input::key::key_f3, input::state::press))
-	{	graphics::setRenderMode(graphics::mode::point); }
-
-	// Spotlight cone
-	const float coneSpeed = valueModKeys(6.0f) * (float)getDeltaTime();
-	if (input::checkKeyState(input::key::key_t, input::state::press))
-	{	graphics::modifyAllSpotlights(true, coneSpeed); }
-	if (input::checkKeyState(input::key::key_g, input::state::press))
-	{	graphics::modifyAllSpotlights(true, -coneSpeed); }
-	// Spotlight blur
-	const float blurSpeed = valueModKeys(0.5f) * (float)getDeltaTime();
-	if (input::checkKeyState(input::key::key_y, input::state::press))
-	{	graphics::modifyAllSpotlights(false, -blurSpeed); }
-	if (input::checkKeyState(input::key::key_h, input::state::press))
-	{	graphics::modifyAllSpotlights(false, blurSpeed); }
-
-	vec3 translation = vec3();
-	const float moveSpeed = valueModKeys(4.0f) * (float)getDeltaTime();
-
-	// Forwards
-	if (input::checkKeyState(input::key::key_w, input::state::press))
-	{	translation += (vec3)graphics::getCamera()->getForward() * moveSpeed; }
-	// Backwards
-	if (input::checkKeyState(input::key::key_s, input::state::press))
-	{	translation -= (vec3)graphics::getCamera()->getForward() * moveSpeed; }
-	// Left
-	if (input::checkKeyState(input::key::key_a, input::state::press))
-	{	translation += (vec3)graphics::getCamera()->getRight() * moveSpeed; }
-	// Right
-	if (input::checkKeyState(input::key::key_d, input::state::press))
-	{	translation -= (vec3)graphics::getCamera()->getRight() * moveSpeed; }
-	// Up
-	if (input::checkKeyState(input::key::key_space, input::state::press))
-	{	translation += (vec3)graphics::getCamera()->getUp() * moveSpeed; }
-	// Down
-	if (input::checkKeyState(input::key::key_c, input::state::press))
-	{	translation -= (vec3)graphics::getCamera()->getUp() * moveSpeed; }
-
-	graphics::getCamera()->translate(translation);
-}
-
-float project::valueModKeys(float _value) noexcept
-{
-	// Reduce
-	if (input::checkKeyState(input::key::key_left_control, input::state::press))
-	{	_value *= 0.1f; }
-	// Increase
-	else if (input::checkKeyState(input::key::key_left_shift, input::state::press))
-	{	_value *= 3; }
-	return _value;
 }
